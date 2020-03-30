@@ -106,14 +106,22 @@ namespace Epoxy
 #if WINDOWS_WPF
         public static implicit operator Vector(ValueHolder vh) =>
             vh.GetValue<Vector>();
+        public static implicit operator Pen(ValueHolder vh) =>
+            vh.GetValue<Pen>();
 #endif
 #if WINDOWS_WPF || WINDOWS_UWP
-        public static implicit operator Visibility(ValueHolder vh) =>
-            vh.GetValue<Visibility>();
+        public static implicit operator Brush(ValueHolder vh) =>
+            vh.GetValue<Brush>();
         public static implicit operator Rect(ValueHolder vh) =>
             vh.GetValue<Rect>();
         public static implicit operator Matrix(ValueHolder vh) =>
             vh.GetValue<Matrix>();
+        public static implicit operator Visibility(ValueHolder vh) =>
+            vh.GetValue<Visibility>();
+#endif
+#if XAMARIN_FORMS
+        public static implicit operator FontAttributes(ValueHolder vh) =>
+            vh.GetValue<FontAttributes>();
 #endif
         public static implicit operator ImageSource?(ValueHolder vh) =>
             vh.GetValue<ImageSource?>();

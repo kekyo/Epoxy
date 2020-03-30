@@ -81,6 +81,11 @@ namespace Epoxy
 
         public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
             new DelegatedValueConverter<TTo, TFrom, TParameter>(convert, convertBack);
+
+        public static ValueConverter Create<T1, T2>()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public abstract class ValueConverter<TTo, TFrom> : ValueConverter
@@ -88,13 +93,16 @@ namespace Epoxy
         protected ValueConverter()
         { }
 
-        public abstract bool TryConvert(TFrom from, object? parameter, out TTo result);
+        public abstract bool TryConvert(TFrom from, out TTo result);
 
-        public virtual bool TryConvertBack(TTo to, object? parameter, out TFrom result) =>
+        public virtual bool TryConvertBack(TTo to, out TFrom result) =>
             throw new NotImplementedException();
 
         private protected override object? Convert(object? value, Type targetType, object? parameter)
         {
+            Debug.Assert(
+                parameter == null,
+                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
             Debug.Assert(
                 targetType.IsAssignableFrom(typeof(TTo)),
                 $"ValueConverter.Convert: Type mismatched in {this.GetType().FullName}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
@@ -102,7 +110,7 @@ namespace Epoxy
             if (value is TFrom from &&
                 targetType.IsAssignableFrom(typeof(TTo)))
             {
-                if (this.TryConvert(from, parameter, out var result))
+                if (this.TryConvert(from, out var result))
                 {
                     return result;
                 }
@@ -118,13 +126,77 @@ namespace Epoxy
         private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
             Debug.Assert(
+                parameter == null,
+                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
+            Debug.Assert(
                 typeof(TFrom).IsAssignableFrom(targetType),
                 $"ValueConverter.ConvertBack: Type mismatched in {this.GetType().FullName}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
 
             if (value is TTo to &&
                 typeof(TFrom).IsAssignableFrom(targetType))
             {
-                if (this.TryConvertBack(to, parameter, out var result))
+                if (this.TryConvertBack(to, out var result))
+                {
+                    return result;
+                }
+            }
+
+#if XAMARIN_FORMS
+            return default(TFrom)!;
+#else
+            return DependencyProperty.UnsetValue;
+#endif
+        }
+    }
+
+    public abstract class ValueConverter<TTo, TFrom, TParameter> : ValueConverter
+    {
+        protected ValueConverter()
+        { }
+
+        public abstract bool TryConvert(TFrom from, TParameter parameter, out TTo result);
+
+        public virtual bool TryConvertBack(TTo to, TParameter parameter, out TFrom result) =>
+            throw new NotImplementedException();
+
+        private protected override object? Convert(object? value, Type targetType, object? parameter)
+        {
+            Debug.Assert(
+                parameter is TParameter,
+                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
+            Debug.Assert(
+                targetType.IsAssignableFrom(typeof(TTo)),
+                $"ValueConverter.Convert: Type mismatched in {this.GetType().FullName}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
+
+            if (value is TFrom from &&
+                targetType.IsAssignableFrom(typeof(TTo)))
+            {
+                if (this.TryConvert(from, (TParameter)parameter!, out var result))
+                {
+                    return result;
+                }
+            }
+
+#if XAMARIN_FORMS
+            return default(TTo)!;
+#else
+            return DependencyProperty.UnsetValue;
+#endif
+        }
+
+        private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
+        {
+            Debug.Assert(
+                parameter is TParameter,
+                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
+            Debug.Assert(
+                typeof(TFrom).IsAssignableFrom(targetType),
+                $"ValueConverter.ConvertBack: Type mismatched in {this.GetType().FullName}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
+
+            if (value is TTo to &&
+                typeof(TFrom).IsAssignableFrom(targetType))
+            {
+                if (this.TryConvertBack(to, (TParameter)parameter!, out var result))
                 {
                     return result;
                 }

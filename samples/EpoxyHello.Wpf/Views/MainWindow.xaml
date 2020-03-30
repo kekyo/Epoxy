@@ -24,8 +24,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
+        xmlns:converters="clr-namespace:EpoxyHello.Wpf.Views.Converters"
         mc:Ignorable="d"
         Title="EpoxyHello.Wpf" Height="450" Width="800">
+
+    <Window.Resources>
+        <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
+    </Window.Resources>
     
     <Window.DataContext>
         <viewmodels:MainWindowViewModel />
@@ -43,7 +48,8 @@
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock
-                            Text="{Binding Title}" />
+                            Text="{Binding Title}"
+                            Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
                         <Image
                             Source="{Binding Image}"
                             Stretch="UniformToFill" />

@@ -20,26 +20,14 @@
 using Epoxy;
 using System.Windows.Media;
 
-namespace EpoxyHello.Wpf.ViewModels
+namespace EpoxyHello.Wpf.Views.Converters
 {
-    public sealed class ItemViewModel : ViewModel
+    public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
     {
-        public string? Title
+        public override bool TryConvert(int from, out Brush result)
         {
-            get => GetValue();
-            set => SetValue(value);
-        }
-
-        public ImageSource? Image
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
-
-        public int Score
-        {
-            get => GetValue();
-            set => SetValue(value);
+            result = from >= 5 ? Brushes.Red : Brushes.White;
+            return true;
         }
     }
 }

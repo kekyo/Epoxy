@@ -46,6 +46,7 @@ namespace EpoxyHello.Wpf.ViewModels
                         this.Items.Add(new ItemViewModel
                         {
                             Title = reddit.Title,
+                            Score = reddit.Score,
                             Image = await Reddit.FetchImageAsync(reddit.Url)
                         });
                     }

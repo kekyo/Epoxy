@@ -56,7 +56,7 @@ namespace EpoxyHello.Wpf.Models
                     return root!["data"]!["children"]!.
                         Select(child => child["data"]!).
                         Where(data => Path.GetExtension(((Uri)data["url"]!).AbsolutePath) switch { ".jpg" => true, ".png" => true, _ => false }).
-                        Select(data => new RedditPost((string)data["title"]!, (Uri)data["url"]!)).
+                        Select(data => new RedditPost((string)data["title"]!, (Uri)data["url"]!, (int)data["score"]!)).
                         ToArray();
                 }
             }

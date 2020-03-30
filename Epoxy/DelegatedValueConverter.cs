@@ -20,7 +20,6 @@
 #nullable enable
 
 using System;
-using System.Diagnostics;
 
 namespace Epoxy
 {
@@ -38,22 +37,14 @@ namespace Epoxy
             this.convertBack = convertBack;
         }
 
-        public override bool TryConvert(TFrom from, object? parameter, out TTo result)
+        public override bool TryConvert(TFrom from, out TTo result)
         {
-            Debug.Assert(
-                parameter == null,
-                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-
             result = this.convert(from);
             return true;
         }
 
-        public override bool TryConvertBack(TTo to, object? parameter, out TFrom result)
+        public override bool TryConvertBack(TTo to, out TFrom result)
         {
-            Debug.Assert(
-               parameter == null,
-               $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-
             if (this.convertBack != null)
             {
                 result = this.convertBack(to);
@@ -66,7 +57,7 @@ namespace Epoxy
         }
     }
 
-    public sealed class DelegatedValueConverter<TTo, TFrom, TParameter> : ValueConverter<TTo, TFrom>
+    public sealed class DelegatedValueConverter<TTo, TFrom, TParameter> : ValueConverter<TTo, TFrom, TParameter>
     {
         private readonly Func<TFrom, TParameter, TTo> convert;
         private readonly Func<TTo, TParameter, TFrom>? convertBack;
@@ -80,42 +71,18 @@ namespace Epoxy
             this.convertBack = convertBack;
         }
 
-        public override bool TryConvert(TFrom from, object? parameter, out TTo result)
+        public override bool TryConvert(TFrom from, TParameter parameter, out TTo result)
         {
-            Debug.Assert(
-                parameter is TParameter,
-                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-
-            if (parameter is TParameter p)
-            {
-                result = this.convert(from, p);
-                return true;
-            }
-            else
-            {
-                result = default!;
-                return false;
-            }
+            result = this.convert(from, parameter);
+            return true;
         }
 
-        public override bool TryConvertBack(TTo to, object? parameter, out TFrom result)
+        public override bool TryConvertBack(TTo to, TParameter parameter, out TFrom result)
         {
-            Debug.Assert(
-                parameter is TParameter,
-                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-
             if (this.convertBack != null)
             {
-                if (parameter is TParameter p)
-                {
-                    result = this.convertBack(to, p);
-                    return true;
-                }
-                else
-                {
-                    result = default!;
-                    return false;
-                }
+                result = this.convertBack(to, parameter);
+                return true;
             }
             else
             {
