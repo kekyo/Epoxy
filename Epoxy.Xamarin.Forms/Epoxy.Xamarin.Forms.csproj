@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>Enable</Nullable>
+    <RootNamespace>Epoxy</RootNamespace>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Platforms>AnyCPU</Platforms>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <DefineConstants>XAMARIN_FORMS</DefineConstants>
+
+    <AssemblyTitle>Epoxy.Xamarin.Forms</AssemblyTitle>
+    <Product>Epoxy</Product>
+    <Trademark>Epoxy</Trademark>
+    <Copyright>Copyright (c) 2020 Kouji Matsui</Copyright>
+    <Description>A minimum MVVM assister library.</Description>
+
+    <PackageId>Epoxy.Xamarin.Forms</PackageId>
+    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
+    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
+    <PackageIcon>Epoxy.100.png</PackageIcon>
+    <PackageTags>xamarin;forms;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CenterCLR.RelaxVersioner" Version="1.0.5" PrivateAssets="All" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/*.cs" />
+    <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>
