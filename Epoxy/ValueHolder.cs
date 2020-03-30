@@ -25,6 +25,8 @@ using System.Threading;
 
 #if WINDOWS_UWP
 using Windows.Foundation;
+using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 #endif
 
@@ -52,7 +54,7 @@ namespace Epoxy
                 SynchronizationContext.Current != null,
                 "Cannot use OnPropertyChanged() on worker thread context.");
 
-            return (TValue)value!;
+            return (value != null) ? (TValue)value : default;
         }
 
         public static implicit operator bool(ValueHolder vh) =>
@@ -97,17 +99,25 @@ namespace Epoxy
             vh.GetValue<Size>();
         public static implicit operator Point(ValueHolder vh) =>
             vh.GetValue<Point>();
+        public static implicit operator Thickness(ValueHolder vh) =>
+            vh.GetValue<Thickness>();
+        public static implicit operator Color(ValueHolder vh) =>
+            vh.GetValue<Color>();
 #if WINDOWS_WPF
         public static implicit operator Vector(ValueHolder vh) =>
             vh.GetValue<Vector>();
 #endif
 #if WINDOWS_WPF || WINDOWS_UWP
+        public static implicit operator Visibility(ValueHolder vh) =>
+            vh.GetValue<Visibility>();
         public static implicit operator Rect(ValueHolder vh) =>
             vh.GetValue<Rect>();
         public static implicit operator Matrix(ValueHolder vh) =>
             vh.GetValue<Matrix>();
 #endif
+        public static implicit operator ImageSource?(ValueHolder vh) =>
+            vh.GetValue<ImageSource?>();
         public static implicit operator Command?(ValueHolder vh) =>
-            vh.GetValue<Command>();
+            vh.GetValue<Command?>();
     }
 }
