@@ -20,26 +20,9 @@
 using Epoxy;
 using EpoxyHello.Wpf.Models;
 using System.Collections.ObjectModel;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace EpoxyHello.Wpf.ViewModels
 {
-    public sealed class ItemViewModel : ViewModel
-    {
-        public string? Title
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
-
-        public ImageSource? Image
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
-    }
-
     public sealed class MainWindowViewModel : ViewModel
     {
         public MainWindowViewModel()
@@ -57,7 +40,6 @@ namespace EpoxyHello.Wpf.ViewModels
                     var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
                     this.Items.Clear();
-
 
                     foreach (var reddit in reddits)
                     {

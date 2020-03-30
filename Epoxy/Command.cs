@@ -48,7 +48,7 @@ namespace Epoxy
 
         public event EventHandler? CanExecuteChanged;
 
-        public void InvokeCanExecuteChanged() =>
+        public void ChangeCanExecute() =>
             this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
         protected abstract bool OnCanExecute(object parameter);

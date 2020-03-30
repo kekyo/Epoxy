@@ -103,10 +103,19 @@ namespace Epoxy
             var properties = this.Prepare();
             if (properties.TryGetValue(propertyName!, out var oldValue))
             {
-                if (!ValueEquals(oldValue, newValue))
+                if (!DefaultValue<TValue>.ValueEquals(oldValue, newValue))
                 {
                     this.OnPropertyChanging(propertyName);
-                    properties[propertyName!] = newValue!;
+
+                    if (!DefaultValue<TValue>.IsDefault(newValue))
+                    {
+                        properties[propertyName!] = newValue!;
+                    }
+                    else
+                    {
+                        properties.Remove(propertyName!);
+                    }
+
                     this.OnPropertyChanged(propertyName);
                     propertyChanged?.Invoke(newValue);
                 }
@@ -114,31 +123,18 @@ namespace Epoxy
             else
             {
                 this.OnPropertyChanging(propertyName);
-                properties.Add(propertyName!, newValue!);
+
+                if (!DefaultValue<TValue>.IsDefault(newValue))
+                {
+                    properties.Add(propertyName!, newValue!);
+                }
+                else
+                {
+                    properties.Remove(propertyName!);
+                }
+
                 this.OnPropertyChanged(propertyName);
                 propertyChanged?.Invoke(newValue);
-            }
-        }
-
-        private static bool ValueEquals<TValue>(
-            object? oldValue,
-            TValue newValue)
-        {
-            if ((oldValue == null) && (newValue == null))
-            {
-                return true;
-            }
-            else if((oldValue == null) && (newValue != null))
-            {
-                return false;
-            }
-            else if((oldValue != null) && (newValue == null))
-            {
-                return false;
-            }
-            else
-            {
-                return oldValue!.Equals(newValue);
             }
         }
 
