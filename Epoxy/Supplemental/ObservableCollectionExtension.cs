@@ -22,7 +22,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Epoxy
+namespace Epoxy.Supplemental
 {
     public static class ObservableCollectionExtension
     {
