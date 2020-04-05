@@ -25,13 +25,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
         xmlns:converters="clr-namespace:EpoxyHello.Wpf.Views.Converters"
+        xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy"
         mc:Ignorable="d"
         Title="EpoxyHello.Wpf" Height="450" Width="800">
 
-    <Window.Resources>
-        <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
-    </Window.Resources>
-    
     <Window.DataContext>
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
@@ -40,22 +37,34 @@
         <Button DockPanel.Dock="Top" Height="30"
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
-        <ListBox ItemsSource="{Binding Items}"
+        <Grid>
+            <ListBox ItemsSource="{Binding Items}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ScrollViewer.CanContentScroll="False">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock
-                            Text="{Binding Title}"
-                            Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
-                        <Image
-                            Source="{Binding Image}"
-                            Stretch="UniformToFill" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>            
-        </ListBox>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <StackPanel.Resources>
+                                <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
+                            </StackPanel.Resources>
+
+                            <TextBlock
+                                Text="{Binding Title}"
+                                Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
+                            <Image
+                                Source="{Binding Image}"
+                                Stretch="UniformToFill" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Grid Width="50" Height="50"
+                  Margin="0,0,30,30"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Bottom"
+                  epoxy:ChildrenBinder.Collection="{Binding Indicators}">
+            </Grid>
+        </Grid>
     </DockPanel>
 </Window>

@@ -18,8 +18,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
+using EpoxyHello.Wpf.Controls;
 using EpoxyHello.Wpf.Models;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace EpoxyHello.Wpf.ViewModels
 {
@@ -28,11 +30,15 @@ namespace EpoxyHello.Wpf.ViewModels
         public MainWindowViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
+            this.Indicators = new ObservableCollection<UIElement>();
 
             // A handler for fetch button
             this.Fetch = CreateCommand(async () =>
             {
                 this.IsEnabled = false;
+
+                var waitingBlock = new WaitingBlock();
+                this.Indicators.Add(waitingBlock);
 
                 try
                 {
@@ -53,6 +59,7 @@ namespace EpoxyHello.Wpf.ViewModels
                 }
                 finally
                 {
+                    this.Indicators.Remove(waitingBlock);
                     IsEnabled = true;
                 }
             });
@@ -75,6 +82,12 @@ namespace EpoxyHello.Wpf.ViewModels
         public Command? Fetch
         {
             get => GetValue();
+            private set => SetValue(value);
+        }
+
+        public ObservableCollection<UIElement> Indicators
+        {
+            get => GetValue<ObservableCollection<UIElement>>();
             private set => SetValue(value);
         }
     }

@@ -73,36 +73,36 @@ namespace Epoxy
             d.ClearValue(ChildrenBridgeProperty);
 
 #if XAMARIN_FORMS
-        public static readonly BindableProperty ChildrenProperty =
+        public static readonly BindableProperty CollectionProperty =
             BindableProperty.CreateAttached(
-                "Children",
+                "Collection",
                 typeof(IList<UIElement>),
                 typeof(ChildrenBinder),
                 null,
                 BindingMode.OneWay,
                 null,
-                Children_PropertyChanged);
+                Collection_PropertyChanged);
 #else
-        public static readonly DependencyProperty ChildrenProperty =
+        public static readonly DependencyProperty CollectionProperty =
             DependencyProperty.RegisterAttached(
-                "Children",
+                "Collection",
                 typeof(IList<UIElement>),
                 typeof(ChildrenBinder),
-                new PropertyMetadata(null, Children_PropertyChanged));
+                new PropertyMetadata(null, Collection_PropertyChanged));
 #endif
 
-        public static IList<UIElement>? GetChildren(DependencyObject d) =>
-            (IList<UIElement>?)d.GetValue(ChildrenProperty);
+        public static IList<UIElement>? GetCollection(DependencyObject d) =>
+            (IList<UIElement>?)d.GetValue(CollectionProperty);
 
-        public static void SetChildren(DependencyObject d, IList<UIElement>? children) =>
-            d.SetValue(ChildrenProperty, children);
+        public static void SetCollection(DependencyObject d, IList<UIElement>? children) =>
+            d.SetValue(CollectionProperty, children);
 
 #if XAMARIN_FORMS
-        private static void Children_PropertyChanged(
+        private static void Collection_PropertyChanged(
             BindableObject d, object? oldValue, object? newValue)
         {
 #else
-        private static void Children_PropertyChanged(
+        private static void Collection_PropertyChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var newValue = e.NewValue;
@@ -128,27 +128,27 @@ namespace Epoxy
         private sealed class ChildrenBridge : IDisposable
         {
             private Panel? panel;
-            private IList<UIElement>? children;
+            private IList<UIElement>? collection;
 
-            public ChildrenBridge(Panel panel, IList<UIElement> children)
+            public ChildrenBridge(Panel panel, IList<UIElement> collection)
             {
                 this.panel = panel;
-                this.children = children;
+                this.collection = collection;
 
 #if XAMARIN_FORMS
                 // TODO: Cannot use DLR infrastructure on AOT platforms.
-                var panelChildren = ((dynamic)this.panel).Children;
+                var panelChildren = ((dynamic)this.panel!).Children;
 #else
                 var panelChildren = this.panel.Children;
 #endif
 
                 panelChildren.Clear();
-                foreach (var child in this.children)
+                foreach (var child in this.collection)
                 {
                     panelChildren.Add(child);
                 }
 
-                if (this.children is INotifyCollectionChanged ncc)
+                if (this.collection is INotifyCollectionChanged ncc)
                 {
                     ncc.CollectionChanged += this.CollectionChanged;
                 }
@@ -156,9 +156,9 @@ namespace Epoxy
 
             public void Dispose()
             {
-                if (this.children != null)
+                if (this.collection != null)
                 {
-                    if (this.children is INotifyCollectionChanged ncc)
+                    if (this.collection is INotifyCollectionChanged ncc)
                     {
                         ncc.CollectionChanged -= this.CollectionChanged;
                     }
@@ -170,7 +170,7 @@ namespace Epoxy
 #endif
                     panelChildren.Clear();
 
-                    this.children = null;
+                    this.collection = null;
                     this.panel = null;
                 }
             }
@@ -179,7 +179,7 @@ namespace Epoxy
             {
                 Debug.Assert(this.panel != null);
 
-                var children = this.children!;
+                var collection = this.collection!;
 #if XAMARIN_FORMS
                 // TODO: Cannot use DLR infrastructure on AOT platforms.
                 var panelChildren = ((dynamic)this.panel!).Children;
@@ -193,8 +193,8 @@ namespace Epoxy
                         if (e.NewItems.Count >= 1)
                         {
                             var startIndex =
-                                ((e.NewStartingIndex < children.Count) &&
-                                 (panelChildren.IndexOf(children[e.NewStartingIndex]) is int panelIndex &&
+                                ((e.NewStartingIndex < collection.Count) &&
+                                 (panelChildren.IndexOf(collection[e.NewStartingIndex]) is int panelIndex &&
                                   panelIndex >= 0)) ?
                                   panelIndex : panelChildren.Count;
 
@@ -231,7 +231,6 @@ namespace Epoxy
                             panelChildren.RemoveAt(e.OldStartingIndex);
                             panelChildren.Insert(e.NewStartingIndex + relativeIndex, child);
                         }
-
                         break;
 
                     case NotifyCollectionChangedAction.Reset:
