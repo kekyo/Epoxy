@@ -16,13 +16,13 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DefineConstants>WINDOWS_WPF</DefineConstants>
 
-    <AssemblyTitle>Epoxy.Wpf</AssemblyTitle>
+    <AssemblyTitle>Epoxy.Uwp</AssemblyTitle>
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
     <Copyright>Copyright (c) 2020 Kouji Matsui</Copyright>
     <Description>A minimum MVVM assister library.</Description>
 
-    <PackageId>Epoxy.Wpf</PackageId>
+    <PackageId>Epoxy.Uwp</PackageId>
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
     <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
     <RepositoryType>git</RepositoryType>
@@ -30,7 +30,7 @@
     <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
     <PackageIcon>Epoxy.100.png</PackageIcon>
-    <PackageTags>wpf;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
+    <PackageTags>uwp;uap;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
