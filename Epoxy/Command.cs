@@ -81,7 +81,7 @@ namespace Epoxy
                 }
                 else
                 {
-                    Trace.Fail($"Epoxy: unobserved {ex.GetType().FullName}: {ex.Message}");
+                    Debug.Fail($"Epoxy: unobserved {ex.GetType().FullName}: {ex.Message}");
                 }
             }
         }

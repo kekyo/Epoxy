@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -196,6 +197,14 @@ namespace Epoxy
             Func<TParameter, bool> canExecute) =>
             new DelegatedCommand<TParameter>(execute, canExecute);
 
+#if WINDOWS_UWP
+        private static bool IsPrimitive(Type type) =>
+            type.GetTypeInfo().IsPrimitive;
+#else
+        private static bool IsPrimitive(Type type) =>
+            type.IsPrimitive;
+#endif
+
         public string PrettyPrint =>
             string.Join(
                 ",",
@@ -204,7 +213,7 @@ namespace Epoxy
                     p.CanRead &&
                     (p.GetGetMethod() != null) &&
                     (p.GetIndexParameters().Length == 0) &&
-                    (p.PropertyType.IsPrimitive || p.PropertyType == typeof(string))).
+                    (IsPrimitive(p.PropertyType) || p.PropertyType == typeof(string))).
                 OrderBy(p => p.Name).
                 Select(p => $"{p.Name}={p.GetValue(this)}"));
 

@@ -20,6 +20,7 @@
 #nullable enable
 
 using System.Diagnostics;
+using System.Reflection;
 
 #if WINDOWS_UWP
 using System;
@@ -81,11 +82,6 @@ namespace Epoxy
 
         public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
             new DelegatedValueConverter<TTo, TFrom, TParameter>(convert, convertBack);
-
-        public static ValueConverter Create<T1, T2>()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public abstract class ValueConverter<TTo, TFrom> : ValueConverter

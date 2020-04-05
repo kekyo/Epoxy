@@ -1,70 +1,55 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CAE7B7FE-9B7B-4E6C-A9F4-0D3F30E58E0C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Epoxy</RootNamespace>
     <AssemblyName>Epoxy</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
-    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+
+    <TargetFramework>uap10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Nullable>Enable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+    <GenerateLibraryLayout>false</GenerateLibraryLayout>
+    <RootNamespace>Epoxy</RootNamespace>
+    <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Platforms>AnyCPU</Platforms>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DefineConstants>WINDOWS_WPF</DefineConstants>
+
+    <AssemblyTitle>Epoxy.Wpf</AssemblyTitle>
+    <Product>Epoxy</Product>
+    <Trademark>Epoxy</Trademark>
+    <Copyright>Copyright (c) 2020 Kouji Matsui</Copyright>
+    <Description>A minimum MVVM assister library.</Description>
+
+    <PackageId>Epoxy.Wpf</PackageId>
+    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
+    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
+    <PackageIcon>Epoxy.100.png</PackageIcon>
+    <PackageTags>wpf;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <Optimize>false</Optimize>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Optimize>true</Optimize>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="CenterCLR.RelaxVersioner" Version="1.0.5" PrivateAssets="All" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+    <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
     <EmbeddedResource Include="Properties\Epoxy.Uwp.rd.xml" />
-    <Compile Include="../Epoxy/*.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="CenterCLR.RelaxVersioner">
-      <Version>1.0.5</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.9</Version>
-    </PackageReference>
-    <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.5.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Epoxy.Uwp.nuspec" />
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
-    <VisualStudioVersion>14.0</VisualStudioVersion>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
