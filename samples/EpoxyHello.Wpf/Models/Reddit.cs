@@ -62,7 +62,7 @@ namespace EpoxyHello.Wpf.Models
             }
         }
 
-        public static async ValueTask<ImageSource> FetchImageAsync(Uri url)
+        private static async ValueTask<Stream> InternalFetchAsync(Uri url)
         {
             using (var response =
                 await httpClient.
@@ -78,12 +78,19 @@ namespace EpoxyHello.Wpf.Models
                         ConfigureAwait(false);
 
                     ms.Position = 0;
-                    var bitmap = new WriteableBitmap(BitmapFrame.Create(ms));
-                    bitmap.Freeze();
 
-                    return bitmap;
+                    return ms;
                 }
             }
+        }
+
+        public static async ValueTask<ImageSource> FetchImageAsync(Uri url)
+        {
+            var bitmap = new WriteableBitmap(
+                BitmapFrame.Create(await InternalFetchAsync(url)));
+            bitmap.Freeze();
+
+            return bitmap;
         }
     }
 }
