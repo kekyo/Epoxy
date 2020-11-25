@@ -28,7 +28,7 @@ namespace Epoxy
 {
     public interface IAsyncCommand
     {
-        ValueTask ExecuteAsync(object parameter);
+        ValueTask ExecuteAsync(object? parameter);
     }
 
     public sealed class UnobservedExceptionEventArgs : EventArgs
@@ -51,21 +51,21 @@ namespace Epoxy
         public void ChangeCanExecute() =>
             this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
-        protected abstract bool OnCanExecute(object parameter);
+        protected abstract bool OnCanExecute(object? parameter);
 
-        private protected virtual void OnExecute(object parameter) =>
+        private protected virtual void OnExecute(object? parameter) =>
             _ = this.OnExecuteAsync(parameter);
 
-        private protected virtual ValueTask OnExecuteAsync(object parameter)
+        private protected virtual ValueTask OnExecuteAsync(object? parameter)
         {
             this.OnExecute(parameter);
             return new ValueTask();
         }
 
-        public bool CanExecute(object parameter) =>
+        public bool CanExecute(object? parameter) =>
             this.OnCanExecute(parameter);
 
-        public async ValueTask ExecuteAsync(object parameter)
+        public async ValueTask ExecuteAsync(object? parameter)
         {
             var task = this.OnExecuteAsync(parameter);
 
@@ -86,7 +86,7 @@ namespace Epoxy
             }
         }
 
-        public void Execute(object parameter) =>
+        public void Execute(object? parameter) =>
             this.OnExecute(parameter);
     }
 }

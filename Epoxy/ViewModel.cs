@@ -34,6 +34,8 @@ namespace Epoxy
     [DebuggerDisplay("{PrettyPrint}")]
     public abstract class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged
     {
+        private static readonly object[] empty = new object[0];
+
         private Dictionary<string, object?>? properties;
 
         protected ViewModel()
@@ -87,7 +89,7 @@ namespace Epoxy
             }
             else
             {
-                return defaultValue;
+                return defaultValue!;
             }
         }
 
@@ -215,7 +217,7 @@ namespace Epoxy
                     (p.GetIndexParameters().Length == 0) &&
                     (IsPrimitive(p.PropertyType) || p.PropertyType == typeof(string))).
                 OrderBy(p => p.Name).
-                Select(p => $"{p.Name}={p.GetValue(this)}"));
+                Select(p => $"{p.Name}={p.GetValue(this, empty)}"));
 
         public override string ToString() =>
             this.PrettyPrint;

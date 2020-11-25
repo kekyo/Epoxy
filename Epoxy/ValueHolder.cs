@@ -32,6 +32,7 @@ using Windows.UI.Xaml.Media;
 
 #if WINDOWS_WPF
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 #endif
 
@@ -54,7 +55,7 @@ namespace Epoxy
                 SynchronizationContext.Current != null,
                 "Cannot use OnPropertyChanged() on worker thread context.");
 
-            return (value != null) ? (TValue)value : default;
+            return (value != null) ? (TValue)value! : default!;
         }
 
         public static implicit operator bool(ValueHolder vh) =>

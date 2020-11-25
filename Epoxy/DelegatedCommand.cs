@@ -47,14 +47,14 @@ namespace Epoxy
             this.canExecute = canExecute;
         }
 
-        protected override bool OnCanExecute(object parameter)
+        protected override bool OnCanExecute(object? parameter)
         {
             Debug.Assert(parameter == null);
 
             return (parameter == null) && canExecute.Invoke();
         }
 
-        private protected override void OnExecute(object parameter) =>
+        private protected override void OnExecute(object? parameter) =>
             execute();
     }
 
@@ -81,14 +81,14 @@ namespace Epoxy
             this.canExecute = canExecute;
         }
 
-        protected override bool OnCanExecute(object parameter)
+        protected override bool OnCanExecute(object? parameter)
         {
             Debug.Assert((parameter == null) || (parameter is TParameter));
 
             return parameter is TParameter p && canExecute.Invoke(p);
         }
 
-        private protected override void OnExecute(object parameter) =>
-            execute((TParameter)parameter);
+        private protected override void OnExecute(object? parameter) =>
+            execute((TParameter)parameter!);
     }
 }

@@ -175,7 +175,7 @@ namespace Epoxy
                 }
             }
 
-            private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+            private void CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
             {
                 Debug.Assert(this.panel != null);
 
@@ -190,7 +190,7 @@ namespace Epoxy
                 switch (e.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        if (e.NewItems.Count >= 1)
+                        if (e.NewItems!.Count >= 1)
                         {
                             var startIndex =
                                 ((e.NewStartingIndex < collection.Count) &&
@@ -207,7 +207,7 @@ namespace Epoxy
                         break;
 
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (UIElement? child in e.OldItems)
+                        foreach (UIElement? child in e.OldItems!)
                         {
                             panelChildren.Remove(child);
                         }
@@ -215,8 +215,8 @@ namespace Epoxy
 
                     case NotifyCollectionChangedAction.Replace:
                         foreach (var entry in
-                            e.OldItems.Cast<UIElement?>().
-                            Zip(e.NewItems.Cast<UIElement?>(),
+                            e.OldItems!.Cast<UIElement?>().
+                            Zip(e.NewItems!.Cast<UIElement?>(),
                             (o, n) => new { panelIndex = panelChildren.IndexOf(o), newChild = n }).
                             Where(entry => entry.panelIndex >= 0))
                         {
@@ -225,7 +225,7 @@ namespace Epoxy
                         break;
 
                     case NotifyCollectionChangedAction.Move:
-                        for (var relativeIndex = 0; relativeIndex < e.NewItems.Count; relativeIndex++)
+                        for (var relativeIndex = 0; relativeIndex < e.NewItems!.Count; relativeIndex++)
                         {
                             var child = (UIElement?)e.NewItems[relativeIndex];
                             panelChildren.RemoveAt(e.OldStartingIndex);
