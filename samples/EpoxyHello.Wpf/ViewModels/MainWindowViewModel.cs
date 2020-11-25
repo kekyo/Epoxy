@@ -21,7 +21,11 @@ using Epoxy;
 using EpoxyHello.Wpf.Controls;
 using EpoxyHello.Wpf.Models;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace EpoxyHello.Wpf.ViewModels
 {
@@ -33,7 +37,7 @@ namespace EpoxyHello.Wpf.ViewModels
             this.Indicators = new ObservableCollection<UIElement>();
 
             // A handler for fetch button
-            this.Fetch = CreateCommand(async () =>
+            this.Fetch = Command.Create(async () =>
             {
                 this.IsEnabled = false;
 
@@ -65,30 +69,75 @@ namespace EpoxyHello.Wpf.ViewModels
             });
 
             this.IsEnabled = true;
+
+            //////////////////////////////////////////////////////////////////////////
+            // Anchor/Pile:
+
+            // Pile is an safe accessor of a temporary UIElement reference in view model.
+            // CAUTION: NOT RECOMMENDED for normal usage on MVVM architecture,
+            //    Pile is a last solution for complex UI manipulation.
+            this.ButtonPile = Pile.Create<Button>();
+            this.ButtonPileInvoker = Command.Create(() =>
+                this.ButtonPile.Execute(
+                    // Rent temporary UIElement reference only inside of lambda expression.
+                    button => button.Background = Brushes.Red));
+
+            //////////////////////////////////////////////////////////////////////////
+            // UIThread:
+
+            var _ = Task.Run(async () =>
+            {
+                var count = 0;
+                while (true)
+                {
+                    await Task.Delay(500).ConfigureAwait(false);
+                    await UIThread.Bind();
+                    this.ThreadIncrementer = count.ToString();
+                    count++;
+                }
+            });
         }
 
         public bool IsEnabled
         {
-            get => GetValue();
-            private set => SetValue(value);
+            get => this.GetValue();
+            private set => this.SetValue(value);
         }
 
         public ObservableCollection<ItemViewModel>? Items
         {
-            get => GetValue<ObservableCollection<ItemViewModel>?>();
-            private set => SetValue(value);
+            get => this.GetValue<ObservableCollection<ItemViewModel>?>();
+            private set => this.SetValue(value);
         }
 
         public Command? Fetch
         {
-            get => GetValue();
-            private set => SetValue(value);
+            get => this.GetValue();
+            private set => this.SetValue(value);
         }
 
         public ObservableCollection<UIElement> Indicators
         {
-            get => GetValue<ObservableCollection<UIElement>>();
-            private set => SetValue(value);
+            get => this.GetValue<ObservableCollection<UIElement>>();
+            private set => this.SetValue(value);
+        }
+
+        public Pile<Button>? ButtonPile
+        {
+            get => this.GetValue<Pile<Button>?>();
+            private set => this.SetValue(value);
+        }
+
+        public Command? ButtonPileInvoker
+        {
+            get => this.GetValue();
+            private set => this.SetValue(value);
+        }
+
+        public string? ThreadIncrementer
+        {
+            get => this.GetValue();
+            private set => this.SetValue(value);
         }
     }
 }

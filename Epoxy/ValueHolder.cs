@@ -82,8 +82,8 @@ namespace Epoxy
             vh.GetValue<double>();
         public static implicit operator char(ValueHolder vh) =>
             vh.GetValue<char>();
-        public static implicit operator string(ValueHolder vh) =>
-            vh.GetValue<string>();
+        public static implicit operator string?(ValueHolder vh) =>
+            vh.GetValue<string?>();
         public static implicit operator decimal(ValueHolder vh) =>
             vh.GetValue<decimal>();
         public static implicit operator DateTime(ValueHolder vh) =>
@@ -94,8 +94,8 @@ namespace Epoxy
             vh.GetValue<TimeSpan>();
         public static implicit operator Guid(ValueHolder vh) =>
             vh.GetValue<Guid>();
-        public static implicit operator Uri(ValueHolder vh) =>
-            vh.GetValue<Uri>();
+        public static implicit operator Uri?(ValueHolder vh) =>
+            vh.GetValue<Uri?>();
         public static implicit operator Size(ValueHolder vh) =>
             vh.GetValue<Size>();
         public static implicit operator Point(ValueHolder vh) =>
@@ -107,12 +107,12 @@ namespace Epoxy
 #if WINDOWS_WPF
         public static implicit operator Vector(ValueHolder vh) =>
             vh.GetValue<Vector>();
-        public static implicit operator Pen(ValueHolder vh) =>
-            vh.GetValue<Pen>();
+        public static implicit operator Pen?(ValueHolder vh) =>
+            vh.GetValue<Pen?>();
 #endif
 #if WINDOWS_WPF || WINDOWS_UWP
-        public static implicit operator Brush(ValueHolder vh) =>
-            vh.GetValue<Brush>();
+        public static implicit operator Brush?(ValueHolder vh) =>
+            vh.GetValue<Brush?>();
         public static implicit operator Rect(ValueHolder vh) =>
             vh.GetValue<Rect>();
         public static implicit operator Matrix(ValueHolder vh) =>
@@ -128,5 +128,7 @@ namespace Epoxy
             vh.GetValue<ImageSource?>();
         public static implicit operator Command?(ValueHolder vh) =>
             vh.GetValue<Command?>();
+        public static implicit operator Pile?(ValueHolder vh) =>
+            vh.GetValue<Pile?>();
     }
 }

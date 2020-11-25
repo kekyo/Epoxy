@@ -12,7 +12,6 @@
     <DebugSymbols>true</DebugSymbols>
     <Platforms>AnyCPU</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DefineConstants>WINDOWS_WPF</DefineConstants>
 
     <AssemblyTitle>Epoxy.Wpf</AssemblyTitle>
     <Product>Epoxy</Product>
@@ -31,11 +30,19 @@
     <PackageTags>wpf;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
- 
-  <ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;WINDOWS_WPF</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;WINDOWS_WPF</DefineConstants>
+  </PropertyGroup>
+
+    <ItemGroup>
     <PackageReference Include="CenterCLR.RelaxVersioner" Version="1.0.5" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

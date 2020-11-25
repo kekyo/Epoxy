@@ -88,5 +88,41 @@ namespace Epoxy
 
         public void Execute(object? parameter) =>
             this.OnExecute(parameter);
+
+        public static Command Create(
+            Func<ValueTask> executeAsync) =>
+            new DelegatedAsyncCommand(executeAsync);
+
+        public static Command Create(
+            Func<ValueTask> executeAsync,
+            Func<bool> canExecute) =>
+            new DelegatedAsyncCommand(executeAsync, canExecute);
+
+        public static Command Create(
+            Action execute) =>
+            new DelegatedCommand(execute);
+
+        public static Command Create(
+            Action execute,
+            Func<bool> canExecute) =>
+            new DelegatedCommand(execute, canExecute);
+
+        public static Command Create<TParameter>(
+            Func<TParameter, ValueTask> executeAsync) =>
+            new DelegatedAsyncCommand<TParameter>(executeAsync);
+
+        public static Command Create<TParameter>(
+            Func<TParameter, ValueTask> executeAsync,
+            Func<TParameter, bool> canExecute) =>
+            new DelegatedAsyncCommand<TParameter>(executeAsync, canExecute);
+
+        public static Command Create<TParameter>(
+            Action<TParameter> execute) =>
+            new DelegatedCommand<TParameter>(execute);
+
+        public static Command Create<TParameter>(
+            Action<TParameter> execute,
+            Func<TParameter, bool> canExecute) =>
+            new DelegatedCommand<TParameter>(execute, canExecute);
     }
 }

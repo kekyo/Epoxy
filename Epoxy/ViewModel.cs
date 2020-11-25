@@ -24,18 +24,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Epoxy
 {
-    [DebuggerDisplay("{PrettyPrint}")]
-    public abstract class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged
+    public abstract class ViewModel : Model, INotifyPropertyChanging, INotifyPropertyChanged
     {
-        private static readonly object[] empty = new object[0];
-
         private Dictionary<string, object?>? properties;
 
         protected ViewModel()
@@ -163,63 +158,11 @@ namespace Epoxy
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected Command CreateCommand(
-            Func<ValueTask> executeAsync) =>
-            new DelegatedAsyncCommand(executeAsync);
-
-        protected Command CreateCommand(
-            Func<ValueTask> executeAsync,
-            Func<bool> canExecute) =>
-            new DelegatedAsyncCommand(executeAsync, canExecute);
-
-        protected Command CreateCommand(
-            Action execute) =>
-            new DelegatedCommand(execute);
-
-        protected Command CreateCommand(
-            Action execute,
-            Func<bool> canExecute) =>
-            new DelegatedCommand(execute, canExecute);
-
-        protected Command CreateCommand<TParameter>(
-            Func<TParameter, ValueTask> executeAsync) =>
-            new DelegatedAsyncCommand<TParameter>(executeAsync);
-
-        protected Command CreateCommand<TParameter>(
-            Func<TParameter, ValueTask> executeAsync,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedAsyncCommand<TParameter>(executeAsync, canExecute);
-
-        protected Command CreateCommand<TParameter>(
-            Action<TParameter> execute) =>
-            new DelegatedCommand<TParameter>(execute);
-
-        protected Command CreateCommand<TParameter>(
-            Action<TParameter> execute,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(execute, canExecute);
-
-#if WINDOWS_UWP
-        private static bool IsPrimitive(Type type) =>
-            type.GetTypeInfo().IsPrimitive;
-#else
-        private static bool IsPrimitive(Type type) =>
-            type.IsPrimitive;
-#endif
-
-        public string PrettyPrint =>
+        public override string PrettyPrint =>
             string.Join(
                 ",",
-                this.GetType().GetProperties().
-                Where(p =>
-                    p.CanRead &&
-                    (p.GetGetMethod() != null) &&
-                    (p.GetIndexParameters().Length == 0) &&
-                    (IsPrimitive(p.PropertyType) || p.PropertyType == typeof(string))).
-                OrderBy(p => p.Name).
-                Select(p => $"{p.Name}={p.GetValue(this, empty)}"));
-
-        public override string ToString() =>
-            this.PrettyPrint;
+                this.EnumerateProperties().
+                OrderBy(entry => entry.name).
+                Select(entry => $"{entry.name}={entry.value ?? "(null)"}"));
     }
 }

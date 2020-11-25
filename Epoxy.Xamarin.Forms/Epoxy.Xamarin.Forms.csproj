@@ -12,7 +12,6 @@
     <Platforms>AnyCPU</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <DefineConstants>XAMARIN_FORMS</DefineConstants>
 
     <AssemblyTitle>Epoxy.Xamarin.Forms</AssemblyTitle>
     <Product>Epoxy</Product>
@@ -32,10 +31,18 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;XAMARIN_FORMS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;XAMARIN_FORMS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="CenterCLR.RelaxVersioner" Version="1.0.5" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" /> <!-- TODO: -->
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
   </ItemGroup>
 
