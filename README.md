@@ -2,6 +2,8 @@
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
+[![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
 |Package|Status|
 |:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|
@@ -11,16 +13,16 @@
 ## What is this ?
 
 * Epoxy is .NET XAML Model-View-ViewModel data-bindable infrastructure library, and very simple usage API sets.
+* Supported platforms:
+  * WPF: .NET Core 3.0/3.1, .NET Framework 4.5/4.8
+  * UWP: Universal Windows 10
+  * Xamarin Forms: .NET Standard 2.0
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * Easy understandable.
 * Supported simplest and minimalism Model-View-ViewModel design.
 * Smallest footprint.
 * Friction-free for combination other MVVM frameworks such as ReactiveProperty and etc.
-
-## Current status:
-
-* Still under construction.
 
 ## Sample code
 
@@ -79,16 +81,16 @@ public sealed class MainWindowViewModel : ViewModel
     //    Epoxy can handle with C# 8.0's nullable reference types.
     public Command? Fetch
     {
-        get => GetValue();
-        private set => SetValue(value);
+        get => this.GetValue();
+        private set => this.SetValue(value);
     }
 
-    public ObservableCollection<Image>? Items
+    public ObservableCollection<ImageSource>? Items
     {
         // Step 2-1: Can suppress the GetValue() generic argument
         //   if use basic types (primitives, string, Command and etc).
-        get => GetValue<ObservableCollection<Image>?>();
-        private set => SetValue(value);
+        get => this.GetValue<ObservableCollection<ImageSource>?>();
+        private set => this.SetValue(value);
     }
 
     public MainWindowViewModel()
@@ -97,8 +99,8 @@ public sealed class MainWindowViewModel : ViewModel
         this.Items = new ObservableCollection<ItemViewModel>();
 
         // Step 4: A handler for fetch button.
-        //   Ofcourse, we can use async/await with safer lambda expressions!
-        this.Fetch = CreateCommand(async () =>
+        //   Ofcourse, we can use async/await safely in lambda expressions!
+        this.Fetch = Command.Create(async () =>
         {
             var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
@@ -112,6 +114,29 @@ public sealed class MainWindowViewModel : ViewModel
     }
 }
 ```
+
+## Minor but unique useful features
+
+### ChildrenBinder
+
+TODO:
+
+[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
+
+[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
+
+### Anchor/Pile
+
+Anchor/Pile pair is a loose connection between UIElement (Xamarin Forms Element) and view models.
+
+Rare case in MVVM architecture, we have to access directly UIElement member,
+but sometimes gointg to wait the pitfall of circular references (and couldn't unbind by GC).
+
+The Pile pull in the UIElement's anchor, and we can rent temporary UIElement reference safely inside view model.
+
+[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
+
+[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
 
 ## License
 
