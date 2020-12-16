@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Epoxy
 {
@@ -88,10 +89,10 @@ namespace Epoxy
             }
         }
 
-        public void SetValue<TValue>(
+        private ValueTask InternalSetValueAsync<TValue>(
             TValue newValue,
-            Action<TValue>? propertyChanged = null,
-            [CallerMemberName] string? propertyName = null)
+            Func<TValue, ValueTask>? propertyChanged,
+            string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
             Debug.Assert(
@@ -115,7 +116,10 @@ namespace Epoxy
                     }
 
                     this.OnPropertyChanged(propertyName);
-                    propertyChanged?.Invoke(newValue);
+                    if (propertyChanged is Func<TValue, ValueTask> pc)
+                    {
+                        return pc.Invoke(newValue);
+                    }
                 }
             }
             else
@@ -132,9 +136,25 @@ namespace Epoxy
                 }
 
                 this.OnPropertyChanged(propertyName);
-                propertyChanged?.Invoke(newValue);
+                if (propertyChanged is Func<TValue, ValueTask> pc)
+                {
+                    return pc.Invoke(newValue);
+                }
             }
+
+            return default;
         }
+
+        public ValueTask SetValueAsync<TValue>(
+            TValue newValue,
+            Func<TValue, ValueTask> propertyChanged,
+            [CallerMemberName] string? propertyName = null) =>
+            this.InternalSetValueAsync(newValue, propertyChanged, propertyName);
+
+        public void SetValue<TValue>(
+            TValue newValue,
+            [CallerMemberName] string? propertyName = null) =>
+            _ = this.InternalSetValueAsync(newValue, null, propertyName);
 
         protected void OnPropertyChanging(
             [CallerMemberName] string? propertyName = null)
@@ -164,5 +184,36 @@ namespace Epoxy
                 this.EnumerateProperties().
                 OrderBy(entry => entry.name).
                 Select(entry => $"{entry.name}={entry.value ?? "(null)"}"));
+    }
+
+    public static class ViewModelExtension
+    {
+        public static ValueTask SetValueAsync<TValue>(
+            this ViewModel viewModel,
+            TValue newValue,
+            Func<TValue, Task> propertyChanged,
+            [CallerMemberName] string? propertyName = null) =>
+            viewModel.SetValueAsync(
+                newValue,
+                value => new ValueTask(propertyChanged(value)),
+                propertyName);
+
+        [Obsolete("Synchronous callback is obsoleted. Use SetValueSync instead.")]
+        public static void SetValue<TValue>(
+            this ViewModel viewModel,
+            TValue newValue,
+            Action<TValue> propertyChanged,
+            [CallerMemberName] string? propertyName = null) =>
+            viewModel.SetValue(newValue, propertyChanged, propertyName);
+
+        public static void SetValueSync<TValue>(
+            this ViewModel viewModel,
+            TValue newValue,
+            Action<TValue> propertyChanged,
+            [CallerMemberName] string? propertyName = null) =>
+            _ = viewModel.SetValueAsync(
+                newValue,
+                value => { propertyChanged(value); return default; },
+                propertyName);
     }
 }

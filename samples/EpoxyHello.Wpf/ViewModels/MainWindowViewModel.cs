@@ -77,8 +77,8 @@ namespace EpoxyHello.Wpf.ViewModels
             // CAUTION: NOT RECOMMENDED for normal usage on MVVM architecture,
             //    Pile is a last solution for complex UI manipulation.
             this.ButtonPile = Pile.Create<Button>();
-            this.ButtonPileInvoker = Command.Create(() =>
-                this.ButtonPile.Execute(
+            this.ButtonPileInvoker = Command.Factory.CreateSync(() =>
+                this.ButtonPile.ExecuteSync(
                     // Rent temporary UIElement reference only inside of lambda expression.
                     button => button.Background = Brushes.Red));
 
@@ -90,8 +90,14 @@ namespace EpoxyHello.Wpf.ViewModels
                 var count = 0;
                 while (true)
                 {
+                    // Disjoint UI thread from current task.
                     await Task.Delay(500).ConfigureAwait(false);
+
+                    // Rejoint UI thread.
+                    // The bind method will cause InvalidOperationException if platform Application context was discarded.
                     await UIThread.Bind();
+
+                    // Grant access UI contents.
                     this.ThreadIncrementer = count.ToString();
                     count++;
                 }

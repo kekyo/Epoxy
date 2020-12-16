@@ -21,6 +21,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 #if WINDOWS_UWP
@@ -58,7 +59,7 @@ namespace Epoxy
                     }
                     if (n is Pile np)
                     {
-                        np.Moor((UIElement)b);
+                        np.Moore((UIElement)b);
                     }
                 });
 #else
@@ -75,7 +76,7 @@ namespace Epoxy
                     }
                     if (e.NewValue is Pile np)
                     {
-                        np.Moor((UIElement)d);
+                        np.Moore((UIElement)d);
                     }
                 }));
 #endif
@@ -95,7 +96,7 @@ namespace Epoxy
         internal Pile()
         { }
 
-        internal abstract void Moor(UIElement element);
+        internal abstract void Moore(UIElement element);
         internal abstract void Release(UIElement element);
 
         public static Pile<UIElement> Create() =>
@@ -112,7 +113,7 @@ namespace Epoxy
         private readonly WeakReference element =
             new WeakReference(null);
 
-        internal override void Moor(UIElement element)
+        internal override void Moore(UIElement element)
         {
             Debug.Assert(element is TUIElement);
             this.element.Target = (TUIElement)element;
@@ -124,6 +125,7 @@ namespace Epoxy
             this.element.Target = null;
         }
 
+        [Obsolete("Synchronous instance method is obsoleted. Use ExecuteSync instead.")]
         public void Execute(Action<TUIElement> action, bool canIgnore = false)
         {
             if (this.element.Target is TUIElement element)
@@ -132,10 +134,11 @@ namespace Epoxy
             }
             else if (!canIgnore)
             {
-                throw new InvalidOperationException("Didn't moor a UIElement.");
+                throw new InvalidOperationException("Didn't moore a UIElement.");
             }
         }
 
+        [Obsolete("Synchronous instance method is obsoleted. Use ExecuteSync instead.")]
         public T Execute<T>(Func<TUIElement, T> action)
         {
             if (this.element.Target is TUIElement element)
@@ -144,7 +147,7 @@ namespace Epoxy
             }
             else
             {
-                throw new InvalidOperationException("Didn't moor a UIElement.");
+                throw new InvalidOperationException("Didn't moore a UIElement.");
             }
         }
 
@@ -156,7 +159,7 @@ namespace Epoxy
             }
             else if (!canIgnore)
             {
-                throw new InvalidOperationException("Didn't moor a UIElement.");
+                throw new InvalidOperationException("Didn't moore a UIElement.");
             }
             else
             {
@@ -172,7 +175,7 @@ namespace Epoxy
             }
             else
             {
-                throw new InvalidOperationException("Didn't moor a UIElement.");
+                throw new InvalidOperationException("Didn't moore a UIElement.");
             }
         }
 
@@ -180,5 +183,47 @@ namespace Epoxy
             this.element.Target is TUIElement element ?
                 $"Mooring: {element.GetType().FullName}" :
                 "Released";
+    }
+
+    public static class PileExtension
+    {
+        public static ValueTask ExecuteAsync<TUIElement>(
+            this Pile<TUIElement> pile,
+            Func<TUIElement, Task> action, bool canIgnore = false)
+            where TUIElement : UIElement =>
+            pile.ExecuteAsync(element => new ValueTask(action(element)), canIgnore);
+
+        public static ValueTask<T> ExecuteAsync<TUIElement, T>(
+            this Pile<TUIElement> pile,
+            Func<TUIElement, Task<T>> action)
+            where TUIElement : UIElement =>
+            pile.ExecuteAsync(element => new ValueTask<T>(action(element)));
+
+        public static void ExecuteSync<TUIElement>(
+            this Pile<TUIElement> pile,
+            Action<TUIElement> action, bool canIgnore = false)
+            where TUIElement : UIElement =>
+            pile.ExecuteAsync(element => { action(element); return default; }, canIgnore);
+
+        public static T ExecuteSync<TUIElement, T>(
+            this Pile<TUIElement> pile,
+            Func<TUIElement, T> action)
+            where TUIElement : UIElement
+        {
+            var (result, edi) = pile.ExecuteAsync(element =>
+            {
+                try
+                {
+                    return new ValueTask<(T, ExceptionDispatchInfo?)>((action(element), default));
+                }
+                catch (Exception ex)
+                {
+                    return new ValueTask<(T, ExceptionDispatchInfo?)>((default!, ExceptionDispatchInfo.Capture(ex)));
+                }
+            }).Result;  // Will not block
+
+            edi?.Throw();
+            return result;
+        }
     }
 }
