@@ -43,7 +43,7 @@
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
   </ItemGroup>
 
   <ItemGroup>
