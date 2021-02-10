@@ -16,7 +16,7 @@
     <AssemblyTitle>Epoxy.Xamarin.Forms</AssemblyTitle>
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
-    <Copyright>Copyright (c) 2020 Kouji Matsui</Copyright>
+    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
     <Description>A minimum MVVM assister library.</Description>
 
     <PackageId>Epoxy.Xamarin.Forms</PackageId>
@@ -39,9 +39,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CenterCLR.RelaxVersioner" Version="1.0.5" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" /> <!-- TODO: -->
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
   </ItemGroup>
