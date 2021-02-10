@@ -17,7 +17,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Android.App;
-using System.Runtime.InteropServices;
+using Xamarin.Forms;
 
-[assembly: ComVisible(false)]
+namespace EpoxyHello.Xamarin.Forms.Views
+{
+    public partial class MainPage : ContentPage
+    {
+        public MainPage() =>
+            InitializeComponent();
+    }
+}

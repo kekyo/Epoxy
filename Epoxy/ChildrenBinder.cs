@@ -39,7 +39,7 @@ using System.Windows.Controls;
 using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
 using DependencyProperty = Xamarin.Forms.BindableProperty;
-using UIElement = Xamarin.Forms.Element;
+using UIElement = Xamarin.Forms.VisualElement;
 using Panel = Xamarin.Forms.Layout;
 #endif
 
@@ -125,6 +125,110 @@ namespace Epoxy
             }
         }
 
+#if XAMARIN_FORMS
+        private abstract class PanelChildrenAccessor
+        {
+            public abstract int Count(Panel panel);
+            public abstract int IndexOf(Panel panel, UIElement element);
+            public abstract void Clear(Panel panel);
+            public abstract void Add(Panel panel, UIElement element);
+            public abstract void Insert(Panel panel, int index, UIElement element);
+            public abstract void Set(Panel panel, int index, UIElement element);
+            public abstract void Remove(Panel panel, UIElement element);
+            public abstract void RemoveAt(Panel panel, int index);
+        }
+
+        [DebuggerStepThrough]
+        private sealed class PanelChildrenAccessor<T> : PanelChildrenAccessor
+            where T : UIElement
+        {
+            public override int Count(Panel panel) =>
+                ((IViewContainer<T>)panel).Children.Count;
+
+            public override int IndexOf(Panel panel, UIElement element) =>
+                ((IViewContainer<T>)panel).Children.IndexOf((T)element);
+
+            public override void Clear(Panel panel) =>
+                ((IViewContainer<T>)panel).Children.Clear();
+
+            public override void Add(Panel panel, UIElement element) =>
+                ((IViewContainer<T>)panel).Children.Add((T)element);
+
+            public override void Insert(Panel panel, int index, UIElement element) =>
+                ((IViewContainer<T>)panel).Children.Insert(index, (T)element);
+
+            public override void Set(Panel panel, int index, UIElement element) =>
+                ((IViewContainer<T>)panel).Children[index] = (T)element;
+
+            public override void Remove(Panel panel, UIElement element) =>
+                ((IViewContainer<T>)panel).Children.Remove((T)element);
+
+            public override void RemoveAt(Panel panel, int index) =>
+                ((IViewContainer<T>)panel).Children.RemoveAt(index);
+        }
+
+        private static readonly Dictionary<Type, PanelChildrenAccessor> accessors =
+            new Dictionary<Type, PanelChildrenAccessor>();
+
+        [DebuggerStepThrough]
+        private static PanelChildrenAccessor GetPanelChildrenAccessor(Panel panel)
+        {
+            Debug.Assert(UIThread.IsBound);
+
+            var type = panel.GetType();
+            if (!accessors.TryGetValue(type, out var accessor))
+            {
+                var elementType = type.GetInterfaces().
+                    Where(it => it.IsGenericType && it.GetGenericTypeDefinition() == typeof(IViewContainer<>)).
+                    Select(it => it.GetGenericArguments()[0]).
+                    First();
+
+                accessor = (PanelChildrenAccessor)Activator.CreateInstance(
+                    typeof(PanelChildrenAccessor<>).MakeGenericType(elementType));
+                accessors.Add(type, accessor);
+            }
+            return accessor;
+        }
+#else
+        [DebuggerStepThrough]
+        private sealed class PanelChildrenAccessor
+        {
+            private PanelChildrenAccessor()
+            { }
+
+            public int Count(Panel panel) =>
+                panel.Children.Count;
+
+            public int IndexOf(Panel panel, UIElement element) =>
+                panel.Children.IndexOf(element);
+
+            public void Clear(Panel panel) =>
+                panel.Children.Clear();
+
+            public void Add(Panel panel, UIElement element) =>
+                panel.Children.Add(element);
+
+            public void Insert(Panel panel, int index, UIElement element) =>
+                panel.Children.Insert(index, element);
+
+            public void Set(Panel panel, int index, UIElement element) =>
+                panel.Children[index] = element;
+
+            public void Remove(Panel panel, UIElement element) =>
+                panel.Children.Remove(element);
+
+            public void RemoveAt(Panel panel, int index) =>
+                panel.Children.RemoveAt(index);
+
+            public static readonly PanelChildrenAccessor Instance =
+                new PanelChildrenAccessor();
+        }
+
+        [DebuggerStepThrough]
+        private static PanelChildrenAccessor GetPanelChildrenAccessor(Panel panel) =>
+            PanelChildrenAccessor.Instance;
+#endif
+
         private sealed class ChildrenBridge : IDisposable
         {
             private Panel? panel;
@@ -135,17 +239,12 @@ namespace Epoxy
                 this.panel = panel;
                 this.collection = collection;
 
-#if XAMARIN_FORMS
-                // TODO: Cannot use DLR infrastructure on AOT platforms.
-                var panelChildren = ((dynamic)this.panel!).Children;
-#else
-                var panelChildren = this.panel.Children;
-#endif
+                var panelChildren = GetPanelChildrenAccessor(this.panel);
 
-                panelChildren.Clear();
+                panelChildren.Clear(this.panel);
                 foreach (var child in this.collection)
                 {
-                    panelChildren.Add(child);
+                    panelChildren.Add(this.panel, child);
                 }
 
                 if (this.collection is INotifyCollectionChanged ncc)
@@ -162,13 +261,10 @@ namespace Epoxy
                     {
                         ncc.CollectionChanged -= this.CollectionChanged;
                     }
-#if XAMARIN_FORMS
-                    // TODO: Cannot use DLR infrastructure on AOT platforms.
-                    var panelChildren = ((dynamic)this.panel!).Children;
-#else
-                    var panelChildren = this.panel!.Children;
-#endif
-                    panelChildren.Clear();
+
+                    var panelChildren = GetPanelChildrenAccessor(this.panel!);
+
+                    panelChildren.Clear(this.panel!);
 
                     this.collection = null;
                     this.panel = null;
@@ -180,12 +276,7 @@ namespace Epoxy
                 Debug.Assert(this.panel != null);
 
                 var collection = this.collection!;
-#if XAMARIN_FORMS
-                // TODO: Cannot use DLR infrastructure on AOT platforms.
-                var panelChildren = ((dynamic)this.panel!).Children;
-#else
-                var panelChildren = this.panel!.Children;
-#endif
+                var panelChildren = GetPanelChildrenAccessor(this.panel!);
 
                 switch (e.Action)
                 {
@@ -194,14 +285,14 @@ namespace Epoxy
                         {
                             var startIndex =
                                 ((e.NewStartingIndex < collection.Count) &&
-                                 (panelChildren.IndexOf(collection[e.NewStartingIndex]) is int panelIndex &&
+                                 (panelChildren.IndexOf(this.panel!, collection[e.NewStartingIndex]) is int panelIndex &&
                                   panelIndex >= 0)) ?
-                                  panelIndex : panelChildren.Count;
+                                  panelIndex : panelChildren.Count(this.panel!);
 
                             for (var relativeIndex = 0; relativeIndex < e.NewItems.Count; relativeIndex++)
                             {
                                 var child = (UIElement?)e.NewItems[relativeIndex];
-                                panelChildren.Insert(relativeIndex + startIndex, child);
+                                panelChildren.Insert(this.panel!, relativeIndex + startIndex, child!);
                             }
                         }
                         break;
@@ -209,7 +300,7 @@ namespace Epoxy
                     case NotifyCollectionChangedAction.Remove:
                         foreach (UIElement? child in e.OldItems!)
                         {
-                            panelChildren.Remove(child);
+                            panelChildren.Remove(this.panel!, child!);
                         }
                         break;
 
@@ -217,10 +308,10 @@ namespace Epoxy
                         foreach (var entry in
                             e.OldItems!.Cast<UIElement?>().
                             Zip(e.NewItems!.Cast<UIElement?>(),
-                            (o, n) => new { panelIndex = panelChildren.IndexOf(o), newChild = n }).
+                            (o, n) => new { panelIndex = panelChildren.IndexOf(this.panel!, o!), newChild = n }).
                             Where(entry => entry.panelIndex >= 0))
                         {
-                            panelChildren[entry.panelIndex] = entry.newChild;
+                            panelChildren.Set(this.panel!, entry.panelIndex, entry.newChild!);
                         }
                         break;
 
@@ -228,13 +319,13 @@ namespace Epoxy
                         for (var relativeIndex = 0; relativeIndex < e.NewItems!.Count; relativeIndex++)
                         {
                             var child = (UIElement?)e.NewItems[relativeIndex];
-                            panelChildren.RemoveAt(e.OldStartingIndex);
-                            panelChildren.Insert(e.NewStartingIndex + relativeIndex, child);
+                            panelChildren.RemoveAt(this.panel!, e.OldStartingIndex);
+                            panelChildren.Insert(this.panel!, e.NewStartingIndex + relativeIndex, child!);
                         }
                         break;
 
                     case NotifyCollectionChangedAction.Reset:
-                        panelChildren.Clear();
+                        panelChildren.Clear(this.panel!);
                         break;
                 }
             }

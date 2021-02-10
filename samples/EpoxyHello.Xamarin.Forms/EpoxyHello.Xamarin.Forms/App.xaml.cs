@@ -17,6 +17,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+using EpoxyHello.Xamarin.Forms.Views;
 using Xamarin.Forms;
 
 namespace EpoxyHello.Xamarin.Forms

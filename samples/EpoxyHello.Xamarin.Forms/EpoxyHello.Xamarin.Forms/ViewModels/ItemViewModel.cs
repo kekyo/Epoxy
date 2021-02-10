@@ -17,7 +17,29 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Android.App;
-using System.Runtime.InteropServices;
+using Epoxy;
+using Xamarin.Forms;
 
-[assembly: ComVisible(false)]
+namespace EpoxyHello.Xamarin.Forms.ViewModels
+{
+    public sealed class ItemViewModel : ViewModel
+    {
+        public string? Title
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
+        public ImageSource? Image
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
+        public int Score
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+    }
+}

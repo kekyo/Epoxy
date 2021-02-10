@@ -17,13 +17,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Xamarin.Forms;
+using System;
 
-namespace EpoxyHello.Xamarin.Forms
+namespace EpoxyHello.Xamarin.Forms.Models
 {
-    public partial class MainPage : ContentPage
+    public sealed class RedditPost
     {
-        public MainPage() =>
-            InitializeComponent();
+        public readonly string Title;
+        public readonly Uri Url;
+        public readonly int Score;
+
+        public RedditPost(string title, Uri url, int score)
+        {
+            this.Title = title;
+            this.Url = url;
+            this.Score = score;
+        }
     }
 }

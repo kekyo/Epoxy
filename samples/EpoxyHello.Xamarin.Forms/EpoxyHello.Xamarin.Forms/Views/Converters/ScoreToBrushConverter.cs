@@ -17,7 +17,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Android.App;
-using System.Runtime.InteropServices;
+using Epoxy;
+using Xamarin.Forms;
 
-[assembly: ComVisible(false)]
+namespace EpoxyHello.Xamarin.Forms.Views.Converters
+{
+    public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+    {
+        public override bool TryConvert(int from, out Brush result)
+        {
+            result = from >= 5 ? Brush.Red : Brush.White;
+            return true;
+        }
+    }
+}
