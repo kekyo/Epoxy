@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - A minimum MVVM assister library.
-// Copyright (c) 2020 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,24 +22,4 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("Epoxy.Uwp")]
-[assembly: AssemblyDescription("A minimum MVVM assister library.")]
-[assembly: AssemblyCompany("Kouji Matsui (@kozy_kekyo, @kekyo2)")]
-[assembly: AssemblyProduct("Epoxy")]
-[assembly: AssemblyCopyright("Copyright (c) 2020 Kouji Matsui")]
-[assembly: AssemblyTrademark("Epoxy")]
-
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: ComVisible(false)]
