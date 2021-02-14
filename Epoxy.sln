@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build-nupkg.bat = build-nupkg.bat
 		Epoxy.sln.licenseheader = Epoxy.sln.licenseheader
 		LICENSE = LICENSE
+		README.ja.md = README.ja.md
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -26,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpoxyHello.Xamarin.Forms.An
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpoxyHello.Xamarin.Forms.iOS", "samples\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms.iOS\EpoxyHello.Xamarin.Forms.iOS.csproj", "{DF9FBA91-F099-45A9-96BF-406B94516113}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpoxyHello.Xamarin.Forms", "samples\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms.csproj", "{7014D337-8E2C-49F3-B4FF-8FF78D014284}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Xamarin.Forms", "samples\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms.csproj", "{7014D337-8E2C-49F3-B4FF-8FF78D014284}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
