@@ -39,9 +39,9 @@ WPFとXamarin Formsの実働サンプルがあります。
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
 
-![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/master/Images/sample.Wpf.png)
+![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Wpf.png)
 
-![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/master/Images/sample.Xamarin.Forms.png)
+![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
 
 ## MVVMアプリケーションの実装を、最小限の手間で始める
 
@@ -153,7 +153,24 @@ MVVMアーキテクチャのレアケースにおいて、コントロールを�
 また、オブジェクト参照の管理を誤るとメモリリークにつながり、かつ、その箇所を特定するのが難しくなります。
 
 Anchor/Pileは、コントロールへの参照を一時的にレンタルすることによって、ViewとViewModelを分離しながら、
-この問題を解決します。
+この問題を解決します。もちろん、レンタル中の処理は非同期処理対応です。
+
+```csharp
+// PileをViewModelに配置する
+// (操作したいコントロールのXAMLにAnchorを配置して、バインディングします)
+this.ButtonPile = Pile.Create<Button>();
+
+// ...
+
+// コントロールを操作したくなったら、Pileを通じて参照をレンタルする:
+this.ButtonPile.ExecuteAsync(async button =>
+{
+    // モデルから情報を非同期で取得
+    var color = await ServerAccessor.GetColorAsync();
+    // コントロールに反映
+    button.Background = Color.FromRgb(color.R, color.G, color.B);
+});
+```
 
 [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 

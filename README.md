@@ -2,7 +2,7 @@
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
-[![Japanese language](Images/Japanese.256.png)](https://github.com/kekyo/Epoxy/blob/master/README.ja.md)
+[![Japanese language](Images/Japanese.256.png)](https://github.com/kekyo/Epoxy/blob/main/README.ja.md)
 
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
@@ -35,9 +35,9 @@ You can refer full WPF/Xamarin Forms application sample code in:
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
-![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/master/Images/sample.Wpf.png)
+![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Wpf.png)
 
-![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/master/Images/sample.Xamarin.Forms.png)
+![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
 
 ## Getting started minimum MVVM application
 
