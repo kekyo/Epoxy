@@ -2,21 +2,23 @@
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
+[![Japanese language](Images/Japanese.256.png)](https://github.com/kekyo/Epoxy/blob/master/README.ja.md)
+
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 |Package|Status|
 |:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|
-|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|
+|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|
 
 ## What is this ?
 
 * Epoxy is .NET XAML Model-View-ViewModel data-bindable infrastructure library, and very simple usage API sets.
 * Supported platforms:
-  * WPF: .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * UWP: Universal Windows 10
+  * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: .NET Standard 2.0
+  * UWP: Universal Windows 10
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * Easy understandable.
@@ -26,15 +28,20 @@
 
 ## Sample code
 
-You can refer full WPF application sample code in [EpoxyHello.Wpf](samples/EpoxyHello.Wpf).
+You can refer full WPF/Xamarin Forms application sample code in:
+
+* [EpoxyHello.Wpf](samples/EpoxyHello.Wpf).
+* [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms).
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
-![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/master/Images/sample.png)
+![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/master/Images/sample.Wpf.png)
+
+![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/master/Images/sample.Xamarin.Forms.png)
 
 ## Getting started minimum MVVM application
 
-Completed separately xaml based view declarations (Suppressed, refer full sample code instead):
+Completed separately xaml based view declarations (WPF, Focused, refer full sample code instead):
 
 ```xml
 <Window

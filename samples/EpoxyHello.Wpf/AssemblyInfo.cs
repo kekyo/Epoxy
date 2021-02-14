@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - A minimum MVVM assister library.
-// Copyright (c) 2020 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
