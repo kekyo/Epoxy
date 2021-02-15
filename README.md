@@ -141,9 +141,63 @@ but sometimes gointg to wait the pitfall of circular references (and couldn't un
 
 The Pile pull in the UIElement's anchor, and we can rent temporary UIElement reference safely inside view model.
 
+```xml
+<!-- Declared Epoxy namespace -->
+<Window xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy">
+    <!-- Placed Anchor onto the TextBox and bound property -->
+    <TextBox epoxy:Anchor.Pile="{Binding LogPile}" />
+</Window>
+```
+
+```csharp
+// Declared a Pile into the ViewModel.
+this.LogPile = Pile.Create<TextBox>();
+
+// ...
+
+// Do rent by Pile when we have to manipulate the TextBox directly:
+await this.LogPile.ExecuteAsync(async textBox =>
+{
+    // Fetch information from related model.
+    var result = await ServerAccessor.GetResultTextAsync();
+    // We can manipulate safer directly TextBox.
+    textBox.AppendText(result);
+});
+```
+
 [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 
 [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+
+### ValueConverter
+
+TODO:
+
+[For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
+
+### UIThread
+
+Some different platform contains different UI thread manipulation.
+Epoxy can handle only one [UIThread class](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/Epoxy/UIThread.cs#L29),
+it has commonly manipulation methods.
+We can easier combine both UI manipulation and asynchronous operations.
+
+```csharp
+// Can check what current thread
+Debug.Assert(UIThread.IsBound);
+
+// Invoke asynchronous operation and will detach current thread context.
+var read = await httpStream.ReadAsync(...).ConfigureAwait(false);
+
+// Executes on the worker thread.
+Console.WriteLine($"Read={read}");
+
+// Switches to the UI thread explicitly.
+await UIThread.Bind();
+
+// We can handle any UI elements in the UI thread (include binding operation.)
+this.Log = $"Read={read}";
+```
 
 ## License
 

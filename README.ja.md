@@ -28,6 +28,10 @@
 * 小さなライブラリです。
 * ほかの MVVMフレームワーク(例: ReactiveProperty)と組み合わせて使えるように、余計な操作や暗黙の前提を排除しています。
 
+### 解説動画があります (YouTube):
+
+[![Epoxyで C# MVVMアーキテクチャを簡単に実装する話 - 作ってみた 第一回](https://img.youtube.com/vi/LkyrgJbuiQs/0.jpg)](https://www.youtube.com/watch?v=LkyrgJbuiQs)
+
 ## サンプルコード
 
 WPFとXamarin Formsの実働サンプルがあります。
@@ -155,26 +159,40 @@ MVVMアーキテクチャのレアケースにおいて、コントロールを�
 Anchor/Pileは、コントロールへの参照を一時的にレンタルすることによって、ViewとViewModelを分離しながら、
 この問題を解決します。もちろん、レンタル中の処理は非同期処理対応です。
 
+```xml
+<!-- EpoxyのXML名前空間を定義 -->
+<Window xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy">
+    <!-- AnchorをTextBoxに配置してバインディングする -->
+    <TextBox epoxy:Anchor.Pile="{Binding LogPile}" />
+</Window>
+```
+
 ```csharp
 // PileをViewModelに配置する
-// (操作したいコントロールのXAMLにAnchorを配置して、バインディングします)
-this.ButtonPile = Pile.Create<Button>();
+// (操作したいTextBoxのXAMLにAnchorを配置して、バインディングします)
+this.LogPile = Pile.Create<TextBox>();
 
 // ...
 
-// コントロールを操作したくなったら、Pileを通じて参照をレンタルする:
-this.ButtonPile.ExecuteAsync(async button =>
+// TextBoxを操作したくなったら、Pileを通じて参照をレンタルする:
+await this.LogPile.ExecuteAsync(async textBox =>
 {
     // モデルから情報を非同期で取得
-    var color = await ServerAccessor.GetColorAsync();
-    // コントロールに反映
-    button.Background = Color.FromRgb(color.R, color.G, color.B);
+    var result = await ServerAccessor.GetResultTextAsync();
+    // TextBoxを直接操作できる
+    textBox.AppendText(result);
 });
 ```
 
 [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 
 [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+
+### ValueConverter
+
+TODO:
+
+[For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
 ### UIThread
 
