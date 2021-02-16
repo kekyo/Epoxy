@@ -109,28 +109,6 @@ namespace Epoxy
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute) =>
             new DelegatedAsyncCommand<TParameter>(executeAsync, canExecute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create(
-            Action execute) =>
-            new DelegatedCommand(execute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create(
-            Action execute,
-            Func<bool> canExecute) =>
-            new DelegatedCommand(execute, canExecute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create<TParameter>(
-            Action<TParameter> execute) =>
-            new DelegatedCommand<TParameter>(execute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create<TParameter>(
-            Action<TParameter> execute,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(execute, canExecute);
     }
 
     public sealed class CommandFactory
@@ -184,27 +162,5 @@ namespace Epoxy
             Func<TParameter, Task> executeAsync,
             Func<TParameter, bool> canExecute) =>
             new DelegatedAsyncCommand<TParameter>(parameter => new ValueTask(executeAsync(parameter)), canExecute);
-
-        public static Command CreateSync(
-            this CommandFactory factory,
-            Action execute) =>
-            new DelegatedCommand(execute);
-
-        public static Command CreateSync(
-            this CommandFactory factory,
-            Action execute,
-            Func<bool> canExecute) =>
-            new DelegatedCommand(execute, canExecute);
-
-        public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
-            Action<TParameter> execute) =>
-            new DelegatedCommand<TParameter>(execute);
-
-        public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
-            Action<TParameter> execute,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(execute, canExecute);
     }
 }

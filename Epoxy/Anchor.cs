@@ -125,32 +125,6 @@ namespace Epoxy
             this.element.Target = null;
         }
 
-        [Obsolete("Synchronous instance method is obsoleted. Use ExecuteSync instead.")]
-        public void Execute(Action<TUIElement> action, bool canIgnore = false)
-        {
-            if (this.element.Target is TUIElement element)
-            {
-                action(element);
-            }
-            else if (!canIgnore)
-            {
-                throw new InvalidOperationException("Didn't moore a UIElement.");
-            }
-        }
-
-        [Obsolete("Synchronous instance method is obsoleted. Use ExecuteSync instead.")]
-        public T Execute<T>(Func<TUIElement, T> action)
-        {
-            if (this.element.Target is TUIElement element)
-            {
-                return action(element);
-            }
-            else
-            {
-                throw new InvalidOperationException("Didn't moore a UIElement.");
-            }
-        }
-
         public ValueTask ExecuteAsync(Func<TUIElement, ValueTask> action, bool canIgnore = false)
         {
             if (this.element.Target is TUIElement element)
@@ -198,32 +172,5 @@ namespace Epoxy
             Func<TUIElement, Task<T>> action)
             where TUIElement : UIElement =>
             pile.ExecuteAsync(element => new ValueTask<T>(action(element)));
-
-        public static void ExecuteSync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Action<TUIElement> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => { action(element); return default; }, canIgnore);
-
-        public static T ExecuteSync<TUIElement, T>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, T> action)
-            where TUIElement : UIElement
-        {
-            var (result, edi) = pile.ExecuteAsync(element =>
-            {
-                try
-                {
-                    return new ValueTask<(T, ExceptionDispatchInfo?)>((action(element), default));
-                }
-                catch (Exception ex)
-                {
-                    return new ValueTask<(T, ExceptionDispatchInfo?)>((default!, ExceptionDispatchInfo.Capture(ex)));
-                }
-            }).Result;  // Will not block
-
-            edi?.Throw();
-            return result;
-        }
     }
 }

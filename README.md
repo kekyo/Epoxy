@@ -122,7 +122,7 @@ public sealed class MainWindowViewModel : ViewModel
 }
 ```
 
-## Minor but unique useful features
+## Minor but useful features
 
 ### ChildrenBinder
 
@@ -171,7 +171,52 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 ### ValueConverter
 
-TODO:
+The ValueConverter class is a base class for safely implementing the XAML converters.
+It avoids cumbersome typecasting by explicitly specifying the type, and
+It can also automatically fail to convert incompatible types.
+
+You can give an argument to the converter with `ConverterParameter` on the XAML,
+then you have to change the base class to use when you receive this parameter or not.
+
+```csharp
+// This is an implementation of a converter that takes an integer and converts it to a Brush.
+// Specify the expected type as a generic argument.
+public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+{
+    // When the need for conversion arises, TryConvert will be called.
+    public override bool TryConvert(int from, out Brush result)
+    {
+        // The result of the conversion is returned by the out argument.
+        result = from >= 5 ? Brush.Red : Brush.White;
+        // If the conversion fails, you have to return false.
+        return true;
+    }
+
+    // Although not shown here as an example, TryConvertBack can also be implemented.
+}
+```
+
+This is an example of receiving a converter parameter:
+
+```csharp
+// In this example, it receives the value specified by ConverterParameter.
+// Its type is specified by the generic third argument.
+// Here is an example of receiving a string:
+public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
+{
+    // The value of the parameter is passed as the second argument.
+    public override bool TryConvert(int from, string parameter, out Brush result)
+    {
+        // ...
+    }
+}
+```
+
+Note: The XAML converter cannot be asynchronous due to the structure of XAML.
+This means that the TryConvert method cannot be made to behave like TryConvertAsync.
+
+Try not to do asynchronous processing in the XAML converter!
+(If you want to do so, you can implement it on the Model or ViewModel side to avoid problems such as deadlocks).
 
 [For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 

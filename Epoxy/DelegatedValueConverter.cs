@@ -28,10 +28,10 @@ namespace Epoxy
         private readonly Func<TFrom, TTo> convert;
         private readonly Func<TTo, TFrom>? convertBack;
 
-        public DelegatedValueConverter(Func<TFrom, TTo> convert) =>
+        internal DelegatedValueConverter(Func<TFrom, TTo> convert) =>
             this.convert = convert;
 
-        public DelegatedValueConverter(Func<TFrom, TTo> convert, Func<TTo, TFrom> convertBack)
+        internal DelegatedValueConverter(Func<TFrom, TTo> convert, Func<TTo, TFrom> convertBack)
         {
             this.convert = convert;
             this.convertBack = convertBack;
@@ -62,10 +62,10 @@ namespace Epoxy
         private readonly Func<TFrom, TParameter, TTo> convert;
         private readonly Func<TTo, TParameter, TFrom>? convertBack;
 
-        public DelegatedValueConverter(Func<TFrom, TParameter, TTo> convert) =>
+        internal DelegatedValueConverter(Func<TFrom, TParameter, TTo> convert) =>
             this.convert = convert;
 
-        public DelegatedValueConverter(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack)
+        internal DelegatedValueConverter(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack)
         {
             this.convert = convert;
             this.convertBack = convertBack;

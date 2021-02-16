@@ -18,6 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
+using Epoxy.Supplemental;
 using EpoxyHello.Wpf.Controls;
 using EpoxyHello.Wpf.Models;
 using System.Collections.ObjectModel;

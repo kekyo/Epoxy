@@ -32,14 +32,14 @@ namespace Epoxy
         private readonly Action execute;
         private readonly Func<bool> canExecute;
 
-        public DelegatedCommand(
+        internal DelegatedCommand(
             Action execute)
         {
             this.execute = execute;
             this.canExecute = defaultCanExecute;
         }
 
-        public DelegatedCommand(
+        internal DelegatedCommand(
             Action execute,
             Func<bool> canExecute)
         {
@@ -66,14 +66,14 @@ namespace Epoxy
         private readonly Action<TParameter> execute;
         private readonly Func<TParameter, bool> canExecute;
 
-        public DelegatedCommand(
+        internal DelegatedCommand(
             Action<TParameter> execute)
         {
             this.execute = execute;
             this.canExecute = defaultCanExecute;
         }
 
-        public DelegatedCommand(
+        internal DelegatedCommand(
             Action<TParameter> execute,
             Func<TParameter, bool> canExecute)
         {

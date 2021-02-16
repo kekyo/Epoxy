@@ -160,26 +160,26 @@ Anchor/Pileは、コントロールへの参照を一時的にレンタルする
 この問題を解決します。もちろん、レンタル中の処理は非同期処理対応です。
 
 ```xml
-<!-- EpoxyのXML名前空間を定義 -->
+<!-- EpoxyのXML名前空間を定義します -->
 <Window xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy">
-    <!-- AnchorをTextBoxに配置してバインディングする -->
+    <!-- AnchorをTextBoxに配置してバインディングします -->
     <TextBox epoxy:Anchor.Pile="{Binding LogPile}" />
 </Window>
 ```
 
 ```csharp
-// PileをViewModelに配置する
+// PileをViewModelに配置します。
 // (操作したいTextBoxのXAMLにAnchorを配置して、バインディングします)
 this.LogPile = Pile.Create<TextBox>();
 
 // ...
 
-// TextBoxを操作したくなったら、Pileを通じて参照をレンタルする:
+// TextBoxを操作したくなったら、Pileを通じて参照をレンタルします:
 await this.LogPile.ExecuteAsync(async textBox =>
 {
-    // モデルから情報を非同期で取得
+    // モデルから情報を非同期で取得します
     var result = await ServerAccessor.GetResultTextAsync();
-    // TextBoxを直接操作できる
+    // TextBoxを直接操作できます
     textBox.AppendText(result);
 });
 ```
@@ -190,7 +190,50 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 ### ValueConverter
 
-TODO:
+ValueConverterクラスは、いわゆるXAMLのコンバーターを安全に実装するための基底クラスです。
+型を明示的に指定することで、煩雑な型キャストを回避する事が出来、
+互換性のない型については、自動的に変換を失敗させる事が出来ます。
+
+コンバーターには`ConverterParameter`で引数を与える事が出来ますが、
+このパラメータを受け取る場合と受け取らない場合で、使用する基底クラスを変えて下さい。
+
+```csharp
+// intの値を受け取り、Brush型に変換するコンバーターの実装です。
+// ジェネリック引数に、想定される型を指定します。
+public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+{
+    // 変換の必要が生じると、TryConvertが呼び出されます。
+    public override bool TryConvert(int from, out Brush result)
+    {
+        // 変換した結果は、out引数で返します。
+        result = from >= 5 ? Brush.Red : Brush.White;
+        // 変換に失敗する場合はfalseを返します。
+        return true;
+    }
+
+    // ここでは例示しませんが、TryConvertBackを実装する事も出来ます。
+}
+```
+
+コンバーターパラメータを受け取る例です:
+
+```csharp
+// この例では、ConverterParameterで指定された値を受け取ります。
+// その型は、ジェネリック第3引数で指定します。ここでは文字列を受け取る例を示します:
+public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
+{
+    // 第2引数にパラメータの値が渡されます。
+    public override bool TryConvert(int from, string parameter, out Brush result)
+    {
+        // ...
+    }
+}
+```
+
+注意: XAMLコンバーターは、XAMLの構造上、非同期化出来ません。つまり、TryConvertメソッドをTryConvertAsyncのように振舞わせることは出来ません。
+
+XAMLコンバーター内で非同期処理を行わないようにしましょう
+（そうしたくなった場合は、ModelやViewModel側で実装すれば、デッドロックなどのトラブルを回避できます）。
 
 [For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 

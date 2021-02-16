@@ -33,14 +33,14 @@ namespace Epoxy
         private readonly Func<ValueTask> executeAsync;
         private readonly Func<bool> canExecute;
 
-        public DelegatedAsyncCommand(
+        internal DelegatedAsyncCommand(
             Func<ValueTask> executeAsync)
         {
             this.executeAsync = executeAsync;
             this.canExecute = defaultCanExecute;
         }
 
-        public DelegatedAsyncCommand(
+        internal DelegatedAsyncCommand(
             Func<ValueTask> executeAsync,
             Func<bool> canExecute)
         {
@@ -67,14 +67,14 @@ namespace Epoxy
         private readonly Func<TParameter, ValueTask> executeAsync;
         private readonly Func<TParameter, bool> canExecute;
 
-        public DelegatedAsyncCommand(
+        internal DelegatedAsyncCommand(
             Func<TParameter, ValueTask> executeAsync)
         {
             this.executeAsync = executeAsync;
             this.canExecute = defaultCanExecute;
         }
 
-        public DelegatedAsyncCommand(
+        internal DelegatedAsyncCommand(
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute)
         {
