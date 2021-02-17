@@ -21,16 +21,19 @@
   * UWP: Universal Windows 10
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
-* 理解しやすいAPIです。
+* 小さなライブラリで、理解しやすいAPIです。
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
   * Viewにコードビハインドを書かずに済むことが着地点ですが、そのために煩雑な処理を記述しなければならなくなる事を避ける方針です。
   * MVVMビギナーが躓きそうな部分に焦点を当てています。
-* 小さなライブラリです。
+  * 完全な共通化は行いません。Epoxyについてだけ、可能な限り共通の構造とし、その他の部分はそれぞれの環境に依存させることで、最大公約数的にならないようにしています。
 * ほかの MVVMフレームワーク(例: ReactiveProperty)と組み合わせて使えるように、余計な操作や暗黙の前提を排除しています。
 
-### 解説動画があります (YouTube):
+### 解説動画があります (YouTube, 日本語のみ):
 
-[![Epoxyで C# MVVMアーキテクチャを簡単に実装する話 - 作ってみた 第一回](https://img.youtube.com/vi/LkyrgJbuiQs/0.jpg)](https://www.youtube.com/watch?v=LkyrgJbuiQs)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LkyrgJbuiQs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+[(再生出来ない場合はこちら)](https://www.youtube.com/watch?v=LkyrgJbuiQs)
+
 
 ## サンプルコード
 
@@ -38,8 +41,9 @@ WPFとXamarin Formsの実働サンプルがあります。
 このサンプルは、Reddit掲示板のr/awwから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
-* [EpoxyHello.Wpf](samples/EpoxyHello.Wpf).
-* [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms).
+* [EpoxyHello.Core - 共通コード(Model)](samples/EpoxyHello.Core)。Redditにアクセスして投稿をダウンロードする。netstandard2.0で共通化している。
+* [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf)。WPFのViewとViewModel。
+* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms)。Xamarin FormsのViewとViewModel。
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
 
@@ -49,8 +53,16 @@ WPFとXamarin Formsの実働サンプルがあります。
 
 ## MVVMアプリケーションの実装を、最小限の手間で始める
 
-XAMLビューの定義とその実装を、MVVMに従って完全に分離しつつ、最小限の手間で実装する例です。
+Model-View-ViewModelの役割についてのおさらい:
+* `View`: XAMLでユーザーインターフェイスを記述し、`ViewModel`とバインディングする（コードビハインドを書かない）。
+* `ViewModel`: `Model`から情報を取得して、`View`にマッピングするプロパティを定義する。
+* `Model`: ユーザーインターフェイスに直接関係の無い処理を実装。ここではRedditから投稿をダウンロードする処理。
 
+注意: MVVMの役割については諸説あります。
+はじめから完全な設計を目指さずに、ブラッシュアップすると良いでしょう。
+Epoxyは段階的に改善する事を想定して設計しています。
+
+XAMLビューの定義とその実装を、MVVMに従って完全に分離しつつ、最小限の手間で実装する例です
 (このコードはWPFの例で、ポイントとなる点に絞っているため、完全な例はサンプルコードを参照して下さい):
 
 ```xml
@@ -131,12 +143,57 @@ public sealed class MainWindowViewModel : ViewModel
 
             foreach (var reddit in reddits)
             {
-                this.Items.Add(await Reddit.FetchImageAsync(reddit.Url));
+                var bitmap = new WriteableBitmap(
+                    BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
+                bitmap.Freeze();
+                this.Items.Add(bitmap);
             }
         });
     }
 }
 ```
+
+Redditにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
+このプロジェクトは、WPF・Xamarin Formsのどちらにも依存せず、完全に独立しています。
+
+このように、依存性を排除することで、マルチプラットフォーム対応の共通化を行うことが出来ますが、
+小規模な開発であれば、`Model`の実装を`ViewModel`と同じプロジェクトに配置してもかまいません
+(分離しておけば、意図せず依存してしまったという失敗を排除出来ます)。
+
+[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/samples/EpoxyHello.Core/Models/Reddit.cs#L63)を抜粋します:
+
+```csharp
+// Modelの実装: netstandard2.0の純粋なライブラリ
+// Redditから画像をダウンロードする
+public static async ValueTask<byte[]> FetchImageAsync(Uri url)
+{
+    using (var response =
+        await httpClient.GetAsync(url).ConfigureAwait(false))
+    {
+        using (var stream =
+            await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+        {
+            var ms = new MemoryStream();
+            await stream.CopyToAsync(ms).ConfigureAwait(false);
+            return ms.ToArray();
+        }
+    }
+}
+```
+
+Modelの実装は、直接ユーザーインターフェイスを操作する事がないため、
+非同期操作でタスクコンテキストを分離 `task.ConfigureAwait(false)` することで、
+パフォーマンスを向上させることが出来ます。
+
+### ViewModel基底クラスについて
+
+`ViewModel`基底クラスは、`GetValue`/`SetValue`メソッドの実装を提供します。
+これらのメソッドは、XAML側にプロパティの変更通知 `NotifyPropertyChanging`/`NotifyPropertyChanged` を自動的に行います。
+たとえば、ボタンクリックの契機で`ViewModel`からプロパティを変更すると、変更がXAMLのコントロールに通知され、ユーザーインターフェイスに反映されます。
+
+上記サンプルコードのコメントにあるように、`GetValue`については型引数を省略できる場合があります。
+省略可能な型は、[implicit operatorの定義](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/Epoxy/ValueHolder.cs#L61)を参照してください。
+
 
 ## その他の有用な機能
 
@@ -150,13 +207,13 @@ TODO:
 
 ### Anchor/Pile
 
-Anchor/Pileは、XAMLとViewModelをゆるく結合して、XAML側のコントロールの完全な操作を、一時的に可能にします。
+`Anchor`/`Pile`は、XAMLと`ViewModel`をゆるく結合して、XAML側のコントロールの完全な操作を、一時的に可能にします。
 
 MVVMアーキテクチャのレアケースにおいて、コントロールを直接操作したくなることがままあります。
 しかし、厳密に分離されたViewとViewModelでは、コードビハインドを書かないことが前提となるため、このような連携が難しくなります。
 また、オブジェクト参照の管理を誤るとメモリリークにつながり、かつ、その箇所を特定するのが難しくなります。
 
-Anchor/Pileは、コントロールへの参照を一時的にレンタルすることによって、ViewとViewModelを分離しながら、
+`Anchor`/`Pile`は、コントロールへの参照を一時的にレンタルすることによって、`View`と`ViewModel`を分離しながら、
 この問題を解決します。もちろん、レンタル中の処理は非同期処理対応です。
 
 ```xml
@@ -190,7 +247,7 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 ### ValueConverter
 
-ValueConverterクラスは、いわゆるXAMLのコンバーターを安全に実装するための基底クラスです。
+`ValueConverter`クラスは、いわゆるXAMLのコンバーターを安全に実装するための基底クラスです。
 型を明示的に指定することで、煩雑な型キャストを回避する事が出来、
 互換性のない型については、自動的に変換を失敗させる事が出来ます。
 
@@ -230,7 +287,7 @@ public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
 }
 ```
 
-注意: XAMLコンバーターは、XAMLの構造上、非同期化出来ません。つまり、TryConvertメソッドをTryConvertAsyncのように振舞わせることは出来ません。
+注意: XAMLコンバーターは、XAMLの構造上、非同期化出来ません。つまり、`TryConvert`メソッドを`TryConvertAsync`のように振舞わせることは出来ません。
 
 XAMLコンバーター内で非同期処理を行わないようにしましょう
 （そうしたくなった場合は、ModelやViewModel側で実装すれば、デッドロックなどのトラブルを回避できます）。

@@ -14,24 +14,28 @@
 
 ## What is this ?
 
-* Epoxy is .NET XAML Model-View-ViewModel data-bindable infrastructure library, and very simple usage API sets.
+* Epoxy is an .NET XAML Model-View-ViewModel data-bindable infrastructure library, and very simple API sets.
 * Supported platforms:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: .NET Standard 2.0
   * UWP: Universal Windows 10
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
-* Easy understandable.
+* Smallest footprint and easy understandable.
 * Supported simplest and minimalism Model-View-ViewModel design.
-* Smallest footprint.
+  * The main goal is to avoid writing code behinds in the View, but to avoid having to write complicated processes to do so.
+  * The focus is on areas where MVVM beginners might stumble.
+  * We don't do complete commonality; only Epoxy has a common structure as much as possible, and other parts are dependent on each environment to avoid being the greatest common denominator.
 * Friction-free for combination other MVVM frameworks such as ReactiveProperty and etc.
 
 ## Sample code
 
-You can refer full WPF/Xamarin Forms application sample code in:
+You can refer full WPF/Xamarin Forms application sample code in.
+This sample displays a list of the latest posts and images from the Reddit forum r/aww, downloading them asynchronously and displays them in a list format.
 
-* [EpoxyHello.Wpf](samples/EpoxyHello.Wpf).
-* [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms).
+* [EpoxyHello.Core - Common(Model)](samples/EpoxyHello.Core). Go to Reddit and download the posts. netstandard2.0 for common use.
+* [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf). WPF View and ViewModel.
+* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms). Xamarin Forms View and ViewModel.
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
@@ -41,7 +45,17 @@ Full asynchronous fetching and updating into ListBox when you click a button.
 
 ## Getting started minimum MVVM application
 
-Completed separately xaml based view declarations (WPF, Focused, refer full sample code instead):
+Review of Model-View-ViewModel architecture:
+* `View`: Describes the user interface in XAML and write binding expressions to the `ViewModel` (without writing code-behinds).
+* `ViewModel`: Get information from `Model` and define properties that map to `View`.
+* `Model`: Implement processes that are not directly related to the user interface. In this case, the process of downloading posts from Reddit.
+
+Note: There are many theories about the architecture of MVVM.
+It is a good idea to brush up on the design without aiming for perfection from the start.
+Epoxy is designed to be improved step by step.
+
+Completed separately xaml based view declarations.
+(WPF, introducing focused, refer full sample code instead):
 
 ```xml
 <Window
@@ -78,7 +92,7 @@ Completed separately xaml based view declarations (WPF, Focused, refer full samp
 </Window>
 ```
 
-Completed separately ViewModel implementation.
+Completed separately `ViewModel` implementation.
 
 ```csharp
 // Step 1: Write view model class deriving from Epoxy.ViewModel.
@@ -115,12 +129,56 @@ public sealed class MainWindowViewModel : ViewModel
 
             foreach (var reddit in reddits)
             {
-                this.Items.Add(await Reddit.FetchImageAsync(reddit.Url));
+                var bitmap = new WriteableBitmap(
+                    BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
+                bitmap.Freeze();
+                this.Items.Add(bitmap);
             }
         });
     }
 }
 ```
+
+The common code to access Reddit is implemented in the `EpoxyHello.Core` project.
+It does not depend on either WPF or Xamarin Forms assemblies and is completely independent.
+
+By eliminating dependencies in this way, we can achieve commonality for multi-platform support.
+However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
+(separating them eliminates the possibility of unintentional dependencies).
+
+[Image downloader from Reddit post (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/samples/EpoxyHello.Core/Models/Reddit.cs#L63):
+
+```csharp
+// Model implementation: The pure netstandard2.0 library.
+// Downalod image data from Reddit.
+public static async ValueTask<byte[]> FetchImageAsync(Uri url)
+{
+    using (var response =
+        await httpClient.GetAsync(url).ConfigureAwait(false))
+    {
+        using (var stream =
+            await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+        {
+            var ms = new MemoryStream();
+            await stream.CopyToAsync(ms).ConfigureAwait(false);
+            return ms.ToArray();
+        }
+    }
+}
+```
+
+Since the Model implementation does not directly manipulate the user interface fragments,
+it can isolate task contexts with `task.ConfigureAwait(false)` annotation to improve performance.
+
+### About ViewModel base class
+
+The `ViewModel` base class provides an implementation of the `GetValue`/`SetValue` methods.
+These methods automatically notify to the XAML control by property changes event `NotifyPropertyChanging`/`NotifyPropertyChanged`.
+For example, when a property is changed upon a button click in `ViewModel`, the change will be notified to the XAML control and reflected to the user interface.
+
+As commented in the sample code above, the type argument may be omitted for `GetValue`.
+See [definition of implicit operator](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/Epoxy/ValueHolder.cs#L61) for the optional types.
+
 
 ## Minor but useful features
 
@@ -134,12 +192,12 @@ TODO:
 
 ### Anchor/Pile
 
-Anchor/Pile pair is a loose connection between UIElement (Xamarin Forms Element) and view models.
+`Anchor`/`Pile` pair is a loose connection between `UIElement` (Xamarin Forms `Element`) and `ViewModel`s.
 
-Rare case in MVVM architecture, we have to access directly UIElement member,
+Rare case in MVVM architecture, we have to access directly `UIElement` member,
 but sometimes gointg to wait the pitfall of circular references (and couldn't unbind by GC).
 
-The Pile pull in the UIElement's anchor, and we can rent temporary UIElement reference safely inside view model.
+The `Pile` pull in the `UIElement`'s anchor, and we can rent temporary `UIElement` reference safely inside `ViewModel`.
 
 ```xml
 <!-- Declared Epoxy namespace -->
@@ -171,7 +229,7 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 ### ValueConverter
 
-The ValueConverter class is a base class for safely implementing the XAML converters.
+The `ValueConverter` class is a base class for safely implementing the XAML converters.
 It avoids cumbersome typecasting by explicitly specifying the type, and
 It can also automatically fail to convert incompatible types.
 
@@ -213,10 +271,10 @@ public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
 ```
 
 Note: The XAML converter cannot be asynchronous due to the structure of XAML.
-This means that the TryConvert method cannot be made to behave like TryConvertAsync.
+This means that the `TryConvert` method cannot be made to behave like `TryConvertAsync`.
 
 Try not to do asynchronous processing in the XAML converter!
-(If you want to do so, you can implement it on the Model or ViewModel side to avoid problems such as deadlocks).
+(If you want to do so, you can implement it on the `Model` or `ViewModel` side to avoid problems such as deadlocks).
 
 [For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
