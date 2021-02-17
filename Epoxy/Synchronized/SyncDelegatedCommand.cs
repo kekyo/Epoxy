@@ -20,7 +20,6 @@
 #nullable enable
 
 using System;
-using System.Diagnostics;
 
 namespace Epoxy.Synchronized
 {
@@ -49,7 +48,11 @@ namespace Epoxy.Synchronized
 
         protected override bool OnCanExecute(object? parameter)
         {
-            Debug.Assert(parameter == null);
+            if (parameter != null)
+            {
+                throw new ArgumentException(
+                    $"SyncDelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
+            }
 
             return (parameter == null) && canExecute.Invoke();
         }
@@ -83,7 +86,12 @@ namespace Epoxy.Synchronized
 
         protected override bool OnCanExecute(object? parameter)
         {
-            Debug.Assert((parameter == null) || (parameter is TParameter));
+            if (parameter is not TParameter &&
+                !DefaultValue.IsDefault<TParameter>(parameter))
+            {
+                throw new ArgumentException(
+                    $"SyncDelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
+            }
 
             return parameter is TParameter p && canExecute.Invoke(p);
         }

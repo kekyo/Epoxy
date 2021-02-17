@@ -18,6 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
+using Epoxy.Synchronized;
 
 using System;
 using System.Collections.ObjectModel;
@@ -34,6 +35,12 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
         public MainContentPageViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
+
+            // A handler for page loaded
+            this.Loaded = Epoxy.Command.Factory.CreateSync<EventArgs>(e =>
+            {
+                this.IsEnabled = true;
+            });
 
             // A handler for fetch button
             this.Fetch = Epoxy.Command.Create(async () =>
@@ -71,8 +78,12 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
                     IsEnabled = true;
                 }
             });
+        }
 
-            this.IsEnabled = true;
+        public Epoxy.Command? Loaded
+        {
+            get => this.GetValue();
+            set => this.SetValue(value);
         }
 
         public bool IsEnabled

@@ -87,7 +87,8 @@ namespace Epoxy
 
         protected override bool OnCanExecute(object? parameter)
         {
-            if (!DefaultValue.IsDefault<TParameter>(parameter))
+            if (parameter is not TParameter &&
+                !DefaultValue.IsDefault<TParameter>(parameter))
             {
                 throw new ArgumentException(
                     $"DelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");

@@ -19,6 +19,7 @@
 
 using Epoxy;
 using Epoxy.Synchronized;
+
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -39,6 +40,12 @@ namespace EpoxyHello.Wpf.ViewModels
         {
             this.Items = new ObservableCollection<ItemViewModel>();
             this.Indicators = new ObservableCollection<UIElement>();
+
+            // A handler for window loaded
+            this.Loaded = Command.Factory.CreateSync<RoutedEventArgs>(e =>
+            {
+                this.IsEnabled = true;
+            });
 
             // A handler for fetch button
             this.Fetch = Command.Create(async () =>
@@ -88,8 +95,6 @@ namespace EpoxyHello.Wpf.ViewModels
                 }
             });
 
-            this.IsEnabled = true;
-
             //////////////////////////////////////////////////////////////////////////
             // Anchor/Pile:
 
@@ -122,6 +127,12 @@ namespace EpoxyHello.Wpf.ViewModels
                     count++;
                 }
             });
+        }
+
+        public Command? Loaded
+        {
+            get => this.GetValue();
+            set => this.SetValue(value);
         }
 
         public bool IsEnabled

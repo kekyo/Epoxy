@@ -32,6 +32,10 @@
     <Window.DataContext>
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
+
+    <epoxy:EventBinder.Events>
+        <epoxy:Event Name="Loaded" Command="{Binding Loaded}" />
+    </epoxy:EventBinder.Events>
     
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">

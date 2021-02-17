@@ -30,6 +30,10 @@
         <viewmodels:MainContentPageViewModel />
     </ContentPage.BindingContext>
 
+    <epoxy:EventBinder.Events>
+        <epoxy:Event Name="Loaded" Command="{Binding Loaded}" />
+    </epoxy:EventBinder.Events>
+
     <StackLayout>
         <Button BackgroundColor="#F32121" Padding="24"
                 TextColor="White" TextTransform="None" FontSize="18"
