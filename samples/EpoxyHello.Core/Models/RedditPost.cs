@@ -19,7 +19,7 @@
 
 using System;
 
-namespace EpoxyHello.Xamarin.Forms.Models
+namespace EpoxyHello.Models
 {
     public sealed class RedditPost
     {

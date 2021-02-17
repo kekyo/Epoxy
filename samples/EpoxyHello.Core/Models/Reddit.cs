@@ -25,10 +25,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
-namespace EpoxyHello.Wpf.Models
+namespace EpoxyHello.Models
 {
     public static class Reddit
     {
@@ -62,7 +60,7 @@ namespace EpoxyHello.Wpf.Models
             }
         }
 
-        private static async ValueTask<Stream> InternalFetchAsync(Uri url)
+        public static async ValueTask<byte[]> FetchImageAsync(Uri url)
         {
             using (var response =
                 await httpClient.
@@ -77,20 +75,9 @@ namespace EpoxyHello.Wpf.Models
                     await stream.CopyToAsync(ms).
                         ConfigureAwait(false);
 
-                    ms.Position = 0;
-
-                    return ms;
+                    return ms.ToArray();
                 }
             }
-        }
-
-        public static async ValueTask<ImageSource> FetchImageAsync(Uri url)
-        {
-            var bitmap = new WriteableBitmap(
-                BitmapFrame.Create(await InternalFetchAsync(url)));
-            bitmap.Freeze();
-
-            return bitmap;
         }
     }
 }

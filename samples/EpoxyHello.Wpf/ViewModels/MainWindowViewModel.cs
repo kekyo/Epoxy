@@ -19,13 +19,17 @@
 
 using Epoxy;
 using Epoxy.Synchronized;
-using EpoxyHello.Wpf.Controls;
-using EpoxyHello.Wpf.Models;
+using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+using EpoxyHello.Models;
+using EpoxyHello.Wpf.Controls;
 
 namespace EpoxyHello.Wpf.ViewModels
 {
@@ -51,13 +55,29 @@ namespace EpoxyHello.Wpf.ViewModels
 
                     this.Items.Clear();
 
+                    static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
+                    {
+                        try
+                        {
+                            var bitmap = new WriteableBitmap(
+                                BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
+                            bitmap.Freeze();
+                            return bitmap;
+                        }
+                        // Some images will cause decoding error by WPF's BitmapFrame, so ignoring it.
+                        catch (FileFormatException)
+                        {
+                            return null;
+                        }
+                    }
+
                     foreach (var reddit in reddits)
                     {
                         this.Items.Add(new ItemViewModel
                         {
                             Title = reddit.Title,
                             Score = reddit.Score,
-                            Image = await Reddit.FetchImageAsync(reddit.Url)
+                            Image = await FetchImageAsync(reddit.Url)
                         });
                     }
                 }
