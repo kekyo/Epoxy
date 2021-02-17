@@ -21,27 +21,27 @@
 
 using System;
 
-namespace Epoxy.Synchronization
+namespace Epoxy.Synchronized
 {
     public static class CommandFactoryExtension
     {
-        public static Command Create(
+        public static Command CreateSync(
             this CommandFactory factory,
             Action execute) =>
             new SyncDelegatedCommand(execute);
 
-        public static Command Create(
+        public static Command CreateSync(
             this CommandFactory factory,
             Action execute,
             Func<bool> canExecute) =>
             new SyncDelegatedCommand(execute, canExecute);
 
-        public static Command Create<TParameter>(
+        public static Command CreateSync<TParameter>(
             this CommandFactory factory,
             Action<TParameter> execute) =>
             new SyncDelegatedCommand<TParameter>(execute);
 
-        public static Command Create<TParameter>(
+        public static Command CreateSync<TParameter>(
             this CommandFactory factory,
             Action<TParameter> execute,
             Func<TParameter, bool> canExecute) =>

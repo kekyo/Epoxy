@@ -20,7 +20,6 @@
 #nullable enable
 
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Epoxy
@@ -50,9 +49,13 @@ namespace Epoxy
 
         protected override bool OnCanExecute(object? parameter)
         {
-            Debug.Assert(parameter == null);
+            if (parameter != null)
+            {
+                throw new ArgumentException(
+                    $"DelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
+            }
 
-            return (parameter == null) && canExecute.Invoke();
+            return canExecute.Invoke();
         }
 
         private protected override ValueTask OnExecuteAsync(object? parameter) =>
@@ -84,9 +87,13 @@ namespace Epoxy
 
         protected override bool OnCanExecute(object? parameter)
         {
-            Debug.Assert((parameter == null) || (parameter is TParameter));
+            if (!DefaultValue.IsDefault<TParameter>(parameter))
+            {
+                throw new ArgumentException(
+                    $"DelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
+            }
 
-            return parameter is TParameter p && canExecute.Invoke(p);
+            return canExecute.Invoke((TParameter)parameter!);
         }
 
         private protected override ValueTask OnExecuteAsync(object? parameter) =>

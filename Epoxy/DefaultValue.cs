@@ -19,33 +19,58 @@
 
 #nullable enable
 
+#if WINDOWS_WPF
+using System.Windows;
+#endif
+
+#if WINDOWS_UWP
+using Windows.UI.Xaml;
+#endif
+
 namespace Epoxy
 {
     internal static class DefaultValue<TValue>
     {
         private static readonly TValue defaultValue = default!;
 
-        public static bool ValueEquals(object? oldValue, TValue newValue)
+        public static bool ValueEquals(object? lhs, TValue rhs)
         {
-            if ((oldValue == null) && (newValue == null))
+            if ((lhs == null) && (rhs == null))
             {
                 return true;
             }
-            else if ((oldValue == null) && (newValue != null))
+            else if ((lhs == null) && (rhs != null))
             {
                 return false;
             }
-            else if ((oldValue != null) && (newValue == null))
+            else if ((lhs != null) && (rhs == null))
             {
                 return false;
             }
             else
             {
-                return oldValue!.Equals(newValue);
+                return lhs!.Equals(rhs);
             }
         }
 
-        public static bool IsDefault(TValue value) =>
+        public static bool IsDefault(object? value) =>
             ValueEquals(value, defaultValue);
+    }
+
+    internal static class DefaultValue
+    {
+        public static bool IsDefaultValue<TValue>(this TValue value) =>
+            DefaultValue<TValue>.IsDefault(value);
+
+        public static bool IsDefault<TValue>(object? value) =>
+            DefaultValue<TValue>.IsDefault(value);
+
+#if XAMARIN_FORMS
+        public static readonly object? XamlProperty =
+            null;
+#else
+        public static readonly object? XamlProperty =
+            DependencyProperty.UnsetValue;
+#endif
     }
 }

@@ -18,7 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
-using Epoxy.Synchronization;
+using Epoxy.Synchronized;
 using EpoxyHello.Wpf.Controls;
 using EpoxyHello.Wpf.Models;
 using System.Collections.ObjectModel;
@@ -77,8 +77,8 @@ namespace EpoxyHello.Wpf.ViewModels
             // CAUTION: NOT RECOMMENDED for normal usage on MVVM architecture,
             //    Pile is a last solution for complex UI manipulation.
             this.ButtonPile = Pile.Create<Button>();
-            this.ButtonPileInvoker = Command.Factory.Create(() =>
-                this.ButtonPile.Execute(
+            this.ButtonPileInvoker = Command.Factory.CreateSync(() =>
+                this.ButtonPile.ExecuteSync(
                     // Rent temporary UIElement reference only inside of lambda expression.
                     button => button.Background = Brushes.Red));
 

@@ -22,7 +22,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Epoxy.Synchronization
+namespace Epoxy.Synchronized
 {
     public sealed class SyncDelegatedCommand : Command
     {

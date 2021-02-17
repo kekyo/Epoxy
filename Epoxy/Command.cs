@@ -90,7 +90,7 @@ namespace Epoxy
             this.OnExecute(parameter);
 
         public static readonly CommandFactory Factory =
-            CommandFactory.Instance;
+            new CommandFactory();
 
         public static Command Create(
             Func<ValueTask> executeAsync) =>
@@ -113,7 +113,7 @@ namespace Epoxy
 
     public sealed class CommandFactory
     {
-        private CommandFactory()
+        internal CommandFactory()
         {
         }
 
@@ -134,8 +134,5 @@ namespace Epoxy
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute) =>
             new DelegatedCommand<TParameter>(executeAsync, canExecute);
-
-        public static readonly CommandFactory Instance =
-            new CommandFactory();
     }
 }

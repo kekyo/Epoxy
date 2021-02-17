@@ -19,27 +19,22 @@
 
 #nullable enable
 
-using System.Diagnostics;
-using System.Linq;
+using System;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
-namespace Epoxy
+namespace Epoxy.Supplemental
 {
-    [DebuggerDisplay("{PrettyPrint}")]
-    public abstract class Model
+    public static class ViewModelExtension
     {
-        internal static readonly object[] emptyArgs = new object[0];
-
-        protected Model()
-        { }
-
-        public virtual string PrettyPrint =>
-            string.Join(
-                ",",
-                this.EnumerateFields().Concat(this.EnumerateProperties()).
-                OrderBy(entry => entry.name).
-                Select(entry => $"{entry.name}={entry.value ?? "(null)"}"));
-
-        public override string ToString() =>
-            $"{this.GetPrettyTypeName()}: {this.PrettyPrint}";
+        public static ValueTask SetValueAsync<TValue>(
+            this ViewModel viewModel,
+            TValue newValue,
+            Func<TValue, Task> propertyChanged,
+            [CallerMemberName] string? propertyName = null) =>
+            viewModel.SetValueAsync(
+                newValue,
+                value => new ValueTask(propertyChanged(value)),
+                propertyName);
     }
 }

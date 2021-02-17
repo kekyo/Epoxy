@@ -32,22 +32,20 @@ using System.Windows;
 #endif
 
 #if XAMARIN_FORMS
-using Xamarin.Forms;
-using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.Element;
 #endif
 
-namespace Epoxy.Synchronization
+namespace Epoxy.Synchronized
 {
     public static class PileExtension
     {
-        public static void Execute<TUIElement>(
+        public static void ExecuteSync<TUIElement>(
             this Pile<TUIElement> pile,
             Action<TUIElement> action, bool canIgnore = false)
             where TUIElement : UIElement =>
             pile.ExecuteAsync(element => { action(element); return default; }, canIgnore);
 
-        public static T Execute<TUIElement, T>(
+        public static T ExecuteSync<TUIElement, T>(
             this Pile<TUIElement> pile,
             Func<TUIElement, T> action)
             where TUIElement : UIElement
@@ -67,5 +65,19 @@ namespace Epoxy.Synchronization
             edi?.Throw();
             return result;
         }
+
+        [Obsolete("Use ExecuteAsync instead.", true)]
+        public static void ExecuteSync<TUIElement>(
+            this Pile<TUIElement> pile,
+            Func<TUIElement, ValueTask> action, bool canIgnore = false)
+            where TUIElement : UIElement =>
+            throw new InvalidOperationException("Use ExecuteAsync instead.");
+
+        [Obsolete("Use ExecuteAsync instead.", true)]
+        public static T ExecuteSync<TUIElement, T>(
+            this Pile<TUIElement> pile,
+            Func<TUIElement, ValueTask<T>> action)
+            where TUIElement : UIElement =>
+            throw new InvalidOperationException("Use ExecuteAsync instead.");
     }
 }
