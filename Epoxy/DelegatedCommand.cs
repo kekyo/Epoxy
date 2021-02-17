@@ -21,6 +21,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Epoxy
 {
@@ -29,21 +30,21 @@ namespace Epoxy
         private static readonly Func<bool> defaultCanExecute =
             () => true;
 
-        private readonly Action execute;
+        private readonly Func<ValueTask> executeAsync;
         private readonly Func<bool> canExecute;
 
         internal DelegatedCommand(
-            Action execute)
+            Func<ValueTask> executeAsync)
         {
-            this.execute = execute;
+            this.executeAsync = executeAsync;
             this.canExecute = defaultCanExecute;
         }
 
         internal DelegatedCommand(
-            Action execute,
+            Func<ValueTask> executeAsync,
             Func<bool> canExecute)
         {
-            this.execute = execute;
+            this.executeAsync = executeAsync;
             this.canExecute = canExecute;
         }
 
@@ -54,8 +55,8 @@ namespace Epoxy
             return (parameter == null) && canExecute.Invoke();
         }
 
-        private protected override void OnExecute(object? parameter) =>
-            execute();
+        private protected override ValueTask OnExecuteAsync(object? parameter) =>
+            executeAsync();
     }
 
     public sealed class DelegatedCommand<TParameter> : Command
@@ -63,21 +64,21 @@ namespace Epoxy
         private static readonly Func<TParameter, bool> defaultCanExecute =
             _ => true;
 
-        private readonly Action<TParameter> execute;
+        private readonly Func<TParameter, ValueTask> executeAsync;
         private readonly Func<TParameter, bool> canExecute;
 
         internal DelegatedCommand(
-            Action<TParameter> execute)
+            Func<TParameter, ValueTask> executeAsync)
         {
-            this.execute = execute;
+            this.executeAsync = executeAsync;
             this.canExecute = defaultCanExecute;
         }
 
         internal DelegatedCommand(
-            Action<TParameter> execute,
+            Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute)
         {
-            this.execute = execute;
+            this.executeAsync = executeAsync;
             this.canExecute = canExecute;
         }
 
@@ -88,7 +89,7 @@ namespace Epoxy
             return parameter is TParameter p && canExecute.Invoke(p);
         }
 
-        private protected override void OnExecute(object? parameter) =>
-            execute((TParameter)parameter!);
+        private protected override ValueTask OnExecuteAsync(object? parameter) =>
+            executeAsync((TParameter)parameter!);
     }
 }

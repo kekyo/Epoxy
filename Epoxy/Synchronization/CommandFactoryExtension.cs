@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - A minimum MVVM assister library.
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -20,32 +20,31 @@
 #nullable enable
 
 using System;
-using System.Threading.Tasks;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Synchronization
 {
     public static class CommandFactoryExtension
     {
         public static Command Create(
             this CommandFactory factory,
-            Func<Task> executeAsync) =>
-            new DelegatedCommand(() => new ValueTask(executeAsync()));
+            Action execute) =>
+            new SyncDelegatedCommand(execute);
 
         public static Command Create(
             this CommandFactory factory,
-            Func<Task> executeAsync,
+            Action execute,
             Func<bool> canExecute) =>
-            new DelegatedCommand(() => new ValueTask(executeAsync()), canExecute);
+            new SyncDelegatedCommand(execute, canExecute);
 
         public static Command Create<TParameter>(
             this CommandFactory factory,
-            Func<TParameter, Task> executeAsync) =>
-            new DelegatedCommand<TParameter>(parameter => new ValueTask(executeAsync(parameter)));
+            Action<TParameter> execute) =>
+            new SyncDelegatedCommand<TParameter>(execute);
 
         public static Command Create<TParameter>(
             this CommandFactory factory,
-            Func<TParameter, Task> executeAsync,
+            Action<TParameter> execute,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(parameter => new ValueTask(executeAsync(parameter)), canExecute);
+            new SyncDelegatedCommand<TParameter>(execute, canExecute);
     }
 }

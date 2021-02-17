@@ -20,6 +20,7 @@
 #nullable enable
 
 using System;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 #if WINDOWS_UWP
@@ -36,20 +37,35 @@ using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.Element;
 #endif
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Synchronization
 {
     public static class PileExtension
     {
-        public static ValueTask ExecuteAsync<TUIElement>(
+        public static void Execute<TUIElement>(
             this Pile<TUIElement> pile,
-            Func<TUIElement, Task> action, bool canIgnore = false)
+            Action<TUIElement> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => new ValueTask(action(element)), canIgnore);
+            pile.ExecuteAsync(element => { action(element); return default; }, canIgnore);
 
-        public static ValueTask<T> ExecuteAsync<TUIElement, T>(
+        public static T Execute<TUIElement, T>(
             this Pile<TUIElement> pile,
-            Func<TUIElement, Task<T>> action)
-            where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => new ValueTask<T>(action(element)));
+            Func<TUIElement, T> action)
+            where TUIElement : UIElement
+        {
+            var (result, edi) = pile.ExecuteAsync(element =>
+            {
+                try
+                {
+                    return new ValueTask<(T, ExceptionDispatchInfo?)>((action(element), default));
+                }
+                catch (Exception ex)
+                {
+                    return new ValueTask<(T, ExceptionDispatchInfo?)>((default!, ExceptionDispatchInfo.Capture(ex)));
+                }
+            }).Result;  // Will not block
+
+            edi?.Throw();
+            return result;
+        }
     }
 }

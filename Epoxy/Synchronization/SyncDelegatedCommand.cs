@@ -21,30 +21,29 @@
 
 using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
-namespace Epoxy
+namespace Epoxy.Synchronization
 {
-    public sealed class DelegatedAsyncCommand : Command
+    public sealed class SyncDelegatedCommand : Command
     {
         private static readonly Func<bool> defaultCanExecute =
             () => true;
 
-        private readonly Func<ValueTask> executeAsync;
+        private readonly Action execute;
         private readonly Func<bool> canExecute;
 
-        internal DelegatedAsyncCommand(
-            Func<ValueTask> executeAsync)
+        internal SyncDelegatedCommand(
+            Action execute)
         {
-            this.executeAsync = executeAsync;
+            this.execute = execute;
             this.canExecute = defaultCanExecute;
         }
 
-        internal DelegatedAsyncCommand(
-            Func<ValueTask> executeAsync,
+        internal SyncDelegatedCommand(
+            Action execute,
             Func<bool> canExecute)
         {
-            this.executeAsync = executeAsync;
+            this.execute = execute;
             this.canExecute = canExecute;
         }
 
@@ -55,30 +54,30 @@ namespace Epoxy
             return (parameter == null) && canExecute.Invoke();
         }
 
-        private protected override ValueTask OnExecuteAsync(object? parameter) =>
-            executeAsync();
+        private protected override void OnExecute(object? parameter) =>
+            execute();
     }
 
-    public sealed class DelegatedAsyncCommand<TParameter> : Command
+    public sealed class SyncDelegatedCommand<TParameter> : Command
     {
         private static readonly Func<TParameter, bool> defaultCanExecute =
             _ => true;
 
-        private readonly Func<TParameter, ValueTask> executeAsync;
+        private readonly Action<TParameter> execute;
         private readonly Func<TParameter, bool> canExecute;
 
-        internal DelegatedAsyncCommand(
-            Func<TParameter, ValueTask> executeAsync)
+        internal SyncDelegatedCommand(
+            Action<TParameter> execute)
         {
-            this.executeAsync = executeAsync;
+            this.execute = execute;
             this.canExecute = defaultCanExecute;
         }
 
-        internal DelegatedAsyncCommand(
-            Func<TParameter, ValueTask> executeAsync,
+        internal SyncDelegatedCommand(
+            Action<TParameter> execute,
             Func<TParameter, bool> canExecute)
         {
-            this.executeAsync = executeAsync;
+            this.execute = execute;
             this.canExecute = canExecute;
         }
 
@@ -89,7 +88,7 @@ namespace Epoxy
             return parameter is TParameter p && canExecute.Invoke(p);
         }
 
-        private protected override ValueTask OnExecuteAsync(object? parameter) =>
-            executeAsync((TParameter)parameter!);
+        private protected override void OnExecute(object? parameter) =>
+            execute((TParameter)parameter!);
     }
 }

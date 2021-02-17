@@ -158,19 +158,4 @@ namespace Epoxy
                 $"Mooring: {element.GetType().FullName}" :
                 "Released";
     }
-
-    public static class PileExtension
-    {
-        public static ValueTask ExecuteAsync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => new ValueTask(action(element)), canIgnore);
-
-        public static ValueTask<T> ExecuteAsync<TUIElement, T>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task<T>> action)
-            where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => new ValueTask<T>(action(element)));
-    }
 }
