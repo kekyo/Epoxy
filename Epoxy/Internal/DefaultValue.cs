@@ -23,7 +23,7 @@
 using System.Windows;
 #endif
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 #endif
 

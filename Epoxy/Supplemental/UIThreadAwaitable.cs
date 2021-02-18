@@ -56,7 +56,8 @@ namespace Epoxy.Supplemental
                     this.IsCompleted = true;
                     continuation();
                 }));
-#elif WINDOWS_UWP
+#endif
+#if WINDOWS_UWP || UNO
             var dispatcher = Windows.UI.Xaml.Window.Current?.Dispatcher;
             if (dispatcher == null)
             {
@@ -70,7 +71,8 @@ namespace Epoxy.Supplemental
                     this.IsCompleted = true;
                     continuation();
                 });
-#elif XAMARIN_FORMS
+#endif
+#if XAMARIN_FORMS
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
                 this.IsCompleted = true;

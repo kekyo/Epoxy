@@ -22,7 +22,7 @@
 using System;
 using System.Windows.Input;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 #endif
 
@@ -182,11 +182,14 @@ namespace Epoxy
         }
     }
 
-    public sealed class Event :
+#if WINDOWS_UWP || UNO
+    [Windows.UI.Xaml.Data.Bindable]
+#endif
+    public sealed partial class Event :
 #if WINDOWS_WPF
         Freezable
 #endif
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
         DependencyObject
 #endif
 #if XAMARIN_FORMS
@@ -241,14 +244,14 @@ namespace Epoxy
 
         public string? Name
         {
-            get => (string?)base.GetValue(NameProperty);
-            set => base.SetValue(NameProperty, value);
+            get => (string?)this.GetValue(NameProperty);
+            set => this.SetValue(NameProperty, value);
         }
 
         public ICommand? Command
         {
-            get => (ICommand?)base.GetValue(CommandProperty);
-            set => base.SetValue(CommandProperty, value);
+            get => (ICommand?)this.GetValue(CommandProperty);
+            set => this.SetValue(CommandProperty, value);
         }
 
         private Delegate? Handler { get; set; }

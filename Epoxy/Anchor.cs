@@ -23,7 +23,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 #endif
 

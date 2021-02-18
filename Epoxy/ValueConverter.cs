@@ -22,7 +22,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
@@ -57,7 +57,7 @@ namespace Epoxy
         private protected abstract object? ConvertBack(object? value, Type targetType, object? parameter);
 
         object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
             string? language
 #else
             CultureInfo? culture
@@ -66,7 +66,7 @@ namespace Epoxy
             this.Convert(value, targetType, parameter);
 
         object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
             string? language
 #else
             CultureInfo? culture

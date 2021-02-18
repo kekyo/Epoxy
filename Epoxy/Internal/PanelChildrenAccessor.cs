@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #endif

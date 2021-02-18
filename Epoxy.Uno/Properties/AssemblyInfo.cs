@@ -19,31 +19,7 @@
 
 #nullable enable
 
-using System.Threading;
+//using System.Windows.Markup;
 
-using Epoxy.Supplemental;
-
-namespace Epoxy
-{
-    public static class UIThread
-    {
-        public static bool IsBound
-        {
-            get
-            {
-#if WINDOWS_WPF
-                return System.Windows.Threading.DispatcherSynchronizationContext.Current != null;
-#endif
-#if WINDOWS_UWP || UNO
-                return Windows.UI.Xaml.Window.Current.Dispatcher != null;
-#endif
-#if XAMARIN_FORMS
-                return SynchronizationContext.Current != null;
-#endif
-            }
-        }
-
-        public static UIThreadAwaitable Bind() =>
-            new UIThreadAwaitable();
-    }
-}
+//[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
+//[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]

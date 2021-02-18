@@ -23,7 +23,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -110,7 +110,7 @@ namespace Epoxy.Supplemental
         public static implicit operator Pen?(ValueHolder vh) =>
             vh.GetValue<Pen?>();
 #endif
-#if WINDOWS_WPF || WINDOWS_UWP
+#if WINDOWS_WPF || WINDOWS_UWP || UNO
         public static implicit operator Brush?(ValueHolder vh) =>
             vh.GetValue<Brush?>();
         public static implicit operator Rect(ValueHolder vh) =>
