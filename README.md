@@ -26,7 +26,7 @@
   * The main goal is to avoid writing code behinds in the View, but to avoid having to write complicated processes to do so.
   * The focus is on areas where MVVM beginners might stumble.
   * We don't do complete commonality; only Epoxy has a common structure as much as possible, and other parts are dependent on each environment to avoid being the greatest common divisor.
-* Friction-free for combination other MVVM frameworks such as ReactiveProperty and etc.
+* Friction-free for combination other framework libraries such as ReactiveProperty and etc.
 
 ## Sample code
 
@@ -198,8 +198,8 @@ For example, you can bind the `Window.Loaded` event of WPF as follows:
     <!-- ... -->
 
     <epoxy:EventBinder.Events>
-        <!-- Binding the Window.Loaded event to the ViewModel's Loaded property -->
-        <epoxy:Event Name="Loaded" Command="{Binding Loaded}" />
+        <!-- Binding the Window.Loaded event to the ViewModel's Ready property -->
+        <epoxy:Event Name="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 </Window>
 ```
@@ -208,7 +208,7 @@ On the `ViewModel` side, you can write handlers in Command, just like Button:
 
 ```csharp
 // Defining the Command property for receiving Loaded events
-public Command? Loaded
+public Command? Ready
 {
     get => this.GetValue();
     private set => this.SetValue(value);
@@ -217,7 +217,7 @@ public Command? Loaded
 // ...
 
 // Describe what to do when the Loaded event occurs.
-this.Loaded = Command.Create<EventArgs>(async _ =>
+this.Ready = Command.Create<EventArgs>(async _ =>
 {
     // ex: Asynchronous acquisition of information to be displayed in the list from Model.
     foreach (var item in await Model.FetchInitialItemsAsync())

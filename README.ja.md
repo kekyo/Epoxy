@@ -26,7 +26,7 @@
   * Viewにコードビハインドを書かずに済むことが着地点ですが、そのために煩雑な処理を記述しなければならなくなる事を避ける方針です。
   * MVVMビギナーが躓きそうな部分に焦点を当てています。
   * 完全な共通化は行いません。Epoxyについてだけ同じように記述可能にし、その他の部分はそれぞれの環境に依存させることで、最大公約数的にならないようにしています。
-* ほかの MVVMフレームワーク(例: ReactiveProperty)と組み合わせて使えるように、余計な操作や暗黙の前提を排除しています。
+* ほかのフレームワークライブラリ(例: ReactiveProperty)と組み合わせて使えるように、余計な操作や暗黙の前提を排除しています。
 
 ### 解説動画があります (YouTube, 日本語のみ):
 
@@ -213,8 +213,8 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
     <!-- ... -->
 
     <epoxy:EventBinder.Events>
-        <!-- Window.Loadedイベントを、ViewModelのLoadedプロパティにバインディングする -->
-        <epoxy:Event Name="Loaded" Command="{Binding Loaded}" />
+        <!-- Window.Loadedイベントを、ViewModelのReadyプロパティにバインディングする -->
+        <epoxy:Event Name="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 </Window>
 ```
@@ -223,7 +223,7 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 
 ```csharp
 // Loadedイベントを受信するためのCommandプロパティの定義
-public Command? Loaded
+public Command? Ready
 {
     get => this.GetValue();
     private set => this.SetValue(value);
@@ -232,7 +232,7 @@ public Command? Loaded
 // ...
 
 // Loadedイベントが発生した場合の処理を記述
-this.Loaded = Command.Create<EventArgs>(async _ =>
+this.Ready = Command.Create<EventArgs>(async _ =>
 {
     // リストに表示する情報をModelから非同期で取得
     foreach (var item in await Model.FetchInitialItemsAsync())

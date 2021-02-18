@@ -42,7 +42,7 @@ namespace EpoxyHello.Wpf.ViewModels
             this.Indicators = new ObservableCollection<UIElement>();
 
             // A handler for window loaded
-            this.Loaded = Command.Factory.CreateSync<RoutedEventArgs>(e =>
+            this.Ready = Command.Factory.CreateSync<RoutedEventArgs>(e =>
             {
                 this.IsEnabled = true;
             });
@@ -129,7 +129,7 @@ namespace EpoxyHello.Wpf.ViewModels
             });
         }
 
-        public Command? Loaded
+        public Command? Ready
         {
             get => this.GetValue();
             set => this.SetValue(value);
