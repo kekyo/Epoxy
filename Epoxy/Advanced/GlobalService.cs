@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 using Epoxy.Internal;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Advanced
 {
     [AttributeUsage(AttributeTargets.Interface)]
     public sealed class GlobalServiceAttribute : Attribute
@@ -106,6 +106,9 @@ namespace Epoxy.Supplemental
             }
         }
 
+        public static readonly GlobalServiceAccessor Accessor =
+            new GlobalServiceAccessor();
+
         public static ValueTask ExecuteAsync<TService>(Func<TService, ValueTask> action, bool ignoreNotPresent = false) =>
             ServiceHolder<TService>.Instance is { } instance ?
                 action(instance) :
@@ -116,5 +119,35 @@ namespace Epoxy.Supplemental
             ServiceHolder<TService>.Instance is { } instance ?
                 action(instance) :
                 throw new InvalidOperationException($"GlobalService: Service didn't assign: Type={typeof(TService).FullName}");
+
+        internal static void ExecuteSync<TService>(Action<TService> action, bool ignoreNotPresent)
+        {
+            if (ServiceHolder<TService>.Instance is { } instance)
+            {
+                action(instance);
+            }
+            else if (!ignoreNotPresent)
+            {
+                throw new InvalidOperationException($"GlobalService: Service didn't assign: Type={typeof(TService).FullName}");
+            }
+        }
+
+        internal static TResult ExecuteSync<TService, TResult>(Func<TService, TResult> action) =>
+            ServiceHolder<TService>.Instance is { } instance?
+                action(instance) :
+                throw new InvalidOperationException($"GlobalService: Service didn't assign: Type={typeof(TService).FullName}");
+    }
+
+    public sealed class GlobalServiceAccessor
+    {
+        internal GlobalServiceAccessor()
+        {
+        }
+
+        public ValueTask ExecuteAsync<TService>(Func<TService, ValueTask> action, bool ignoreNotPresent = false) =>
+            GlobalService.ExecuteAsync(action, ignoreNotPresent);
+
+        public ValueTask<TResult> ExecuteAsync<TService, TResult>(Func<TService, ValueTask<TResult>> action) =>
+            GlobalService.ExecuteAsync(action);
     }
 }

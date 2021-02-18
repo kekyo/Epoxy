@@ -21,7 +21,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 #if WINDOWS_UWP

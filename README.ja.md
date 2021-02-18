@@ -454,7 +454,7 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 
 注意: "Global"の名の通り、`GlobalService`は、一種のグローバル変数のように振る舞います。
 本来必要のない場所で`GlobalService`を使わないようにして下さい。
-少しでも区別できるように、`GlobalService`は`Epoxy.Supplemental`名前空間に配置されています（using宣言が必要です）。
+少しでも区別できるように、`GlobalService`は`Epoxy.Advanced`名前空間に配置されています（using宣言が必要です）。
 
 ## License
 

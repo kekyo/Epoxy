@@ -443,7 +443,7 @@ Rather, it is preferable to use it only when necessary, each time.
 
 NOTE: As the name "Global" implies, `GlobalService` behaves like a kind of global variable.
 Try not to use `GlobalService` in places where it is not really needed.
-`Epoxy.Supplemental` namespace (using declarations are required) to make it a bit more distinguishable.
+`Epoxy.Advanced` namespace (using declarations are required) to make it a bit more distinguishable.
 
 ## License
 
