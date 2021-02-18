@@ -24,8 +24,17 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
+using Epoxy.Internal;
+
 namespace Epoxy.Supplemental
 {
+    [AttributeUsage(AttributeTargets.Interface)]
+    public sealed class GlobalServiceAttribute : Attribute
+    {
+        public GlobalServiceAttribute()
+        { }
+    }
+
     public enum RegisteringValidations
     {
         Strict,
@@ -48,29 +57,28 @@ namespace Epoxy.Supplemental
                 GetValue(null);
         }
 
-        private static void SetInstance(Type targetType, object? instance)
+        private static void SetInstance(Type targetType, object? instance, bool ignoreIfPresent)
         {
             var holderType = typeof(ServiceHolder<>).MakeGenericType(targetType);
-            holderType.
-                GetField("Instance", BindingFlags.Public | BindingFlags.Static)!.
-                SetValue(null, instance);
+            var fi = holderType.
+                GetField("Instance", BindingFlags.Public | BindingFlags.Static)!;
+
+            if (!ignoreIfPresent || (fi.GetValue(null) == null))
+            {
+                fi.SetValue(null, instance);
+            }
         }
 
         public static void Register(
             object instance, RegisteringValidations validation = RegisteringValidations.Strict)
         {
             var targetType = instance.GetType();
-            if (validation != RegisteringValidations.UnsafeOverride)
-            {
-                if (GetInstance(targetType) != null)
-                {
-                    throw new InvalidOperationException(
-                        $"GlobalService: Service already assigned: Type={targetType.FullName}");
-                }
-            }
+            var interfaces = targetType.GetInterfaces().
+                Where(it => it.IsDefined<GlobalServiceAttribute>()).
+                ToArray()!;
             if (validation == RegisteringValidations.Strict)
             {
-                var assigned = targetType.GetInterfaces().
+                var assigned = interfaces.
                     Where(it => GetInstance(it) != null).
                     ToArray();
                 if (assigned.Length >= 1)
@@ -80,34 +88,21 @@ namespace Epoxy.Supplemental
                 }
             }
 
-            SetInstance(targetType, instance);
-
-            switch (validation)
+            foreach (var it in interfaces)
             {
-                case RegisteringValidations.UnsafePartial:
-                    foreach (var it in targetType.GetInterfaces().
-                        Where(it => GetInstance(it) == null))
-                    {
-                        SetInstance(it, instance);
-                    }
-                    break;
-                default:
-                    foreach (var it in targetType.GetInterfaces())
-                    {
-                        SetInstance(it, instance);
-                    }
-                    break;
+                SetInstance(it, instance, validation == RegisteringValidations.UnsafePartial);
             }
         }
 
         public static void UnRegister(object instance)
         {
             var targetType = instance.GetType();
-            SetInstance(targetType, null);
-
-            foreach (var it in instance.GetType().GetInterfaces())
+            var interfaces = targetType.GetInterfaces().
+               Where(it => it.IsDefined<GlobalServiceAttribute>()).
+               ToArray()!;
+            foreach (var it in interfaces)
             {
-                SetInstance(it, null);
+                SetInstance(it, null, false);
             }
         }
 

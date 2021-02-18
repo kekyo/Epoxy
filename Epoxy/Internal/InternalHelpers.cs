@@ -37,11 +37,15 @@ namespace Epoxy.Internal
             type.GetTypeInfo().IsPrimitive;
         public static bool IsClass(this Type type) =>
             type.GetTypeInfo().IsClass;
+        public static bool IsDefined<TAttribute>(this Type type) =>
+            type.GetTypeInfo().IsDefined(typeof(TAttribute));
 #else
         public static bool IsPrimitive(this Type type) =>
             type.IsPrimitive;
         public static bool IsClass(this Type type) =>
             type.IsClass;
+        public static bool IsDefined<TAttribute>(this Type type) =>
+            type.IsDefined(typeof(TAttribute));
 #endif
 
         public static string GetPrettyTypeName(this object? value) =>
