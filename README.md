@@ -1,4 +1,4 @@
-# Epoxy - A minimum MVVM assister library. 
+# Epoxy - An independent flexible XAML MVVM library for .NET
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
@@ -14,7 +14,7 @@
 
 ## What is this ?
 
-* Epoxy is an .NET XAML Model-View-ViewModel data-bindable infrastructure library, and very simple API sets.
+* Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
 * Supported platforms:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: .NET Standard 2.0
@@ -22,6 +22,7 @@
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * Smallest footprint and easy understandable.
+  * No dependency on non-platform standard frameworks or libraries.
 * Supported simplest and minimalism Model-View-ViewModel design.
   * The main goal is to avoid writing code behinds in the View, but to avoid having to write complicated processes to do so.
   * The focus is on areas where MVVM beginners might stumble.
@@ -44,6 +45,8 @@ Full asynchronous fetching and updating into ListBox when you click a button.
 
 ![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
 
+----
+
 ## Getting started minimum MVVM application
 
 Review of Model-View-ViewModel architecture:
@@ -51,12 +54,18 @@ Review of Model-View-ViewModel architecture:
 * `ViewModel`: Get information from `Model` and define properties that map to `View`.
 * `Model`: Implement processes that are not directly related to the user interface. In this case, the process of downloading posts from Reddit.
 
-Note: There are many theories about the architecture of MVVM.
+The relationship between these MVVM elements is illustrated in the following figure:
+
+![MVVM architecture](Images/diagram.png)
+
+NOTE: There are many theories about the architecture of MVVM.
 It is a good idea to brush up on the design without aiming for perfection from the start.
 Epoxy is designed to be improved step by step.
 
 Completed separately xaml based view declarations.
 (WPF, introducing focused, refer full sample code instead):
+
+### Example of View (XAML) implementation
 
 ```xml
 <Window
@@ -92,6 +101,8 @@ Completed separately xaml based view declarations.
     </DockPanel>
 </Window>
 ```
+
+### Example of ViewModel implementation
 
 Completed separately `ViewModel` implementation.
 
@@ -140,6 +151,8 @@ public sealed class MainWindowViewModel : ViewModel
 }
 ```
 
+### Example of Model implementation
+
 The common code to access Reddit is implemented in the `EpoxyHello.Core` project.
 It does not depend on either WPF or Xamarin Forms assemblies and is completely independent.
 
@@ -182,6 +195,8 @@ See [definition of implicit operator](https://github.com/kekyo/Epoxy/blob/1b16a9
 
 In addition, `GetValue` defines the default value,
 and `SetValue` defines an overload that can perform additional operations when the value is changed.
+
+---
 
 ## Minor but useful features
 
@@ -444,6 +459,8 @@ Rather, it is preferable to use it only when necessary, each time.
 NOTE: As the name "Global" implies, `GlobalService` behaves like a kind of global variable.
 Try not to use `GlobalService` in places where it is not really needed.
 `Epoxy.Advanced` namespace (using declarations are required) to make it a bit more distinguishable.
+
+---
 
 ## License
 

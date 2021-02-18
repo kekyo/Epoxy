@@ -1,4 +1,4 @@
-# Epoxy - A minimum MVVM assister library. 
+# Epoxy - An independent flexible XAML MVVM library for .NET
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
@@ -14,7 +14,7 @@
 
 ## これは何?
 
-* Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、シンプルで小さいライブラリです。
+* Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、独立した柔軟性のあるライブラリです。
 * 以下の環境をサポートしています:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: .NET Standard 2.0
@@ -22,6 +22,7 @@
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
 * 小さなライブラリで、理解しやすいAPIです。
+  * プラットフォーム標準以外のフレームワークやライブラリに依存していません。
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
   * Viewにコードビハインドを書かずに済むことが着地点ですが、そのために煩雑な処理を記述しなければならなくなる事を避ける方針です。
   * MVVMビギナーが躓きそうな部分に焦点を当てています。
@@ -52,12 +53,19 @@ WPFとXamarin Formsの実働サンプルがあります。
 
 ![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
 
+---
+
 ## MVVMアプリケーションの実装を、最小限の手間で始める
 
 Model-View-ViewModelの役割についてのおさらい:
+
 * `View`: XAMLでユーザーインターフェイスを記述し、`ViewModel`とバインディングする（コードビハインドを書かない）。
 * `ViewModel`: `Model`から情報を取得して、`View`にマッピングするプロパティを定義する。
 * `Model`: ユーザーインターフェイスに直接関係の無い処理を実装。ここではRedditから投稿をダウンロードする処理。
+
+以下にこれらのMVVM要素の関係を図示します:
+
+![MVVMアーキテクチャ](Images/diagram.png)
 
 注意: MVVMの役割については諸説あります。
 はじめから完全な設計を目指さずに、ブラッシュアップすると良いでしょう。
@@ -65,6 +73,8 @@ Epoxyは段階的に改善する事を想定して設計しています。
 
 XAMLビューの定義とその実装を、MVVMに従って完全に分離しつつ、最小限の手間で実装する例です
 (このコードはWPFの例で、ポイントとなる点に絞っているため、完全な例はサンプルコードを参照して下さい):
+
+### View (XAML)の実装例
 
 ```xml
 <Window
@@ -100,6 +110,8 @@ XAMLビューの定義とその実装を、MVVMに従って完全に分離しつ
     </DockPanel>
 </Window>
 ```
+
+### ViewModelの実装例
 
 完全に分離された、ViewModelクラスの実装です。
 完全に、とは、つまりViewクラス[(MainWindow.xaml.cs)](samples/EpoxyHello.Wpf/Views/MainWindow.xaml.cs)に、コードビハインドを一切記述しないことを指します。
@@ -154,6 +166,8 @@ public sealed class MainWindowViewModel : ViewModel
 }
 ```
 
+### Modelの実装例
+
 Redditにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
 このプロジェクトは、WPF・Xamarin Formsのどちらにも依存せず、完全に独立しています。
 
@@ -197,6 +211,8 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 
 なお、`GetValue`には、デフォルト値の定義が、
 `SetValue`には、値変更時に追加操作を行うことが出来るオーバーロードが定義されています。
+
+---
 
 ## その他の有用な機能
 
@@ -455,6 +471,8 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 注意: "Global"の名の通り、`GlobalService`は、一種のグローバル変数のように振る舞います。
 本来必要のない場所で`GlobalService`を使わないようにして下さい。
 少しでも区別できるように、`GlobalService`は`Epoxy.Advanced`名前空間に配置されています（using宣言が必要です）。
+
+---
 
 ## License
 
