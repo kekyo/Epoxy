@@ -25,7 +25,7 @@
 * Supported simplest and minimalism Model-View-ViewModel design.
   * The main goal is to avoid writing code behinds in the View, but to avoid having to write complicated processes to do so.
   * The focus is on areas where MVVM beginners might stumble.
-  * We don't do complete commonality; only Epoxy has a common structure as much as possible, and other parts are dependent on each environment to avoid being the greatest common denominator.
+  * We don't do complete commonality; only Epoxy has a common structure as much as possible, and other parts are dependent on each environment to avoid being the greatest common divisor.
 * Friction-free for combination other MVVM frameworks such as ReactiveProperty and etc.
 
 ## Sample code

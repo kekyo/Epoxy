@@ -26,6 +26,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
+// Conflicted between Xamarin.Forms.Command and Epoxy.Command.
+using Command = Epoxy.Command;
+
 using EpoxyHello.Models;
 
 namespace EpoxyHello.Xamarin.Forms.ViewModels
@@ -36,14 +39,14 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
         {
             this.Items = new ObservableCollection<ItemViewModel>();
 
-            // A handler for page loaded
-            this.Loaded = Epoxy.Command.Factory.CreateSync<EventArgs>(e =>
+            // A handler for page appearing
+            this.Appearing = Command.Factory.CreateSync<EventArgs>(e =>
             {
                 this.IsEnabled = true;
             });
 
             // A handler for fetch button
-            this.Fetch = Epoxy.Command.Create(async () =>
+            this.Fetch = Command.Create(async () =>
             {
                 this.IsEnabled = false;
 
@@ -80,7 +83,7 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
             });
         }
 
-        public Epoxy.Command? Loaded
+        public Command? Appearing
         {
             get => this.GetValue();
             set => this.SetValue(value);

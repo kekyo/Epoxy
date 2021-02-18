@@ -19,10 +19,8 @@
 
 #nullable enable
 
-using Epoxy.Supplemental;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Reflection;
 using System.Windows.Input;
 
@@ -41,6 +39,8 @@ using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
 #endif
 
+using Epoxy.Supplemental;
+
 namespace Epoxy
 {
     public static class EventBinder
@@ -52,9 +52,9 @@ namespace Epoxy
                 typeof(EventsCollection),
                 typeof(EventBinder),
                 null,
-                BindingMode.OneWay,
+                BindingMode.OneTime,
                 null,
-                OnEventsPropertyChanged,
+                null,
                 null,
                 null,
                 d =>
@@ -65,14 +65,29 @@ namespace Epoxy
                 });
         public static readonly BindableProperty EventsProperty =
             EventsPropertyKey.BindableProperty;
+
+        public static EventsCollection? GetEvents(DependencyObject d) =>
+            (EventsCollection?)d.GetValue(EventsProperty);
 #else
         private static readonly DependencyProperty EventsProperty =
             DependencyProperty.RegisterAttached(
                 "ShadowEvents",
                 typeof(EventsCollection),
                 typeof(EventBinder),
-                new PropertyMetadata(null, (d, e) => OnEventsPropertyChanged(d, e.OldValue, e.NewValue)));
-#endif
+                new PropertyMetadata(null, (d, e) =>
+                {
+                    if (!object.ReferenceEquals(e.OldValue, e.NewValue))
+                    {
+                        if (e.OldValue is EventsCollection oec)
+                        {
+                            oec.Detach();
+                        }
+                        if (e.NewValue is EventsCollection nec)
+                        {
+                            nec.Attach(d);
+                        }
+                    }
+                }));
 
         public static EventsCollection? GetEvents(DependencyObject d)
         {
@@ -81,36 +96,20 @@ namespace Epoxy
             {
                 // Self generated.
                 collection = new EventsCollection();
-                d.SetValue(EventsPropertyKey, collection);
+                d.SetValue(EventsProperty, collection);
             }
             return collection;
         }
-
-        private static void OnEventsPropertyChanged(DependencyObject d, object? oldValue, object? newValue)
-        {
-            if (!object.ReferenceEquals(oldValue, newValue))
-            {
-                if (oldValue is EventsCollection oec)
-                {
-                    oec.Detach();
-                }
-                if (newValue is EventsCollection nec)
-                {
-                    nec.Attach(d);
-                }
-            }
-        }
+#endif
     }
 
     public sealed class EventsCollection :
         XamlElementCollection<EventsCollection, Event>
     {
-        private List<Event> snapshot = new List<Event>();
-
         private DependencyObject? associatedObject;
 
-        public EventsCollection() =>
-            ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
+        public EventsCollection()
+        { }
 
         private DependencyObject? AssociatedObject
         {
@@ -121,80 +120,28 @@ namespace Epoxy
             }
         }
 
-        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
+        protected override void OnAdded(Event evt)
         {
-            void OnAdded(Event evt)
+            if (this.AssociatedObject != null)
             {
-                if (this.AssociatedObject != null)
-                {
-                    evt.Attach(this.AssociatedObject);
-                }
+                evt.Attach(this.AssociatedObject);
             }
+        }
 
-            void OnRemoved(Event evt)
+        protected override void OnRemoving(Event evt)
+        {
+            if (evt.AssociatedObject != null)
             {
-                if (evt.AssociatedObject != null)
-                {
-                    evt.Detach();
-                }
-            }
-
-            switch (e!.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (Event? evt1 in e.NewItems!)
-                    {
-                        try
-                        {
-                            OnAdded(evt1!);
-                        }
-                        finally
-                        {
-                            this.snapshot.Insert(IndexOf(evt1!), evt1!);
-                        }
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    foreach (Event? evt2 in e.OldItems!)
-                    {
-                        OnRemoved(evt2!);
-                        this.snapshot.Remove(evt2!);
-                    }
-                    foreach (Event? evt3 in e.NewItems!)
-                    {
-                        try
-                        {
-                            OnAdded(evt3!);
-                        }
-                        finally
-                        {
-                            this.snapshot.Insert(IndexOf(evt3!), evt3!);
-                        }
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (Event? evt4 in e.OldItems!)
-                    {
-                        OnRemoved(evt4!);
-                        this.snapshot.Remove(evt4!);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    foreach (var evt5 in this.snapshot)
-                    {
-                        OnRemoved(evt5);
-                    }
-                    this.snapshot.Clear();
-                    foreach (var evt6 in this)
-                    {
-                        OnAdded(evt6!);
-                    }
-                    break;
+                evt.Detach();
             }
         }
 
         internal void Attach(DependencyObject d)
         {
+#if XAMARIN_FORMS
+            this.Parent = d as Element;
+#endif
+
             if (d != this.AssociatedObject)
             {
                 if (this.AssociatedObject != null)
@@ -229,6 +176,10 @@ namespace Epoxy
             WritePreamble();
             this.associatedObject = null;
             WritePostscript();
+
+#if XAMARIN_FORMS
+            this.Parent = null;
+#endif
         }
     }
 
@@ -284,11 +235,11 @@ namespace Epoxy
         {
             // Limitation:
             //   The closure handler signature valid only standard event style:
-            //   `void (object?, object?)`
+            //   `void (object? sender, object? e)`
             //   We can make perfect trampoline by opcode emitter or expression constructor.
             //   It's decline running on the AOT platform...
             var closure = new InvokingClosure(command);
-            return new EventHandler(closure.Handler).   // valid with contravariance
+            return new EventHandler(closure.Handler).   // valid with contravariance `e`
                 GetMethodInfo()!.
                 CreateDelegate(ei.EventHandlerType!, closure);
         }

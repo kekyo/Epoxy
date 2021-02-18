@@ -47,8 +47,82 @@ namespace Epoxy.Supplemental
         FreezableCollection<TElement>
         where TElement : Freezable
     {
-        public XamlElementCollection()
-        { }
+        private readonly List<TElement> snapshot = new List<TElement>();
+
+        public XamlElementCollection() =>
+            ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
+
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
+        {
+            switch (e!.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (TElement? element1 in e.NewItems!)
+                    {
+                        this.snapshot.Insert(IndexOf(element1!), element1!);
+                        this.OnAdded(element1!);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    foreach (TElement? element2 in e.OldItems!)
+                    {
+                        try
+                        {
+                            this.OnRemoving(element2!);
+                        }
+                        finally
+                        {
+                            this.snapshot.Remove(element2!);
+                        }
+                    }
+                    foreach (TElement? element3 in e.NewItems!)
+                    {
+                        this.snapshot.Insert(IndexOf(element3!), element3!);
+                        this.OnAdded(element3!);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (TElement? element4 in e.OldItems!)
+                    {
+                        try
+                        {
+                            this.OnRemoving(element4!);
+                        }
+                        finally
+                        {
+                            this.snapshot.Remove(element4!);
+                        }
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    foreach (var element5 in this.snapshot)
+                    {
+                        try
+                        {
+                            this.OnRemoving(element5!);
+                        }
+                        finally
+                        {
+                            this.snapshot.Remove(element5!);
+                        }
+                    }
+                    this.snapshot.Clear();
+                    foreach (var element6 in this)
+                    {
+                        this.snapshot.Insert(IndexOf(element6!), element6!);
+                        this.OnAdded(element6!);
+                    }
+                    break;
+            }
+        }
+
+        protected virtual void OnAdded(TElement element)
+        {
+        }
+
+        protected virtual void OnRemoving(TElement element)
+        {
+        }
 
         protected override Freezable? CreateInstanceCore() =>
             (Freezable)Activator.CreateInstance(this.GetType())!;
@@ -63,35 +137,74 @@ namespace Epoxy.Supplemental
         private readonly List<TElement> snapshot = new List<TElement>();
 
         public XamlElementCollection() =>
-            base.VectorChanged += (s, e) =>
+            base.VectorChanged += this.OnVectorChanged;
+
+        private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
+        {
+            switch (e.CollectionChange)
             {
-                switch (e.CollectionChange)
-                {
-                    case CollectionChange.ItemInserted:
-                        var value1 = this[(int)e.Index];
-                        this.snapshot.Insert((int)e.Index, value1);
-                        this.PropertyChanged?.Invoke(s, new PropertyChangedEventArgs("Count"));
-                        this.PropertyChanged?.Invoke(s, new PropertyChangedEventArgs("Item[]"));
-                        this.CollectionChanged?.Invoke(s, new NotifyCollectionChangedEventArgs(
-                            NotifyCollectionChangedAction.Add, value1, (int)e.Index));
-                        break;
-                    case CollectionChange.ItemChanged:
-                        var value2 = this[(int)e.Index];
-                        this.snapshot[(int)e.Index] = value2;
-                        this.PropertyChanged?.Invoke(s, new PropertyChangedEventArgs("Item[]"));
-                        this.CollectionChanged?.Invoke(s, new NotifyCollectionChangedEventArgs(
-                            NotifyCollectionChangedAction.Replace, this[(int)e.Index], (int)e.Index));
-                        break;
-                    case CollectionChange.ItemRemoved:
-                        var value3 = this[(int)e.Index];
+                case CollectionChange.ItemInserted:
+                    var newElement1 = this[(int)e.Index];
+                    this.snapshot.Insert((int)e.Index, newElement1);
+                    try
+                    {
+                        this.OnAdded(newElement1);
+                    }
+                    finally
+                    {
+                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+                        this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
+                            NotifyCollectionChangedAction.Add, newElement1, (int)e.Index));
+                    }
+                    break;
+                case CollectionChange.ItemChanged:
+                    var oldElement2 = this.snapshot[(int)e.Index];
+                    var newElement2 = this[(int)e.Index];
+                    try
+                    {
+                        this.OnRemoving(oldElement2);
+                    }
+                    finally
+                    {
+                        this.snapshot[(int)e.Index] = newElement2;
+                        try
+                        {
+                            this.OnAdded(newElement2);
+                        }
+                        finally
+                        {
+                            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+                            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
+                                NotifyCollectionChangedAction.Replace, newElement2, (int)e.Index));
+                        }
+                    }
+                    break;
+                case CollectionChange.ItemRemoved:
+                    var oldElement3 = this.snapshot[(int)e.Index];
+                    try
+                    {
+                        this.OnRemoving(oldElement3);
+                    }
+                    finally
+                    {
                         this.snapshot.RemoveAt((int)e.Index);
-                        this.PropertyChanged?.Invoke(s, new PropertyChangedEventArgs("Count"));
-                        this.PropertyChanged?.Invoke(s, new PropertyChangedEventArgs("Item[]"));
-                        this.CollectionChanged?.Invoke(s, new NotifyCollectionChangedEventArgs(
-                            NotifyCollectionChangedAction.Remove, value3, (int)e.Index));
-                        break;
-                }
-            };
+                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+                        this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
+                            NotifyCollectionChangedAction.Remove, oldElement3, (int)e.Index));
+                    }
+                    break;
+            }
+        }
+
+        protected virtual void OnAdded(TElement element)
+        {
+        }
+
+        protected virtual void OnRemoving(TElement element)
+        {
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
@@ -154,13 +267,93 @@ namespace Epoxy.Supplemental
     {
         private readonly ObservableCollection<TElement> collection =
             new ObservableCollection<TElement>();
+        private readonly List<TElement> snapshot =
+            new List<TElement>();
 
         public XamlElementCollection()
         {
             ((INotifyPropertyChanged)this.collection).PropertyChanged += (s, e) =>
                 this.OnPropertyChanged(e.PropertyName);
-            this.collection.CollectionChanged += (s, e) =>
-                this.CollectionChanged?.Invoke(this, e);
+            this.collection.CollectionChanged += this.OnCollectionChanged;
+        }
+
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
+        {
+            switch (e!.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (TElement? element1 in e.NewItems!)
+                    {
+                        this.snapshot.Insert(IndexOf(element1!), element1!);
+                        element1!.Parent = this;
+                        this.OnAdded(element1!);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    foreach (TElement? element2 in e.OldItems!)
+                    {
+                        try
+                        {
+                            this.OnRemoving(element2!);
+                        }
+                        finally
+                        {
+                            element2!.Parent = null;
+                            this.snapshot.Remove(element2!);
+                        }
+                    }
+                    foreach (TElement? element3 in e.NewItems!)
+                    {
+                        this.snapshot.Insert(IndexOf(element3!), element3!);
+                        element3!.Parent = null;
+                        this.OnAdded(element3!);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (TElement? element4 in e.OldItems!)
+                    {
+                        try
+                        {
+                            this.OnRemoving(element4!);
+                        }
+                        finally
+                        {
+                            element4!.Parent = null;
+                            this.snapshot.Remove(element4!);
+                        }
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    foreach (var element5 in this.snapshot)
+                    {
+                        try
+                        {
+                            this.OnRemoving(element5!);
+                        }
+                        finally
+                        {
+                            element5!.Parent = null;
+                        }
+                    }
+                    this.snapshot.Clear();
+                    foreach (var element6 in this)
+                    {
+                        this.snapshot.Insert(IndexOf(element6!), element6!);
+                        element6!.Parent = this;
+                        this.OnAdded(element6!);
+                    }
+                    break;
+            }
+
+            this.CollectionChanged?.Invoke(this, e);
+        }
+        
+        protected virtual void OnAdded(TElement element)
+        {
+        }
+
+        protected virtual void OnRemoving(TElement element)
+        {
         }
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;

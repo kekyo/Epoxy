@@ -30,7 +30,7 @@
 
 ### 解説動画があります (YouTube, 日本語のみ):
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/LkyrgJbuiQs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Epoxyで C# MVVMアーキテクチャを簡単に実装する話 - 作ってみた 第一回](https://img.youtube.com/vi/LkyrgJbuiQs/0.jpg)](https://www.youtube.com/watch?v=LkyrgJbuiQs)
 
 [(再生出来ない場合はこちら)](https://www.youtube.com/watch?v=LkyrgJbuiQs)
 
