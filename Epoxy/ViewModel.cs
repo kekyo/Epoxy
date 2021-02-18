@@ -27,6 +27,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
+using Epoxy.Internal;
+using Epoxy.Supplemental;
+
 namespace Epoxy
 {
     public abstract class ViewModel : Model, INotifyPropertyChanging, INotifyPropertyChanged

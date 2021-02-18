@@ -19,7 +19,6 @@
 
 #nullable enable
 
-using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -41,6 +40,9 @@ using System;
 using System.Globalization;
 using Xamarin.Forms;
 #endif
+
+using Epoxy.Internal;
+using Epoxy.Supplemental;
 
 namespace Epoxy
 {

@@ -22,6 +22,8 @@
 using System.Diagnostics;
 using System.Linq;
 
+using Epoxy.Internal;
+
 namespace Epoxy
 {
     [DebuggerDisplay("{PrettyPrint}")]

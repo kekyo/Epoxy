@@ -25,7 +25,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Epoxy
+namespace Epoxy.Internal
 {
     [DebuggerStepThrough]
     internal static class InternalHelpers

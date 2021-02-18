@@ -27,7 +27,7 @@ using System.Windows;
 using Windows.UI.Xaml;
 #endif
 
-namespace Epoxy
+namespace Epoxy.Internal
 {
     internal static class DefaultValue<TValue>
     {

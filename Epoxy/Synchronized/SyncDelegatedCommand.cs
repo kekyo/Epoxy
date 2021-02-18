@@ -21,6 +21,8 @@
 
 using System;
 
+using Epoxy.Internal;
+
 namespace Epoxy.Synchronized
 {
     public sealed class SyncDelegatedCommand : Command

@@ -22,7 +22,9 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Epoxy
+using Epoxy.Internal;
+
+namespace Epoxy.Supplemental
 {
     public sealed class DelegatedCommand : Command
     {

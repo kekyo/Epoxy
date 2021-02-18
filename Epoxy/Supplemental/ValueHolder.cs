@@ -40,7 +40,7 @@ using System.Windows.Media;
 using Xamarin.Forms;
 #endif
 
-namespace Epoxy
+namespace Epoxy.Supplemental
 {
     public struct ValueHolder
     {

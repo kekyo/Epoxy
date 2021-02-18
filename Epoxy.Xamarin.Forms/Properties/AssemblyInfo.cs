@@ -19,15 +19,7 @@
 
 #nullable enable
 
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading;
+using Xamarin.Forms;
 
-namespace Epoxy
-{
-    public static class Registrar
-    {
-        // TODO:
-    }
-}
+[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
+[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]

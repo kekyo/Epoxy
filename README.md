@@ -182,13 +182,68 @@ See [definition of implicit operator](https://github.com/kekyo/Epoxy/blob/1b16a9
 
 ## Minor but useful features
 
-### ChildrenBinder
+Since each function is independent, it can be used in any combination.
 
-TODO:
+### EventBinder
 
-[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
+The `EventBinder` allows binding of unbindable events as `Command` when they are exposed.
+This feature avoids the practice of writing a code-behind for the sake of writing an event handler.
 
-[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
+For example, you can bind the `Window.Loaded` event of WPF as follows:
+
+```xml
+<!-- Declared Epoxy namespace -->
+<Window xmlns:epoxy="https://github.com/kekyo/Epoxy">
+
+    <!-- ... -->
+
+    <epoxy:EventBinder.Events>
+        <!-- Binding the Window.Loaded event to the ViewModel's Loaded property -->
+        <epoxy:Event Name="Loaded" Command="{Binding Loaded}" />
+    </epoxy:EventBinder.Events>
+</Window>
+```
+
+On the `ViewModel` side, you can write handlers in Command, just like Button:
+
+```csharp
+// Defining the Command property for receiving Loaded events
+public Command? Loaded
+{
+    get => this.GetValue();
+    private set => this.SetValue(value);
+}
+
+// ...
+
+// Describe what to do when the Loaded event occurs.
+this.Loaded = Command.Create<EventArgs>(async _ =>
+{
+    // ex: Asynchronous acquisition of information to be displayed in the list from Model.
+    foreach (var item in await Model.FetchInitialItemsAsync())
+    {
+        this.Items.Add(item);
+    }
+});
+```
+
+The generic argument of `Command.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
+Currently, this type must be specified because of strict checking.
+However, if you do not use the argument, or if you know it is not important,
+you can use `EventArgs` uniformly, as in the example above.
+
+TIP: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
+However, WPF and UWP require additional packages and are designed to be generic,
+so they are a bit more complex.
+Using `EventBinder` has the advantage of being simple and using the same notation.
+
+[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+
+[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+
+[For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+
+[For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
 ### Anchor/Pile
 
@@ -201,7 +256,10 @@ The `Pile` pull in the `UIElement`'s anchor, and we can rent temporary `UIElemen
 
 ```xml
 <!-- Declared Epoxy namespace -->
-<Window xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy">
+<Window xmlns:epoxy="https://github.com/kekyo/Epoxy">
+
+    <!-- ... -->
+
     <!-- Placed Anchor onto the TextBox and bound property -->
     <TextBox epoxy:Anchor.Pile="{Binding LogPile}" />
 </Window>
@@ -301,6 +359,14 @@ await UIThread.Bind();
 // We can handle any UI elements in the UI thread (include binding operation.)
 this.Log = $"Read={read}";
 ```
+
+### ChildrenBinder
+
+TODO:
+
+[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
+
+[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
 
 ## License
 

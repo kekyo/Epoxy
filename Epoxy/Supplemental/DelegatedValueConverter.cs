@@ -21,7 +21,7 @@
 
 using System;
 
-namespace Epoxy
+namespace Epoxy.Supplemental
 {
     public sealed class DelegatedValueConverter<TTo, TFrom> : ValueConverter<TTo, TFrom>
     {

@@ -25,7 +25,7 @@
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
   * Viewにコードビハインドを書かずに済むことが着地点ですが、そのために煩雑な処理を記述しなければならなくなる事を避ける方針です。
   * MVVMビギナーが躓きそうな部分に焦点を当てています。
-  * 完全な共通化は行いません。Epoxyについてだけ、可能な限り共通の構造とし、その他の部分はそれぞれの環境に依存させることで、最大公約数的にならないようにしています。
+  * 完全な共通化は行いません。Epoxyについてだけ同じように記述可能にし、その他の部分はそれぞれの環境に依存させることで、最大公約数的にならないようにしています。
 * ほかの MVVMフレームワーク(例: ReactiveProperty)と組み合わせて使えるように、余計な操作や暗黙の前提を排除しています。
 
 ### 解説動画があります (YouTube, 日本語のみ):
@@ -197,13 +197,67 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 
 ## その他の有用な機能
 
-### ChildrenBinder
+それぞれの機能は独立しているため、自由に組み合わせて使用出来ます。
 
-TODO:
+### EventBinder
 
-[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
+`EventBinder`は、バインディング出来ないイベントが公開されている場合に、`Command`としてバインディング可能にします。
+この機能により、イベントハンドラを記述するために、やむを得なくコードビハインドを書くと言う手法を回避できます。
 
-[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
+例えば、以下のように、WPFの`Window.Loaded`イベントをバインディング出来ます:
+
+```xml
+<!-- EpoxyのXML名前空間を定義します -->
+<Window xmlns:epoxy="https://github.com/kekyo/Epoxy">
+
+    <!-- ... -->
+
+    <epoxy:EventBinder.Events>
+        <!-- Window.Loadedイベントを、ViewModelのLoadedプロパティにバインディングする -->
+        <epoxy:Event Name="Loaded" Command="{Binding Loaded}" />
+    </epoxy:EventBinder.Events>
+</Window>
+```
+
+`ViewModel`側はButtonと同じように、Commandでハンドラを書くことが出来ます:
+
+```csharp
+// Loadedイベントを受信するためのCommandプロパティの定義
+public Command? Loaded
+{
+    get => this.GetValue();
+    private set => this.SetValue(value);
+}
+
+// ...
+
+// Loadedイベントが発生した場合の処理を記述
+this.Loaded = Command.Create<EventArgs>(async _ =>
+{
+    // リストに表示する情報をModelから非同期で取得
+    foreach (var item in await Model.FetchInitialItemsAsync())
+    {
+        this.Items.Add(item);
+    }
+});
+```
+
+`Command.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
+現在のところ、チェックを厳しくしているため、この型は必ず指定する必要があります。
+但し、引数を使用しない場合や、重要でないと分かっている場合は、
+上の例のように、一律`EventArgs`としておくことが可能です。
+
+補足: WPF,UWPやXamarin Formsでは、`Behavior`や`Trigger`で同じことを実現できますが、
+WPFやUWPの場合は追加のパッケージが必要になることと、汎用的に設計されているため、やや複雑です。
+`EventBinder`を使うことで、同じ記法でシンプルに記述できる利点があります。
+
+[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+
+[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+
+[For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+
+[For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
 ### Anchor/Pile
 
@@ -218,7 +272,10 @@ MVVMアーキテクチャのレアケースにおいて、コントロールを�
 
 ```xml
 <!-- EpoxyのXML名前空間を定義します -->
-<Window xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy">
+<Window xmlns:epoxy="https://github.com/kekyo/Epoxy">
+
+    <!-- ... -->
+
     <!-- AnchorをTextBoxに配置してバインディングします -->
     <TextBox epoxy:Anchor.Pile="{Binding LogPile}" />
 </Window>
@@ -316,6 +373,14 @@ await UIThread.Bind();
 // バインディングされたTextBlockに反映する
 this.Log = $"Read={read}";
 ```
+
+### ChildrenBinder
+
+TODO:
+
+[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
+
+[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
 
 ## License
 

@@ -20,8 +20,6 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Windows.Input;
 
 #if WINDOWS_UWP
@@ -39,6 +37,7 @@ using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
 #endif
 
+using Epoxy.Internal;
 using Epoxy.Supplemental;
 
 namespace Epoxy
@@ -180,68 +179,6 @@ namespace Epoxy
 #if XAMARIN_FORMS
             this.Parent = null;
 #endif
-        }
-    }
-
-    internal static class EventMetadata
-    {
-        private struct EventKey
-        {
-            public readonly Type Type;
-            public readonly string Name;
-
-            public EventKey(Type type, string name)
-            {
-                this.Type = type;
-                this.Name = name;
-            }
-        }
-
-        private static readonly Dictionary<EventKey, EventInfo?> events =
-            new Dictionary<EventKey, EventInfo?>();
-
-        public static EventInfo? GetOrAddEventInfo(Type type, string name)
-        {
-            var key = new EventKey(type, name);
-            if (!events.TryGetValue(key, out var ei))
-            {
-                ei = type.GetEvent(name);
-                events.Add(key, ei);
-            }
-            if (ei == null)
-            {
-                throw new ArgumentException($"Couldn't bind event: Type={type.FullName}, Name={name}");
-            }
-            return ei;
-        }
-
-        private sealed class InvokingClosure
-        {
-            private readonly ICommand command;
-
-            public InvokingClosure(ICommand command) =>
-                this.command = command;
-
-            public void Handler(object? sender, object? e)
-            {
-                if (this.command.CanExecute(e))
-                {
-                    this.command.Execute(e);
-                }
-            }
-        }
-
-        public static Delegate CreateHandler(EventInfo ei, ICommand command)
-        {
-            // Limitation:
-            //   The closure handler signature valid only standard event style:
-            //   `void (object? sender, object? e)`
-            //   We can make perfect trampoline by opcode emitter or expression constructor.
-            //   It's decline running on the AOT platform...
-            var closure = new InvokingClosure(command);
-            return new EventHandler(closure.Handler).   // valid with contravariance `e`
-                GetMethodInfo()!.
-                CreateDelegate(ei.EventHandlerType!, closure);
         }
     }
 

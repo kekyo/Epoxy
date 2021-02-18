@@ -24,6 +24,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Epoxy.Supplemental;
+
 namespace Epoxy
 {
     public interface IAsyncCommand

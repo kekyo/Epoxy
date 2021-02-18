@@ -21,9 +21,9 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:epoxy="https://github.com/kekyo/Epoxy"
     xmlns:viewmodels="clr-namespace:EpoxyHello.Xamarin.Forms.ViewModels"
     xmlns:converters="clr-namespace:EpoxyHello.Xamarin.Forms.Views.Converters"
-    xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy"
     x:Class="EpoxyHello.Xamarin.Forms.Views.MainPage">
 
     <ContentPage.BindingContext>
