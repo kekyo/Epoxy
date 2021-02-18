@@ -18,8 +18,18 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
-using EpoxyHello.Xamarin.Forms.Models;
+using Epoxy.Synchronized;
+
+using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+
+// Conflicted between Xamarin.Forms.Command and Epoxy.Command.
+using Command = Epoxy.Command;
+
+using EpoxyHello.Models;
 
 namespace EpoxyHello.Xamarin.Forms.ViewModels
 {
@@ -28,6 +38,12 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
         public MainContentPageViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
+
+            // A handler for page appearing
+            this.Ready = Command.Factory.CreateSync<EventArgs>(e =>
+            {
+                this.IsEnabled = true;
+            });
 
             // A handler for fetch button
             this.Fetch = Command.Create(async () =>
@@ -41,13 +57,22 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
 
                     this.Items.Clear();
 
+                    static async ValueTask<ImageSource> FetchImageAsync(Uri url)
+                    {
+                        var data = await Reddit.FetchImageAsync(url);
+                        return new StreamImageSource
+                        {
+                            Stream = _ => Task.FromResult((Stream)new MemoryStream(data))
+                        };
+                    }
+
                     foreach (var reddit in reddits)
                     {
                         this.Items.Add(new ItemViewModel
                         {
                             Title = reddit.Title,
                             Score = reddit.Score,
-                            Image = await Reddit.FetchImageAsync(reddit.Url)
+                            Image = await FetchImageAsync(reddit.Url)
                         });
                     }
                 }
@@ -56,8 +81,12 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
                     IsEnabled = true;
                 }
             });
+        }
 
-            this.IsEnabled = true;
+        public Command? Ready
+        {
+            get => this.GetValue();
+            set => this.SetValue(value);
         }
 
         public bool IsEnabled
@@ -72,7 +101,7 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
             private set => this.SetValue(value);
         }
 
-        public Command? Fetch
+        public Epoxy.Command? Fetch
         {
             get => this.GetValue();
             private set => this.SetValue(value);

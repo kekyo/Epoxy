@@ -25,8 +25,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
+
+using Epoxy.Internal;
+using Epoxy.Supplemental;
 
 namespace Epoxy
 {
@@ -49,13 +51,12 @@ namespace Epoxy
             return properties;
         }
 
-        public ValueHolder GetValue(
+        protected ValueHolder GetValue(
             object? defaultValue = default,
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(
-                SynchronizationContext.Current != null,
+            Debug.Assert(UIThread.IsBound,
                 "Cannot use GetValue() on worker thread context.");
 
             var properties = this.Prepare();
@@ -69,13 +70,12 @@ namespace Epoxy
             }
         }
 
-        public TValue GetValue<TValue>(
+        protected TValue GetValue<TValue>(
             TValue defaultValue = default,
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(
-                SynchronizationContext.Current != null,
+            Debug.Assert(UIThread.IsBound,
                 "Cannot use GetValue<TValue>() on worker thread context.");
 
             var properties = this.Prepare();
@@ -95,8 +95,7 @@ namespace Epoxy
             string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(
-                SynchronizationContext.Current != null,
+            Debug.Assert(UIThread.IsBound,
                 "Cannot use SetValue() on worker thread context.");
 
             var properties = this.Prepare();
@@ -106,7 +105,7 @@ namespace Epoxy
                 {
                     this.OnPropertyChanging(propertyName);
 
-                    if (!DefaultValue<TValue>.IsDefault(newValue))
+                    if (!DefaultValue.IsDefaultValue(newValue))
                     {
                         properties[propertyName!] = newValue!;
                     }
@@ -126,7 +125,7 @@ namespace Epoxy
             {
                 this.OnPropertyChanging(propertyName);
 
-                if (!DefaultValue<TValue>.IsDefault(newValue))
+                if (!DefaultValue.IsDefaultValue(newValue))
                 {
                     properties.Add(propertyName!, newValue!);
                 }
@@ -151,7 +150,7 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null) =>
             this.InternalSetValueAsync(newValue, propertyChanged, propertyName);
 
-        public void SetValue<TValue>(
+        protected void SetValue<TValue>(
             TValue newValue,
             [CallerMemberName] string? propertyName = null) =>
             _ = this.InternalSetValueAsync(newValue, null, propertyName);
@@ -160,8 +159,7 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(
-                SynchronizationContext.Current != null,
+            Debug.Assert(UIThread.IsBound,
                 "Cannot use OnPropertyChanging() on worker thread context.");
 
             this.PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
@@ -171,8 +169,7 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(
-                SynchronizationContext.Current != null,
+            Debug.Assert(UIThread.IsBound,
                 "Cannot use OnPropertyChanged() on worker thread context.");
 
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -184,36 +181,5 @@ namespace Epoxy
                 this.EnumerateProperties().
                 OrderBy(entry => entry.name).
                 Select(entry => $"{entry.name}={entry.value ?? "(null)"}"));
-    }
-
-    public static class ViewModelExtension
-    {
-        public static ValueTask SetValueAsync<TValue>(
-            this ViewModel viewModel,
-            TValue newValue,
-            Func<TValue, Task> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            viewModel.SetValueAsync(
-                newValue,
-                value => new ValueTask(propertyChanged(value)),
-                propertyName);
-
-        [Obsolete("Synchronous callback is obsoleted. Use SetValueSync instead.")]
-        public static void SetValue<TValue>(
-            this ViewModel viewModel,
-            TValue newValue,
-            Action<TValue> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            viewModel.SetValue(newValue, propertyChanged, propertyName);
-
-        public static void SetValueSync<TValue>(
-            this ViewModel viewModel,
-            TValue newValue,
-            Action<TValue> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            _ = viewModel.SetValueAsync(
-                newValue,
-                value => { propertyChanged(value); return default; },
-                propertyName);
     }
 }

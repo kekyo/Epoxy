@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net45;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <UseWPF>true</UseWPF>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Epoxy.Wpf\Epoxy.Wpf.csproj" />
+    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 
 </Project>

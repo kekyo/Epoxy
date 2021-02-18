@@ -19,8 +19,8 @@
 
 #nullable enable
 
-using System.Diagnostics;
 using System.Reflection;
+using System.Threading.Tasks;
 
 #if WINDOWS_UWP
 using System;
@@ -40,6 +40,9 @@ using System;
 using System.Globalization;
 using Xamarin.Forms;
 #endif
+
+using Epoxy.Internal;
+using Epoxy.Supplemental;
 
 namespace Epoxy
 {
@@ -82,6 +85,30 @@ namespace Epoxy
 
         public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
             new DelegatedValueConverter<TTo, TFrom, TParameter>(convert, convertBack);
+
+        [Obsolete("Avoid asynchronous XAML conversion.", true)]
+        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, ValueTask<TTo>> convert) =>
+            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
+
+        [Obsolete("Avoid asynchronous XAML conversion.", true)]
+        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, ValueTask<TTo>> convert, Func<TTo, TFrom> convertBack) =>
+            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
+
+        [Obsolete("Avoid asynchronous XAML conversion.", true)]
+        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert) =>
+            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
+
+        [Obsolete("Avoid asynchronous XAML conversion.", true)]
+        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, TFrom> convertBack) =>
+            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
+
+        [Obsolete("Avoid asynchronous XAML conversion.", true)]
+        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
+            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
+
+        [Obsolete("Avoid asynchronous XAML conversion.", true)]
+        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
+            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
     }
 
     public abstract class ValueConverter<TTo, TFrom> : ValueConverter
@@ -96,15 +123,18 @@ namespace Epoxy
 
         private protected override object? Convert(object? value, Type targetType, object? parameter)
         {
-            Debug.Assert(
-                parameter == null,
-                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-            Debug.Assert(
-                targetType.IsAssignableFrom(typeof(TTo)),
-                $"ValueConverter.Convert: Type mismatched in {this.GetType().FullName}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
+            if (parameter != null)
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+            }
+            if (!targetType.IsAssignableFrom(typeof(TTo)))
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.Convert: Type mismatched in {this.GetPrettyTypeName()}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
+            }
 
-            if (value is TFrom from &&
-                targetType.IsAssignableFrom(typeof(TTo)))
+            if (value is TFrom from)
             {
                 if (this.TryConvert(from, out var result))
                 {
@@ -112,24 +142,23 @@ namespace Epoxy
                 }
             }
 
-#if XAMARIN_FORMS
-            return default(TTo)!;
-#else
-            return DependencyProperty.UnsetValue;
-#endif
+            return DefaultValue.XamlProperty;
         }
 
         private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
-            Debug.Assert(
-                parameter == null,
-                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-            Debug.Assert(
-                typeof(TFrom).IsAssignableFrom(targetType),
-                $"ValueConverter.ConvertBack: Type mismatched in {this.GetType().FullName}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
+            if (parameter != null)
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+            }
+            if (!typeof(TFrom).IsAssignableFrom(targetType))
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.ConvertBack: Type mismatched in {this.GetPrettyTypeName()}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
+            }
 
-            if (value is TTo to &&
-                typeof(TFrom).IsAssignableFrom(targetType))
+            if (value is TTo to)
             {
                 if (this.TryConvertBack(to, out var result))
                 {
@@ -137,11 +166,7 @@ namespace Epoxy
                 }
             }
 
-#if XAMARIN_FORMS
-            return default(TFrom)!;
-#else
-            return DependencyProperty.UnsetValue;
-#endif
+            return DefaultValue.XamlProperty;
         }
     }
 
@@ -157,15 +182,18 @@ namespace Epoxy
 
         private protected override object? Convert(object? value, Type targetType, object? parameter)
         {
-            Debug.Assert(
-                parameter is TParameter,
-                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-            Debug.Assert(
-                targetType.IsAssignableFrom(typeof(TTo)),
-                $"ValueConverter.Convert: Type mismatched in {this.GetType().FullName}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
+            if (!DefaultValue.IsDefault<TParameter>(value))
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+            }
+            if (!targetType.IsAssignableFrom(typeof(TTo)))
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.Convert: Type mismatched in {this.GetPrettyTypeName()}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
+            }
 
-            if (value is TFrom from &&
-                targetType.IsAssignableFrom(typeof(TTo)))
+            if (value is TFrom from)
             {
                 if (this.TryConvert(from, (TParameter)parameter!, out var result))
                 {
@@ -173,24 +201,23 @@ namespace Epoxy
                 }
             }
 
-#if XAMARIN_FORMS
-            return default(TTo)!;
-#else
-            return DependencyProperty.UnsetValue;
-#endif
+            return DefaultValue.XamlProperty;
         }
 
         private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
-            Debug.Assert(
-                parameter is TParameter,
-                $"ValueConverter.Convert: Invalid parameter given in {this.GetType().FullName}");
-            Debug.Assert(
-                typeof(TFrom).IsAssignableFrom(targetType),
-                $"ValueConverter.ConvertBack: Type mismatched in {this.GetType().FullName}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
+            if (!DefaultValue.IsDefault<TParameter>(value))
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.ConvertBack: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+            }
+            if (!typeof(TFrom).IsAssignableFrom(targetType))
+            {
+                throw new ArgumentException(
+                    $"ValueConverter.ConvertBack: Type mismatched in {this.GetPrettyTypeName()}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
+            }
 
-            if (value is TTo to &&
-                typeof(TFrom).IsAssignableFrom(targetType))
+            if (value is TTo to)
             {
                 if (this.TryConvertBack(to, (TParameter)parameter!, out var result))
                 {
@@ -198,11 +225,7 @@ namespace Epoxy
                 }
             }
 
-#if XAMARIN_FORMS
-            return default(TFrom)!;
-#else
-            return DependencyProperty.UnsetValue;
-#endif
+            return DefaultValue.XamlProperty;
         }
     }
 }

@@ -19,11 +19,10 @@
 
 #nullable enable
 
+using Epoxy.Internal;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Linq;
 
 #if WINDOWS_UWP
 using Windows.UI.Xaml;
@@ -81,14 +80,14 @@ namespace Epoxy
                 null,
                 BindingMode.OneWay,
                 null,
-                Collection_PropertyChanged);
+                OnPropertyChanged);
 #else
         public static readonly DependencyProperty CollectionProperty =
             DependencyProperty.RegisterAttached(
                 "Collection",
                 typeof(IList<UIElement>),
                 typeof(ChildrenBinder),
-                new PropertyMetadata(null, Collection_PropertyChanged));
+                new PropertyMetadata(null, OnPropertyChanged));
 #endif
 
         public static IList<UIElement>? GetCollection(DependencyObject d) =>
@@ -98,11 +97,11 @@ namespace Epoxy
             d.SetValue(CollectionProperty, children);
 
 #if XAMARIN_FORMS
-        private static void Collection_PropertyChanged(
+        private static void OnPropertyChanged(
             BindableObject d, object? oldValue, object? newValue)
         {
 #else
-        private static void Collection_PropertyChanged(
+        private static void OnPropertyChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var newValue = e.NewValue;
@@ -121,212 +120,6 @@ namespace Epoxy
                 {
                     cb = new ChildrenBridge(panel, nv);
                     SetChildrenBridge(panel, cb);
-                }
-            }
-        }
-
-#if XAMARIN_FORMS
-        private abstract class PanelChildrenAccessor
-        {
-            public abstract int Count(Panel panel);
-            public abstract int IndexOf(Panel panel, UIElement element);
-            public abstract void Clear(Panel panel);
-            public abstract void Add(Panel panel, UIElement element);
-            public abstract void Insert(Panel panel, int index, UIElement element);
-            public abstract void Set(Panel panel, int index, UIElement element);
-            public abstract void Remove(Panel panel, UIElement element);
-            public abstract void RemoveAt(Panel panel, int index);
-        }
-
-        [DebuggerStepThrough]
-        private sealed class PanelChildrenAccessor<T> : PanelChildrenAccessor
-            where T : UIElement
-        {
-            public override int Count(Panel panel) =>
-                ((IViewContainer<T>)panel).Children.Count;
-
-            public override int IndexOf(Panel panel, UIElement element) =>
-                ((IViewContainer<T>)panel).Children.IndexOf((T)element);
-
-            public override void Clear(Panel panel) =>
-                ((IViewContainer<T>)panel).Children.Clear();
-
-            public override void Add(Panel panel, UIElement element) =>
-                ((IViewContainer<T>)panel).Children.Add((T)element);
-
-            public override void Insert(Panel panel, int index, UIElement element) =>
-                ((IViewContainer<T>)panel).Children.Insert(index, (T)element);
-
-            public override void Set(Panel panel, int index, UIElement element) =>
-                ((IViewContainer<T>)panel).Children[index] = (T)element;
-
-            public override void Remove(Panel panel, UIElement element) =>
-                ((IViewContainer<T>)panel).Children.Remove((T)element);
-
-            public override void RemoveAt(Panel panel, int index) =>
-                ((IViewContainer<T>)panel).Children.RemoveAt(index);
-        }
-
-        private static readonly Dictionary<Type, PanelChildrenAccessor> accessors =
-            new Dictionary<Type, PanelChildrenAccessor>();
-
-        [DebuggerStepThrough]
-        private static PanelChildrenAccessor GetPanelChildrenAccessor(Panel panel)
-        {
-            Debug.Assert(UIThread.IsBound);
-
-            var type = panel.GetType();
-            if (!accessors.TryGetValue(type, out var accessor))
-            {
-                var elementType = type.GetInterfaces().
-                    Where(it => it.IsGenericType && it.GetGenericTypeDefinition() == typeof(IViewContainer<>)).
-                    Select(it => it.GetGenericArguments()[0]).
-                    First();
-
-                accessor = (PanelChildrenAccessor)Activator.CreateInstance(
-                    typeof(PanelChildrenAccessor<>).MakeGenericType(elementType));
-                accessors.Add(type, accessor);
-            }
-            return accessor;
-        }
-#else
-        [DebuggerStepThrough]
-        private sealed class PanelChildrenAccessor
-        {
-            private PanelChildrenAccessor()
-            { }
-
-            public int Count(Panel panel) =>
-                panel.Children.Count;
-
-            public int IndexOf(Panel panel, UIElement element) =>
-                panel.Children.IndexOf(element);
-
-            public void Clear(Panel panel) =>
-                panel.Children.Clear();
-
-            public void Add(Panel panel, UIElement element) =>
-                panel.Children.Add(element);
-
-            public void Insert(Panel panel, int index, UIElement element) =>
-                panel.Children.Insert(index, element);
-
-            public void Set(Panel panel, int index, UIElement element) =>
-                panel.Children[index] = element;
-
-            public void Remove(Panel panel, UIElement element) =>
-                panel.Children.Remove(element);
-
-            public void RemoveAt(Panel panel, int index) =>
-                panel.Children.RemoveAt(index);
-
-            public static readonly PanelChildrenAccessor Instance =
-                new PanelChildrenAccessor();
-        }
-
-        [DebuggerStepThrough]
-        private static PanelChildrenAccessor GetPanelChildrenAccessor(Panel panel) =>
-            PanelChildrenAccessor.Instance;
-#endif
-
-        private sealed class ChildrenBridge : IDisposable
-        {
-            private Panel? panel;
-            private IList<UIElement>? collection;
-
-            public ChildrenBridge(Panel panel, IList<UIElement> collection)
-            {
-                this.panel = panel;
-                this.collection = collection;
-
-                var panelChildren = GetPanelChildrenAccessor(this.panel);
-
-                panelChildren.Clear(this.panel);
-                foreach (var child in this.collection)
-                {
-                    panelChildren.Add(this.panel, child);
-                }
-
-                if (this.collection is INotifyCollectionChanged ncc)
-                {
-                    ncc.CollectionChanged += this.CollectionChanged;
-                }
-            }
-
-            public void Dispose()
-            {
-                if (this.collection != null)
-                {
-                    if (this.collection is INotifyCollectionChanged ncc)
-                    {
-                        ncc.CollectionChanged -= this.CollectionChanged;
-                    }
-
-                    var panelChildren = GetPanelChildrenAccessor(this.panel!);
-
-                    panelChildren.Clear(this.panel!);
-
-                    this.collection = null;
-                    this.panel = null;
-                }
-            }
-
-            private void CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-            {
-                Debug.Assert(this.panel != null);
-
-                var collection = this.collection!;
-                var panelChildren = GetPanelChildrenAccessor(this.panel!);
-
-                switch (e.Action)
-                {
-                    case NotifyCollectionChangedAction.Add:
-                        if (e.NewItems!.Count >= 1)
-                        {
-                            var startIndex =
-                                ((e.NewStartingIndex < collection.Count) &&
-                                 (panelChildren.IndexOf(this.panel!, collection[e.NewStartingIndex]) is int panelIndex &&
-                                  panelIndex >= 0)) ?
-                                  panelIndex : panelChildren.Count(this.panel!);
-
-                            for (var relativeIndex = 0; relativeIndex < e.NewItems.Count; relativeIndex++)
-                            {
-                                var child = (UIElement?)e.NewItems[relativeIndex];
-                                panelChildren.Insert(this.panel!, relativeIndex + startIndex, child!);
-                            }
-                        }
-                        break;
-
-                    case NotifyCollectionChangedAction.Remove:
-                        foreach (UIElement? child in e.OldItems!)
-                        {
-                            panelChildren.Remove(this.panel!, child!);
-                        }
-                        break;
-
-                    case NotifyCollectionChangedAction.Replace:
-                        foreach (var entry in
-                            e.OldItems!.Cast<UIElement?>().
-                            Zip(e.NewItems!.Cast<UIElement?>(),
-                            (o, n) => new { panelIndex = panelChildren.IndexOf(this.panel!, o!), newChild = n }).
-                            Where(entry => entry.panelIndex >= 0))
-                        {
-                            panelChildren.Set(this.panel!, entry.panelIndex, entry.newChild!);
-                        }
-                        break;
-
-                    case NotifyCollectionChangedAction.Move:
-                        for (var relativeIndex = 0; relativeIndex < e.NewItems!.Count; relativeIndex++)
-                        {
-                            var child = (UIElement?)e.NewItems[relativeIndex];
-                            panelChildren.RemoveAt(this.panel!, e.OldStartingIndex);
-                            panelChildren.Insert(this.panel!, e.NewStartingIndex + relativeIndex, child!);
-                        }
-                        break;
-
-                    case NotifyCollectionChangedAction.Reset:
-                        panelChildren.Clear(this.panel!);
-                        break;
                 }
             }
         }

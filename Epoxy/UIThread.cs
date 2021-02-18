@@ -19,10 +19,9 @@
 
 #nullable enable
 
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading;
+
+using Epoxy.Supplemental;
 
 namespace Epoxy
 {
@@ -44,64 +43,5 @@ namespace Epoxy
 
         public static UIThreadAwaitable Bind() =>
             new UIThreadAwaitable();
-
-        public struct UIThreadAwaitable
-        {
-            public UIThreadAwaiter GetAwaiter() =>
-                new UIThreadAwaiter();
-        }
-
-        public sealed class UIThreadAwaiter : INotifyCompletion
-        {
-            internal UIThreadAwaiter()
-            {
-            }
-
-            public bool IsCompleted { get; private set; }
-
-            public void OnCompleted(Action continuation)
-            {
-#if WINDOWS_WPF
-                var dispatcher = System.Windows.Application.Current?.Dispatcher;
-                if (dispatcher == null)
-                {
-                    throw new InvalidOperationException("UI thread not found.");
-                }
-
-                var _ = dispatcher.BeginInvoke(
-                    System.Windows.Threading.DispatcherPriority.Normal,
-                    new Action(() =>
-                    {
-                        this.IsCompleted = true;
-                        continuation();
-                    }));
-#elif WINDOWS_UWP
-                var dispatcher = Windows.UI.Xaml.Window.Current?.Dispatcher;
-                if (dispatcher == null)
-                {
-                    throw new InvalidOperationException("UI thread not found.");
-                }
-
-                var _ = dispatcher.RunAsync(
-                    Windows.UI.Core.CoreDispatcherPriority.Normal,
-                    () =>
-                    {
-                        this.IsCompleted = true;
-                        continuation();
-                    });
-#elif XAMARIN_FORMS
-                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-                {
-                    this.IsCompleted = true;
-                    continuation();
-                });
-#endif
-            }
-
-            public void GetResult()
-            {
-                Debug.Assert(this.IsCompleted);
-            }
-        }
     }
 }

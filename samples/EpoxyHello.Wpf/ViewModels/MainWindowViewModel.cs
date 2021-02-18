@@ -18,13 +18,19 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
-using EpoxyHello.Wpf.Controls;
-using EpoxyHello.Wpf.Models;
+using Epoxy.Synchronized;
+
+using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+using EpoxyHello.Models;
+using EpoxyHello.Wpf.Controls;
 
 namespace EpoxyHello.Wpf.ViewModels
 {
@@ -34,6 +40,12 @@ namespace EpoxyHello.Wpf.ViewModels
         {
             this.Items = new ObservableCollection<ItemViewModel>();
             this.Indicators = new ObservableCollection<UIElement>();
+
+            // A handler for window loaded
+            this.Ready = Command.Factory.CreateSync<RoutedEventArgs>(e =>
+            {
+                this.IsEnabled = true;
+            });
 
             // A handler for fetch button
             this.Fetch = Command.Create(async () =>
@@ -50,13 +62,29 @@ namespace EpoxyHello.Wpf.ViewModels
 
                     this.Items.Clear();
 
+                    static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
+                    {
+                        try
+                        {
+                            var bitmap = new WriteableBitmap(
+                                BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
+                            bitmap.Freeze();
+                            return bitmap;
+                        }
+                        // Some images will cause decoding error by WPF's BitmapFrame, so ignoring it.
+                        catch (FileFormatException)
+                        {
+                            return null;
+                        }
+                    }
+
                     foreach (var reddit in reddits)
                     {
                         this.Items.Add(new ItemViewModel
                         {
                             Title = reddit.Title,
                             Score = reddit.Score,
-                            Image = await Reddit.FetchImageAsync(reddit.Url)
+                            Image = await FetchImageAsync(reddit.Url)
                         });
                     }
                 }
@@ -66,8 +94,6 @@ namespace EpoxyHello.Wpf.ViewModels
                     IsEnabled = true;
                 }
             });
-
-            this.IsEnabled = true;
 
             //////////////////////////////////////////////////////////////////////////
             // Anchor/Pile:
@@ -101,6 +127,12 @@ namespace EpoxyHello.Wpf.ViewModels
                     count++;
                 }
             });
+        }
+
+        public Command? Ready
+        {
+            get => this.GetValue();
+            set => this.SetValue(value);
         }
 
         public bool IsEnabled

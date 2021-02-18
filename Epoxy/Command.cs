@@ -24,6 +24,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Epoxy.Supplemental;
+
 namespace Epoxy
 {
     public interface IAsyncCommand
@@ -90,121 +92,49 @@ namespace Epoxy
             this.OnExecute(parameter);
 
         public static readonly CommandFactory Factory =
-            CommandFactory.Instance;
+            new CommandFactory();
 
         public static Command Create(
             Func<ValueTask> executeAsync) =>
-            new DelegatedAsyncCommand(executeAsync);
+            new DelegatedCommand(executeAsync);
 
         public static Command Create(
             Func<ValueTask> executeAsync,
             Func<bool> canExecute) =>
-            new DelegatedAsyncCommand(executeAsync, canExecute);
+            new DelegatedCommand(executeAsync, canExecute);
 
         public static Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync) =>
-            new DelegatedAsyncCommand<TParameter>(executeAsync);
+            new DelegatedCommand<TParameter>(executeAsync);
 
         public static Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedAsyncCommand<TParameter>(executeAsync, canExecute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create(
-            Action execute) =>
-            new DelegatedCommand(execute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create(
-            Action execute,
-            Func<bool> canExecute) =>
-            new DelegatedCommand(execute, canExecute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create<TParameter>(
-            Action<TParameter> execute) =>
-            new DelegatedCommand<TParameter>(execute);
-
-        [Obsolete("Direct factory method is obsoleted. Use Factory instead.")]
-        public static Command Create<TParameter>(
-            Action<TParameter> execute,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(execute, canExecute);
+            new DelegatedCommand<TParameter>(executeAsync, canExecute);
     }
 
     public sealed class CommandFactory
     {
-        private CommandFactory()
+        internal CommandFactory()
         {
         }
 
         public Command Create(
             Func<ValueTask> executeAsync) =>
-            new DelegatedAsyncCommand(executeAsync);
+            new DelegatedCommand(executeAsync);
 
         public Command Create(
             Func<ValueTask> executeAsync,
             Func<bool> canExecute) =>
-            new DelegatedAsyncCommand(executeAsync, canExecute);
+            new DelegatedCommand(executeAsync, canExecute);
 
         public Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync) =>
-            new DelegatedAsyncCommand<TParameter>(executeAsync);
+            new DelegatedCommand<TParameter>(executeAsync);
 
         public Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedAsyncCommand<TParameter>(executeAsync, canExecute);
-
-        public static readonly CommandFactory Instance =
-            new CommandFactory();
-    }
-
-    public static class CommandFactoryExtension
-    {
-        public static Command Create(
-            this CommandFactory factory,
-            Func<Task> executeAsync) =>
-            new DelegatedAsyncCommand(() => new ValueTask(executeAsync()));
-
-        public static Command Create(
-            this CommandFactory factory,
-            Func<Task> executeAsync,
-            Func<bool> canExecute) =>
-            new DelegatedAsyncCommand(() => new ValueTask(executeAsync()), canExecute);
-
-        public static Command Create<TParameter>(
-            this CommandFactory factory,
-            Func<TParameter, Task> executeAsync) =>
-            new DelegatedAsyncCommand<TParameter>(parameter => new ValueTask(executeAsync(parameter)));
-
-        public static Command Create<TParameter>(
-            this CommandFactory factory,
-            Func<TParameter, Task> executeAsync,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedAsyncCommand<TParameter>(parameter => new ValueTask(executeAsync(parameter)), canExecute);
-
-        public static Command CreateSync(
-            this CommandFactory factory,
-            Action execute) =>
-            new DelegatedCommand(execute);
-
-        public static Command CreateSync(
-            this CommandFactory factory,
-            Action execute,
-            Func<bool> canExecute) =>
-            new DelegatedCommand(execute, canExecute);
-
-        public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
-            Action<TParameter> execute) =>
-            new DelegatedCommand<TParameter>(execute);
-
-        public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
-            Action<TParameter> execute,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(execute, canExecute);
+            new DelegatedCommand<TParameter>(executeAsync, canExecute);
     }
 }

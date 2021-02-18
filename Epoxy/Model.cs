@@ -19,11 +19,10 @@
 
 #nullable enable
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
+
+using Epoxy.Internal;
 
 namespace Epoxy
 {
@@ -35,30 +34,6 @@ namespace Epoxy
         protected Model()
         { }
 
-#if WINDOWS_UWP
-        internal static bool IsPrimitive(Type type) =>
-            type.GetTypeInfo().IsPrimitive;
-#else
-        internal static bool IsPrimitive(Type type) =>
-            type.IsPrimitive;
-#endif
-
-        internal IEnumerable<(string name, object? value)> EnumerateFields() =>
-            this.GetType().GetFields().
-            Where(f => f.IsPublic && !f.IsStatic).
-            Select(f => (f.Name, (object?)f.GetValue(this)));
-
-        internal IEnumerable<(string name, object? value)> EnumerateProperties() =>
-            this.GetType().GetProperties().
-            Where(p =>
-                p.CanRead &&
-                (p.Name != "PrettyPrint") &&
-                (p.GetIndexParameters().Length == 0) &&
-                (IsPrimitive(p.PropertyType) || p.PropertyType == typeof(string)) &&
-                p.GetGetMethod() is MethodInfo m &&
-                m.IsPublic && !m.IsStatic).
-            Select(p => (p.Name, (object?)p.GetValue(this, emptyArgs)));
-
         public virtual string PrettyPrint =>
             string.Join(
                 ",",
@@ -67,6 +42,6 @@ namespace Epoxy
                 Select(entry => $"{entry.name}={entry.value ?? "(null)"}"));
 
         public override string ToString() =>
-            $"{this.GetType().Name}: {this.PrettyPrint}";
+            $"{this.GetPrettyTypeName()}: {this.PrettyPrint}";
     }
 }

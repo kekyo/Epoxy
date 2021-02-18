@@ -23,15 +23,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:epoxy="https://github.com/kekyo/Epoxy"
         xmlns:viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
         xmlns:converters="clr-namespace:EpoxyHello.Wpf.Views.Converters"
-        xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy"
         mc:Ignorable="d"
         Title="EpoxyHello.Wpf" Height="450" Width="800">
 
     <Window.DataContext>
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
+
+    <epoxy:EventBinder.Events>
+        <epoxy:Event Name="Loaded" Command="{Binding Ready}" />
+    </epoxy:EventBinder.Events>
     
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">

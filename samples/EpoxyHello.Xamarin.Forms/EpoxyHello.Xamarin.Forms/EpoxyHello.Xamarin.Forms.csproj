@@ -5,9 +5,6 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -20,5 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj" />
+    <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 </Project>
