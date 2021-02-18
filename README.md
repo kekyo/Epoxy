@@ -26,6 +26,7 @@
   * The main goal is to avoid writing code behinds in the View, but to avoid having to write complicated processes to do so.
   * The focus is on areas where MVVM beginners might stumble.
   * We don't do complete commonality; only Epoxy has a common structure as much as possible, and other parts are dependent on each environment to avoid being the greatest common divisor.
+  * Each function is "unrelated" to each other. Since they are independent, they can be freely combined.
 * Friction-free for combination other framework libraries such as ReactiveProperty and etc.
 
 ## Sample code
@@ -172,21 +173,24 @@ it can isolate task contexts with `task.ConfigureAwait(false)` annotation to imp
 
 ### About ViewModel base class
 
-The `ViewModel` base class provides an implementation of the `GetValue`/`SetValue` methods.
+`ViewModel` base class provides an implementation of the `GetValue`/`SetValue` methods.
 These methods automatically notify to the XAML control by property changes event `NotifyPropertyChanging`/`NotifyPropertyChanged`.
 For example, when a property is changed upon a button click in `ViewModel`, the change will be notified to the XAML control and reflected to the user interface.
 
 As commented in the sample code above, the type argument may be omitted for `GetValue`.
 See [definition of implicit operator](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/Epoxy/ValueHolder.cs#L61) for the optional types.
 
+In addition, `GetValue` defines the default value,
+and `SetValue` defines an overload that can perform additional operations when the value is changed.
 
 ## Minor but useful features
 
 Since each function is independent, it can be used in any combination.
+(For example, it is NOT necessary to inherit from `ViewModel` to use it.)
 
 ### EventBinder
 
-The `EventBinder` allows binding of unbindable events as `Command` when they are exposed.
+`EventBinder` allows binding of unbindable events as `Command` when they are exposed.
 This feature avoids the practice of writing a code-behind for the sake of writing an event handler.
 
 For example, you can bind the `Window.Loaded` event of WPF as follows:
@@ -287,7 +291,7 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 ### ValueConverter
 
-The `ValueConverter` class is a base class for safely implementing the XAML converters.
+`ValueConverter` class is a base class for safely implementing the XAML converters.
 It avoids cumbersome typecasting by explicitly specifying the type, and
 It can also automatically fail to convert incompatible types.
 
@@ -367,6 +371,79 @@ TODO:
 [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
 
 [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
+
+### GlobalService (Advanced topic)
+
+`GlobalService` class is an Epoxy implementation of techniques
+such as dependency injection and dependency isolation.
+Like other functions, it can safely implement asynchronous processing.
+
+The key of dependency separation is to define a common interface type:
+
+```csharp
+// Commonly Sample.Xamarin.Forms project.
+
+// Define platform-independent Bluetooth operations,
+// applying the GlobalService attribute.
+[GlobalService]
+public interface IBluetoothAccessor
+{
+    // Start discovering Bluetooth.
+    ValueTask BeginDiscoverAsync();
+}
+```
+
+Then, in each platform's project, register the implementation of this interface.
+The following is an example for Android:
+
+```csharp
+// In Sample.Xamarin.Forms.Android project:
+
+// Implementation for Android Bluetooth.
+public sealed class AndroidBluetoothAccessor : IBluetoothAccessor
+{
+    public async ValueTask BeginDiscoverAsync()
+    {
+        // Android-specific implementation...
+    }
+}
+
+// The Application constructor
+public Application()
+{
+    // Register a class instance that performs Android-dependent processing.
+    GlobalService.Register(new AndroidBluetoothAccessor());
+}
+```
+
+Now you can use separate implementations through interfaces in a common project:
+
+```csharp
+// Commonly Sample.Xamarin.Forms project.
+
+// I want to use Bluetooth:
+await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
+{
+    // Start discovering Bluetooth.
+    await accessor.BeginDiscoverAsync();
+
+    // ...
+});
+
+```
+
+Existing libraries for dependency injection and dependency isolation
+(e.g. `DependencyService` class, Unity, MEF, etc.) have the following problems:
+
+* Have complex functionality: In many situations, you simply want an instance that implements
+a common interface, so the `GlobalService` class allows you to perform such operations in a fast way.
+* If the retrieved instance is retained, it is not possible to manage the lifetime:
+Since it is fast, it is not a problem to call `ExecuteAsync` every time.
+Rather, it is preferable to use it only when necessary, each time.
+
+NOTE: As the name "Global" implies, `GlobalService` behaves like a kind of global variable.
+Try not to use `GlobalService` in places where it is not really needed.
+`Epoxy.Supplemental` namespace (using declarations are required) to make it a bit more distinguishable.
 
 ## License
 

@@ -26,6 +26,7 @@
   * Viewにコードビハインドを書かずに済むことが着地点ですが、そのために煩雑な処理を記述しなければならなくなる事を避ける方針です。
   * MVVMビギナーが躓きそうな部分に焦点を当てています。
   * 完全な共通化は行いません。Epoxyについてだけ同じように記述可能にし、その他の部分はそれぞれの環境に依存させることで、最大公約数的にならないようにしています。
+  * それぞれの機能が、相互に関係「しません」。独立しているので、自由に組み合わせることが出来ます。
 * ほかのフレームワークライブラリ(例: ReactiveProperty)と組み合わせて使えるように、余計な操作や暗黙の前提を排除しています。
 
 ### 解説動画があります (YouTube, 日本語のみ):
@@ -194,10 +195,13 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 上記サンプルコードのコメントにあるように、`GetValue`については型引数を省略できる場合があります。
 省略可能な型は、[implicit operatorの定義](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/Epoxy/ValueHolder.cs#L61)を参照してください。
 
+なお、`GetValue`には、デフォルト値の定義が、
+`SetValue`には、値変更時に追加操作を行うことが出来るオーバーロードが定義されています。
 
 ## その他の有用な機能
 
-それぞれの機能は独立しているため、自由に組み合わせて使用出来ます。
+それぞれの機能は独立しているため、自由に組み合わせて使用出来ます
+（例えば、`ViewModel`を継承していないと使えない、と言うような事はありません）。
 
 ### EventBinder
 
@@ -264,7 +268,8 @@ WPFやUWPの場合は追加のパッケージが必要になることと、汎�
 `Anchor`/`Pile`は、XAMLと`ViewModel`をゆるく結合して、XAML側のコントロールの完全な操作を、一時的に可能にします。
 
 MVVMアーキテクチャのレアケースにおいて、コントロールを直接操作したくなることがままあります。
-しかし、厳密に分離されたViewとViewModelでは、コードビハインドを書かないことが前提となるため、このような連携が難しくなります。
+しかし、厳密に分離された`View`と`ViewModel`では、コードビハインドを書かないことが前提となるため、
+このような連携が難しくなります。
 また、オブジェクト参照の管理を誤るとメモリリークにつながり、かつ、その箇所を特定するのが難しくなります。
 
 `Anchor`/`Pile`は、コントロールへの参照を一時的にレンタルすることによって、`View`と`ViewModel`を分離しながら、
@@ -355,7 +360,7 @@ XAMLコンバーター内で非同期処理を行わないようにしましょ�
 
 UIスレッドの取り扱いは、異なるプラットフォームにおいても重要な点です。
 Epoxyでは[UIThreadクラス](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/Epoxy/UIThread.cs#L29)で同じ操作が行えるようにしています。
-このクラスを使うことで、UIの操作と非同期処理を簡単に組み合わせる事が出来ます。
+また、このクラスを使うことで、UIの操作と非同期処理を簡単に組み合わせる事が出来ます。
 
 ```csharp
 // 現在のスレッドがUIスレッドかどうか
@@ -381,6 +386,75 @@ TODO:
 [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
 
 [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
+
+### GlobalService (高度なトピック)
+
+`GlobalService`クラスは、依存注入や依存分離といったテクニックを、Epoxy上で実現するものです。
+他の機能と同様に、安全に非同期処理を実装出来ます。
+
+依存分離を行うポイントは、共通のインターフェイス型を定義しておくことです:
+
+```csharp
+// 共通プロジェクトの、Sample.Xamarin.Formsプロジェクトで定義する
+
+// プラットフォームに依存しないBluetooth操作の定義。GlobalService属性を適用します:
+[GlobalService]
+public interface IBluetoothAccessor
+{
+    // Bluetooth探索を開始する
+    ValueTask BeginDiscoverAsync();
+}
+```
+
+そして、それぞれのプラットフォームのプロジェクトで、このインターフェイスを実装したものを登録します。
+以下はAndroidの例です:
+
+```csharp
+// Android向けの、Sample.Xamarin.Forms.Androidプロジェクトで定義する
+
+// Android向けの実装
+public sealed class AndroidBluetoothAccessor : IBluetoothAccessor
+{
+    public async ValueTask BeginDiscoverAsync()
+    {
+        // Androidに固有の実装...
+    }
+}
+
+// Applicationコンストラクタ
+public Application()
+{
+    // Android依存の処理を行うクラスを登録する
+    GlobalService.Register(new AndroidBluetoothAccessor());
+}
+```
+
+これで、共通プロジェクト内で、インターフェイスを通じて分離された実装を使えるようになりました:
+
+```csharp
+// 共通プロジェクトの、Sample.Xamarin.Formsプロジェクトで使う
+
+// Bluetoothを使いたくなった:
+await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
+{
+    // Bluetoothの探索を開始する
+    await accessor.BeginDiscoverAsync();
+
+    // ...
+});
+
+```
+
+既存の依存注入や依存分離を行うライブラリ(例:`DependencyService`クラスやUnity、MEFなど)には、以下のような問題があります:
+
+* 複雑な機能を持っている: 多くのシチュエーションでは、単に共通のインターフェイスを実装したインスタンスが欲しいだけであるので、
+`GlobalService`クラスでは、そのような操作を高速に実行できるようにしました。
+* 取得したインスタンスを保持されると、生存期間の管理が出来ない: 高速なので、毎回`ExecuteAsync`を呼び出しても問題ありません。
+むしろ、必要な場合にのみ、その都度使用することが望ましいです。
+
+注意: "Global"の名の通り、`GlobalService`は、一種のグローバル変数のように振る舞います。
+本来必要のない場所で`GlobalService`を使わないようにして下さい。
+少しでも区別できるように、`GlobalService`は`Epoxy.Supplemental`名前空間に配置されています（using宣言が必要です）。
 
 ## License
 
