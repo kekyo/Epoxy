@@ -1,4 +1,5 @@
-﻿////////////////////////////////////////////////////////////////////////////
+<!--
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - A minimum MVVM assister library.
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -16,21 +17,9 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-
-using Epoxy;
-using System.Windows.Media;
-
-namespace EpoxyHello.Wpf.Views.Converters
-{
-    public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
-    {
-        private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
-        private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));
-
-        public override bool TryConvert(int from, out Brush result)
-        {
-            result = from >= 5 ? yellow : gray;
-            return true;
-        }
-    }
-}
+-->
+<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+  <Application>
+    <Assembly Name="*Application*" Dynamic="Required All" />
+  </Application>
+</Directives>

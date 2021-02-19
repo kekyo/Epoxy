@@ -18,9 +18,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
-using System.Windows.Media;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
-namespace EpoxyHello.Wpf.Views.Converters
+namespace EpoxyHello.Uwp.Views.Converters
 {
     public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
     {

@@ -30,13 +30,13 @@ using Windows.UI.Xaml;
 
 namespace Epoxy.Supplemental
 {
-    public class XamlElementCollection<TElement> :
-        DependencyObjectCollection, IList<TElement>, INotifyPropertyChanged, INotifyCollectionChanged
+    public class XamlElementCollectionBase<TElement> :
+        DependencyObjectCollection, INotifyPropertyChanged, INotifyCollectionChanged
         where TElement : DependencyObject
     {
         private readonly List<TElement> snapshot = new List<TElement>();
 
-        public XamlElementCollection() =>
+        internal XamlElementCollectionBase() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -112,9 +112,6 @@ namespace Epoxy.Supplemental
         public int Count =>
             ((ICollection<DependencyObject>)this).Count;
 
-        bool ICollection<TElement>.IsReadOnly =>
-            ((ICollection<DependencyObject>)this).IsReadOnly;
-
         public TElement this[int index]
         {
             get => (TElement)((IList<DependencyObject>)this)[index];
@@ -145,11 +142,8 @@ namespace Epoxy.Supplemental
         public bool Remove(TElement item) =>
             ((ICollection<DependencyObject>)this).Remove(item);
 
-        public IEnumerator<TElement> GetEnumerator() =>
+        private protected IEnumerator<TElement> InternalGetEnumerator() =>
             ((IEnumerable<DependencyObject>)this).Cast<TElement>().GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() =>
-            ((IEnumerable<DependencyObject>)this).GetEnumerator();
 
         protected void ReadPreamble()
         { }
@@ -157,6 +151,14 @@ namespace Epoxy.Supplemental
         { }
         protected void WritePostscript()
         { }
+    }
+
+    public class XamlElementCollection<TElement> :
+        XamlElementCollectionBase<TElement>
+        where TElement : DependencyObject
+    {
+        public IEnumerator<TElement> GetEnumerator() =>
+            base.InternalGetEnumerator();
     }
 
     public class XamlElementCollection<TSelf, TElement> :

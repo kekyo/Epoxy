@@ -24,9 +24,12 @@ namespace EpoxyHello.Xamarin.Forms.Views.Converters
 {
     public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
     {
+        private static readonly Brush yellow = new SolidColorBrush(Color.FromRgba(96, 96, 0, 255));
+        private static readonly Brush gray = new SolidColorBrush(Color.FromRgba(96, 96, 96, 255));
+
         public override bool TryConvert(int from, out Brush result)
         {
-            result = from >= 5 ? Brush.Cyan : Brush.White;
+            result = from >= 5 ? yellow : gray;
             return true;
         }
     }

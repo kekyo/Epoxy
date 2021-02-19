@@ -54,7 +54,7 @@
                             </StackLayout.Resources>
 
                             <Label Text="{Binding Title}"
-                                   TextColor="Black"
+                                   TextColor="White"
                                    Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
                             <Image Margin="5,0,5,0"
                                    Source="{Binding Image}"

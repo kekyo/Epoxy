@@ -17,20 +17,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Epoxy;
-using System.Windows.Media;
+using Windows.UI.Xaml.Controls;
 
-namespace EpoxyHello.Wpf.Views.Converters
+namespace EpoxyHello.Uwp.Views
 {
-    public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+    public sealed partial class MainPage : Page
     {
-        private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
-        private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));
-
-        public override bool TryConvert(int from, out Brush result)
+        public MainPage()
         {
-            result = from >= 5 ? yellow : gray;
-            return true;
+            this.InitializeComponent();
         }
     }
 }

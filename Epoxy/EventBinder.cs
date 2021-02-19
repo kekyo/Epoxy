@@ -265,7 +265,7 @@ namespace Epoxy
                 var type = ao.GetType();
                 if (EventMetadata.GetOrAddEventInfo(type, n) is { } ei)
                 {
-                    ei.RemoveEventHandler(ao, oh);
+                    EventMetadata.RemoveEvent(ei, ao, oh);
                     this.Handler = null;
                 }
             }
@@ -281,7 +281,7 @@ namespace Epoxy
                 if (EventMetadata.GetOrAddEventInfo(type, n) is { } ei)
                 {
                     var nh = EventMetadata.CreateHandler(ei, c);
-                    ei.AddEventHandler(ao, nh);
+                    EventMetadata.AddEvent(ei, ao, nh);
                     this.Handler = nh;
                 }
             }

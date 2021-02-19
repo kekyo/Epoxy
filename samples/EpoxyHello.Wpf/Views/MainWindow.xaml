@@ -53,7 +53,7 @@
                  ScrollViewer.CanContentScroll="False">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
+                        <StackPanel Margin="5">
                             <StackPanel.Resources>
                                 <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
                             </StackPanel.Resources>
@@ -62,6 +62,7 @@
                                 Text="{Binding Title}"
                                 Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
                             <Image
+                                Margin="5,3,5,0"
                                 Source="{Binding Image}"
                                 Stretch="UniformToFill" />
                         </StackPanel>

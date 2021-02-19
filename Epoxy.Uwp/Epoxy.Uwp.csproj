@@ -3,7 +3,11 @@
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
 
-    <TargetFramework>uap10.0</TargetFramework>
+    <!-- Universal Windows Platform is used with netstandard2.0 (truly interoperable) has limitation,
+         bottom version requires 10.0.16299 or upper (Fall creators update)
+         https://devblogs.microsoft.com/dotnet/announcing-uwp-support-for-net-standard-2-0/
+    -->
+    <TargetFramework>uap10.0.16299</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
