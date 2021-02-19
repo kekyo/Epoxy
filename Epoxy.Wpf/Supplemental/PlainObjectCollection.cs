@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,13 +26,13 @@ using System.Windows;
 
 namespace Epoxy.Supplemental
 {
-    public class XamlElementCollection<TElement> :
-        FreezableCollection<TElement>
-        where TElement : Freezable
+    public class PlainObjectCollection<TObject> :
+        FreezableCollection<TObject>
+        where TObject : Freezable
     {
-        private readonly List<TElement> snapshot = new List<TElement>();
+        private readonly List<TObject> snapshot = new List<TObject>();
 
-        public XamlElementCollection() =>
+        public PlainObjectCollection() =>
             ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
@@ -40,14 +40,14 @@ namespace Epoxy.Supplemental
             switch (e!.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (TElement? element1 in e.NewItems!)
+                    foreach (TObject? element1 in e.NewItems!)
                     {
                         this.snapshot.Insert(IndexOf(element1!), element1!);
                         this.OnAdded(element1!);
                     }
                     break;
                 case NotifyCollectionChangedAction.Replace:
-                    foreach (TElement? element2 in e.OldItems!)
+                    foreach (TObject? element2 in e.OldItems!)
                     {
                         try
                         {
@@ -58,14 +58,14 @@ namespace Epoxy.Supplemental
                             this.snapshot.Remove(element2!);
                         }
                     }
-                    foreach (TElement? element3 in e.NewItems!)
+                    foreach (TObject? element3 in e.NewItems!)
                     {
                         this.snapshot.Insert(IndexOf(element3!), element3!);
                         this.OnAdded(element3!);
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (TElement? element4 in e.OldItems!)
+                    foreach (TObject? element4 in e.OldItems!)
                     {
                         try
                         {
@@ -99,11 +99,11 @@ namespace Epoxy.Supplemental
             }
         }
 
-        protected virtual void OnAdded(TElement element)
+        protected virtual void OnAdded(TObject element)
         {
         }
 
-        protected virtual void OnRemoving(TElement element)
+        protected virtual void OnRemoving(TObject element)
         {
         }
 
@@ -111,10 +111,10 @@ namespace Epoxy.Supplemental
             (Freezable)Activator.CreateInstance(this.GetType())!;
     }
 
-    public class XamlElementCollection<TSelf, TElement> :
-        XamlElementCollection<TElement>
-        where TElement : Freezable
-        where TSelf : XamlElementCollection<TElement>, new()
+    public class PlainObjectCollection<TSelf, TObject> :
+        PlainObjectCollection<TObject>
+        where TObject : Freezable
+        where TSelf : PlainObjectCollection<TObject>, new()
     {
         protected override sealed Freezable? CreateInstanceCore() =>
             new TSelf();

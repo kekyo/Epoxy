@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,8 @@
 using System;
 using System.Threading.Tasks;
 
+using Epoxy.Internal;
+
 namespace Epoxy.Supplemental
 {
     public static class CommandFactoryExtension
@@ -29,23 +31,23 @@ namespace Epoxy.Supplemental
         public static Command Create(
             this CommandFactory factory,
             Func<Task> executeAsync) =>
-            new DelegatedCommand(() => new ValueTask(executeAsync()));
+            new DelegatedCommand(() => InternalHelpers.FromTask(executeAsync()));
 
         public static Command Create(
             this CommandFactory factory,
             Func<Task> executeAsync,
             Func<bool> canExecute) =>
-            new DelegatedCommand(() => new ValueTask(executeAsync()), canExecute);
+            new DelegatedCommand(() => InternalHelpers.FromTask(executeAsync()), canExecute);
 
         public static Command Create<TParameter>(
             this CommandFactory factory,
             Func<TParameter, Task> executeAsync) =>
-            new DelegatedCommand<TParameter>(parameter => new ValueTask(executeAsync(parameter)));
+            new DelegatedCommand<TParameter>(parameter => InternalHelpers.FromTask(executeAsync(parameter)));
 
         public static Command Create<TParameter>(
             this CommandFactory factory,
             Func<TParameter, Task> executeAsync,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(parameter => new ValueTask(executeAsync(parameter)), canExecute);
+            new DelegatedCommand<TParameter>(parameter => InternalHelpers.FromTask(executeAsync(parameter)), canExecute);
     }
 }

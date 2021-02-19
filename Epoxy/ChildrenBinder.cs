@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,10 +42,21 @@ using UIElement = Xamarin.Forms.VisualElement;
 using Panel = Xamarin.Forms.Layout;
 #endif
 
+#if AVALONIA
+using Avalonia;
+using DependencyObject = Avalonia.IAvaloniaObject;
+using DependencyProperty = Avalonia.AvaloniaProperty;
+using UIElement = Avalonia.Controls.IControl;
+using Panel = Avalonia.Controls.IPanel;
+#endif
+
 namespace Epoxy
 {
-    public static class ChildrenBinder
+    public sealed class ChildrenBinder
     {
+        private ChildrenBinder()
+        { }
+
 #if XAMARIN_FORMS
         private static readonly BindableProperty ChildrenBridgeProperty =
             BindableProperty.CreateAttached(
@@ -53,6 +64,9 @@ namespace Epoxy
                 typeof(IDisposable),
                 typeof(ChildrenBinder),
                 null);
+#elif AVALONIA
+        private static readonly AvaloniaProperty<IDisposable?> ChildrenBridgeProperty =
+            DependencyProperty.RegisterAttached<ChildrenBinder, DependencyObject, IDisposable?>("ChildrenBridge");
 #else
         private static readonly DependencyProperty ChildrenBridgeProperty =
             DependencyProperty.RegisterAttached(
@@ -81,6 +95,12 @@ namespace Epoxy
                 BindingMode.OneWay,
                 null,
                 OnPropertyChanged);
+#elif AVALONIA
+        private static readonly AvaloniaProperty<IList<UIElement>?> CollectionProperty =
+            DependencyProperty.RegisterAttached<ChildrenBinder, Panel, IList<UIElement>?>("ChildrenBridge");
+
+        static ChildrenBinder() =>
+            CollectionProperty.Changed.Subscribe(OnPropertyChanged);
 #else
         public static readonly DependencyProperty CollectionProperty =
             DependencyProperty.RegisterAttached(
@@ -100,6 +120,12 @@ namespace Epoxy
         private static void OnPropertyChanged(
             BindableObject d, object? oldValue, object? newValue)
         {
+#elif AVALONIA
+        private static void OnPropertyChanged(
+            AvaloniaPropertyChangedEventArgs<IList<UIElement>?> e)
+        {
+            var d = e.Sender;
+            var newValue = e.NewValue.GetValueOrDefault();
 #else
         private static void OnPropertyChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs e)

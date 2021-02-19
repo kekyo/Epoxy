@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
     
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
@@ -20,7 +20,7 @@
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
     <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>A minimum MVVM assister library.</Description>
+    <Description>An independent flexible XAML MVVM library for .NET</Description>
 
     <PackageId>Epoxy.Uno</PackageId>
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
@@ -39,7 +39,6 @@
   <ItemGroup>
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="Uno.UI" Version="3.5.1" />
   </ItemGroup>
 

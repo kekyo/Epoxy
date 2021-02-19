@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Epoxy.Internal
 {
@@ -51,12 +52,22 @@ namespace Epoxy.Internal
         public static string GetPrettyTypeName(this object? value) =>
             value?.GetType().FullName ?? "(null)";
 
-        public static IEnumerable<(string name, object? value)> EnumerateFields(this object self) =>
+        public static KeyValuePair<TKey, TValue> Pair<TKey, TValue>(TKey key, TValue value) =>
+            new KeyValuePair<TKey, TValue>(key, value);
+
+        public static ValueTask<T> FromResult<T>(T value) =>
+            new ValueTask<T>(value);
+        public static ValueTask<T> FromTask<T>(Task<T> task) =>
+            new ValueTask<T>(task);
+        public static ValueTask FromTask(Task task) =>
+            new ValueTask(task);
+
+        public static IEnumerable<KeyValuePair<string, object?>> EnumerateFields(this object self) =>
             self.GetType().GetFields().
             Where(f => f.IsPublic && !f.IsStatic).
-            Select(f => (f.Name, (object?)f.GetValue(self)));
+            Select(f => Pair(f.Name, (object?)f.GetValue(self)));
 
-        public static IEnumerable<(string name, object? value)> EnumerateProperties(this object self) =>
+        public static IEnumerable<KeyValuePair<string, object?>> EnumerateProperties(this object self) =>
             self.GetType().GetProperties().
             Where(p =>
                 p.CanRead &&
@@ -65,6 +76,16 @@ namespace Epoxy.Internal
                 (p.PropertyType.IsPrimitive() || p.PropertyType == typeof(string)) &&
                 p.GetGetMethod() is MethodInfo m &&
                 m.IsPublic && !m.IsStatic).
-            Select(p => (p.Name, (object?)p.GetValue(self, EmptyArgs)));
+            Select(p => Pair(p.Name, (object?)p.GetValue(self, EmptyArgs)));
+
+        public static IEnumerable<T> Traverse<T>(this T instance, Func<T, T?> traverser)
+        {
+            T? current = instance;
+            while (current != null)
+            {
+                yield return current;
+                current = traverser(current);
+            }
+        }
     }
 }

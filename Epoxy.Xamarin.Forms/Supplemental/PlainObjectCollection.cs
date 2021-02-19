@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,16 +29,16 @@ using Xamarin.Forms;
 
 namespace Epoxy.Supplemental
 {
-    public class XamlElementCollection<TElement> :
-        Element, IList<TElement>, INotifyPropertyChanged, INotifyCollectionChanged
-        where TElement : Element
+    public class PlainObjectCollection<TObject> :
+        Element, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
+        where TObject : Element
     {
-        private readonly ObservableCollection<TElement> collection =
-            new ObservableCollection<TElement>();
-        private readonly List<TElement> snapshot =
-            new List<TElement>();
+        private readonly ObservableCollection<TObject> collection =
+            new ObservableCollection<TObject>();
+        private readonly List<TObject> snapshot =
+            new List<TObject>();
 
-        public XamlElementCollection()
+        public PlainObjectCollection()
         {
             ((INotifyPropertyChanged)this.collection).PropertyChanged += (s, e) =>
                 this.OnPropertyChanged(e.PropertyName);
@@ -50,7 +50,7 @@ namespace Epoxy.Supplemental
             switch (e!.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (TElement? element1 in e.NewItems!)
+                    foreach (TObject? element1 in e.NewItems!)
                     {
                         this.snapshot.Insert(IndexOf(element1!), element1!);
                         element1!.Parent = this;
@@ -58,7 +58,7 @@ namespace Epoxy.Supplemental
                     }
                     break;
                 case NotifyCollectionChangedAction.Replace:
-                    foreach (TElement? element2 in e.OldItems!)
+                    foreach (TObject? element2 in e.OldItems!)
                     {
                         try
                         {
@@ -70,7 +70,7 @@ namespace Epoxy.Supplemental
                             this.snapshot.Remove(element2!);
                         }
                     }
-                    foreach (TElement? element3 in e.NewItems!)
+                    foreach (TObject? element3 in e.NewItems!)
                     {
                         this.snapshot.Insert(IndexOf(element3!), element3!);
                         element3!.Parent = null;
@@ -78,7 +78,7 @@ namespace Epoxy.Supplemental
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (TElement? element4 in e.OldItems!)
+                    foreach (TObject? element4 in e.OldItems!)
                     {
                         try
                         {
@@ -116,11 +116,11 @@ namespace Epoxy.Supplemental
             this.CollectionChanged?.Invoke(this, e);
         }
         
-        protected virtual void OnAdded(TElement element)
+        protected virtual void OnAdded(TObject element)
         {
         }
 
-        protected virtual void OnRemoving(TElement element)
+        protected virtual void OnRemoving(TObject element)
         {
         }
 
@@ -129,57 +129,50 @@ namespace Epoxy.Supplemental
         public int Count =>
             this.collection.Count;
 
-        bool ICollection<TElement>.IsReadOnly =>
+        bool ICollection<TObject>.IsReadOnly =>
             false;
 
-        public TElement this[int index]
+        public TObject this[int index]
         {
             get => this.collection[index];
             set => this.collection[index] = value;
         }
 
-        public int IndexOf(TElement item) =>
+        public int IndexOf(TObject item) =>
             this.collection.IndexOf(item);
 
-        public void Insert(int index, TElement item) =>
+        public void Insert(int index, TObject item) =>
             this.collection.Insert(index, item);
 
         public void RemoveAt(int index) =>
             this.collection.RemoveAt(index);
 
-        public void Add(TElement item) =>
+        public void Add(TObject item) =>
             this.collection.Add(item);
 
         public void Clear() =>
             this.collection.Clear();
 
-        public bool Contains(TElement item) =>
+        public bool Contains(TObject item) =>
             this.collection.Contains(item);
 
-        public void CopyTo(TElement[] array, int arrayIndex) =>
+        public void CopyTo(TObject[] array, int arrayIndex) =>
             this.collection.CopyTo(array, arrayIndex);
 
-        public bool Remove(TElement item) =>
+        public bool Remove(TObject item) =>
             this.collection.Remove(item);
 
-        public IEnumerator<TElement> GetEnumerator() =>
+        public IEnumerator<TObject> GetEnumerator() =>
             this.collection.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() =>
             this.collection.GetEnumerator();
-
-        protected void ReadPreamble()
-        { }
-        protected void WritePreamble()
-        { }
-        protected void WritePostscript()
-        { }
     }
 
-    public class XamlElementCollection<TSelf, TElement> :
-        XamlElementCollection<TElement>
-        where TElement : Element
-        where TSelf : XamlElementCollection<TElement>, new()
+    public class PlainObjectCollection<TSelf, TObject> :
+        PlainObjectCollection<TObject>
+        where TObject : Element
+        where TSelf : PlainObjectCollection<TObject>, new()
     {
     }
 }

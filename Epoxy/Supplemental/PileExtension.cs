@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,10 +31,14 @@ using System.Windows;
 #endif
 
 #if XAMARIN_FORMS
-using Xamarin.Forms;
-using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.Element;
 #endif
+
+#if AVALONIA
+using UIElement = Avalonia.IStyledElement;
+#endif
+
+using Epoxy.Internal;
 
 namespace Epoxy.Supplemental
 {
@@ -44,12 +48,12 @@ namespace Epoxy.Supplemental
             this Pile<TUIElement> pile,
             Func<TUIElement, Task> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => new ValueTask(action(element)), canIgnore);
+            pile.ExecuteAsync(element => InternalHelpers.FromTask(action(element)), canIgnore);
 
         public static ValueTask<T> ExecuteAsync<TUIElement, T>(
             this Pile<TUIElement> pile,
             Func<TUIElement, Task<T>> action)
             where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => new ValueTask<T>(action(element)));
+            pile.ExecuteAsync(element => InternalHelpers.FromTask(action(element)));
     }
 }

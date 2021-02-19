@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,14 @@ using DependencyObject = Xamarin.Forms.BindableObject;
 using DependencyProperty = Xamarin.Forms.BindableProperty;
 using UIElement = Xamarin.Forms.VisualElement;
 using Panel = Xamarin.Forms.Layout;
+#endif
+
+#if AVALONIA
+using Avalonia;
+using DependencyObject = Avalonia.IAvaloniaObject;
+using DependencyProperty = Avalonia.AvaloniaProperty;
+using UIElement = Avalonia.Controls.IControl;
+using Panel = Avalonia.Controls.IPanel;
 #endif
 
 namespace Epoxy.Internal

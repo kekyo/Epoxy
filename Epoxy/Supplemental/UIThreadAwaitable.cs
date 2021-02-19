@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,10 @@ using Windows.UI.Core;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
+
+#if AVALONIA
+using Avalonia.Threading;
 #endif
 
 namespace Epoxy.Supplemental
@@ -88,6 +92,14 @@ namespace Epoxy.Supplemental
 #endif
 #if XAMARIN_FORMS
             Device.BeginInvokeOnMainThread(() =>
+            {
+                this.IsCompleted = true;
+                continuation();
+            });
+#endif
+#if AVALONIA
+            var dispatcher = Dispatcher.UIThread;
+            Dispatcher.UIThread.Post(() =>
             {
                 this.IsCompleted = true;
                 continuation();

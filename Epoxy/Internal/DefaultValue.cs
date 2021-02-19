@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,10 @@ using System.Windows;
 
 #if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
+#endif
+
+#if AVALONIA
+using Avalonia;
 #endif
 
 namespace Epoxy.Internal
@@ -68,6 +72,9 @@ namespace Epoxy.Internal
 #if XAMARIN_FORMS
         public static readonly object? XamlProperty =
             null;
+#elif AVALONIA
+        public static readonly object? XamlProperty =
+            AvaloniaProperty.UnsetValue;
 #else
         public static readonly object? XamlProperty =
             DependencyProperty.UnsetValue;

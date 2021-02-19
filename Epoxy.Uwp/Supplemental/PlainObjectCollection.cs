@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,20 +23,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 
 namespace Epoxy.Supplemental
 {
-    public class XamlElementCollection<TElement> :
-        DependencyObjectCollection, INotifyPropertyChanged, INotifyCollectionChanged
-        where TElement : DependencyObject
+    // DANGER: The implementation is very fragile. You may die if refactor this.
+    public class PlainObjectCollection<TObject> :
+        DependencyObjectCollection, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
+        where TObject : DependencyObject
     {
-        private readonly List<TElement> snapshot = new List<TElement>();
+        private readonly List<TObject> snapshot = new List<TObject>();
 
-        public XamlElementCollection() =>
+        public PlainObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -98,11 +98,11 @@ namespace Epoxy.Supplemental
             }
         }
 
-        protected virtual void OnAdded(TElement element)
+        protected virtual void OnAdded(TObject element)
         {
         }
 
-        protected virtual void OnRemoving(TElement element)
+        protected virtual void OnRemoving(TObject element)
         {
         }
 
@@ -110,53 +110,58 @@ namespace Epoxy.Supplemental
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public int Count =>
-            ((ICollection<DependencyObject>)this).Count;
+            ((IList<DependencyObject>)this).Count;
 
-        public TElement this[int index]
+        bool ICollection<TObject>.IsReadOnly =>
+            ((IList<DependencyObject>)this).IsReadOnly;
+
+        public TObject this[int index]
         {
-            get => (TElement)((IList<DependencyObject>)this)[index];
+            get => (TObject)((IList<DependencyObject>)this)[index];
             set => ((IList<DependencyObject>)this)[index] = value;
         }
 
-        public int IndexOf(TElement item) =>
+        public int IndexOf(TObject item) =>
             ((IList<DependencyObject>)this).IndexOf(item);
 
-        public void Insert(int index, TElement item) =>
+        public void Insert(int index, TObject item) =>
             ((IList<DependencyObject>)this).Insert(index, item);
 
         public void RemoveAt(int index) =>
             ((IList<DependencyObject>)this).RemoveAt(index);
 
-        public void Add(TElement item) =>
-            ((ICollection<DependencyObject>)this).Add(item);
+        public void Add(TObject item) =>
+            ((IList<DependencyObject>)this).Add(item);
 
         public void Clear() =>
-            ((ICollection<DependencyObject>)this).Clear();
+            ((IList<DependencyObject>)this).Clear();
 
-        public bool Contains(TElement item) =>
-            ((ICollection<DependencyObject>)this).Contains(item);
+        public bool Contains(TObject item) =>
+            ((IList<DependencyObject>)this).Contains(item);
 
-        public void CopyTo(TElement[] array, int arrayIndex) =>
-            ((ICollection<DependencyObject>)this).CopyTo(array, arrayIndex);
+        public void CopyTo(TObject[] array, int arrayIndex) =>
+            ((IList<DependencyObject>)this).CopyTo(array, arrayIndex);
 
-        public bool Remove(TElement item) =>
-            ((ICollection<DependencyObject>)this).Remove(item);
+        public bool Remove(TObject item) =>
+            ((IList<DependencyObject>)this).Remove(item);
 
-        public IEnumerator<TElement> GetEnumerator() =>
-            ((IEnumerable<DependencyObject>)this).Cast<TElement>().GetEnumerator();
+        public IEnumerator<TObject> GetEnumerator()
+        {
+            var list = (IList<DependencyObject>)this;
+            for (var index = 0; index < list.Count; index++)
+            {
+                yield return (TObject)list[index];
+            }
+        }
 
-        protected void ReadPreamble()
-        { }
-        protected void WritePreamble()
-        { }
-        protected void WritePostscript()
-        { }
+        IEnumerator IEnumerable.GetEnumerator() =>
+            this.GetEnumerator();
     }
 
-    public class XamlElementCollection<TSelf, TElement> :
-        XamlElementCollection<TElement>
-        where TElement : DependencyObject
-        where TSelf : XamlElementCollection<TElement>, new()
+    public class PlainObjectCollection<TSelf, TObject> :
+        PlainObjectCollection<TObject>
+        where TObject : DependencyObject
+        where TSelf : PlainObjectCollection<TObject>, new()
     {
     }
 }
