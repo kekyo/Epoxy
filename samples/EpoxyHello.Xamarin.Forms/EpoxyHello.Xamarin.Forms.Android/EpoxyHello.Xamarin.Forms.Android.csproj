@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A2C37DCA-16F9-408B-94D7-74A397B54AE5}</ProjectGuid>
+    <ProjectGuid>{4F9E0BA8-B6FE-49BE-93E5-5961D6BC00FF}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{c9e5eea5-ca05-42a1-839b-61506e0a37df}</TemplateGuid>
     <OutputType>Library</OutputType>
@@ -90,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms.csproj">
-      <Project>{AFAC3107-3220-45B1-81A9-FC77303E71A3}</Project>
+      <Project>{0EDD9470-DFE5-41E4-8204-D0BFA0EFD999}</Project>
       <Name>EpoxyHello.Xamarin.Forms</Name>
     </ProjectReference>
   </ItemGroup>

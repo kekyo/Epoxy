@@ -47,14 +47,17 @@
                     <ViewCell>
                         <StackLayout
                             HorizontalOptions="FillAndExpand"
-                            Orientation="Vertical">
+                            Orientation="Vertical"
+                            Margin="5">
                             <StackLayout.Resources>
                                 <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
                             </StackLayout.Resources>
 
                             <Label Text="{Binding Title}"
+                                   TextColor="Black"
                                    Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
-                            <Image Source="{Binding Image}"
+                            <Image Margin="5,0,5,0"
+                                   Source="{Binding Image}"
                                    HorizontalOptions="EndAndExpand" VerticalOptions="Center"
                                    Aspect="AspectFit" />
                         </StackLayout>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - A minimum MVVM assister library.
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -18,10 +16,7 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
--->
-<resources>
-    <color name="launcher_background">#FFFFFF</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-</resources>
+
+using System.Runtime.InteropServices;
+
+[assembly: ComVisible(false)]

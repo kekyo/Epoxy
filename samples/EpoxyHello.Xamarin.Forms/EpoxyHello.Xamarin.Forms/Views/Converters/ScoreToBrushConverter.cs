@@ -26,7 +26,7 @@ namespace EpoxyHello.Xamarin.Forms.Views.Converters
     {
         public override bool TryConvert(int from, out Brush result)
         {
-            result = from >= 5 ? Brush.Red : Brush.White;
+            result = from >= 5 ? Brush.Cyan : Brush.White;
             return true;
         }
     }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+﻿<!--
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - A minimum MVVM assister library.
@@ -19,9 +18,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 -->
-<resources>
-    <color name="launcher_background">#FFFFFF</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-</resources>
+<forms:WindowsPage
+    x:Class="EpoxyHello.Xamarin.Forms.UWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:forms="using:Xamarin.Forms.Platform.UWP"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EpoxyHello.Xamarin.Forms.UWP"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    </Grid>
+</forms:WindowsPage>
