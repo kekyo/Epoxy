@@ -8,7 +8,7 @@
       you need to make sure that the version provided here matches https://github.com/novotnyllc/MSBuildSdkExtras/blob/main/Source/MSBuild.Sdk.Extras/DefaultItems/ImplicitPackages.targets#L11.
       This is not an issue when libraries are referenced through nuget packages. See https://github.com/unoplatform/uno/issues/446 for more details.
       -->
-      <Version>6.2.11</Version>
+      <Version>6.2.12</Version>
     </PackageReference>
     <PackageReference Include="Uno.Core" Version="2.1.0" />
     <PackageReference Include="Uno.UI" Version="3.5.1" />
@@ -18,7 +18,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>bdd3606c-d125-4d9b-bd73-a1274927d984</ProjectGuid>
+    <ProjectGuid>{BDD3606C-D125-4D9B-BD73-A1274927D984}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EpoxyHello.Uno</RootNamespace>
