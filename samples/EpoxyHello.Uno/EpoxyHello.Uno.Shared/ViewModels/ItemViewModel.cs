@@ -19,9 +19,29 @@
 
 #nullable enable
 
-#if !WINDOWS_UWP
-using System.Windows.Markup;
+using Epoxy;
+using Windows.UI.Xaml.Media;
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]
-#endif
+namespace EpoxyHello.Uno.ViewModels
+{
+    public sealed class ItemViewModel : ViewModel
+    {
+        public string? Title
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
+        public ImageSource? Image
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
+        public int Score
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+    }
+}

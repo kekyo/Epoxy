@@ -30,13 +30,13 @@ using Windows.UI.Xaml;
 
 namespace Epoxy.Supplemental
 {
-    public class XamlElementCollectionBase<TElement> :
+    public class XamlElementCollection<TElement> :
         DependencyObjectCollection, INotifyPropertyChanged, INotifyCollectionChanged
         where TElement : DependencyObject
     {
         private readonly List<TElement> snapshot = new List<TElement>();
 
-        internal XamlElementCollectionBase() =>
+        public XamlElementCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -142,7 +142,7 @@ namespace Epoxy.Supplemental
         public bool Remove(TElement item) =>
             ((ICollection<DependencyObject>)this).Remove(item);
 
-        private protected IEnumerator<TElement> InternalGetEnumerator() =>
+        public IEnumerator<TElement> GetEnumerator() =>
             ((IEnumerable<DependencyObject>)this).Cast<TElement>().GetEnumerator();
 
         protected void ReadPreamble()
@@ -151,14 +151,6 @@ namespace Epoxy.Supplemental
         { }
         protected void WritePostscript()
         { }
-    }
-
-    public class XamlElementCollection<TElement> :
-        XamlElementCollectionBase<TElement>
-        where TElement : DependencyObject
-    {
-        public IEnumerator<TElement> GetEnumerator() =>
-            base.InternalGetEnumerator();
     }
 
     public class XamlElementCollection<TSelf, TElement> :

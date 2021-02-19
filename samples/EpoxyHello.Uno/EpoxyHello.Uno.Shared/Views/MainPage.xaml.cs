@@ -17,11 +17,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
+using Windows.UI.Xaml.Controls;
 
-#if !WINDOWS_UWP
-using System.Windows.Markup;
-
-[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]
-#endif
+namespace EpoxyHello.Uno.Views
+{
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class MainPage : Page
+    {
+        public MainPage() =>
+            this.InitializeComponent();
+    }
+}

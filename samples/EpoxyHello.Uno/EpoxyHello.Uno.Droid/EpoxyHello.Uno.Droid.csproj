@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>9e3278af-ebb3-4c3d-a240-a17b4b3244aa</ProjectGuid>
+    <ProjectGuid>{9E3278AF-EBB3-4C3D-A240-A17B4B3244AA}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -87,6 +87,16 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Epoxy.Uno\Epoxy.Uno.csproj">
+      <Project>{db9561e0-8da3-4b07-83bf-98b86b6fe26d}</Project>
+      <Name>Epoxy.Uno</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj">
+      <Project>{45093a50-db02-4bf9-a879-d732204a0f23}</Project>
+      <Name>EpoxyHello.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

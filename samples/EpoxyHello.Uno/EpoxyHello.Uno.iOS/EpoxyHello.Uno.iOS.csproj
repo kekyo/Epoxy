@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProjectGuid>6a610b7f-4852-467a-a993-4d9e264a1294</ProjectGuid>
+    <ProjectGuid>{6A610B7F-4852-467A-A993-4D9E264A1294}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>EpoxyHello.Uno</RootNamespace>
@@ -149,10 +149,16 @@
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Media" Visible="false" />
-    <Folder Include="Media\AppIcons" Visible="false" />
-    <Folder Include="Media\LaunchImages" Visible="false" />
+    <ProjectReference Include="..\..\..\Epoxy.Uno\Epoxy.Uno.csproj">
+      <Project>{db9561e0-8da3-4b07-83bf-98b86b6fe26d}</Project>
+      <Name>Epoxy.Uno</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj">
+      <Project>{45093a50-db02-4bf9-a879-d732204a0f23}</Project>
+      <Name>EpoxyHello.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

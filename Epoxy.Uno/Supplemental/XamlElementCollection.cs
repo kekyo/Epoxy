@@ -31,7 +31,7 @@ using Windows.UI.Xaml;
 namespace Epoxy.Supplemental
 {
     public class XamlElementCollection<TElement> :
-        DependencyObjectCollection, IList<TElement>, INotifyPropertyChanged, INotifyCollectionChanged
+        DependencyObjectCollection, INotifyPropertyChanged, INotifyCollectionChanged
 #if WINDOWS_UWP
         where TElement : DependencyObject
 #else
@@ -113,13 +113,10 @@ namespace Epoxy.Supplemental
         public event PropertyChangedEventHandler? PropertyChanged;
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
-        int ICollection<TElement>.Count =>
+#if WINDOWS_UWP
+        public int Count =>
             ((ICollection<DependencyObject>)this).Count;
 
-        bool ICollection<TElement>.IsReadOnly =>
-            ((ICollection<DependencyObject>)this).IsReadOnly;
-
-#if WINDOWS_UWP
         public TElement this[int index]
         {
             get => (TElement)((IList<DependencyObject>)this)[index];
@@ -162,14 +159,8 @@ namespace Epoxy.Supplemental
         public void Insert(int index, TElement item) =>
             base.Insert(index, item);
 
-        void IList<TElement>.RemoveAt(int index) =>
-            base.RemoveAt(index);
-
         public void Add(TElement item) =>
             base.Add(item);
-
-        void ICollection<TElement>.Clear() =>
-            base.Clear();
 
         public bool Contains(TElement item) =>
             base.Contains(item);
@@ -187,9 +178,6 @@ namespace Epoxy.Supplemental
         public new IEnumerator<TElement> GetEnumerator() =>
 #endif
             ((IEnumerable<DependencyObject>)this).Cast<TElement>().GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() =>
-            ((IEnumerable<DependencyObject>)this).GetEnumerator();
 
         protected void ReadPreamble()
         { }

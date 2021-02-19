@@ -39,7 +39,7 @@ namespace EpoxyHello.Uwp
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            var rootFrame = Window.Current?.Content as Frame;
 
             if (rootFrame == null)
             {
@@ -51,7 +51,7 @@ namespace EpoxyHello.Uwp
                 {
                 }
 
-                Window.Current.Content = rootFrame;
+                Window.Current!.Content = rootFrame;
             }
 
             if (e.PrelaunchActivated == false)
@@ -60,7 +60,7 @@ namespace EpoxyHello.Uwp
                 {
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
-                Window.Current.Activate();
+                Window.Current?.Activate();
             }
         }
 

@@ -70,7 +70,11 @@ namespace Epoxy
 #else
         private static readonly DependencyProperty EventsProperty =
             DependencyProperty.RegisterAttached(
+#if UNO
+                "Events",
+#else
                 "ShadowEvents",
+#endif
                 typeof(EventsCollection),
                 typeof(EventBinder),
                 new PropertyMetadata(null, (d, e) =>

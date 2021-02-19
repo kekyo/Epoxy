@@ -10,7 +10,7 @@
       -->
       <Version>6.2.12</Version>
     </PackageReference>
-    <PackageReference Include="Uno.Core" Version="2.1.0" />
+    <PackageReference Include="Uno.Core" Version="2.2.0" />
     <PackageReference Include="Uno.UI" Version="3.5.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.1" />
@@ -23,6 +23,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EpoxyHello.Uno</RootNamespace>
     <AssemblyName>EpoxyHello.Uno</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
@@ -127,6 +129,14 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\..\..\Epoxy.Uno\Epoxy.Uno.csproj">
+      <Project>{db9561e0-8da3-4b07-83bf-98b86b6fe26d}</Project>
+      <Name>Epoxy.Uno</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj">
+      <Project>{45093a50-db02-4bf9-a879-d732204a0f23}</Project>
+      <Name>EpoxyHello.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
