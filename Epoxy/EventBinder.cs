@@ -20,6 +20,8 @@
 #nullable enable
 
 using System;
+using System.Diagnostics;
+using System.ComponentModel;
 using System.Windows.Input;
 
 #if WINDOWS_UWP || UNO
@@ -27,7 +29,6 @@ using Windows.UI.Xaml;
 #endif
 
 #if WINDOWS_WPF
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media.Animation;
 #endif
@@ -45,7 +46,6 @@ using DependencyObject = Avalonia.IAvaloniaObject;
 
 using Epoxy.Internal;
 using Epoxy.Supplemental;
-using System.Diagnostics;
 
 namespace Epoxy
 {
@@ -85,8 +85,7 @@ namespace Epoxy
                 false,
                 BindingMode.OneTime);
 
-        static EventBinder()
-        {
+        static EventBinder() =>
             EventsProperty.Changed.Subscribe(e =>
             {
                 if (!object.ReferenceEquals(e.OldValue, e.NewValue))
@@ -101,7 +100,6 @@ namespace Epoxy
                     }
                 }
             });
-        }
 
         public static EventsCollection? GetEvents(DependencyObject d)
         {
@@ -114,6 +112,11 @@ namespace Epoxy
             }
             return collection;
         }
+
+        // It's required for Avalonia XAML compiler.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetEvents(DependencyObject d, EventsCollection? value) =>
+            d.SetValue(EventsProperty, value ?? new EventsCollection());
 #else
         private static readonly DependencyProperty EventsProperty =
             DependencyProperty.RegisterAttached(

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
 
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net461;netcoreapp2.0;netstandard2.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <RootNamespace>Epoxy</RootNamespace>
@@ -12,6 +12,7 @@
     <Platforms>AnyCPU</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
 
     <AssemblyTitle>Epoxy.Avalonia</AssemblyTitle>
     <Product>Epoxy</Product>
@@ -29,6 +30,8 @@
     <PackageIcon>Epoxy.100.png</PackageIcon>
     <PackageTags>avalonia;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

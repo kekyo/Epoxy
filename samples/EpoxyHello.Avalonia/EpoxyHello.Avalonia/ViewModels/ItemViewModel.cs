@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -17,23 +17,32 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+#nullable enable
 
-namespace EpoxyHello.Avalonia.Views
+using Epoxy;
+
+using Avalonia.Media.Imaging;
+
+namespace EpoxyHello.Avalonia.ViewModels
 {
-    public sealed class MainWindow : Window
+    public sealed class ItemViewModel : ViewModel
     {
-        public MainWindow()
+        public string? Title
         {
-            InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
+            get => GetValue();
+            set => SetValue(value);
         }
 
-        private void InitializeComponent() =>
-            AvaloniaXamlLoader.Load(this);
+        public Bitmap? Image
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
+        public int Score
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
     }
 }

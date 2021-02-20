@@ -22,9 +22,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 
 using Avalonia;
@@ -42,6 +40,9 @@ namespace Epoxy.Supplemental
         private static readonly PlainObjectCollection<PlainObject> empty =
             new PlainObjectCollection<PlainObject>();
 
+        protected PlainObject()
+        { }
+
         public event EventHandler<LogicalTreeAttachmentEventArgs>? AttachedToLogicalTree;
         public event EventHandler<LogicalTreeAttachmentEventArgs>? DetachedFromLogicalTree;
 
@@ -54,27 +55,39 @@ namespace Epoxy.Supplemental
         {
             if (this.LogicalParent != null)
             {
-                var root = this.LogicalParent.Traverse(c => c.LogicalParent).
+                if (this.LogicalParent.Traverse(c => c.LogicalParent).
                     OfType<ILogicalRoot>().
-                    FirstOrDefault();
-                var e = new LogicalTreeAttachmentEventArgs(
-                    root,
-                    this,
-                    this.LogicalParent);
-                this.OnNotifyDetachedFromLogicalTree(e);
-                this.LogicalParent = null;
+                    FirstOrDefault() is { } root)
+                {
+                    var e = new LogicalTreeAttachmentEventArgs(
+                        root,
+                        this,
+                        this.LogicalParent);
+                    this.LogicalParent = null;
+                    this.OnNotifyDetachedFromLogicalTree(e);
+                }
+                else
+                {
+                    this.LogicalParent = null;
+                }
             }
             if (parent != null)
             {
-                this.LogicalParent = parent;
-                var root = parent.Traverse(c => c.LogicalParent).
+                if (parent.Traverse(c => c.LogicalParent).
                     OfType<ILogicalRoot>().
-                    FirstOrDefault();
-                var e = new LogicalTreeAttachmentEventArgs(
-                    root,
-                    this,
-                    parent);
-                this.OnNotifyAttachedToLogicalTree(e);
+                    FirstOrDefault() is { } root)
+                {
+                    var e = new LogicalTreeAttachmentEventArgs(
+                        root,
+                        this,
+                        parent);
+                    this.LogicalParent = parent;
+                    this.OnNotifyAttachedToLogicalTree(e);
+                }
+                else
+                {
+                    this.LogicalParent = parent;
+                }
             }
         }
 
@@ -105,12 +118,11 @@ namespace Epoxy.Supplemental
     }
 
     public class PlainObjectCollection<TObject> :
-        PlainObject, IAvaloniaReadOnlyList<TObject>,
-        IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
+        PlainObject, IAvaloniaList<TObject>
         where TObject : ILogical, ISetLogicalParent
     {
-        private readonly ObservableCollection<TObject> collection =
-            new ObservableCollection<TObject>();
+        private readonly AvaloniaList<TObject> collection =
+            new AvaloniaList<TObject>();
         private readonly List<TObject> snapshot =
             new List<TObject>();
 
@@ -124,7 +136,7 @@ namespace Epoxy.Supplemental
                 case NotifyCollectionChangedAction.Add:
                     foreach (TObject? element1 in e.NewItems!)
                     {
-                        this.snapshot.Insert(IndexOf(element1!), element1!);
+                        this.snapshot.Insert(this.collection.IndexOf(element1!), element1!);
                         element1!.SetParent(this);
                         this.OnAdded(element1!);
                     }
@@ -144,7 +156,7 @@ namespace Epoxy.Supplemental
                     }
                     foreach (TObject? element3 in e.NewItems!)
                     {
-                        this.snapshot.Insert(IndexOf(element3!), element3!);
+                        this.snapshot.Insert(this.collection.IndexOf(element3!), element3!);
                         element3!.SetParent(this);
                         this.OnAdded(element3!);
                     }
@@ -178,7 +190,7 @@ namespace Epoxy.Supplemental
                     this.snapshot.Clear();
                     foreach (var element6 in this)
                     {
-                        this.snapshot.Insert(IndexOf(element6!), element6!);
+                        this.snapshot.Insert(this.collection.IndexOf(element6!), element6!);
                         element6!.SetParent(this);
                         this.OnAdded(element6!);
                     }
@@ -210,11 +222,11 @@ namespace Epoxy.Supplemental
 
         protected override void OnNotifyDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
-            base.OnNotifyDetachedFromLogicalTree(e);
             foreach (var child in this.collection)
             {
                 child.NotifyDetachedFromLogicalTree(e);
             }
+            base.OnNotifyDetachedFromLogicalTree(e);
         }
 
         protected override void OnNotifyResourcesChanged(ResourcesChangedEventArgs e)
@@ -269,6 +281,24 @@ namespace Epoxy.Supplemental
 
         IEnumerator IEnumerable.GetEnumerator() =>
             this.collection.GetEnumerator();
+
+        public void AddRange(IEnumerable<TObject> items) =>
+            this.collection.AddRange(items);
+
+        public void InsertRange(int index, IEnumerable<TObject> items) =>
+            this.collection.InsertRange(index, items);
+
+        public void Move(int oldIndex, int newIndex) =>
+            this.collection.Move(oldIndex, newIndex);
+
+        public void MoveRange(int oldIndex, int count, int newIndex) =>
+            this.collection.MoveRange(oldIndex, count, newIndex);
+
+        public void RemoveAll(IEnumerable<TObject> items) =>
+            this.collection.RemoveAll(items);
+
+        public void RemoveRange(int index, int count) =>
+            this.collection.RemoveRange(index, count);
     }
 
     public class PlainObjectCollection<TSelf, TObject> :

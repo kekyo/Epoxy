@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -17,23 +17,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using Epoxy;
 
-namespace EpoxyHello.Avalonia.Views
+using Avalonia.Media;
+
+namespace EpoxyHello.Avalonia.Views.Converters
 {
-    public sealed class MainWindow : Window
+    public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
-        }
+        private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
+        private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));
 
-        private void InitializeComponent() =>
-            AvaloniaXamlLoader.Load(this);
+        public override bool TryConvert(int from, out Brush result)
+        {
+            result = from >= 5 ? yellow : gray;
+            return true;
+        }
     }
 }
