@@ -56,8 +56,11 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(UIThread.IsBound,
-                "Cannot use GetValue() on worker thread context.");
+            if (!UIThread.IsBound)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't use GetValue() on worker thread context.");
+            }
 
             var properties = this.Prepare();
             if (properties.TryGetValue(propertyName!, out var value))
@@ -75,8 +78,11 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(UIThread.IsBound,
-                "Cannot use GetValue<TValue>() on worker thread context.");
+            if (!UIThread.IsBound)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't use GetValue<TValue>() on worker thread context.");
+            }
 
             var properties = this.Prepare();
             if (properties.TryGetValue(propertyName!, out var value) && value is TValue v)
@@ -95,8 +101,11 @@ namespace Epoxy
             string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(UIThread.IsBound,
-                "Cannot use SetValue() on worker thread context.");
+            if (!UIThread.IsBound)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't use SetValue() on worker thread context.");
+            }
 
             var properties = this.Prepare();
             if (properties.TryGetValue(propertyName!, out var oldValue))
@@ -159,8 +168,11 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(UIThread.IsBound,
-                "Cannot use OnPropertyChanging() on worker thread context.");
+            if (!UIThread.IsBound)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't use OnPropertyChanging() on worker thread context.");
+            }
 
             this.PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
         }
@@ -169,8 +181,11 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            Debug.Assert(UIThread.IsBound,
-                "Cannot use OnPropertyChanged() on worker thread context.");
+            if (!UIThread.IsBound)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't use OnPropertyChanged() on worker thread context.");
+            }
 
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

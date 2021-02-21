@@ -28,6 +28,10 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 #endif
 
+#if WINUI
+using Microsoft.UI.Xaml;
+#endif
+
 #if WINDOWS_WPF
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -255,7 +259,7 @@ namespace Epoxy
 #if WINDOWS_WPF
         Freezable
 #endif
-#if WINDOWS_UWP || UNO
+#if WINDOWS_UWP || WINUI || UNO
         DependencyObject
 #endif
 #if XAMARIN_FORMS

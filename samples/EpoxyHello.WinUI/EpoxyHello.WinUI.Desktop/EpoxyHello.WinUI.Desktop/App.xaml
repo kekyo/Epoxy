@@ -1,4 +1,5 @@
-﻿////////////////////////////////////////////////////////////////////////////
+﻿<!--
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -16,28 +17,19 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-
-#nullable enable
-
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-namespace Epoxy.Supplemental
-{
-    public struct UIThreadAwaitable
-    {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
-
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
-    {
-        internal UIThreadAwaiter()
-        { }
-
-        public bool IsCompleted { get; private set; }
-
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
-    }
-}
+-->
+<Application
+    x:Class="EpoxyHello.WinUI.Desktop.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EpoxyHello.WinUI.Desktop">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <!-- Other merged dictionaries here -->
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Other app resources here -->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

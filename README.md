@@ -12,6 +12,7 @@
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
+|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
 ## What is this ?
@@ -22,6 +23,7 @@
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
   * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
+  * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper)
   * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
@@ -43,8 +45,9 @@ This sample displays a list of the latest posts and images from the Reddit forum
 * [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf). WPF View and ViewModel.
 * [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms). Xamarin Forms View and ViewModel. (Contains Android, iOS and Universal Windows)
 * [EpoxyHello.Avalonia - View,ViewModel](samples/EpoxyHello.Avalonia). Avalonia View and ViewModel. (Contains Win32, X11 and macOS)
-* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno). Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`)
 * [EpoxyHello.Uwp - View,ViewModel](samples/EpoxyHello.Uwp). UWP View and ViewModel.
+* [EpoxyHello.WinUI - View,ViewModel](samples/EpoxyHello.WinUI). Windows UI 3 View and ViewModel.
+* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno). Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`)
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 

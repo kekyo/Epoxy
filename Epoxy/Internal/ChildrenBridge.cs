@@ -30,6 +30,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #endif
 
+#if WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+#endif
+
 #if WINDOWS_WPF
 using System.Windows;
 using System.Windows.Controls;

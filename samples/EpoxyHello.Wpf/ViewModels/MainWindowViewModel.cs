@@ -112,19 +112,25 @@ namespace EpoxyHello.Wpf.ViewModels
 
             var _ = Task.Run(async () =>
             {
-                var count = 0;
-                while (true)
+                try
                 {
-                    // Disjoint UI thread from current task.
-                    await Task.Delay(500).ConfigureAwait(false);
+                    var count = 0;
+                    while (true)
+                    {
+                        // Disjoint UI thread from current task.
+                        await Task.Delay(500).ConfigureAwait(false);
 
-                    // Rejoint UI thread.
-                    // The bind method will cause InvalidOperationException if platform Application context was discarded.
-                    await UIThread.Bind();
+                        // Rejoint UI thread.
+                        // The bind method will cause InvalidOperationException if platform Application context was discarded.
+                        await UIThread.Bind();
 
-                    // Grant access UI contents.
-                    this.ThreadIncrementer = count.ToString();
-                    count++;
+                        // Grant access UI contents.
+                        this.ThreadIncrementer = count.ToString();
+                        count++;
+                    }
+                }
+                catch
+                {
                 }
             });
         }

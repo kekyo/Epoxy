@@ -26,6 +26,10 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 #endif
 
+#if WINUI
+using Microsoft.UI.Xaml;
+#endif
+
 #if WINDOWS_WPF
 using System.Windows;
 #endif

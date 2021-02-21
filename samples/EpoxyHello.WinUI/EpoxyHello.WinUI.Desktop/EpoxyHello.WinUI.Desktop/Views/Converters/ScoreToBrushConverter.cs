@@ -17,27 +17,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
+using Epoxy;
+using Windows.UI;
+using Microsoft.UI.Xaml.Media;
 
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-namespace Epoxy.Supplemental
+namespace EpoxyHello.WinUI.Desktop.Views.Converters
 {
-    public struct UIThreadAwaitable
+    public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
     {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
+        private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
+        private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));
 
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
-    {
-        internal UIThreadAwaiter()
-        { }
-
-        public bool IsCompleted { get; private set; }
-
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
+        public override bool TryConvert(int from, out Brush result)
+        {
+            result = from >= 5 ? yellow : gray;
+            return true;
+        }
     }
 }

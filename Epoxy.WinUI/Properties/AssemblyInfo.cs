@@ -19,25 +19,10 @@
 
 #nullable enable
 
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
-namespace Epoxy.Supplemental
-{
-    public struct UIThreadAwaitable
-    {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
+[assembly: ComVisible(false)]
 
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
-    {
-        internal UIThreadAwaiter()
-        { }
-
-        public bool IsCompleted { get; private set; }
-
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
-    }
-}
+[assembly: SupportedOSPlatform("windows10.0.17134.0")] 

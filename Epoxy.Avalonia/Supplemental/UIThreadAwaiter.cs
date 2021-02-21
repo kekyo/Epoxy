@@ -19,25 +19,35 @@
 
 #nullable enable
 
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System;
+
+using Avalonia.Threading;
 
 namespace Epoxy.Supplemental
 {
-    public struct UIThreadAwaitable
+    partial class UIThreadAwaiter
     {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
+        public void OnCompleted(Action continuation)
+        {
+            var dispatcher = Dispatcher.UIThread;
+            if (dispatcher == null)
+            {
+                throw new InvalidOperationException("UI thread not found.");
+            }
 
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
-    {
-        internal UIThreadAwaiter()
-        { }
-
-        public bool IsCompleted { get; private set; }
-
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
+            if (dispatcher.CheckAccess())
+            {
+                this.IsCompleted = true;
+                continuation();
+            }
+            else
+            {
+                dispatcher.Post(() =>
+                {
+                    this.IsCompleted = true;
+                    continuation();
+                });
+            }
+        }
     }
 }

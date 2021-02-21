@@ -19,25 +19,38 @@
 
 #nullable enable
 
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System;
+
+using Xamarin.Forms;
 
 namespace Epoxy.Supplemental
 {
-    public struct UIThreadAwaitable
+    partial class UIThreadAwaiter
     {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
+        public void OnCompleted(Action continuation)
+        {
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null)
+            {
+                // NOTE: Could't use SynchronizationContext.
+                //   Because multi-platform targetter is capable for separated threading UI message pumps (ex: UWP).
 
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
-    {
-        internal UIThreadAwaiter()
-        { }
+                throw new InvalidOperationException("UI thread not found.");
+            }
 
-        public bool IsCompleted { get; private set; }
-
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
+            if (!dispatcher.IsInvokeRequired)
+            {
+                this.IsCompleted = true;
+                continuation();
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    this.IsCompleted = true;
+                    continuation();
+                });
+            }
+        }
     }
 }

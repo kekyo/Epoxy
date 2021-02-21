@@ -30,6 +30,13 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 #endif
 
+#if WINUI
+using Windows.Foundation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
+using Windows.UI;
+#endif
+
 #if WINDOWS_WPF
 using System.Windows;
 using System.Windows.Input;
@@ -116,7 +123,7 @@ namespace Epoxy.Supplemental
         public static implicit operator Pen?(ValueHolder vh) =>
             vh.GetValue<Pen?>();
 #endif
-#if WINDOWS_WPF || WINDOWS_UWP || UNO || AVALONIA
+#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO || AVALONIA
         public static implicit operator Brush?(ValueHolder vh) =>
             vh.GetValue<Brush?>();
         public static implicit operator Rect(ValueHolder vh) =>
@@ -124,7 +131,7 @@ namespace Epoxy.Supplemental
         public static implicit operator Matrix(ValueHolder vh) =>
             vh.GetValue<Matrix>();
 #endif
-#if WINDOWS_WPF || WINDOWS_UWP || UNO
+#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO
         public static implicit operator Visibility(ValueHolder vh) =>
             vh.GetValue<Visibility>();
 #endif

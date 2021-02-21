@@ -12,6 +12,7 @@
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
+|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
 ## これは何?
@@ -22,6 +23,7 @@
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
   * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
+  * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/ja-jp/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper)
   * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
@@ -51,8 +53,9 @@
 * [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf)。WPFのViewとViewModel。
 * [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms)。Xamarin FormsのViewとViewModel。(Android・iOS・Universal Windows)
 * [EpoxyHello.Avalonia - View,ViewModel](samples/EpoxyHello.Avalonia). AvaloniaのView and ViewModel。 (Win32・X11・macOS)
-* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno)。Uno platformのViewとViewModel。 (`wasm`を含む多くの環境)
 * [EpoxyHello.Uwp - View,ViewModel](samples/EpoxyHello.Uwp)。Universal WindowsのViewとViewModel。
+* [EpoxyHello.WinUI - View,ViewModel](samples/EpoxyHello.WinUI)。Window UI 3のViewとViewModel。
+* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno)。Uno platformのViewとViewModel。 (`wasm`を含む多くの環境)
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
 
