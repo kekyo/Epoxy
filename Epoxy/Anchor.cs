@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 #endif
 
@@ -37,10 +37,19 @@ using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.Element;
 #endif
 
+#if AVALONIA
+using Avalonia;
+using DependencyObject = Avalonia.IAvaloniaObject;
+using UIElement = Avalonia.IStyledElement;
+#endif
+
 namespace Epoxy
 {
-    public static class Anchor
+    public sealed class Anchor
     {
+        private Anchor()
+        { }
+
 #if XAMARIN_FORMS
         private static readonly BindableProperty PileProperty =
             BindableProperty.CreateAttached(
@@ -61,6 +70,22 @@ namespace Epoxy
                         np.Moore((UIElement)b);
                     }
                 });
+#elif AVALONIA
+        private static readonly AvaloniaProperty<Pile?> PileProperty =
+            AvaloniaProperty.RegisterAttached<Anchor, UIElement, Pile?>("Pile");
+
+        static Anchor() =>
+            PileProperty.Changed.Subscribe(e =>
+            {
+                if (e.OldValue.GetValueOrDefault() is { } op)
+                {
+                    op.Release((UIElement)e.Sender);
+                }
+                if (e.NewValue.GetValueOrDefault() is { } np)
+                {
+                    np.Moore((UIElement)e.Sender);
+                }
+            });
 #else
         private static readonly DependencyProperty PileProperty =
             DependencyProperty.RegisterAttached(

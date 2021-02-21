@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -38,6 +38,12 @@ using System.Windows.Media;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
+
+#if AVALONIA
+using Avalonia;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 #endif
 
 namespace Epoxy.Supplemental
@@ -104,19 +110,21 @@ namespace Epoxy.Supplemental
             vh.GetValue<Thickness>();
         public static implicit operator Color(ValueHolder vh) =>
             vh.GetValue<Color>();
-#if WINDOWS_WPF
+#if WINDOWS_WPF || AVALONIA
         public static implicit operator Vector(ValueHolder vh) =>
             vh.GetValue<Vector>();
         public static implicit operator Pen?(ValueHolder vh) =>
             vh.GetValue<Pen?>();
 #endif
-#if WINDOWS_WPF || WINDOWS_UWP
+#if WINDOWS_WPF || WINDOWS_UWP || UNO || AVALONIA
         public static implicit operator Brush?(ValueHolder vh) =>
             vh.GetValue<Brush?>();
         public static implicit operator Rect(ValueHolder vh) =>
             vh.GetValue<Rect>();
         public static implicit operator Matrix(ValueHolder vh) =>
             vh.GetValue<Matrix>();
+#endif
+#if WINDOWS_WPF || WINDOWS_UWP || UNO
         public static implicit operator Visibility(ValueHolder vh) =>
             vh.GetValue<Visibility>();
 #endif
@@ -124,8 +132,17 @@ namespace Epoxy.Supplemental
         public static implicit operator FontAttributes(ValueHolder vh) =>
             vh.GetValue<FontAttributes>();
 #endif
+#if AVALONIA
+        public static implicit operator DrawingImage?(ValueHolder vh) =>
+            vh.GetValue<DrawingImage?>();
+        public static implicit operator Bitmap?(ValueHolder vh) =>
+            vh.GetValue<Bitmap?>();
+        public static implicit operator CroppedBitmap?(ValueHolder vh) =>
+            vh.GetValue<CroppedBitmap?>();
+#else
         public static implicit operator ImageSource?(ValueHolder vh) =>
             vh.GetValue<ImageSource?>();
+#endif
         public static implicit operator Command?(ValueHolder vh) =>
             vh.GetValue<Command?>();
         public static implicit operator Pile?(ValueHolder vh) =>

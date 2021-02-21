@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DF9FBA91-F099-45A9-96BF-406B94516113}</ProjectGuid>
+    <ProjectGuid>{FD4397BA-222E-49F6-9901-D4D2A02821E8}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{6143fdea-f3c2-4a09-aafa-6e230626515e}</TemplateGuid>
     <OutputType>Exe</OutputType>
@@ -123,13 +123,13 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms.csproj">
-      <Project>{AFAC3107-3220-45B1-81A9-FC77303E71A3}</Project>
+      <Project>{0EDD9470-DFE5-41E4-8204-D0BFA0EFD999}</Project>
       <Name>EpoxyHello.Xamarin.Forms</Name>
     </ProjectReference>
   </ItemGroup>

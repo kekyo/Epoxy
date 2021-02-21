@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ using System;
 using System.Threading.Tasks;
 
 using Epoxy.Advanced;
+using Epoxy.Internal;
 
 namespace Epoxy.Supplemental
 {
@@ -30,10 +31,10 @@ namespace Epoxy.Supplemental
     {
         public static ValueTask ExecuteAsync<TService>(
             this GlobalServiceAccessor accessor, Func<TService, Task> action, bool ignoreNotPresent = false) =>
-            GlobalService.ExecuteAsync<TService>(service => new ValueTask(action(service)), ignoreNotPresent);
+            GlobalService.ExecuteAsync<TService>(service => InternalHelpers.FromTask(action(service)), ignoreNotPresent);
 
         public static ValueTask<TResult> ExecuteAsync<TService, TResult>(
             this GlobalServiceAccessor accessor, Func<TService, Task<TResult>> action) =>
-            GlobalService.ExecuteAsync<TService, TResult>(service => new ValueTask<TResult>(action(service)));
+            GlobalService.ExecuteAsync<TService, TResult>(service => InternalHelpers.FromTask(action(service)));
     }
 }

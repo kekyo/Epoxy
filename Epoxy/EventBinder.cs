@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,14 +20,15 @@
 #nullable enable
 
 using System;
+using System.Diagnostics;
+using System.ComponentModel;
 using System.Windows.Input;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 #endif
 
 #if WINDOWS_WPF
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media.Animation;
 #endif
@@ -37,13 +38,22 @@ using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
 #endif
 
+#if AVALONIA
+using Avalonia;
+using Avalonia.Data;
+using DependencyObject = Avalonia.IAvaloniaObject;
+#endif
+
 using Epoxy.Internal;
 using Epoxy.Supplemental;
 
 namespace Epoxy
 {
-    public static class EventBinder
+    public sealed class EventBinder
     {
+        private EventBinder()
+        { }
+
 #if XAMARIN_FORMS
         private static readonly BindablePropertyKey EventsPropertyKey =
             BindableProperty.CreateAttachedReadOnly(
@@ -67,10 +77,54 @@ namespace Epoxy
 
         public static EventsCollection? GetEvents(DependencyObject d) =>
             (EventsCollection?)d.GetValue(EventsProperty);
+#elif AVALONIA
+        private static readonly AttachedProperty<EventsCollection?> EventsProperty =
+            AvaloniaProperty.RegisterAttached<EventBinder, AvaloniaObject, EventsCollection?>(
+                "Events",
+                default,
+                false,
+                BindingMode.OneTime);
+
+        static EventBinder() =>
+            EventsProperty.Changed.Subscribe(e =>
+            {
+                if (!object.ReferenceEquals(e.OldValue, e.NewValue))
+                {
+                    if (e.OldValue.GetValueOrDefault() is EventsCollection oec)
+                    {
+                        oec.Detach();
+                    }
+                    if (e.NewValue.GetValueOrDefault() is EventsCollection nec)
+                    {
+                        nec.Attach(e.Sender);
+                    }
+                }
+            });
+
+        public static EventsCollection? GetEvents(DependencyObject d)
+        {
+            var collection = d.GetValue(EventsProperty);
+            if (collection == null)
+            {
+                // Self generated.
+                collection = new EventsCollection();
+                d.SetValue(EventsProperty, collection);
+            }
+            return collection;
+        }
+
+        // It's required for Avalonia XAML compiler.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetEvents(DependencyObject d, EventsCollection? value) =>
+            d.SetValue(EventsProperty, value ?? new EventsCollection());
 #else
         private static readonly DependencyProperty EventsProperty =
             DependencyProperty.RegisterAttached(
+#if UNO
+                "Events",
+#else
                 "ShadowEvents",
+#endif
                 typeof(EventsCollection),
                 typeof(EventBinder),
                 new PropertyMetadata(null, (d, e) =>
@@ -103,7 +157,7 @@ namespace Epoxy
     }
 
     public sealed class EventsCollection :
-        XamlElementCollection<EventsCollection, Event>
+        PlainObjectCollection<EventsCollection, Event>
     {
         private DependencyObject? associatedObject;
 
@@ -180,17 +234,35 @@ namespace Epoxy
             this.Parent = null;
 #endif
         }
+
+#if !WINDOWS_WPF
+        [Conditional("WINDOWS_WPF")]
+        private void ReadPreamble()
+        { }
+        [Conditional("WINDOWS_WPF")]
+        private void WritePreamble()
+        { }
+        [Conditional("WINDOWS_WPF")]
+        private void WritePostscript()
+        { }
+#endif
     }
 
-    public sealed class Event :
+#if WINDOWS_UWP || UNO
+    [Windows.UI.Xaml.Data.Bindable]
+#endif
+    public sealed partial class Event :
 #if WINDOWS_WPF
         Freezable
 #endif
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
         DependencyObject
 #endif
 #if XAMARIN_FORMS
         Element
+#endif
+#if AVALONIA
+        PlainObject
 #endif
     {
 #if XAMARIN_FORMS
@@ -213,6 +285,18 @@ namespace Epoxy
                 BindingMode.Default,
                 null,
                 (d, _, nv) => ((Event)d).OnCommandPropertyChanged(nv));
+#elif AVALONIA
+        public static readonly AvaloniaProperty<string> NameProperty =
+            AvaloniaProperty.Register<Event, string>("Name");
+
+        public static readonly AvaloniaProperty<ICommand> CommandProperty =
+            AvaloniaProperty.Register<Event, ICommand>("Command");
+
+        static Event()
+        {
+            NameProperty.Changed.Subscribe(e => ((Event)e.Sender).OnNamePropertyChanged(e.OldValue, e.NewValue));
+            CommandProperty.Changed.Subscribe(e => ((Event)e.Sender).OnCommandPropertyChanged(e.NewValue));
+        }
 #else
         public static readonly DependencyProperty NameProperty =
             DependencyProperty.Register(
@@ -241,14 +325,14 @@ namespace Epoxy
 
         public string? Name
         {
-            get => (string?)base.GetValue(NameProperty);
-            set => base.SetValue(NameProperty, value);
+            get => (string?)this.GetValue(NameProperty);
+            set => this.SetValue(NameProperty, value);
         }
 
         public ICommand? Command
         {
-            get => (ICommand?)base.GetValue(CommandProperty);
-            set => base.SetValue(CommandProperty, value);
+            get => (ICommand?)this.GetValue(CommandProperty);
+            set => this.SetValue(CommandProperty, value);
         }
 
         private Delegate? Handler { get; set; }
@@ -262,7 +346,7 @@ namespace Epoxy
                 var type = ao.GetType();
                 if (EventMetadata.GetOrAddEventInfo(type, n) is { } ei)
                 {
-                    ei.RemoveEventHandler(ao, oh);
+                    EventMetadata.RemoveEvent(ei, ao, oh);
                     this.Handler = null;
                 }
             }
@@ -278,7 +362,7 @@ namespace Epoxy
                 if (EventMetadata.GetOrAddEventInfo(type, n) is { } ei)
                 {
                     var nh = EventMetadata.CreateHandler(ei, c);
-                    ei.AddEventHandler(ao, nh);
+                    EventMetadata.AddEvent(ei, ao, nh);
                     this.Handler = nh;
                 }
             }

@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Input;
+
+#if WINDOWS_UWP || UNO
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.UI.Xaml;
+#endif
 
 namespace Epoxy.Internal
 {
@@ -86,5 +91,38 @@ namespace Epoxy.Internal
                 GetMethodInfo()!.
                 CreateDelegate(ei.EventHandlerType!, closure);
         }
+
+#if WINDOWS_UWP || UNO
+        public static void AddEvent(EventInfo ei, object instance, Delegate handler)
+        {
+            var addMethod = ei.GetAddMethod();
+            var removeMethod = ei.GetRemoveMethod();
+
+            Func<RoutedEventHandler, EventRegistrationToken> add = dlg =>
+                (EventRegistrationToken)addMethod.Invoke(instance, new object[] { dlg });
+            Action<EventRegistrationToken> remove = token =>
+                removeMethod.Invoke(instance, new object[] { token });
+
+            // Limitation: UWP platform will decline custom delegate types except RoutedEventHandler.
+            WindowsRuntimeMarshal.AddEventHandler(add, remove, (RoutedEventHandler)handler);
+        }
+
+        public static void RemoveEvent(EventInfo ei, object instance, Delegate handler)
+        {
+            var removeMethod = ei.GetRemoveMethod();
+
+            Action<EventRegistrationToken> remove = token =>
+                removeMethod.Invoke(instance, new object[] { token });
+
+            // Limitation: UWP platform will decline custom delegate types except RoutedEventHandler.
+            WindowsRuntimeMarshal.RemoveEventHandler(remove, (RoutedEventHandler)handler);
+        }
+#else
+        public static void AddEvent(EventInfo ei, object instance, Delegate handler) =>
+            ei.AddEventHandler(instance, handler);
+
+        public static void RemoveEvent(EventInfo ei, object instance, Delegate handler) =>
+            ei.RemoveEventHandler(instance, handler);
+#endif
     }
 }

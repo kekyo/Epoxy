@@ -18,7 +18,7 @@
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
     <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>A minimum MVVM assister library.</Description>
+    <Description>An independent flexible XAML MVVM library for .NET</Description>
 
     <PackageId>Epoxy.Wpf</PackageId>
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
@@ -45,7 +45,6 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

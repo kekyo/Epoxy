@@ -1,7 +1,7 @@
 ﻿<!--
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,7 @@
                  ScrollViewer.CanContentScroll="False">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
+                        <StackPanel Margin="5">
                             <StackPanel.Resources>
                                 <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
                             </StackPanel.Resources>
@@ -62,6 +62,7 @@
                                 Text="{Binding Title}"
                                 Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
                             <Image
+                                Margin="5,3,5,0"
                                 Source="{Binding Image}"
                                 Stretch="UniformToFill" />
                         </StackPanel>

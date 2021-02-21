@@ -6,19 +6,23 @@
 
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-|Package|Status|
-|:--|:--|
-|Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|
-|Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|
-|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|
+|Package|Status|Description|
+|:--|:--|:--|
+|Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
+|Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
+|Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
+|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
+|Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
 ## What is this ?
 
 * Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
 * Supported platforms:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Xamarin Forms: .NET Standard 2.0
-  * UWP: Universal Windows 10
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0)
+  * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
+  * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * Smallest footprint and easy understandable.
@@ -32,12 +36,15 @@
 
 ## Sample code
 
-You can refer full WPF/Xamarin Forms application sample code in.
+You can refer multi-platform application sample code variation in.
 This sample displays a list of the latest posts and images from the Reddit forum r/aww, downloading them asynchronously and displays them in a list format.
 
 * [EpoxyHello.Core - Common(Model)](samples/EpoxyHello.Core). Go to Reddit and download the posts. netstandard2.0 for common use.
 * [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf). WPF View and ViewModel.
-* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms). Xamarin Forms View and ViewModel.
+* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms). Xamarin Forms View and ViewModel. (Contains Android, iOS and Universal Windows)
+* [EpoxyHello.Avalonia - View,ViewModel](samples/EpoxyHello.Avalonia). Avalonia View and ViewModel. (Contains Win32, X11 and macOS)
+* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno). Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`)
+* [EpoxyHello.Uwp - View,ViewModel](samples/EpoxyHello.Uwp). UWP View and ViewModel.
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
@@ -65,7 +72,7 @@ Epoxy is designed to be improved step by step.
 Completed separately xaml based view declarations.
 (WPF, introducing focused, refer full sample code instead):
 
-### Example of View (XAML) implementation
+### Example of View (WPF/XAML) implementation
 
 ```xml
 <Window
@@ -102,7 +109,7 @@ Completed separately xaml based view declarations.
 </Window>
 ```
 
-### Example of ViewModel implementation
+### Example of ViewModel (WPF) implementation
 
 Completed separately `ViewModel` implementation.
 
@@ -154,7 +161,7 @@ public sealed class MainWindowViewModel : ViewModel
 ### Example of Model implementation
 
 The common code to access Reddit is implemented in the `EpoxyHello.Core` project.
-It does not depend on either WPF or Xamarin Forms assemblies and is completely independent.
+It does not depend on either WPF, Xamarin Forms, Uno and UWP assemblies and is completely independent.
 
 By eliminating dependencies in this way, we can achieve commonality for multi-platform support.
 However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
@@ -251,18 +258,26 @@ Currently, this type must be specified because of strict checking.
 However, if you do not use the argument, or if you know it is not important,
 you can use `EventArgs` uniformly, as in the example above.
 
-TIP: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
+TIP 1: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
 However, WPF and UWP require additional packages and are designed to be generic,
 so they are a bit more complex.
 Using `EventBinder` has the advantage of being simple and using the same notation.
 
-[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+TIP 2: In a UWP environment (including UWP builds of Uno), the target event should have the following signature:
 
-[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+```csharp
+// Events that can be bound by EventBinder
+public event RoutedEventHandler Loaded;
+```
 
-[For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+In other words, only events published with the RoutedEventHandler type are eligible.
+The UWP runtime environment has strict security checks.
+This is because the UWP runtime environment has strict security checks, and there are restrictions when dynamically hooking events.
 
-[For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
 ### Anchor/Pile
 
@@ -300,9 +315,8 @@ await this.LogPile.ExecuteAsync(async textBox =>
 });
 ```
 
-[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
-
-[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
 
 ### ValueConverter
 
@@ -353,7 +367,7 @@ This means that the `TryConvert` method cannot be made to behave like `TryConver
 Try not to do asynchronous processing in the XAML converter!
 (If you want to do so, you can implement it on the `Model` or `ViewModel` side to avoid problems such as deadlocks).
 
-[For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
+* [For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
 ### UIThread
 
@@ -383,9 +397,8 @@ this.Log = $"Read={read}";
 
 TODO:
 
-[For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
-
-[For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
 
 ### GlobalService (Advanced topic)
 

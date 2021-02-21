@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,26 +19,27 @@
 
 #nullable enable
 
+using System;
+using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
 
-#if WINDOWS_UWP
-using System;
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 #endif
 
 #if WINDOWS_WPF
-using System;
-using System.Globalization;
 using System.Windows.Data;
 using System.Windows;
 #endif
 
 #if XAMARIN_FORMS
-using System;
-using System.Globalization;
 using Xamarin.Forms;
+#endif
+
+#if AVALONIA
+using Avalonia.Data.Converters;
 #endif
 
 using Epoxy.Internal;
@@ -57,7 +58,7 @@ namespace Epoxy
         private protected abstract object? ConvertBack(object? value, Type targetType, object? parameter);
 
         object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
             string? language
 #else
             CultureInfo? culture
@@ -66,7 +67,7 @@ namespace Epoxy
             this.Convert(value, targetType, parameter);
 
         object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
             string? language
 #else
             CultureInfo? culture

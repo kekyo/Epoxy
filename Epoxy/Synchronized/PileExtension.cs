@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +19,13 @@
 
 #nullable enable
 
+using Epoxy.Internal;
 using System;
+using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
 #endif
 
@@ -33,6 +35,10 @@ using System.Windows;
 
 #if XAMARIN_FORMS
 using UIElement = Xamarin.Forms.Element;
+#endif
+
+#if AVALONIA
+using UIElement = Avalonia.IStyledElement;
 #endif
 
 namespace Epoxy.Synchronized
@@ -50,20 +56,20 @@ namespace Epoxy.Synchronized
             Func<TUIElement, T> action)
             where TUIElement : UIElement
         {
-            var (result, edi) = pile.ExecuteAsync(element =>
+            var result = pile.ExecuteAsync(element =>
             {
                 try
                 {
-                    return new ValueTask<(T, ExceptionDispatchInfo?)>((action(element), default));
+                    return InternalHelpers.FromResult(InternalHelpers.Pair(action(element), default(ExceptionDispatchInfo)!));
                 }
                 catch (Exception ex)
                 {
-                    return new ValueTask<(T, ExceptionDispatchInfo?)>((default!, ExceptionDispatchInfo.Capture(ex)));
+                    return InternalHelpers.FromResult(InternalHelpers.Pair(default(T)!, ExceptionDispatchInfo.Capture(ex)));
                 }
             }).Result;  // Will not block
 
-            edi?.Throw();
-            return result;
+            result.Value?.Throw();
+            return result.Key;
         }
 
         [Obsolete("Use ExecuteAsync instead.", true)]

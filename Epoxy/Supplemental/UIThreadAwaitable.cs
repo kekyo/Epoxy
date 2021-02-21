@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,24 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
+#if WINDOWS_WPF
+using System.Windows;
+using System.Windows.Threading;
+#endif
+
+#if WINDOWS_UWP || UNO
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+#endif
+
+#if XAMARIN_FORMS
+using Xamarin.Forms;
+#endif
+
+#if AVALONIA
+using Avalonia.Threading;
+#endif
+
 namespace Epoxy.Supplemental
 {
     public struct UIThreadAwaitable
@@ -43,35 +61,45 @@ namespace Epoxy.Supplemental
         public void OnCompleted(Action continuation)
         {
 #if WINDOWS_WPF
-            var dispatcher = System.Windows.Application.Current?.Dispatcher;
+            var dispatcher = Application.Current?.Dispatcher;
             if (dispatcher == null)
             {
                 throw new InvalidOperationException("UI thread not found.");
             }
 
             var _ = dispatcher.BeginInvoke(
-                System.Windows.Threading.DispatcherPriority.Normal,
+               DispatcherPriority.Normal,
                 new Action(() =>
                 {
                     this.IsCompleted = true;
                     continuation();
                 }));
-#elif WINDOWS_UWP
-            var dispatcher = Windows.UI.Xaml.Window.Current?.Dispatcher;
+#endif
+#if WINDOWS_UWP || UNO
+            var dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
             if (dispatcher == null)
             {
                 throw new InvalidOperationException("UI thread not found.");
             }
 
             var _ = dispatcher.RunAsync(
-                Windows.UI.Core.CoreDispatcherPriority.Normal,
+                CoreDispatcherPriority.Normal,
                 () =>
                 {
                     this.IsCompleted = true;
                     continuation();
                 });
-#elif XAMARIN_FORMS
-            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+#endif
+#if XAMARIN_FORMS
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                this.IsCompleted = true;
+                continuation();
+            });
+#endif
+#if AVALONIA
+            var dispatcher = Dispatcher.UIThread;
+            Dispatcher.UIThread.Post(() =>
             {
                 this.IsCompleted = true;
                 continuation();

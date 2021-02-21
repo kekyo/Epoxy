@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,8 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
+using Epoxy.Internal;
+
 namespace Epoxy.Supplemental
 {
     public static class ViewModelExtension
@@ -34,7 +36,7 @@ namespace Epoxy.Supplemental
             [CallerMemberName] string? propertyName = null) =>
             viewModel.SetValueAsync(
                 newValue,
-                value => new ValueTask(propertyChanged(value)),
+                value => InternalHelpers.FromTask(propertyChanged(value)),
                 propertyName);
     }
 }

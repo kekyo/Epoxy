@@ -3,7 +3,11 @@
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
 
-    <TargetFramework>uap10.0</TargetFramework>
+    <!-- Universal Windows Platform is used with netstandard2.0 (truly interoperable) has limitation,
+         bottom version requires 10.0.16299 or upper (Fall creators update)
+         https://devblogs.microsoft.com/dotnet/announcing-uwp-support-for-net-standard-2-0/
+    -->
+    <TargetFramework>uap10.0.16299</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -19,7 +23,7 @@
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
     <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>A minimum MVVM assister library.</Description>
+    <Description>An independent flexible XAML MVVM library for .NET</Description>
 
     <PackageId>Epoxy.Uwp</PackageId>
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
@@ -31,6 +35,8 @@
     <PackageIcon>Epoxy.100.png</PackageIcon>
     <PackageTags>uwp;uap;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -43,7 +49,6 @@
   <ItemGroup>
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

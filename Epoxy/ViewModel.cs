@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -179,7 +179,7 @@ namespace Epoxy
             string.Join(
                 ",",
                 this.EnumerateProperties().
-                OrderBy(entry => entry.name).
-                Select(entry => $"{entry.name}={entry.value ?? "(null)"}"));
+                OrderBy(entry => entry.Key).
+                Select(entry => $"{entry.Key}={entry.Value ?? "(null)"}"));
     }
 }

@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - A minimum MVVM assister library.
+// Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,9 +24,12 @@ namespace EpoxyHello.Wpf.Views.Converters
 {
     public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
     {
+        private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
+        private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));
+
         public override bool TryConvert(int from, out Brush result)
         {
-            result = from >= 5 ? Brushes.Red : Brushes.White;
+            result = from >= 5 ? yellow : gray;
             return true;
         }
     }
