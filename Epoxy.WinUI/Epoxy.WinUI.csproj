@@ -1,28 +1,28 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
-    
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
 
-<!--    <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0;monoandroid11.0</TargetFrameworks> -->
-    <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0</TargetFrameworks>
-
+    <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+    <GenerateLibraryLayout>false</GenerateLibraryLayout>
     <RootNamespace>Epoxy</RootNamespace>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <Platforms>AnyCPU</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <GenerateLibraryLayout>true</GenerateLibraryLayout>
 
-    <AssemblyTitle>Epoxy.Uno</AssemblyTitle>
+    <AssemblyTitle>Epoxy.WinUI</AssemblyTitle>
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
     <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
     <Description>An independent flexible XAML MVVM library for .NET</Description>
 
-    <PackageId>Epoxy.Uno</PackageId>
+    <PackageId>Epoxy.WinUI</PackageId>
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
     <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
     <RepositoryType>git</RepositoryType>
@@ -30,30 +30,31 @@
     <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
     <PackageIcon>Epoxy.100.png</PackageIcon>
-    <PackageTags>uno;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
+    <PackageTags>uwp;uap;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
-    
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINUI</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;NETFX_CORE;WINUI</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="Uno.UI" Version="3.5.1" />
+    <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview4.210210.4" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <DefineConstants>DEBUG;TRACE;UNO</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DefineConstants>TRACE;UNO</DefineConstants>
-  </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="../Epoxy/**/*.cs" />
     <Compile Include="../Epoxy.Uwp/Supplemental/UIThreadAwaiter.cs">
-        <Link>Supplemental/UIThreadAwaiter.cs</Link>
+      <Link>Supplemental/UIThreadAwaiter.cs</Link>
     </Compile>
     <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
+
 </Project>

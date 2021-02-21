@@ -19,25 +19,29 @@
 
 #nullable enable
 
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using Epoxy;
+using Microsoft.UI.Xaml.Media;
 
-namespace Epoxy.Supplemental
+namespace EpoxyHello.WinUI.Desktop.ViewModels
 {
-    public struct UIThreadAwaitable
+    public sealed class ItemViewModel : ViewModel
     {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
+        public string? Title
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
 
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
-    {
-        internal UIThreadAwaiter()
-        { }
+        public ImageSource? Image
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
 
-        public bool IsCompleted { get; private set; }
-
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
+        public int Score
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
     }
 }

@@ -36,7 +36,7 @@
     <epoxy:EventBinder.Events>
         <epoxy:Event Name="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
-    
+   
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <Button DockPanel.Dock="Right" Width="60" Height="30"

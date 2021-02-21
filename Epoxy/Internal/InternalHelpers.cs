@@ -33,7 +33,7 @@ namespace Epoxy.Internal
     {
         public static readonly object[] EmptyArgs = new object[0];
 
-#if WINDOWS_UWP || UNO
+#if WINDOWS_UWP || WINUI || UNO
         public static bool IsPrimitive(this Type type) =>
             type.GetTypeInfo().IsPrimitive;
         public static bool IsClass(this Type type) =>

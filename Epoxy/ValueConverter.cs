@@ -29,6 +29,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 #endif
 
+#if WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Data;
+#endif
+
 #if WINDOWS_WPF
 using System.Windows.Data;
 using System.Windows;
@@ -58,7 +63,7 @@ namespace Epoxy
         private protected abstract object? ConvertBack(object? value, Type targetType, object? parameter);
 
         object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
-#if WINDOWS_UWP || UNO
+#if WINDOWS_UWP || WINUI || UNO
             string? language
 #else
             CultureInfo? culture
@@ -67,7 +72,7 @@ namespace Epoxy
             this.Convert(value, targetType, parameter);
 
         object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
-#if WINDOWS_UWP || UNO
+#if WINDOWS_UWP || WINUI || UNO
             string? language
 #else
             CultureInfo? culture

@@ -4,3 +4,4 @@ msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts Epoxy
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts Epoxy.Avalonia\Epoxy.Avalonia.csproj
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts Epoxy.Uwp\Epoxy.Uwp.csproj
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts Epoxy.Uno\Epoxy.Uno.csproj
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts Epoxy.WinUI\Epoxy.WinUI.csproj
