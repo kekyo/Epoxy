@@ -20,8 +20,8 @@
 #nullable enable
 
 using System;
-using System.Threading;
 
+using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 
 namespace Epoxy.Supplemental
@@ -30,18 +30,39 @@ namespace Epoxy.Supplemental
     {
         public void OnCompleted(Action continuation)
         {
-            if (CoreWindow.GetForCurrentThread() is { } coreWindow)
+            if (CoreWindow.GetForCurrentThread()?.Dispatcher is { } d1)
             {
-                if (coreWindow.Dispatcher is { } dispatcher)
+                // Maybe anytime is true
+                if (d1.HasThreadAccess)
                 {
-                    if (dispatcher.HasThreadAccess)
+                    this.IsCompleted = true;
+                    continuation();
+                }
+                else
+                {
+                    var _ = d1.RunAsync(
+                        CoreDispatcherPriority.Normal,
+                        () =>
+                        {
+                            this.IsCompleted = true;
+                            continuation();
+                        });
+                }
+                return;
+            }
+
+            try
+            {
+                if (CoreApplication.MainView?.CoreWindow?.Dispatcher is { } d2)
+                {
+                    if (d2.HasThreadAccess)
                     {
                         this.IsCompleted = true;
                         continuation();
                     }
                     else
                     {
-                        var _ = dispatcher.RunAsync(
+                        var _ = d2.RunAsync(
                             CoreDispatcherPriority.Normal,
                             () =>
                             {
@@ -52,11 +73,8 @@ namespace Epoxy.Supplemental
                     return;
                 }
             }
-            else if (Thread.CurrentThread.ManagedThreadId == 1)
+            catch (InvalidOperationException)
             {
-                this.IsCompleted = true;
-                continuation();
-                return;
             }
 
             throw new InvalidOperationException("UI thread not found.");

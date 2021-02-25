@@ -38,9 +38,10 @@
     </epoxy:EventBinder.Events>
 
     <DockPanel>
-        <Button DockPanel.Dock="Top" Height="30" HorizontalAlignment="Stretch"
+        <Button DockPanel.Dock="Top"
+                Height="30" Foreground="White" Background="Red"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                 IsEnabled="{Binding IsEnabled}"
-                HorizontalContentAlignment="Center"
                 Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
         <Grid>
             <ListBox Items="{Binding Items}"

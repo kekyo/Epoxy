@@ -56,7 +56,7 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.IsBound)
+            if (!UIThread.UnsafeIsBound)
             {
                 throw new InvalidOperationException(
                     "Couldn't use GetValue() on worker thread context.");
@@ -78,7 +78,7 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.IsBound)
+            if (!UIThread.UnsafeIsBound)
             {
                 throw new InvalidOperationException(
                     "Couldn't use GetValue<TValue>() on worker thread context.");
@@ -101,7 +101,7 @@ namespace Epoxy
             string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.IsBound)
+            if (!UIThread.UnsafeIsBound)
             {
                 throw new InvalidOperationException(
                     "Couldn't use SetValue() on worker thread context.");
@@ -168,7 +168,7 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.IsBound)
+            if (!UIThread.UnsafeIsBound)
             {
                 throw new InvalidOperationException(
                     "Couldn't use OnPropertyChanging() on worker thread context.");
@@ -181,7 +181,7 @@ namespace Epoxy
             [CallerMemberName] string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.IsBound)
+            if (!UIThread.UnsafeIsBound)
             {
                 throw new InvalidOperationException(
                     "Couldn't use OnPropertyChanged() on worker thread context.");

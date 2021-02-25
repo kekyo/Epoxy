@@ -1,11 +1,9 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
-    
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
 
-<!--    <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0;monoandroid11.0</TargetFrameworks> -->
-    <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0</TargetFrameworks>
-
+    <TargetFrameworks>net461;netcoreapp2.0;netstandard2.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <RootNamespace>Epoxy</RootNamespace>
@@ -13,16 +11,16 @@
     <DebugSymbols>true</DebugSymbols>
     <Platforms>AnyCPU</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <GenerateLibraryLayout>true</GenerateLibraryLayout>
 
-    <AssemblyTitle>Epoxy.Uno</AssemblyTitle>
+    <AssemblyTitle>Epoxy.Avalonia</AssemblyTitle>
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
     <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
     <Description>An independent flexible XAML MVVM library for .NET</Description>
 
-    <PackageId>Epoxy.Uno</PackageId>
+    <PackageId>Epoxy.Avalonia</PackageId>
     <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
     <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
     <RepositoryType>git</RepositoryType>
@@ -30,10 +28,17 @@
     <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
     <PackageIcon>Epoxy.100.png</PackageIcon>
-    <PackageTags>uno;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
+    <PackageTags>avalonia;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;AVALONIA</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;AVALONIA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,10 +46,11 @@
   </ItemGroup>
     
   <ItemGroup>
-    <ProjectReference Include="..\Epoxy.Uno.Core\Epoxy.Uno.Core.csproj" />
+    <ProjectReference Include="..\Epoxy.Avalonia.Core\Epoxy.Avalonia.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
+
 </Project>
