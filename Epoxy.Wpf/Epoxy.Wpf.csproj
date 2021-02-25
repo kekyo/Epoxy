@@ -44,11 +44,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="../Epoxy/**/*.cs" />
+    <ProjectReference Include="..\Epoxy.Wpf.Core\Epoxy.Wpf.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 

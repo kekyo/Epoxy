@@ -48,11 +48,13 @@
 
   <ItemGroup>
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Uwp.Core\Epoxy.Uwp.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="../Epoxy/**/*.cs" />
     <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
     <EmbeddedResource Include="Properties\Epoxy.Uwp.rd.xml" />
   </ItemGroup>
