@@ -20,6 +20,7 @@
 namespace Epoxy.Synchronized
 
 open System
+open System.ComponentModel
 open System.Diagnostics
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
@@ -40,18 +41,23 @@ module public ViewModelExtension =
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
             viewModel.InternalSetValueAsync<'TValue>(newValue, fromAction propertyChanged, propertyName)
 
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))

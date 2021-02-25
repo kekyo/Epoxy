@@ -19,7 +19,6 @@
 
 namespace Epoxy
 
-open Epoxy.Infrastructure
 open Epoxy.Supplemental
 
 open System

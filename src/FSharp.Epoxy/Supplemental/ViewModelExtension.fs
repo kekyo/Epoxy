@@ -39,8 +39,7 @@ module public ViewModelExtension =
     let fromTask (propertyChanged:'TValue -> Task<unit>) =
         new Func<'TValue, ValueTask>(fun value -> InternalHelpers.FromTask(propertyChanged value :> Task))
     let fromAsync (propertyChanged:'TValue -> Async<unit>) =
-        new Func<'TValue, ValueTask>(fun value ->
-            InternalHelpers.FromTask(Async.StartImmediateAsTask(propertyChanged value) :> Task))
+        new Func<'TValue, ValueTask>(fun value -> InternalHelpers.FromTask(Async.StartImmediateAsTask(propertyChanged value) :> Task))
 
     type public ViewModel with
         member viewModel.setValueAsync<'TValue> (newValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =

@@ -20,6 +20,7 @@
 #nullable enable
 
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Epoxy.Synchronized
@@ -48,12 +49,14 @@ namespace Epoxy.Synchronized
             Func<TParameter, bool> canExecute) =>
             new SyncDelegatedCommand<TParameter>(execute, canExecute);
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync(
             this CommandFactoryInstance factory,
             Func<ValueTask> execute) =>
             throw new InvalidOperationException("Use Create instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync(
             this CommandFactoryInstance factory,
@@ -61,12 +64,14 @@ namespace Epoxy.Synchronized
             Func<bool> canExecute) =>
             throw new InvalidOperationException("Use Create instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync<TParameter>(
             this CommandFactoryInstance factory,
             Func<TParameter, ValueTask> execute) =>
             throw new InvalidOperationException("Use Create instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync<TParameter>(
             this CommandFactoryInstance factory,
