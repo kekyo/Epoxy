@@ -20,6 +20,10 @@
 #nullable enable
 
 using Avalonia.Metadata;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Epoxy")]
+[assembly: InternalsVisibleTo("FSharp.Epoxy")]
 
 [assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
 [assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]

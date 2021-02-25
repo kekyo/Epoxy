@@ -25,7 +25,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -48,7 +47,7 @@ namespace EpoxyHello.Wpf.ViewModels
             });
 
             // A handler for fetch button
-            this.Fetch = Command.Create(async () =>
+            this.Fetch = CommandFactory.Create(async () =>
             {
                 this.IsEnabled = false;
 

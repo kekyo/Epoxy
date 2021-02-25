@@ -47,66 +47,90 @@ namespace Epoxy
 {
     public static class UIThread
     {
+        private static readonly ThreadLocal<bool?> ids = new ThreadLocal<bool?>();
+
         public static bool IsBound
         {
             get
             {
+                switch (ids.Value)
+                {
+                    case true:
+                        return true;
+                    case false:
+                        return false;
+                    default:
 #if WINDOWS_WPF
-                return object.ReferenceEquals(
-                    Application.Current?.Dispatcher?.Thread,
-                    Thread.CurrentThread);
+                        if (object.ReferenceEquals(
+                            Application.Current?.Dispatcher?.Thread,
+                            Thread.CurrentThread))
+                        {
+                            ids.Value = true;
+                            return true;
+                        }
 #endif
 #if AVALONIA
-                return Avalonia.Threading.Dispatcher.UIThread?.CheckAccess() ?? false;
+                        if (Avalonia.Threading.Dispatcher.UIThread?.CheckAccess() ?? false)
+                        {
+                            ids.Value = true;
+                            return true;
+                        }
 #endif
 #if WINDOWS_UWP || WINUI || UNO
-                if (CoreWindow.GetForCurrentThread() is { } cw1 &&
-                    (cw1.Dispatcher?.HasThreadAccess ?? false))
-                {
-                    return true;
-                }
-
-                // Naive impl:
-                //   Before view create timing, can't get the Dispatcher instance.
-                //   So answered it if current thread id is 1. Exactly we know not equals both UI thread and main thread.
-                //   For example: maybe success when main view model is initialized on main thread :)
-                if (Thread.CurrentThread.ManagedThreadId == 1)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                        if (CoreWindow.GetForCurrentThread() is { } cw1 &&
+                            (cw1.Dispatcher?.HasThreadAccess ?? false))
+                        {
+                            ids.Value = true;
+                            return true;
+                        }
 #endif
 #if XAMARIN_FORMS
-                return Application.Current?.Dispatcher?.IsInvokeRequired ?? false;
+                        if (Application.Current?.Dispatcher?.IsInvokeRequired ?? false)
+                        {
+                            ids.Value = true;
+                            return true;
+                        }
 #endif
+                        try
+                        {
+                            if (SynchronizationContext.Current is { } context)
+                            {
+                                var id = -1;
+                                context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
+                                var f = id == Thread.CurrentThread.ManagedThreadId;
+                                ids.Value = f;
+                                return f;
+                            }
+                        }
+                        catch
+                        {
+                            // On UWP, will cause NotSupportedException.
+                        }
+                        ids.Value = false;
+                        return false;
+                }
             }
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool UnsafeIsBound
+        public static bool UnsafeIsBound()
         {
-            get
-            {
 #if XAMARIN_FORMS
-                if (IsBound)
-                {
-                    return true;
-                }
-
-                // Workaround XF on UWP:
-                //   The dispatcher will make invalid result for IsInvokeRequired in
-                //   BindableContext initialize sequence.
-                else if (Device.RuntimePlatform.Equals(Device.UWP))
-                {
-                    return true;
-                }
-                else
-#endif
-                return IsBound;
+            if (IsBound)
+            {
+                return true;
             }
+
+            // Workaround XF on UWP:
+            //   The dispatcher will make invalid result for IsInvokeRequired in
+            //   BindableContext initialize sequence.
+            else if (Device.RuntimePlatform.Equals(Device.UWP))
+            {
+                return true;
+            }
+            else
+#endif
+            return IsBound;
         }
 
         public static UIThreadAwaitable Bind() =>

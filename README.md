@@ -143,7 +143,7 @@ public sealed class MainWindowViewModel : ViewModel
 
         // Step 4: A handler for fetch button.
         //   Ofcourse, we can use async/await safely in lambda expressions!
-        this.Fetch = Command.Create(async () =>
+        this.Fetch = CommandFactory.Create(async () =>
         {
             var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
@@ -246,7 +246,7 @@ public Command? Ready
 // ...
 
 // Describe what to do when the Loaded event occurs.
-this.Ready = Command.Create<EventArgs>(async _ =>
+this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 {
     // ex: Asynchronous acquisition of information to be displayed in the list from Model.
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -256,7 +256,7 @@ this.Ready = Command.Create<EventArgs>(async _ =>
 });
 ```
 
-The generic argument of `Command.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
+The generic argument of `CommandFactory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
 Currently, this type must be specified because of strict checking.
 However, if you do not use the argument, or if you know it is not important,
 you can use `EventArgs` uniformly, as in the example above.

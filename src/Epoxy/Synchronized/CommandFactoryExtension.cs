@@ -27,49 +27,49 @@ namespace Epoxy.Synchronized
     public static class CommandFactoryExtension
     {
         public static Command CreateSync(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Action execute) =>
             new SyncDelegatedCommand(execute);
 
         public static Command CreateSync(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Action execute,
             Func<bool> canExecute) =>
             new SyncDelegatedCommand(execute, canExecute);
 
         public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Action<TParameter> execute) =>
             new SyncDelegatedCommand<TParameter>(execute);
 
         public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Action<TParameter> execute,
             Func<TParameter, bool> canExecute) =>
             new SyncDelegatedCommand<TParameter>(execute, canExecute);
 
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Func<ValueTask> execute) =>
             throw new InvalidOperationException("Use Create instead.");
 
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Func<ValueTask> execute,
             Func<bool> canExecute) =>
             throw new InvalidOperationException("Use Create instead.");
 
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Func<TParameter, ValueTask> execute) =>
             throw new InvalidOperationException("Use Create instead.");
 
         [Obsolete("Use Create instead.", true)]
         public static Command CreateSync<TParameter>(
-            this CommandFactory factory,
+            this CommandFactoryInstance factory,
             Func<TParameter, ValueTask> execute,
             Func<TParameter, bool> canExecute) =>
             throw new InvalidOperationException("Use Create instead.");

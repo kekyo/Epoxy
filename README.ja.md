@@ -158,7 +158,7 @@ public sealed class MainWindowViewModel : ViewModel
         // ステップ 4: XAMLで定義したボタンがクリックされた時に、このラムダ式が呼び出されます。
         //   この式はもちろん async-await を使用した非同期処理で書くことが出来て、
         //   未処理の例外も正しく処理されます。
-        this.Fetch = Command.Create(async () =>
+        this.Fetch = CommandFactory.Create(async () =>
         {
             var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
@@ -262,7 +262,7 @@ public Command? Ready
 // ...
 
 // Loadedイベントが発生した場合の処理を記述
-this.Ready = Command.Create<EventArgs>(async _ =>
+this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 {
     // リストに表示する情報をModelから非同期で取得
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -272,7 +272,7 @@ this.Ready = Command.Create<EventArgs>(async _ =>
 });
 ```
 
-`Command.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
+`CommandFactory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
 現在のところ、チェックを厳しくしているため、この型は必ず指定する必要があります。
 但し、引数を使用しない場合や、重要でないと分かっている場合は、
 上の例のように、一律`EventArgs`としておくことが可能です。

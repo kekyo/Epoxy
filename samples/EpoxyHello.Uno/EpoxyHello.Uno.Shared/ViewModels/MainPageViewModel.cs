@@ -28,9 +28,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 using Windows.Storage.Streams;
-using Windows.UI;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -51,7 +49,7 @@ namespace EpoxyHello.Uno.ViewModels
             });
 
             // A handler for fetch button
-            this.Fetch = Command.Create(async () =>
+            this.Fetch = CommandFactory.Create(async () =>
             {
                 this.IsEnabled = false;
 

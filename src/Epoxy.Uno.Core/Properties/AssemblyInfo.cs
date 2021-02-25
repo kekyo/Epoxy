@@ -19,9 +19,14 @@
 
 #nullable enable
 
+using System.Runtime.CompilerServices;
+
 #if !WINDOWS_UWP
 using System.Windows.Markup;
 
 [assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
 [assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]
 #endif
+
+[assembly: InternalsVisibleTo("Epoxy")]
+[assembly: InternalsVisibleTo("FSharp.Epoxy")]

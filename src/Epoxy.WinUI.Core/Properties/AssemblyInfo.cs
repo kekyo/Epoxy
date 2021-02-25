@@ -19,10 +19,13 @@
 
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 [assembly: ComVisible(false)]
+
+[assembly: InternalsVisibleTo("Epoxy")]
+[assembly: InternalsVisibleTo("FSharp.Epoxy")]
 
 [assembly: SupportedOSPlatform("windows10.0.17134.0")] 

@@ -30,7 +30,7 @@ namespace Epoxy.Synchronized
     public static class ViewModelExtension
     {
         public static void SetValueSync<TValue>(
-            this ViewModelBase viewModel,
+            this ViewModel viewModel,
             TValue newValue,
             Action<TValue> propertyChanged,
             [CallerMemberName] string? propertyName = null) =>
@@ -41,7 +41,7 @@ namespace Epoxy.Synchronized
 
         [Obsolete("Use SetValueAsync instead.", true)]
         public static void SetValueSync<TValue>(
-            this ViewModelBase viewModel,
+            this ViewModel viewModel,
             TValue newValue,
             Func<TValue, ValueTask> propertyChanged,
             [CallerMemberName] string? propertyName = null) =>

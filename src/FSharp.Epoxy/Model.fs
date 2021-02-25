@@ -17,28 +17,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
+namespace Epoxy
 
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+open Epoxy.Infrastructure
 
-using Epoxy.Internal;
+[<AbstractClass>]
+type public Model = class
+    inherit ModelBase
 
-namespace Epoxy.Supplemental
-{
-    [DebuggerStepThrough]
-    public static class ViewModelExtension
-    {
-        public static ValueTask SetValueAsync<TValue>(
-            this ViewModelBase viewModel,
-            TValue newValue,
-            Func<TValue, Task> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            viewModel.InternalSetValueAsync(
-                newValue,
-                value => InternalHelpers.FromTask(propertyChanged(value)),
-                propertyName);
-    }
-}
+end

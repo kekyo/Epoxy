@@ -32,9 +32,9 @@ using Windows.UI.Xaml.Media;
 
 #if WINUI
 using Windows.Foundation;
+using Windows.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
-using Windows.UI;
 #endif
 
 #if WINDOWS_WPF

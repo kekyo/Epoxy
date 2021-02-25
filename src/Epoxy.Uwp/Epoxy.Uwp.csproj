@@ -55,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
     <EmbeddedResource Include="Properties\Epoxy.Uwp.rd.xml" />
   </ItemGroup>

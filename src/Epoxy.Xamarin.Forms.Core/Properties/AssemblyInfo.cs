@@ -19,7 +19,11 @@
 
 #nullable enable
 
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
+
+[assembly: InternalsVisibleTo("Epoxy")]
+[assembly: InternalsVisibleTo("FSharp.Epoxy")]
 
 [assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
 [assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]

@@ -75,7 +75,7 @@ namespace Epoxy.Internal
 
         public static PanelChildrenAccessor GetPanelChildrenAccessor(Panel panel)
         {
-            Debug.Assert(UIThread.UnsafeIsBound);
+            Debug.Assert(UIThread.UnsafeIsBound());
 
             var type = panel.GetType();
             if (!accessors.TryGetValue(type, out var accessor))

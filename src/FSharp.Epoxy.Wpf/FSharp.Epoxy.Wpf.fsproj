@@ -55,8 +55,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="../FSharp.Epoxy/**/*.fs" />
     <Compile Include="Properties\AssemblyInfo.fs" />
+    <Compile Include="../FSharp.Epoxy/*.fs" />
+    <Compile Include="../FSharp.Epoxy/*/*.fs" />
   </ItemGroup>
 
 </Project>

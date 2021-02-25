@@ -19,12 +19,11 @@
 
 #nullable enable
 
+using Epoxy.Supplemental;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Epoxy.Supplemental;
 
 namespace Epoxy
 {
@@ -83,7 +82,7 @@ namespace Epoxy
                 }
                 else
                 {
-                    Debug.Fail($"Epoxy: unobserved {ex.GetType().FullName}: {ex.Message}");
+                    Debug.Fail($"Epoxy.Command: unobserved {ex.GetType().FullName}: {ex.Message}");
                 }
             }
         }
@@ -91,50 +90,36 @@ namespace Epoxy
         public void Execute(object? parameter) =>
             this.OnExecute(parameter);
 
-        public static readonly CommandFactory Factory =
-            new CommandFactory();
+        public static readonly CommandFactoryInstance Factory =
+            new CommandFactoryInstance();
 
+        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
         public static Command Create(
             Func<ValueTask> executeAsync) =>
-            new DelegatedCommand(executeAsync);
+            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
 
+        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
         public static Command Create(
             Func<ValueTask> executeAsync,
             Func<bool> canExecute) =>
-            new DelegatedCommand(executeAsync, canExecute);
+            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
 
+        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
         public static Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync) =>
-            new DelegatedCommand<TParameter>(executeAsync);
+            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
 
+        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
         public static Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(executeAsync, canExecute);
+            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
     }
 
-    public sealed class CommandFactory
+    public sealed class CommandFactoryInstance
     {
-        internal CommandFactory()
+        internal CommandFactoryInstance()
         {
         }
-
-        public Command Create(
-            Func<ValueTask> executeAsync) =>
-            new DelegatedCommand(executeAsync);
-
-        public Command Create(
-            Func<ValueTask> executeAsync,
-            Func<bool> canExecute) =>
-            new DelegatedCommand(executeAsync, canExecute);
-
-        public Command Create<TParameter>(
-            Func<TParameter, ValueTask> executeAsync) =>
-            new DelegatedCommand<TParameter>(executeAsync);
-
-        public Command Create<TParameter>(
-            Func<TParameter, ValueTask> executeAsync,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(executeAsync, canExecute);
     }
 }

@@ -19,6 +19,7 @@
 
 #nullable enable
 
+using Epoxy.Infrastructure;
 using Epoxy.Supplemental;
 
 using System;

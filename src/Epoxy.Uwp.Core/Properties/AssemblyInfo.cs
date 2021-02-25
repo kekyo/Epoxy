@@ -19,7 +19,10 @@
 
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
+
+[assembly: InternalsVisibleTo("Epoxy")]
+[assembly: InternalsVisibleTo("FSharp.Epoxy")]
