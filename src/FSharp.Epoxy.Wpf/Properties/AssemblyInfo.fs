@@ -17,13 +17,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
+namespace global
 
-using System.Runtime.CompilerServices;
-using System.Windows.Markup;
+    open System.Windows.Markup
 
-[assembly: InternalsVisibleTo("Epoxy")]
-[assembly: InternalsVisibleTo("FSharp.Epoxy")]
+    [<assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")>]
+    [<assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")>]
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]
+    do()

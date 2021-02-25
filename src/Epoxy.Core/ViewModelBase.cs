@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 using Epoxy.Internal;
@@ -32,16 +31,19 @@ using Epoxy.Supplemental;
 
 namespace Epoxy
 {
-    public abstract class ViewModel : Model, INotifyPropertyChanging, INotifyPropertyChanged
+    public abstract class ViewModelBase :
+        ModelBase, INotifyPropertyChanging, INotifyPropertyChanged
     {
         private Dictionary<string, object?>? properties;
 
-        protected ViewModel()
+        [DebuggerStepThrough]
+        private protected ViewModelBase()
         { }
 
         public event PropertyChangingEventHandler? PropertyChanging;
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        [DebuggerStepThrough]
         private Dictionary<string, object?> Prepare()
         {
             if (!(properties is Dictionary<string, object>))
@@ -51,9 +53,9 @@ namespace Epoxy
             return properties;
         }
 
-        protected ValueHolder GetValue(
-            object? defaultValue = default,
-            [CallerMemberName] string? propertyName = null)
+        private protected object? InternalGetValue(
+            object? defaultValue,
+            string? propertyName)
         {
             Debug.Assert(propertyName is string);
             if (!UIThread.UnsafeIsBound)
@@ -65,17 +67,17 @@ namespace Epoxy
             var properties = this.Prepare();
             if (properties.TryGetValue(propertyName!, out var value))
             {
-                return new ValueHolder(value);
+                return value;
             }
             else
             {
-                return new ValueHolder(defaultValue);
+                return defaultValue;
             }
         }
 
-        protected TValue GetValue<TValue>(
-            TValue defaultValue = default,
-            [CallerMemberName] string? propertyName = null)
+        private protected TValue InternalGetValue<TValue>(
+            TValue defaultValue,
+            string? propertyName)
         {
             Debug.Assert(propertyName is string);
             if (!UIThread.UnsafeIsBound)
@@ -95,7 +97,7 @@ namespace Epoxy
             }
         }
 
-        private ValueTask InternalSetValueAsync<TValue>(
+        private ValueTask InternalPrivateSetValueAsync<TValue>(
             TValue newValue,
             Func<TValue, ValueTask>? propertyChanged,
             string? propertyName = null)
@@ -112,7 +114,7 @@ namespace Epoxy
             {
                 if (!DefaultValue<TValue>.ValueEquals(oldValue, newValue))
                 {
-                    this.OnPropertyChanging(propertyName);
+                    this.InternalOnPropertyChanging(propertyName);
 
                     if (!DefaultValue.IsDefaultValue(newValue))
                     {
@@ -123,7 +125,7 @@ namespace Epoxy
                         properties.Remove(propertyName!);
                     }
 
-                    this.OnPropertyChanged(propertyName);
+                    this.InternalOnPropertyChanged(propertyName);
                     if (propertyChanged is Func<TValue, ValueTask> pc)
                     {
                         return pc.Invoke(newValue);
@@ -132,7 +134,7 @@ namespace Epoxy
             }
             else
             {
-                this.OnPropertyChanging(propertyName);
+                this.InternalOnPropertyChanging(propertyName);
 
                 if (!DefaultValue.IsDefaultValue(newValue))
                 {
@@ -143,7 +145,7 @@ namespace Epoxy
                     properties.Remove(propertyName!);
                 }
 
-                this.OnPropertyChanged(propertyName);
+                this.InternalOnPropertyChanged(propertyName);
                 if (propertyChanged is Func<TValue, ValueTask> pc)
                 {
                     return pc.Invoke(newValue);
@@ -153,19 +155,21 @@ namespace Epoxy
             return default;
         }
 
-        public ValueTask SetValueAsync<TValue>(
+        [DebuggerStepThrough]
+        internal ValueTask InternalSetValueAsync<TValue>(
             TValue newValue,
             Func<TValue, ValueTask> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            this.InternalSetValueAsync(newValue, propertyChanged, propertyName);
+            string? propertyName) =>
+            this.InternalPrivateSetValueAsync(newValue, propertyChanged, propertyName);
 
-        protected void SetValue<TValue>(
+        [DebuggerStepThrough]
+        internal void InternalSetValue<TValue>(
             TValue newValue,
-            [CallerMemberName] string? propertyName = null) =>
-            _ = this.InternalSetValueAsync(newValue, null, propertyName);
+            string? propertyName) =>
+            _ = this.InternalPrivateSetValueAsync(newValue, null, propertyName);
 
-        protected void OnPropertyChanging(
-            [CallerMemberName] string? propertyName = null)
+        private protected void InternalOnPropertyChanging(
+            string? propertyName)
         {
             Debug.Assert(propertyName is string);
             if (!UIThread.UnsafeIsBound)
@@ -177,8 +181,8 @@ namespace Epoxy
             this.PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
         }
 
-        protected void OnPropertyChanged(
-            [CallerMemberName] string? propertyName = null)
+        private protected void InternalOnPropertyChanged(
+            string? propertyName)
         {
             Debug.Assert(propertyName is string);
             if (!UIThread.UnsafeIsBound)
@@ -190,7 +194,8 @@ namespace Epoxy
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public override string PrettyPrint =>
+        [DebuggerStepThrough]
+        protected override string OnPrettyPrint() =>
             string.Join(
                 ",",
                 this.EnumerateProperties().

@@ -19,29 +19,11 @@
 
 #nullable enable
 
-using System.Diagnostics;
-using System.Linq;
-
-using Epoxy.Internal;
-
 namespace Epoxy
 {
-    [DebuggerDisplay("{PrettyPrint}")]
-    public abstract class Model
+    public abstract class Model : ModelBase
     {
-        internal static readonly object[] emptyArgs = new object[0];
-
         protected Model()
         { }
-
-        public virtual string PrettyPrint =>
-            string.Join(
-                ",",
-                this.EnumerateFields().Concat(this.EnumerateProperties()).
-                OrderBy(entry => entry.Key).
-                Select(entry => $"{entry.Key}={entry.Value ?? "(null)"}"));
-
-        public override string ToString() =>
-            $"{this.GetPrettyTypeName()}: {this.PrettyPrint}";
     }
 }

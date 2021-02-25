@@ -19,26 +19,36 @@
 
 #nullable enable
 
-using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+using System.Linq;
 
 using Epoxy.Internal;
 
-namespace Epoxy.Supplemental
+namespace Epoxy
 {
-    [DebuggerStepThrough]
-    public static class ViewModelExtension
+    [DebuggerDisplay("{PrettyPrint}")]
+    public abstract class ModelBase
     {
-        public static ValueTask SetValueAsync<TValue>(
-            this ViewModelBase viewModel,
-            TValue newValue,
-            Func<TValue, Task> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            viewModel.InternalSetValueAsync(
-                newValue,
-                value => InternalHelpers.FromTask(propertyChanged(value)),
-                propertyName);
+        internal static readonly object[] emptyArgs = new object[0];
+
+        [DebuggerStepThrough]
+        private protected ModelBase()
+        { }
+
+        [DebuggerStepThrough]
+        protected virtual string OnPrettyPrint() =>
+            string.Join(
+                ",",
+                this.EnumerateFields().Concat(this.EnumerateProperties()).
+                OrderBy(entry => entry.Key).
+                Select(entry => $"{entry.Key}={entry.Value ?? "(null)"}"));
+
+        [DebuggerStepThrough]
+        public string PrettyPrint() =>
+            this.OnPrettyPrint();
+
+        [DebuggerStepThrough]
+        public override string ToString() =>
+            $"{this.GetPrettyTypeName()}: {this.OnPrettyPrint()}";
     }
 }

@@ -20,26 +20,28 @@
 #nullable enable
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Epoxy.Synchronized
 {
+    [DebuggerStepThrough]
     public static class ViewModelExtension
     {
         public static void SetValueSync<TValue>(
-            this ViewModel viewModel,
+            this ViewModelBase viewModel,
             TValue newValue,
             Action<TValue> propertyChanged,
             [CallerMemberName] string? propertyName = null) =>
-            _ = viewModel.SetValueAsync(
+            _ = viewModel.InternalSetValueAsync(
                 newValue,
                 value => { propertyChanged(value); return default; },
                 propertyName);
 
         [Obsolete("Use SetValueAsync instead.", true)]
         public static void SetValueSync<TValue>(
-            this ViewModel viewModel,
+            this ViewModelBase viewModel,
             TValue newValue,
             Func<TValue, ValueTask> propertyChanged,
             [CallerMemberName] string? propertyName = null) =>
