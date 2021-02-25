@@ -20,8 +20,8 @@
 #nullable enable
 
 using System;
+using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Threading.Tasks;
 
 #if WINDOWS_UWP || UNO
@@ -48,7 +48,6 @@ using Avalonia.Data.Converters;
 #endif
 
 using Epoxy.Internal;
-using Epoxy.Supplemental;
 
 namespace Epoxy
 {
@@ -80,41 +79,25 @@ namespace Epoxy
             ) =>
             this.ConvertBack(value, targetType, parameter);
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
         public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert) =>
-            new DelegatedValueConverter<TTo, TFrom>(convert);
+            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
         public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert, Func<TTo, TFrom> convertBack) =>
-            new DelegatedValueConverter<TTo, TFrom>(convert, convertBack);
+            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
         public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert) =>
-            new DelegatedValueConverter<TTo, TFrom, TParameter>(convert);
+            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
         public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
-            new DelegatedValueConverter<TTo, TFrom, TParameter>(convert, convertBack);
-
-        [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, ValueTask<TTo>> convert) =>
-            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
-
-        [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, ValueTask<TTo>> convert, Func<TTo, TFrom> convertBack) =>
-            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
-
-        [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert) =>
-            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
-
-        [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, TFrom> convertBack) =>
-            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
-
-        [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
-            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
-
-        [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
-            throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
+            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
     }
 
     public abstract class ValueConverter<TTo, TFrom> : ValueConverter
