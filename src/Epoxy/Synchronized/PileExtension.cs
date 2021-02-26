@@ -22,6 +22,8 @@
 using Epoxy.Internal;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
@@ -49,6 +51,7 @@ namespace Epoxy.Synchronized
 {
     public static class PileExtension
     {
+        [DebuggerStepThrough]
         public static void ExecuteSync<TUIElement>(
             this Pile<TUIElement> pile,
             Action<TUIElement> action, bool canIgnore = false)
@@ -76,6 +79,7 @@ namespace Epoxy.Synchronized
             return result.Key;
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use ExecuteAsync instead.", true)]
         public static void ExecuteSync<TUIElement>(
             this Pile<TUIElement> pile,
@@ -83,6 +87,7 @@ namespace Epoxy.Synchronized
             where TUIElement : UIElement =>
             throw new InvalidOperationException("Use ExecuteAsync instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use ExecuteAsync instead.", true)]
         public static TResult ExecuteSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,

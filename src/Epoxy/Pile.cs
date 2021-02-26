@@ -19,6 +19,8 @@
 
 #nullable enable
 
+using Epoxy.Internal;
+
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -49,6 +51,7 @@ using UIElement = Avalonia.IStyledElement;
 
 namespace Epoxy
 {
+    [DebuggerStepThrough]
     public static class PileFactory
     {
         public static Pile<UIElement> Create() =>
@@ -59,12 +62,13 @@ namespace Epoxy
             new Pile<TUIElement>();
     }
 
+    [DebuggerStepThrough]
     public static class PileExtension
     {
         public static ValueTask ExecuteAsync<TUIElement>(
             this Pile<TUIElement> pile, Func<TUIElement, ValueTask> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.InternalExecuteAsync(action, canIgnore);
+            pile.InternalExecuteAsync(e => action(e).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
 
         public static ValueTask<TResult> ExecuteAsync<TUIElement, TResult>(
             this Pile<TUIElement> pile, Func<TUIElement, ValueTask<TResult>> action)

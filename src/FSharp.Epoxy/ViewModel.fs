@@ -36,11 +36,11 @@ type public ViewModel() =
         self.InternalGetValue<'TValue>(defaultValue, propertyName)
 
     member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =
-        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskUnitAsValueTask |> asFunc1, propertyName)
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskUnitAsValueTaskUnit |> asFunc1, propertyName)
     member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName>] propertyName) =
-        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTask |> asFunc1, propertyName)
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTaskUnit |> asFunc1, propertyName)
     member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName>] propertyName) =
-        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> asyncUnitAsValueTask |> asFunc1, propertyName)
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> asyncUnitAsValueTaskUnit |> asFunc1, propertyName)
 
     member self.setValue (newValue: 'TValue, [<Optional; CallerMemberName>] propertyName) =
         self.InternalSetValue<'TValue>(newValue, propertyName)

@@ -97,9 +97,9 @@ namespace Epoxy.Infrastructure
             }
         }
 
-        private ValueTask InternalPrivateSetValueAsync<TValue>(
+        private ValueTask<Unit> InternalPrivateSetValueAsync<TValue>(
             TValue newValue,
-            Func<TValue, ValueTask>? propertyChanged,
+            Func<TValue, ValueTask<Unit>>? propertyChanged,
             string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
@@ -126,7 +126,7 @@ namespace Epoxy.Infrastructure
                     }
 
                     this.InternalOnPropertyChanged(propertyName);
-                    if (propertyChanged is Func<TValue, ValueTask> pc)
+                    if (propertyChanged is { } pc)
                     {
                         return pc.Invoke(newValue);
                     }
@@ -146,7 +146,7 @@ namespace Epoxy.Infrastructure
                 }
 
                 this.InternalOnPropertyChanged(propertyName);
-                if (propertyChanged is Func<TValue, ValueTask> pc)
+                if (propertyChanged is { } pc)
                 {
                     return pc.Invoke(newValue);
                 }
@@ -156,9 +156,9 @@ namespace Epoxy.Infrastructure
         }
 
         [DebuggerStepThrough]
-        internal ValueTask InternalSetValueAsync<TValue>(
+        internal ValueTask<Unit> InternalSetValueAsync<TValue>(
             TValue newValue,
-            Func<TValue, ValueTask> propertyChanged,
+            Func<TValue, ValueTask<Unit>> propertyChanged,
             string? propertyName) =>
             this.InternalPrivateSetValueAsync(newValue, propertyChanged, propertyName);
 

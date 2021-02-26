@@ -31,10 +31,10 @@ namespace Epoxy.Supplemental
     {
         public static ValueTask ExecuteAsync<TService>(
             this GlobalServiceAccessor accessor, Func<TService, Task> action, bool ignoreNotPresent = false) =>
-            GlobalService.ExecuteAsync<TService>(service => InternalHelpers.FromTask(action(service)), ignoreNotPresent);
+            GlobalService.ExecuteAsync<TService>(service => action(service).AsValueTaskVoid(), ignoreNotPresent);
 
         public static ValueTask<TResult> ExecuteAsync<TService, TResult>(
             this GlobalServiceAccessor accessor, Func<TService, Task<TResult>> action) =>
-            GlobalService.ExecuteAsync<TService, TResult>(service => InternalHelpers.FromTask(action(service)));
+            GlobalService.ExecuteAsync<TService, TResult>(service =>(action(service).AsValueTask()));
     }
 }

@@ -57,10 +57,26 @@ namespace Epoxy.Internal
 
         public static ValueTask<T> FromResult<T>(T value) =>
             new ValueTask<T>(value);
-        public static ValueTask<T> FromTask<T>(Task<T> task) =>
+
+        public static async Task<U> MapAsTask<T, U>(this ValueTask<T> task, Func<T, U> mapper) =>
+            mapper(await task.ConfigureAwait(false));
+        public static async ValueTask<U> MapAsValueTask<T, U>(this ValueTask<T> task, Func<T, U> mapper) =>
+            mapper(await task.ConfigureAwait(false));
+
+        public static ValueTask<T> AsValueTask<T>(this Task<T> task) =>
             new ValueTask<T>(task);
-        public static ValueTask FromTask(Task task) =>
-            new ValueTask(task);
+        public static async ValueTask AsValueTaskVoid(this Task task) =>
+            await task.ConfigureAwait(false);
+        public static async ValueTask AsValueTaskVoid<T>(this ValueTask<T> task) =>
+            await task.ConfigureAwait(false);
+        public static async ValueTask<Unit> AsValueTaskUnit(this Task task)
+            { await task.ConfigureAwait(false); return default; }
+        public static async ValueTask<Unit> AsValueTaskUnit<T>(this Task<T> task)
+        { await task.ConfigureAwait(false); return default; }
+        public static async ValueTask<Unit> AsValueTaskUnit(this ValueTask task)
+            { await task.ConfigureAwait(false); return default; }
+        public static async ValueTask<Unit> AsValueTaskUnit<T>(this ValueTask<T> task)
+        { await task.ConfigureAwait(false); return default; }
 
         public static IEnumerable<KeyValuePair<string, object?>> EnumerateFields(this object self) =>
             self.GetType().GetFields().

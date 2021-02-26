@@ -19,6 +19,8 @@
 
 #nullable enable
 
+using Epoxy.Internal;
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -57,7 +59,7 @@ namespace Epoxy
         private protected virtual void OnExecute(object? parameter) =>
             _ = this.OnExecuteAsync(parameter);
 
-        private protected virtual ValueTask OnExecuteAsync(object? parameter)
+        private protected virtual ValueTask<Unit> OnExecuteAsync(object? parameter)
         {
             this.OnExecute(parameter);
             return default;

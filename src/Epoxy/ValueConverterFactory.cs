@@ -23,10 +23,12 @@ using Epoxy.Supplemental;
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Epoxy
 {
+    [DebuggerStepThrough]
     public static class ValueConverterFactory
     {
         public static ValueConverter Create<TFrom, TTo>(Func<TFrom, TTo> convert) =>

@@ -52,12 +52,12 @@ namespace Epoxy.Supplemental
             this Pile<TUIElement> pile,
             Func<TUIElement, Task> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.InternalExecuteAsync(element => InternalHelpers.FromTask(action(element)), canIgnore);
+            pile.InternalExecuteAsync(element => action(element).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
 
         public static ValueTask<T> ExecuteAsync<TUIElement, T>(
             this Pile<TUIElement> pile,
             Func<TUIElement, Task<T>> action)
             where TUIElement : UIElement =>
-            pile.InternalExecuteAsync(element => InternalHelpers.FromTask(action(element)));
+            pile.InternalExecuteAsync(element => InternalHelpers.AsValueTask(action(element)));
     }
 }

@@ -65,15 +65,15 @@ type public PileFactory =
 module public PileExtension =
     type public Pile<'TUIElement when 'TUIElement :> UIElement> with
         member self.executeAsync (action: 'TUIElement -> ValueTask<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> valueTaskUnitAsValueTask |> asFunc1, canIgnore)
+            self.InternalExecuteAsync(action >> valueTaskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
         member self.executeAsync (action: 'TUIElement -> Task<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> taskUnitAsValueTask |> asFunc1, canIgnore)
+            self.InternalExecuteAsync(action >> taskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
         member self.executeAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> asyncUnitAsValueTask |> asFunc1, canIgnore)
+            self.InternalExecuteAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
 
         member self.executeAsync (action: 'TUIElement -> ValueTask<'TResult>) =
-            self.InternalExecuteAsync<'TResult>(action |> asFunc1)
+            self.InternalExecuteAsync<'TResult>(action |> asFunc1) |> valueTaskAsAsyncResult
         member self.executeAsync (action: 'TUIElement -> Task<'TResult>) =
-            self.InternalExecuteAsync<'TResult>(action >> taskAsValueTask |> asFunc1)
+            self.InternalExecuteAsync<'TResult>(action >> taskAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
         member self.executeAsync (action: 'TUIElement -> Async<'TResult>) =
-            self.InternalExecuteAsync<'TResult>(action >> asyncAsValueTask |> asFunc1)
+            self.InternalExecuteAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult

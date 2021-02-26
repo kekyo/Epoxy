@@ -53,6 +53,6 @@ open Epoxy.Internal
 module public PileExtension =
     type public Pile<'TUIElement when 'TUIElement :> UIElement> with
         member self.executeAsync (action: 'TUIElement -> ValueTask, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action |> asFunc1, canIgnore)
+            self.InternalExecuteAsync(action >> valueTaskVoidAsValueTaskUnit |> asFunc1, canIgnore)
         member self.executeAsync (action: 'TUIElement -> Task, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> taskVoidAsValueTask |> asFunc1, canIgnore)
+            self.InternalExecuteAsync(action >> taskVoidAsValueTaskUnit |> asFunc1, canIgnore)

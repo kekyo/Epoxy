@@ -19,9 +19,11 @@
 
 #nullable enable
 
+using Epoxy.Infrastructure;
+
 using System;
 
-namespace Epoxy.Infrastructure
+namespace Epoxy
 {
     public abstract class ValueConverter<TFrom, TTo> :
         ValueConverterBase<TFrom, TTo>

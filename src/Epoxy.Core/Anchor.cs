@@ -19,6 +19,8 @@
 
 #nullable enable
 
+using Epoxy.Internal;
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -161,7 +163,7 @@ namespace Epoxy
             this.element.Target = null;
         }
 
-        internal ValueTask InternalExecuteAsync(Func<TUIElement, ValueTask> action, bool canIgnore = false)
+        internal ValueTask<Unit> InternalExecuteAsync(Func<TUIElement, ValueTask<Unit>> action, bool canIgnore = false)
         {
             if (this.element.Target is TUIElement element)
             {

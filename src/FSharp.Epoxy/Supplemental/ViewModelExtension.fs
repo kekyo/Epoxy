@@ -34,6 +34,6 @@ open Epoxy.Internal
 module public ViewModelExtension =
     type public ViewModel with
         member viewModel.setValueAsync<'TValue>(newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
-            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged |> asFunc1, propertyName)
+            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskVoidAsValueTaskUnit |> asFunc1, propertyName)
         member viewModel.setValueAsync<'TValue> (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
-            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskVoidAsValueTask |> asFunc1, propertyName)
+            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskVoidAsValueTaskUnit |> asFunc1, propertyName)

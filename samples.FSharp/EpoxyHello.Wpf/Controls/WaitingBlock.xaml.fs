@@ -36,38 +36,43 @@ open System.Windows.Media
 type public WaitingBlock() as self =
     inherit UserControl()
 
+    [<DefaultValue>]
+    val mutable currentPosition: int
+    [<DefaultValue>]
+    val mutable timer: Timer
+
+    do
+        //self.InitializeComponent()
+        //self.DataContext <- self
+
+        self.CellBrushes <- Enumerable.Range(0, 8).
+            Select(fun _ -> Brushes.Gray).
+            ToObservableCollection()
+
+        let timerHandler() =
+            do self.CellBrushes.[self.currentPosition] <- Brushes.Gray
+            do self.currentPosition <- self.currentPosition + 1
+            if self.currentPosition >= self.CellBrushes.Count then
+                do self.currentPosition <- 0
+            do self.CellBrushes.[self.currentPosition] <- Brushes.Red
+
+        self.timer <- new Timer((fun _ -> self.Dispatcher.invokeAsync(timerHandler) |> ignore), null, TimeSpan.Zero, TimeSpan.Zero)
+
     static member CellBrushesProperty =
         DependencyProperty.Register(
             "CellBrushes",
             typeof<ObservableCollection<SolidColorBrush>>,
             typeof<WaitingBlock>)
 
-    val currentPosition: int
-    val timer: Timer
-
-    do
-        self.InitializeComponent()
-        self.DataContext <- self
-
-        self.CellBrushes <- Enumerable.Range(0, 8).
-            Select(fun _ -> Brushes.Gray).
-            ToObservableCollection()
-
-        self.timer = new Timer(fun _ -> Dispatcher.BeginInvoke(new EventHandler(fun (s, e) ->
-                self.CellBrushes[this.currentPosition] <- Brushes.Gray
-                currentPosition <- currentPosition + 1
-                if currentPosition >= self.CellBrushes.Count then
-                    currentPosition <- 0
-                self.CellBrushes[currentPosition] <- Brushes.Red
-            ), self, EventArgs.Empty), null, TimeSpan.Zero, TimeSpan.Zero)
-
     override self.OnVisualParentChanged oldParent =
         base.OnVisualParentChanged(oldParent)
         if self.VisualParent != null then
-            this.timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(300))
+            self.timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(300.0)) |> ignore
         else
-            this.timer.Change(TimeSpan.Zero, TimeSpan.Zero)
+            self.timer.Change(TimeSpan.Zero, TimeSpan.Zero) |> ignore
 
     member self.CellBrushes
-        with get(): ObservableCollection<SolidColorBrush> -> self.GetValue(CellBrushesProperty) :> ObservableCollection<SolidColorBrush>
-        with set(value: ObservableCollection<SolidColorBrush>) -> self.SetValue(CellBrushesProperty, value)
+        with get(): ObservableCollection<SolidColorBrush> =
+            self.GetValue(WaitingBlock.CellBrushesProperty) :?> ObservableCollection<SolidColorBrush>
+        and set(value: ObservableCollection<SolidColorBrush>) =
+            self.SetValue(WaitingBlock.CellBrushesProperty, value)

@@ -19,53 +19,56 @@
 
 #nullable enable
 
+using Epoxy.Internal;
 using Epoxy.Supplemental;
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Epoxy
 {
+    [DebuggerStepThrough]
     public static class CommandFactory
     {
         public static Command Create(
             Func<ValueTask> executeAsync) =>
-            new DelegatedCommand(executeAsync);
+            new DelegatedCommand(() => executeAsync().AsValueTaskUnit());
 
         public static Command Create(
             Func<ValueTask> executeAsync,
             Func<bool> canExecute) =>
-            new DelegatedCommand(executeAsync, canExecute);
+            new DelegatedCommand(() => executeAsync().AsValueTaskUnit(), canExecute);
 
         public static Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync) =>
-            new DelegatedCommand<TParameter>(executeAsync);
+            new DelegatedCommand<TParameter>(p => executeAsync(p).AsValueTaskUnit());
 
         public static Command Create<TParameter>(
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(executeAsync, canExecute);
+            new DelegatedCommand<TParameter>(p => executeAsync(p).AsValueTaskUnit(), canExecute);
 
         public static Command Create(
             this CommandFactoryInstance factory,
             Func<ValueTask> executeAsync) =>
-            new DelegatedCommand(executeAsync);
+            new DelegatedCommand(() => executeAsync().AsValueTaskUnit());
 
         public static Command Create(
             this CommandFactoryInstance factory,
             Func<ValueTask> executeAsync,
             Func<bool> canExecute) =>
-            new DelegatedCommand(executeAsync, canExecute);
+            new DelegatedCommand(() => executeAsync().AsValueTaskUnit(), canExecute);
 
         public static Command Create<TParameter>(
             this CommandFactoryInstance factory,
             Func<TParameter, ValueTask> executeAsync) =>
-            new DelegatedCommand<TParameter>(executeAsync);
+            new DelegatedCommand<TParameter>(p => executeAsync(p).AsValueTaskUnit());
 
         public static Command Create<TParameter>(
             this CommandFactoryInstance factory,
             Func<TParameter, ValueTask> executeAsync,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(executeAsync, canExecute);
+            new DelegatedCommand<TParameter>(p => executeAsync(p).AsValueTaskUnit(), canExecute);
     }
 }

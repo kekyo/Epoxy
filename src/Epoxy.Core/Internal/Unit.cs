@@ -19,27 +19,16 @@
 
 #nullable enable
 
-using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
-using Epoxy.Internal;
-
-namespace Epoxy.Supplemental
+namespace Epoxy.Internal
 {
     [DebuggerStepThrough]
-    public static class ViewModelExtension
+    internal readonly struct Unit
     {
-        public static ValueTask SetValueAsync<TValue>(
-            this ViewModel viewModel,
-            TValue newValue,
-            Func<TValue, Task> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            viewModel.InternalSetValueAsync(
-                newValue,
-                value => propertyChanged(value).AsValueTaskUnit(),
-                propertyName).
-            AsValueTaskVoid();
+        public bool Equals(Unit unit) => true;
+        public override bool Equals(object? obj) => obj is Unit;
+        public override int GetHashCode() => 0;
+        public override string ToString() => "()";
     }
 }

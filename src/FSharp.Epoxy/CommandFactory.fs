@@ -38,34 +38,34 @@ module private CommandFactoryGenerator =
 [<AbstractClass; Sealed>]
 type public CommandFactory =
     static member create executeAsync =
-        create0 (executeAsync >> valueTaskUnitAsValueTask |> asFunc0)
+        create0 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc0)
     static member create (executeAsync, canExecute) =
-        create1 (executeAsync >> valueTaskUnitAsValueTask |> asFunc0) (canExecute |> asFunc0)
+        create1 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
     static member create (executeAsync: 'TParameter -> ValueTask<unit>) =
-        createP0 (executeAsync >> valueTaskUnitAsValueTask |> asFunc1)
+        createP0 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc1)
     static member create (executeAsync: 'TParameter -> ValueTask<unit>, canExecute) =
-        createP1 (executeAsync >> valueTaskUnitAsValueTask |> asFunc1) (canExecute |> asFunc1)
+        createP1 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
 
     static member create (executeAsync: unit -> Task<unit>) =
-        create0 (executeAsync >> taskUnitAsValueTask |> asFunc0)
+        create0 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc0)
     static member create (executeAsync: unit -> Task<unit>, canExecute) =
-        create1 (executeAsync >> taskUnitAsValueTask |> asFunc0) (canExecute |> asFunc0)
+        create1 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
     static member create (executeAsync: 'TParameter -> Task<unit>) =
-        createP0 (executeAsync >> taskUnitAsValueTask |> asFunc1)
+        createP0 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc1)
     static member create (executeAsync: 'TParameter -> Task<unit>, canExecute) =
-        createP1 (executeAsync >> taskUnitAsValueTask |> asFunc1) (canExecute |> asFunc1)
+        createP1 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
 
     static member create executeAsync =
-        create0 (executeAsync >> asyncUnitAsValueTask |> asFunc0)
+        create0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0)
     static member create (executeAsync, canExecute) =
-        create1 (executeAsync >> asyncUnitAsValueTask |> asFunc0) (canExecute |> asFunc0)
+        create1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
     static member create (executeAsync: 'TParameter -> Async<unit>) =
-        createP0 (executeAsync >> asyncUnitAsValueTask |> asFunc1)
+        createP0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1)
     static member create (executeAsync: 'TParameter -> Async<unit>, canExecute) =
-        createP1 (executeAsync >> asyncUnitAsValueTask |> asFunc1) (canExecute |> asFunc1)
+        createP1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
@@ -73,31 +73,31 @@ type public CommandFactory =
 module public CommandFactoryExtension =
     type public CommandFactoryInstance with
         member __.create executeAsync =
-            create0 (executeAsync >> valueTaskUnitAsValueTask |> asFunc0)
+            create0 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc0)
         member __.create (executeAsync, canExecute) =
-            create1 (executeAsync >> valueTaskUnitAsValueTask |> asFunc0) (canExecute |> asFunc0)
+            create1 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
         member __.create (executeAsync: 'TParameter -> ValueTask<unit>) =
-            createP0 (executeAsync >> valueTaskUnitAsValueTask |> asFunc1)
+            createP0 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc1)
         member __.create (executeAsync: 'TParameter -> ValueTask<unit>, canExecute) =
-            createP1 (executeAsync >> valueTaskUnitAsValueTask |> asFunc1) (canExecute |> asFunc1)
+            createP1 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
 
         member __.create (executeAsync: unit -> Task<unit>) =
-            create0 (executeAsync >> taskUnitAsValueTask |> asFunc0)
+            create0 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc0)
         member __.create (executeAsync: unit -> Task<unit>, canExecute) =
-            create1 (executeAsync >> taskUnitAsValueTask |> asFunc0) (canExecute |> asFunc0)
+            create1 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
         member __.create (executeAsync: 'TParameter -> Task<unit>) =
-            createP0 (executeAsync >> taskUnitAsValueTask |> asFunc1)
+            createP0 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc1)
         member __.create (executeAsync: 'TParameter -> Task<unit>, canExecute: 'TParameter -> bool) =
-            createP1 (executeAsync >> taskUnitAsValueTask |> asFunc1) (canExecute |> asFunc1)
+            createP1 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
 
         member __.create executeAsync =
-            create0 (executeAsync >> asyncUnitAsValueTask |> asFunc0)
+            create0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0)
         member __.create (executeAsync, canExecute) =
-            create1 (executeAsync >> asyncUnitAsValueTask |> asFunc0) (canExecute |> asFunc0)
+            create1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
         member __.create (executeAsync: 'TParameter -> Async<unit>) =
-            createP0 (executeAsync >> asyncUnitAsValueTask |> asFunc1)
+            createP0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1)
         member __.create (executeAsync: 'TParameter -> Async<unit>, canExecute) =
-            createP1 (executeAsync >> asyncUnitAsValueTask |> asFunc1) (canExecute |> asFunc1)
+            createP1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)

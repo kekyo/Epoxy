@@ -31,23 +31,23 @@ namespace Epoxy.Supplemental
         public static Command Create(
             this CommandFactoryInstance factory,
             Func<Task> executeAsync) =>
-            new DelegatedCommand(() => InternalHelpers.FromTask(executeAsync()));
+            new DelegatedCommand(() => executeAsync().AsValueTaskUnit());
 
         public static Command Create(
             this CommandFactoryInstance factory,
             Func<Task> executeAsync,
             Func<bool> canExecute) =>
-            new DelegatedCommand(() => InternalHelpers.FromTask(executeAsync()), canExecute);
+            new DelegatedCommand(() => executeAsync().AsValueTaskUnit(), canExecute);
 
         public static Command Create<TParameter>(
             this CommandFactoryInstance factory,
             Func<TParameter, Task> executeAsync) =>
-            new DelegatedCommand<TParameter>(parameter => InternalHelpers.FromTask(executeAsync(parameter)));
+            new DelegatedCommand<TParameter>(parameter => executeAsync(parameter).AsValueTaskUnit());
 
         public static Command Create<TParameter>(
             this CommandFactoryInstance factory,
             Func<TParameter, Task> executeAsync,
             Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(parameter => InternalHelpers.FromTask(executeAsync(parameter)), canExecute);
+            new DelegatedCommand<TParameter>(parameter => executeAsync(parameter).AsValueTaskUnit(), canExecute);
     }
 }

@@ -20,6 +20,7 @@
 #nullable enable
 
 using Epoxy.Infrastructure;
+using Epoxy.Internal;
 using Epoxy.Supplemental;
 
 using System;
@@ -48,7 +49,7 @@ namespace Epoxy
             TValue newValue,
             Func<TValue, ValueTask> propertyChanged,
             [CallerMemberName] string? propertyName = null) =>
-            base.InternalSetValueAsync<TValue>(newValue, propertyChanged, propertyName);
+            base.InternalSetValueAsync<TValue>(newValue, v => propertyChanged(v).AsValueTaskUnit(), propertyName).AsValueTaskVoid();
 
         protected void SetValue<TValue>(
             TValue newValue,

@@ -40,21 +40,21 @@ module private CommandFactoryExtensionGenerator =
 module public CommandFactoryExtension =
     type public CommandFactoryInstance with
         member __.create executeAsync =
-            create0 (executeAsync |> asFunc0)
+            create0 (executeAsync >> valueTaskVoidAsValueTaskUnit |> asFunc0)
         member __.create (executeAsync, canExecute) =
-            create1 (executeAsync |> asFunc0) (canExecute |> asFunc0)
+            create1 (executeAsync >> valueTaskVoidAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
         member __.create (executeAsync: 'TParameter -> ValueTask) =
-            createP0 (executeAsync |> asFunc1)
+            createP0 (executeAsync >> valueTaskVoidAsValueTaskUnit |> asFunc1)
         member __.create (executeAsync: 'TParameter -> ValueTask, canExecute) =
-            createP1 (executeAsync |> asFunc1) (canExecute |> asFunc1)
+            createP1 (executeAsync >> valueTaskVoidAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
 
         member __.create (executeAsync: unit -> Task) =
-            create0 (executeAsync >> taskVoidAsValueTask |> asFunc0)
+            create0 (executeAsync >> taskVoidAsValueTaskUnit |> asFunc0)
         member __.create (executeAsync: unit -> Task, canExecute) =
-            create1 (executeAsync >> taskVoidAsValueTask |> asFunc0) (canExecute |> asFunc0)
+            create1 (executeAsync >> taskVoidAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
         member __.create (executeAsync: 'TParameter -> Task) =
-            createP0 (executeAsync >> taskVoidAsValueTask |> asFunc1)
+            createP0 (executeAsync >> taskVoidAsValueTaskUnit |> asFunc1)
         member __.create (executeAsync: 'TParameter -> Task, canExecute) =
-            createP1 (executeAsync >> taskVoidAsValueTask |> asFunc1) (canExecute |> asFunc1)
+            createP1 (executeAsync >> taskVoidAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)

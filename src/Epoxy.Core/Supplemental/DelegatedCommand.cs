@@ -31,18 +31,18 @@ namespace Epoxy.Supplemental
         private static readonly Func<bool> defaultCanExecute =
             () => true;
 
-        private readonly Func<ValueTask> executeAsync;
+        private readonly Func<ValueTask<Unit>> executeAsync;
         private readonly Func<bool> canExecute;
 
         internal DelegatedCommand(
-            Func<ValueTask> executeAsync)
+            Func<ValueTask<Unit>> executeAsync)
         {
             this.executeAsync = executeAsync;
             this.canExecute = defaultCanExecute;
         }
 
         internal DelegatedCommand(
-            Func<ValueTask> executeAsync,
+            Func<ValueTask<Unit>> executeAsync,
             Func<bool> canExecute)
         {
             this.executeAsync = executeAsync;
@@ -60,7 +60,7 @@ namespace Epoxy.Supplemental
             return canExecute.Invoke();
         }
 
-        private protected override ValueTask OnExecuteAsync(object? parameter) =>
+        private protected override ValueTask<Unit> OnExecuteAsync(object? parameter) =>
             executeAsync();
     }
 
@@ -69,18 +69,18 @@ namespace Epoxy.Supplemental
         private static readonly Func<TParameter, bool> defaultCanExecute =
             _ => true;
 
-        private readonly Func<TParameter, ValueTask> executeAsync;
+        private readonly Func<TParameter, ValueTask<Unit>> executeAsync;
         private readonly Func<TParameter, bool> canExecute;
 
         internal DelegatedCommand(
-            Func<TParameter, ValueTask> executeAsync)
+            Func<TParameter, ValueTask<Unit>> executeAsync)
         {
             this.executeAsync = executeAsync;
             this.canExecute = defaultCanExecute;
         }
 
         internal DelegatedCommand(
-            Func<TParameter, ValueTask> executeAsync,
+            Func<TParameter, ValueTask<Unit>> executeAsync,
             Func<TParameter, bool> canExecute)
         {
             this.executeAsync = executeAsync;
@@ -99,7 +99,7 @@ namespace Epoxy.Supplemental
             return canExecute.Invoke((TParameter)parameter!);
         }
 
-        private protected override ValueTask OnExecuteAsync(object? parameter) =>
+        private protected override ValueTask<Unit> OnExecuteAsync(object? parameter) =>
             executeAsync((TParameter)parameter!);
     }
 }

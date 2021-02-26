@@ -27,19 +27,15 @@ open System.Runtime.InteropServices
 open System.Threading.Tasks
 
 open Epoxy
+open Epoxy.Internal
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module public ViewModelExtension =
-    let fromAction (propertyChanged:'TValue -> unit) =
-        new Func<'TValue, ValueTask>(fun value ->
-            propertyChanged value |> ignore
-            ValueTask())
-
     type public ViewModel with
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
-            viewModel.InternalSetValueAsync<'TValue>(newValue, fromAction propertyChanged, propertyName)
+            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> unitAsValueTaskUnit |> asFunc1, propertyName)
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
