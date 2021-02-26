@@ -6,7 +6,7 @@
 
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-|Package|Status|Description|
+|Package|All (C#)|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -15,9 +15,15 @@
 |Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
+|Package|F# specialized|Description|
+|:--|:--|:--|
+|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
+
 ## これは何?
 
 * Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、独立した柔軟性のあるライブラリです。
+  * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
@@ -79,7 +85,7 @@ Model-View-ViewModelの役割についてのおさらい:
 
 注意: MVVMの役割については諸説あります。
 はじめから完全な設計を目指さずに、ブラッシュアップすると良いでしょう。
-Epoxyは段階的に改善する事を想定して設計しています。
+Epoxyは段階的に改善する事を想定して開発しています。
 
 XAMLビューの定義とその実装を、MVVMに従って完全に分離しつつ、最小限の手間で実装する例です
 (このコードはWPFの例で、ポイントとなる点に絞っているため、完全な例はサンプルコードを参照して下さい):
@@ -90,6 +96,7 @@ XAMLビューの定義とその実装を、MVVMに従って完全に分離しつ
 <Window
     x:Class="EpoxyHello.Wpf.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
     Title="EpoxyHello.Wpf" Height="450" Width="800">
 
     <!-- ここに、ViewModelクラスのインスタンスを配置します。この定義によって、IDEがViewModelの型を認識できます。 -->
@@ -501,3 +508,22 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 ## License
 
 Apache-v2
+
+## History
+
+* 0.11.0:
+  * F#のサポートを追加しました。
+  * ValueConverterの一般的な引数をスワップしました。(Breaking)
+  * いくつかのファクトリーメソッドを "Factory" と名のついた型に移動しました。(Breaking)
+* 0.10.0:
+  * WinUIに対応しました。
+* 0.9.0:
+  * Uno platformとAvaloniaに対応しました。
+* 0.8.0:
+  * GlobalServiceとEventBinder機能を追加しました。
+* 0.7.0:
+  * Xamarin Formsのサンプルコードを追加しました。
+* 0.6.0:
+  * 同期コマンドハンドラを分割しました。
+* 0.5.0:
+  * UIThreadとAnchor/Pile機能を追加しました。

@@ -6,7 +6,7 @@
 
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-|Package|Status|Description|
+|Package|All (C#)|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -15,9 +15,15 @@
 |Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
+|Package|F# specialized|Description|
+|:--|:--|:--|
+|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
+
 ## What is this ?
 
 * Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
+  * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
@@ -81,6 +87,7 @@ Completed separately xaml based view declarations.
 <Window
     x:Class="EpoxyHello.Wpf.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
     Title="EpoxyHello.Wpf" Height="450" Width="800">
 
     <!-- Place view model instance, it'll verify types (by IDE)  -->
@@ -492,3 +499,22 @@ Try not to use `GlobalService` in places where it is not really needed.
 ## License
 
 Apache-v2
+
+## History
+
+* 0.11.0:
+  * Added F# support.
+  * Swapped ValueConverter generic arguments. (Breaking)
+  * Moved some factory methods into "Factory" marked types. (Breaking)
+* 0.10.0:
+  * Supported WinUI platform.
+* 0.9.0:
+  * Supported Uno platform and Avalonia.
+* 0.8.0:
+  * Added GlobalService and EventBinder features.
+* 0.7.0:
+  * Added Xamarin Forms sample code.
+* 0.6.0:
+  * Split synchronous Command handler.
+* 0.5.0:
+  * Added UIThread and Anchor/Pile features.
