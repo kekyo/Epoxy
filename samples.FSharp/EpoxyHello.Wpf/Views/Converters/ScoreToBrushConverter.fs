@@ -17,12 +17,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace Epoxy
+namespace EpoxyHello.Wpf.Views.Converters
 
-open Epoxy.Infrastructure
+open Epoxy
+open System.Windows.Media
 
-[<AbstractClass>]
-type public Model() = class
-    inherit ModelBase()
+[<AutoOpen>]
+module private ScoreToBrushConverterModule =
+    let yellow = new SolidColorBrush(Color.FromArgb(255uy, 96uy, 96uy, 0uy)) :> Brush
+    let gray = new SolidColorBrush(Color.FromArgb(255uy, 96uy, 96uy, 96uy)) :> Brush
 
-end
+[<Sealed>]
+type public ScoreToBrushConverter =
+    inherit ValueConverter<int, Brush>
+
+    override __.convert from =
+        if from >= 5 then Some yellow else Some gray

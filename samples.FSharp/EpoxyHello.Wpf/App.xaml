@@ -1,4 +1,5 @@
-﻿////////////////////////////////////////////////////////////////////////////
+﻿<!--
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -16,13 +17,13 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-
-namespace Epoxy
-
-open Epoxy.Infrastructure
-
-[<AbstractClass>]
-type public Model() = class
-    inherit ModelBase()
-
-end
+-->
+<Application
+    x:Class="EpoxyHello.Wpf.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

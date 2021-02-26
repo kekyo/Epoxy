@@ -148,7 +148,10 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Epoxy.Xamarin.Forms.Core\Epoxy.Xamarin.Forms.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Epoxy.Xamarin.Forms.Core\Epoxy.Xamarin.Forms.Core.csproj">
+      <Project>{494DDC01-9BCD-4CE6-B5B6-58F97BD1346C}</Project>
+      <Name>Epoxy.Xamarin.Forms.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj">
       <Project>{15b90169-2bdf-45fa-acdb-a45aad6f3cca}</Project>
       <Name>Epoxy.Xamarin.Forms</Name>

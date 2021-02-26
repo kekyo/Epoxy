@@ -17,12 +17,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace Epoxy
+namespace EpoxyHello.Wpf.ViewModels
 
-open Epoxy.Infrastructure
+open Epoxy
+open System.Windows.Media
 
-[<AbstractClass>]
-type public Model() = class
-    inherit ModelBase()
+type ItemViewModel() =
+    inherit ViewModel()
 
-end
+    member __.Title
+        with get(): string = __.getValue()
+        and set (value: string) = __.setValue value
+
+    member __.Image
+        with get(): ImageSource = __.getValue()
+        and set (value: ImageSource) = __.setValue value
+
+    member __.Score
+        with get(): int = __.getValue()
+        and set (value: int) = __.setValue value

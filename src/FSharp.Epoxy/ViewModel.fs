@@ -27,8 +27,8 @@ open System.Runtime.InteropServices
 open System.Threading.Tasks
 
 [<AbstractClass>]
-type public ViewModel =
-    inherit ViewModelBase
+type public ViewModel() =
+    inherit ViewModelBase()
 
     member self.getValue<'TValue> ([<Optional; CallerMemberName>] propertyName) =
         self.InternalGetValue<'TValue>(Unchecked.defaultof<_>, propertyName)

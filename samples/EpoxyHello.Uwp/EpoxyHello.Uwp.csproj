@@ -160,7 +160,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Epoxy.Uwp.Core\Epoxy.Uwp.Core.csproj" />
+    <ProjectReference Include="..\..\src\Epoxy.Uwp.Core\Epoxy.Uwp.Core.csproj">
+      <Project>{438DEC32-9A25-4942-8FAB-A10EE04D3B4D}</Project>
+      <Name>Epoxy.Uwp.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Epoxy.Uwp\Epoxy.Uwp.csproj">
       <Project>{cae7b7fe-9b7b-4e6c-a9f4-0d3f30e58e0c}</Project>
       <Name>Epoxy.Uwp</Name>

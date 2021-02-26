@@ -19,12 +19,14 @@
 
 #nullable enable
 
+using Epoxy.Infrastructure;
+
 using System;
 
 namespace Epoxy.Supplemental
 {
     public sealed class DelegatedValueConverter<TFrom, TTo> :
-        ValueConverter<TFrom, TTo>
+        ValueConverterBase<TFrom, TTo>
     {
         private readonly Func<TFrom, TTo> convert;
         private readonly Func<TTo, TFrom>? convertBack;
@@ -38,13 +40,13 @@ namespace Epoxy.Supplemental
             this.convertBack = convertBack;
         }
 
-        public override bool TryConvert(TFrom from, out TTo result)
+        private protected override bool InternalTryConvert(TFrom from, out TTo result)
         {
             result = this.convert(from);
             return true;
         }
 
-        public override bool TryConvertBack(TTo to, out TFrom result)
+        private protected override bool InternalTryConvertBack(TTo to, out TFrom result)
         {
             if (this.convertBack != null)
             {
@@ -59,7 +61,7 @@ namespace Epoxy.Supplemental
     }
 
     public sealed class DelegatedValueConverter<TFrom, TParameter, TTo> :
-        ValueConverter<TFrom, TParameter, TTo>
+        ValueConverterBase<TFrom, TParameter, TTo>
     {
         private readonly Func<TFrom, TParameter, TTo> convert;
         private readonly Func<TTo, TParameter, TFrom>? convertBack;
@@ -73,13 +75,13 @@ namespace Epoxy.Supplemental
             this.convertBack = convertBack;
         }
 
-        public override bool TryConvert(TFrom from, TParameter parameter, out TTo result)
+        private protected override bool InternalTryConvert(TFrom from, TParameter parameter, out TTo result)
         {
             result = this.convert(from, parameter);
             return true;
         }
 
-        public override bool TryConvertBack(TTo to, TParameter parameter, out TFrom result)
+        private protected override bool InternalTryConvertBack(TTo to, TParameter parameter, out TFrom result)
         {
             if (this.convertBack != null)
             {

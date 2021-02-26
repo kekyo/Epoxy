@@ -44,6 +44,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,10 +61,6 @@
     <Compile Include="../FSharp.Epoxy/*.fs" />
     <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
     <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
 </Project>

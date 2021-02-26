@@ -17,12 +17,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace Epoxy
+namespace EpoxyHello.Wpf
 
-open Epoxy.Infrastructure
+open System.Windows
 
-[<AbstractClass>]
-type public Model() = class
-    inherit ModelBase()
-
+type App = class
+    inherit Application
 end

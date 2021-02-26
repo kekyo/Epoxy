@@ -17,12 +17,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace Epoxy
+namespace EpoxyHello.Wpf.Views
 
-open Epoxy.Infrastructure
+open System.Windows
 
-[<AbstractClass>]
-type public Model() = class
-    inherit ModelBase()
-
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+type MainWindow = class
+    inherit Window
 end
