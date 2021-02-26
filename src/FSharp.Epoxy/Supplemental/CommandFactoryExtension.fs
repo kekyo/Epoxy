@@ -28,49 +28,33 @@ open Epoxy.Internal
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
+module private CommandFactoryExtensionGenerator =
+    let inline create0 executeAsync = new DelegatedCommand(executeAsync) :> Command
+    let inline create1 executeAsync canExecute = new DelegatedCommand(executeAsync, canExecute) :> Command
+    let inline createP0 executeAsync = new DelegatedCommand<'TParameter>(executeAsync) :> Command
+    let inline createP1 executeAsync canExecute = new DelegatedCommand<'TParameter>(executeAsync, canExecute) :> Command
+
+[<DebuggerStepThrough>]
+[<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module public CommandFactoryExtension =
-    let fromAsync (propertyChanged:'TValue -> Async<unit>) =
-        new Func<'TValue, ValueTask>(fun value ->
-            InternalHelpers.FromTask(Async.StartImmediateAsTask(propertyChanged value) :> Task))
-
     type public CommandFactoryInstance with
-        member __.create (executeAsync: unit -> ValueTask<unit>) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(executeAsync().AsTask() :> Task)))
-        member __.create (executeAsync: unit -> ValueTask<unit>, canExecute: unit -> bool) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(executeAsync().AsTask() :> Task)), new Func<bool>(canExecute))
+        member __.create executeAsync =
+            create0 (executeAsync |> asFunc0)
+        member __.create (executeAsync, canExecute) =
+            create1 (executeAsync |> asFunc0) (canExecute |> asFunc0)
 
-        member __.create<'TParameter> (executeAsync: 'TParameter -> ValueTask<unit>) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(executeAsync(parameter).AsTask() :> Task)))
-        member __.create<'TParameter> (executeAsync: 'TParameter -> ValueTask<unit>, canExecute: 'TParameter -> bool) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(executeAsync(parameter).AsTask() :> Task)), new Func<'TParameter, bool>(canExecute))
-        
+        member __.create (executeAsync: 'TParameter -> ValueTask) =
+            createP0 (executeAsync |> asFunc1)
+        member __.create (executeAsync: 'TParameter -> ValueTask, canExecute) =
+            createP1 (executeAsync |> asFunc1) (canExecute |> asFunc1)
+
         member __.create (executeAsync: unit -> Task) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(executeAsync())))
-        member __.create (executeAsync: unit -> Task, canExecute: unit -> bool) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(executeAsync())), new Func<bool>(canExecute))
+            create0 (executeAsync >> taskVoidAsValueTask |> asFunc0)
+        member __.create (executeAsync: unit -> Task, canExecute) =
+            create1 (executeAsync >> taskVoidAsValueTask |> asFunc0) (canExecute |> asFunc0)
 
-        member __.create<'TParameter> (executeAsync: 'TParameter -> Task) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(executeAsync parameter)))
-        member __.create<'TParameter> (executeAsync: 'TParameter -> Task, canExecute: 'TParameter -> bool) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(executeAsync parameter)), new Func<'TParameter, bool>(canExecute))
-
-        member __.create (executeAsync: unit -> Task<unit>) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(executeAsync() :> Task)))
-        member __.create (executeAsync: unit -> Task<unit>, canExecute: unit -> bool) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(executeAsync() :> Task)), new Func<bool>(canExecute))
-
-        member __.create<'TParameter> (executeAsync: 'TParameter -> Task<unit>) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(executeAsync parameter :> Task)))
-        member __.create<'TParameter> (executeAsync: 'TParameter -> Task<unit>, canExecute: 'TParameter -> bool) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(executeAsync parameter :> Task)), new Func<'TParameter, bool>(canExecute))
-
-        member __.create (executeAsync: unit -> Async<unit>) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(Async.StartImmediateAsTask(executeAsync()) :> Task)))
-        member __.create (executeAsync: unit -> Async<unit>, canExecute: unit -> bool) =
-            new DelegatedCommand(new Func<ValueTask>(fun () -> InternalHelpers.FromTask(Async.StartImmediateAsTask(executeAsync()) :> Task)), new Func<bool>(canExecute))
-
-        member __.create<'TParameter> (executeAsync: 'TParameter -> Async<unit>) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(Async.StartImmediateAsTask(executeAsync parameter) :> Task)))
-        member __.create<'TParameter> (executeAsync: 'TParameter -> Async<unit>, canExecute: 'TParameter -> bool) =
-            new DelegatedCommand<'TParameter>(new Func<'TParameter, ValueTask>(fun parameter -> InternalHelpers.FromTask(Async.StartImmediateAsTask(executeAsync parameter) :> Task)), new Func<'TParameter, bool>(canExecute))
+        member __.create (executeAsync: 'TParameter -> Task) =
+            createP0 (executeAsync >> taskVoidAsValueTask |> asFunc1)
+        member __.create (executeAsync: 'TParameter -> Task, canExecute) =
+            createP1 (executeAsync >> taskVoidAsValueTask |> asFunc1) (canExecute |> asFunc1)

@@ -19,9 +19,9 @@
 
 namespace Epoxy
 
+open Epoxy.Internal
 open Epoxy.Infrastructure
 
-open System;
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Threading.Tasks
@@ -32,15 +32,20 @@ type public ViewModel =
 
     member self.getValue<'TValue> ([<Optional; CallerMemberName>] propertyName) =
         self.InternalGetValue<'TValue>(Unchecked.defaultof<_>, propertyName)
-    member self.getValue<'TValue> (defaultValue, [<Optional; CallerMemberName>] propertyName) =
+    member self.getValue (defaultValue: 'TValue, [<Optional; CallerMemberName>] propertyName) =
         self.InternalGetValue<'TValue>(defaultValue, propertyName)
 
-    member self.setValueAsync<'TValue>(newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
-        self.InternalSetValueAsync<'TValue>(newValue, new Func<'TValue, ValueTask>(propertyChanged), propertyName)
-    member self.setValue<'TValue>(newValue, [<Optional; CallerMemberName>] propertyName) =
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskUnitAsValueTask |> asFunc1, propertyName)
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName>] propertyName) =
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTask |> asFunc1, propertyName)
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName>] propertyName) =
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> asyncUnitAsValueTask |> asFunc1, propertyName)
+
+    member self.setValue (newValue: 'TValue, [<Optional; CallerMemberName>] propertyName) =
         self.InternalSetValue<'TValue>(newValue, propertyName)
 
-    member self.onPropertyChanging([<Optional; CallerMemberName>] propertyName) =
+    member self.onPropertyChanging ([<Optional; CallerMemberName>] propertyName) =
         self.InternalOnPropertyChanging(propertyName)
-    member self.onPropertyChanged([<Optional; CallerMemberName>] propertyName) =
+    member self.onPropertyChanged ([<Optional; CallerMemberName>] propertyName) =
         self.InternalOnPropertyChanged(propertyName)

@@ -20,6 +20,7 @@
 #nullable enable
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -121,18 +122,22 @@ namespace Epoxy
 
     public abstract class Pile
     {
-        internal Pile()
+        private protected Pile()
         { }
 
         internal abstract void Moore(UIElement element);
         internal abstract void Release(UIElement element);
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
         public static Pile<UIElement> Create() =>
-            new Pile<UIElement>();
+            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
         public static Pile<TUIElement> Create<TUIElement>()
             where TUIElement : UIElement =>
-            new Pile<TUIElement>();
+            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
     }
 
     public sealed class Pile<TUIElement> : Pile
@@ -140,6 +145,9 @@ namespace Epoxy
     {
         private readonly WeakReference element =
             new WeakReference(null);
+
+        internal Pile()
+        { }
 
         internal override void Moore(UIElement element)
         {
@@ -153,7 +161,7 @@ namespace Epoxy
             this.element.Target = null;
         }
 
-        public ValueTask ExecuteAsync(Func<TUIElement, ValueTask> action, bool canIgnore = false)
+        internal ValueTask InternalExecuteAsync(Func<TUIElement, ValueTask> action, bool canIgnore = false)
         {
             if (this.element.Target is TUIElement element)
             {
@@ -169,7 +177,7 @@ namespace Epoxy
             }
         }
 
-        public ValueTask<T> ExecuteAsync<T>(Func<TUIElement, ValueTask<T>> action)
+        internal ValueTask<TResult> InternalExecuteAsync<TResult>(Func<TUIElement, ValueTask<TResult>> action)
         {
             if (this.element.Target is TUIElement element)
             {

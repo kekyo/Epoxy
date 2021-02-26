@@ -53,14 +53,14 @@ namespace Epoxy.Synchronized
             this Pile<TUIElement> pile,
             Action<TUIElement> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.ExecuteAsync(element => { action(element); return default; }, canIgnore);
+            pile.InternalExecuteAsync(element => { action(element); return default; }, canIgnore);
 
-        public static T ExecuteSync<TUIElement, T>(
+        public static TResult ExecuteSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
-            Func<TUIElement, T> action)
+            Func<TUIElement, TResult> action)
             where TUIElement : UIElement
         {
-            var result = pile.ExecuteAsync(element =>
+            var result = pile.InternalExecuteAsync(element =>
             {
                 try
                 {
@@ -68,7 +68,7 @@ namespace Epoxy.Synchronized
                 }
                 catch (Exception ex)
                 {
-                    return InternalHelpers.FromResult(InternalHelpers.Pair(default(T)!, ExceptionDispatchInfo.Capture(ex)));
+                    return InternalHelpers.FromResult(InternalHelpers.Pair(default(TResult)!, ExceptionDispatchInfo.Capture(ex)));
                 }
             }).Result;  // Will not block
 
@@ -84,9 +84,9 @@ namespace Epoxy.Synchronized
             throw new InvalidOperationException("Use ExecuteAsync instead.");
 
         [Obsolete("Use ExecuteAsync instead.", true)]
-        public static T ExecuteSync<TUIElement, T>(
+        public static TResult ExecuteSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
-            Func<TUIElement, ValueTask<T>> action)
+            Func<TUIElement, ValueTask<TResult>> action)
             where TUIElement : UIElement =>
             throw new InvalidOperationException("Use ExecuteAsync instead.");
     }

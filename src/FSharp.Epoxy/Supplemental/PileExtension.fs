@@ -21,9 +21,28 @@ namespace Epoxy.Supplemental
 
 open System
 open System.Diagnostics
-open System.Runtime.CompilerServices
-open System.Runtime.InteropServices
 open System.Threading.Tasks
+open System.Runtime.InteropServices
+
+#if WINDOWS_UWP || UNO
+open Windows.UI.Xaml
+#endif
+
+#if WINUI
+open Microsoft.UI.Xaml
+#endif
+
+#if WINDOWS_WPF
+open System.Windows
+#endif
+
+#if XAMARIN_FORMS
+open UIElement = Xamarin.Forms.Element
+#endif
+
+#if AVALONIA
+open UIElement = Avalonia.IStyledElement
+#endif
 
 open Epoxy
 open Epoxy.Internal
@@ -31,9 +50,9 @@ open Epoxy.Internal
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module public ViewModelExtension =
-    type public ViewModel with
-        member viewModel.setValueAsync<'TValue>(newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
-            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged |> asFunc1, propertyName)
-        member viewModel.setValueAsync<'TValue> (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
-            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskVoidAsValueTask |> asFunc1, propertyName)
+module public PileExtension =
+    type public Pile<'TUIElement when 'TUIElement :> UIElement> with
+        member self.executeAsync (action: 'TUIElement -> ValueTask, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalExecuteAsync(action |> asFunc1, canIgnore)
+        member self.executeAsync (action: 'TUIElement -> Task, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalExecuteAsync(action >> taskVoidAsValueTask |> asFunc1, canIgnore)

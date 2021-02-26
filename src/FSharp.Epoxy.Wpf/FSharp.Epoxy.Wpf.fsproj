@@ -56,8 +56,10 @@
 
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.fs" />
+    <Compile Include="../FSharp.Epoxy/Internal/*.fs" />
     <Compile Include="../FSharp.Epoxy/*.fs" />
-    <Compile Include="../FSharp.Epoxy/*/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
   </ItemGroup>
 
 </Project>
