@@ -100,7 +100,7 @@ namespace Epoxy
             throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
     }
 
-    public abstract class ValueConverter<TTo, TFrom> : ValueConverter
+    public abstract class ValueConverter<TFrom, TTo> : ValueConverter
     {
         protected ValueConverter()
         { }
@@ -159,7 +159,7 @@ namespace Epoxy
         }
     }
 
-    public abstract class ValueConverter<TTo, TFrom, TParameter> : ValueConverter
+    public abstract class ValueConverter<TFrom, TParameter, TTo> : ValueConverter
     {
         protected ValueConverter()
         { }

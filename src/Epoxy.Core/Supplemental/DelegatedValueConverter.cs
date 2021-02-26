@@ -23,7 +23,8 @@ using System;
 
 namespace Epoxy.Supplemental
 {
-    public sealed class DelegatedValueConverter<TTo, TFrom> : ValueConverter<TTo, TFrom>
+    public sealed class DelegatedValueConverter<TFrom, TTo> :
+        ValueConverter<TFrom, TTo>
     {
         private readonly Func<TFrom, TTo> convert;
         private readonly Func<TTo, TFrom>? convertBack;
@@ -57,7 +58,8 @@ namespace Epoxy.Supplemental
         }
     }
 
-    public sealed class DelegatedValueConverter<TTo, TFrom, TParameter> : ValueConverter<TTo, TFrom, TParameter>
+    public sealed class DelegatedValueConverter<TFrom, TParameter, TTo> :
+        ValueConverter<TFrom, TParameter, TTo>
     {
         private readonly Func<TFrom, TParameter, TTo> convert;
         private readonly Func<TTo, TParameter, TFrom>? convertBack;

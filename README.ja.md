@@ -352,7 +352,7 @@ await this.LogPile.ExecuteAsync(async textBox =>
 ```csharp
 // intの値を受け取り、Brush型に変換するコンバーターの実装です。
 // ジェネリック引数に、想定される型を指定します。
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
 {
     // 変換の必要が生じると、TryConvertが呼び出されます。
     public override bool TryConvert(int from, out Brush result)
@@ -372,7 +372,7 @@ public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
 ```csharp
 // この例では、ConverterParameterで指定された値を受け取ります。
 // その型は、ジェネリック第3引数で指定します。ここでは文字列を受け取る例を示します:
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
+public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 {
     // 第2引数にパラメータの値が渡されます。
     public override bool TryConvert(int from, string parameter, out Brush result)
@@ -411,6 +411,14 @@ await UIThread.Bind();
 // バインディングされたTextBlockに反映する
 this.Log = $"Read={read}";
 ```
+
+#### UWP環境で実行する場合の注意
+
+現在の実装では、UWPネイティブや、Xamarin Forms/UnoでのUWP環境においての実行、WinUIなどのUWP由来のランタイムで
+`UIThread`クラスを使う場合、`View`構築中の`ViewModel`のコンストラクタなどで使用すると、正しい結果が得られない場合があります。
+
+UWPは、ビューを保持するウインドウ毎に異なるUIスレッドが割り当てられていて、
+インスタンスを構築中に使用すると、ビューを判別できない事から、正しく判定できないためです。
 
 ### ChildrenBinder
 

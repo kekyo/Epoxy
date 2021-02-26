@@ -23,7 +23,7 @@ using Avalonia.Media;
 
 namespace EpoxyHello.Avalonia.Views.Converters
 {
-    public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+    public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
     {
         private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
         private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));

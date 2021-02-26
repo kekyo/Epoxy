@@ -30,10 +30,10 @@ open System.Threading.Tasks
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module private ValueConverterFactoryGenerator =
-    let inline create0 convert = new DelegatedValueConverter<'TTo, 'TFrom>(convert) :> ValueConverter
-    let inline createP0 convert = new DelegatedValueConverter<'TTo, 'TFrom, 'TParameter>(convert) :> ValueConverter
-    let inline create1 convert convertBack = new DelegatedValueConverter<'TTo, 'TFrom>(convert, convertBack) :> ValueConverter
-    let inline createP1 convert convertBack = new DelegatedValueConverter<'TTo, 'TFrom, 'TParameter>(convert, convertBack) :> ValueConverter
+    let inline create0 convert = new DelegatedValueConverter<'TFrom, 'TTo>(convert) :> ValueConverter
+    let inline createP0 convert = new DelegatedValueConverter<'TFrom, 'TParameter, 'TTo>(convert) :> ValueConverter
+    let inline create1 convert convertBack = new DelegatedValueConverter<'TFrom, 'TTo>(convert, convertBack) :> ValueConverter
+    let inline createP1 convert convertBack = new DelegatedValueConverter<'TFrom, 'TParameter, 'TTo>(convert, convertBack) :> ValueConverter
 
 [<AbstractClass; Sealed>]
 type public ValueConverterFactory =

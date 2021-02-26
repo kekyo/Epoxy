@@ -29,46 +29,46 @@ namespace Epoxy
 {
     public static class ValueConverterFactory
     {
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert) =>
-            new DelegatedValueConverter<TTo, TFrom>(convert);
+        public static ValueConverter Create<TFrom, TTo>(Func<TFrom, TTo> convert) =>
+            new DelegatedValueConverter<TFrom, TTo>(convert);
 
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert, Func<TTo, TFrom> convertBack) =>
-            new DelegatedValueConverter<TTo, TFrom>(convert, convertBack);
+        public static ValueConverter Create<TFrom, TTo>(Func<TFrom, TTo> convert, Func<TTo, TFrom> convertBack) =>
+            new DelegatedValueConverter<TFrom, TTo>(convert, convertBack);
 
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert) =>
-            new DelegatedValueConverter<TTo, TFrom, TParameter>(convert);
+        public static ValueConverter Create<TFrom, TParameter, TTo>(Func<TFrom, TParameter, TTo> convert) =>
+            new DelegatedValueConverter<TFrom, TParameter, TTo>(convert);
 
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
-            new DelegatedValueConverter<TTo, TFrom, TParameter>(convert, convertBack);
+        public static ValueConverter Create<TFrom, TParameter, TTo>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
+            new DelegatedValueConverter<TFrom, TParameter, TTo>(convert, convertBack);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, ValueTask<TTo>> convert) =>
+        public static ValueConverter Create<TFrom, TTo>(Func<TFrom, ValueTask<TTo>> convert) =>
             throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, ValueTask<TTo>> convert, Func<TTo, TFrom> convertBack) =>
+        public static ValueConverter Create<TFrom, TTo>(Func<TFrom, ValueTask<TTo>> convert, Func<TTo, TFrom> convertBack) =>
             throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert) =>
+        public static ValueConverter Create<TFrom, TParameter, TTo>(Func<TFrom, TParameter, ValueTask<TTo>> convert) =>
             throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, TFrom> convertBack) =>
+        public static ValueConverter Create<TFrom, TParameter, TTo>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, TFrom> convertBack) =>
             throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
+        public static ValueConverter Create<TFrom, TParameter, TTo>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
             throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Avoid asynchronous XAML conversion.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
+        public static ValueConverter Create<TFrom, TParameter, TTo>(Func<TFrom, TParameter, ValueTask<TTo>> convert, Func<TTo, TParameter, ValueTask<TFrom>> convertBack) =>
             throw new InvalidOperationException("Avoid asynchronous XAML conversion.");
     }
 }

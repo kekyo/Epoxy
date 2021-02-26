@@ -333,7 +333,7 @@ then you have to change the base class to use when you receive this parameter or
 ```csharp
 // This is an implementation of a converter that takes an integer and converts it to a Brush.
 // Specify the expected type as a generic argument.
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
 {
     // When the need for conversion arises, TryConvert will be called.
     public override bool TryConvert(int from, out Brush result)
@@ -354,7 +354,7 @@ This is an example of receiving a converter parameter:
 // In this example, it receives the value specified by ConverterParameter.
 // Its type is specified by the generic third argument.
 // Here is an example of receiving a string:
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
+public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 {
     // The value of the parameter is passed as the second argument.
     public override bool TryConvert(int from, string parameter, out Brush result)
@@ -395,6 +395,17 @@ await UIThread.Bind();
 // We can handle any UI elements in the UI thread (include binding operation.)
 this.Log = $"Read={read}";
 ```
+
+#### Note on running in a UWP environment
+
+In the current implementation, if you use the `UIThread` class,
+in the constructor of a `ViewModel` while building a `View` and like,
+inside a UWP environment such as UWP native, Xamarin Forms/Uno, or a UWP-derived runtime such as WinUI,
+you may not get the correct results.
+
+UWP has a different UI thread assigned to each window that holds a view,
+and if you use it while constructing an instance,
+it will not be able to determine the view correctly.
 
 ### ChildrenBinder
 
