@@ -37,11 +37,11 @@ open System.Windows
 #endif
 
 #if XAMARIN_FORMS
-open UIElement = Xamarin.Forms.Element
+type UIElement = Xamarin.Forms.Element
 #endif
 
 #if AVALONIA
-open UIElement = Avalonia.IStyledElement
+type UIElement = Avalonia.IStyledElement
 #endif
 
 open Epoxy

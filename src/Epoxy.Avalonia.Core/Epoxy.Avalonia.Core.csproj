@@ -11,7 +11,6 @@
     <DebugSymbols>true</DebugSymbols>
     <Platforms>AnyCPU</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
 
     <AssemblyTitle>Epoxy.Avalonia.Core</AssemblyTitle>

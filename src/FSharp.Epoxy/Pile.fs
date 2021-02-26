@@ -25,6 +25,7 @@ open Epoxy.Internal
 open System
 open System.Diagnostics
 open System.Threading.Tasks
+open System.Runtime.InteropServices
 
 #if WINDOWS_UWP || UNO
 open Windows.UI.Xaml
@@ -36,7 +37,6 @@ open Microsoft.UI.Xaml
 
 #if WINDOWS_WPF
 open System.Windows
-open System.Runtime.InteropServices
 
 #endif
 
