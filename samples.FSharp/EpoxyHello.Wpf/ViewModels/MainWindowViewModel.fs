@@ -28,14 +28,11 @@ open System.Windows
 open System.Windows.Media.Imaging
 
 open EpoxyHello.Models
-open EpoxyHello.Wpf.Controls
 
 type public MainWindowViewModel() as self =
     inherit ViewModel()
-
     do
         self.Items <- new ObservableCollection<ItemViewModel>()
-        self.Indicators <- new ObservableCollection<UIElement>()
 
         // A handler for window loaded
         self.Ready <- Command.Factory.createSync<RoutedEventArgs>(fun e ->
@@ -44,8 +41,6 @@ type public MainWindowViewModel() as self =
         // A handler for fetch button
         self.Fetch <- CommandFactory.create(fun () -> async {
             do self.IsEnabled <- false
-            let waitingBlock = new WaitingBlock()
-            do self.Indicators.Add waitingBlock
             try
                 // Uses Reddit API
                 let! reddits = Reddit.FetchNewPostsAsync("r/aww")
@@ -73,7 +68,6 @@ type public MainWindowViewModel() as self =
                         do self.Items.Add(item)
                     | None -> ()
             finally
-                do self.Indicators.Remove waitingBlock |> ignore
                 do self.IsEnabled <- true
         })
 
@@ -92,7 +86,3 @@ type public MainWindowViewModel() as self =
     member __.Items
         with get(): ObservableCollection<ItemViewModel> = __.getValue()
         and set (value: ObservableCollection<ItemViewModel>) = __.setValue value
-
-    member __.Indicators
-        with get(): ObservableCollection<UIElement> = __.getValue()
-        and set (value: ObservableCollection<UIElement>) = __.setValue value

@@ -24,8 +24,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:epoxy="https://github.com/kekyo/Epoxy"
-    xmlns:viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
-    xmlns:converters="clr-namespace:EpoxyHello.Wpf.Views.Converters"
+    xmlns:viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels;assembly=EpoxyHello.Wpf"
+    xmlns:converters="clr-namespace:EpoxyHello.Wpf.Views.Converters;assembly=EpoxyHello.Wpf"
     mc:Ignorable="d"
     Title="EpoxyHello.Wpf" Height="450" Width="800">
 

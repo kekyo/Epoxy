@@ -30,22 +30,22 @@ open System.Threading.Tasks
 type public ViewModel() =
     inherit ViewModelBase()
 
-    member self.getValue<'TValue> ([<Optional; CallerMemberName>] propertyName) =
+    member self.getValue<'TValue> ([<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalGetValue<'TValue>(Unchecked.defaultof<_>, propertyName)
-    member self.getValue (defaultValue: 'TValue, [<Optional; CallerMemberName>] propertyName) =
+    member self.getValue (defaultValue: 'TValue, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalGetValue<'TValue>(defaultValue, propertyName)
 
-    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskUnitAsValueTaskUnit |> asFunc1, propertyName)
-    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName>] propertyName) =
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTaskUnit |> asFunc1, propertyName)
-    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName>] propertyName) =
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> asyncUnitAsValueTaskUnit |> asFunc1, propertyName)
 
-    member self.setValue (newValue: 'TValue, [<Optional; CallerMemberName>] propertyName) =
+    member self.setValue (newValue: 'TValue, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalSetValue<'TValue>(newValue, propertyName)
 
-    member self.onPropertyChanging ([<Optional; CallerMemberName>] propertyName) =
+    member self.onPropertyChanging ([<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalOnPropertyChanging(propertyName)
-    member self.onPropertyChanged ([<Optional; CallerMemberName>] propertyName) =
+    member self.onPropertyChanged ([<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalOnPropertyChanged(propertyName)
