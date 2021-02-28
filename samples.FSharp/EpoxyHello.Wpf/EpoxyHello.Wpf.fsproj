@@ -11,10 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,20 +24,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Views/MainWindow.xaml" />
-    <Page Remove="App.xaml" />
+    <Compile Include="Properties\AssemblyInfo.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="**/*.xaml" />
+    <Resource Include="**/*.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="Controls/**/*.fs" />
     <Compile Include="ViewModels/**/*.fs" />
     <Compile Include="Views/**/*.fs" />
-    <Compile Include="*.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="App.xaml" />
-    <Resource Include="Views/MainWindow.xaml" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
 
 </Project>

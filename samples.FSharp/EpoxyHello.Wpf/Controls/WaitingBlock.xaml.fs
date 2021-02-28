@@ -43,7 +43,7 @@ type public WaitingBlock() as self =
 
     do
         //self.InitializeComponent()
-        //self.DataContext <- self
+        self.DataContext <- self
 
         self.CellBrushes <- Enumerable.Range(0, 8).
             Select(fun _ -> Brushes.Gray).
@@ -66,10 +66,9 @@ type public WaitingBlock() as self =
 
     override self.OnVisualParentChanged oldParent =
         base.OnVisualParentChanged(oldParent)
-        if self.VisualParent != null then
-            self.timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(300.0)) |> ignore
-        else
-            self.timer.Change(TimeSpan.Zero, TimeSpan.Zero) |> ignore
+        match self.VisualParent with
+        | null -> self.timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(300.0)) |> ignore
+        | _ -> self.timer.Change(TimeSpan.Zero, TimeSpan.Zero) |> ignore
 
     member self.CellBrushes
         with get(): ObservableCollection<SolidColorBrush> =

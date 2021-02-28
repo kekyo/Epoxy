@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -17,13 +17,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows;
+open System
+open System.Windows
 
-[assembly: ThemeInfo(
-    ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
-                                     //(used if a resource is not found in the page,
-                                     // or application resource dictionaries)
-    ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
-                                              //(used if a resource is not found in the page,
-                                              // app, or any theme specific resource dictionaries)
-)]
+[<STAThread>]
+[<EntryPoint>]
+let main _ =
+  let application = 
+    Application.LoadComponent(Uri("App.xaml", UriKind.Relative)) :?> Application
+  application.Run()

@@ -2,30 +2,10 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
-    <RootNamespace>Epoxy</RootNamespace>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Platforms>AnyCPU</Platforms>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-
     <AssemblyTitle>Epoxy.Xamarin.Forms.Core</AssemblyTitle>
-    <Product>Epoxy</Product>
-    <Trademark>Epoxy</Trademark>
-    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>An independent flexible XAML MVVM library for .NET</Description>
-
-    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
-    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageId>Epoxy.Xamarin.Forms.Core</PackageId>
+    <PackageTags>$(PackageTags);xamarin</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -36,13 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

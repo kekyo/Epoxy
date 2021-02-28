@@ -2,35 +2,10 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
-
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
-    <RootNamespace>Epoxy</RootNamespace>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Platforms>AnyCPU</Platforms>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-
     <AssemblyTitle>Epoxy.Xamarin.Forms</AssemblyTitle>
-    <Product>Epoxy</Product>
-    <Trademark>Epoxy</Trademark>
-    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>An independent flexible XAML MVVM library for .NET</Description>
-
     <PackageId>Epoxy.Xamarin.Forms</PackageId>
-    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
-    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
-    <PackageIcon>Epoxy.100.png</PackageIcon>
-    <PackageTags>xamarin;forms;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageTags>$(PackageTags);xamarin</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -39,10 +14,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DefineConstants>TRACE;XAMARIN_FORMS</DefineConstants>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Epoxy.Xamarin.Forms.Core\Epoxy.Xamarin.Forms.Core.csproj" />

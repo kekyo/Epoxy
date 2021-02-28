@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -17,13 +17,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace EpoxyHello.Wpf.Views
+namespace global
 
 open System.Windows
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-type MainWindow = class
-    inherit Window
-end
+[<assembly: ThemeInfo(
+    ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
+                                     //(used if a resource is not found in the page,
+                                     // or application resource dictionaries)
+    ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
+                                              //(used if a resource is not found in the page,
+                                              // app, or any theme specific resource dictionaries)
+)>]
+
+do()

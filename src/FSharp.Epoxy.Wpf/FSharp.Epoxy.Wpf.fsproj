@@ -2,36 +2,11 @@
 
   <PropertyGroup>
     <AssemblyName>FSharp.Epoxy</AssemblyName>
-
     <TargetFrameworks>net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
     <UseWpf>true</UseWpf>
-    <RootNamespace>Epoxy</RootNamespace>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Platforms>AnyCPU</Platforms>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
-
     <AssemblyTitle>FSharp.Epoxy.Wpf</AssemblyTitle>
-    <Product>Epoxy</Product>
-    <Trademark>Epoxy</Trademark>
-    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>An independent flexible XAML MVVM library for .NET</Description>
-
     <PackageId>FSharp.Epoxy.Wpf</PackageId>
-    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
-    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
-    <PackageIcon>Epoxy.100.png</PackageIcon>
-    <PackageTags>fsharp;wpf;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageTags>$(PackageTags);fsharp;wpf</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -43,7 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 

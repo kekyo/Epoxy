@@ -2,34 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-
     <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
-    <GenerateLibraryLayout>false</GenerateLibraryLayout>
-    <RootNamespace>Epoxy</RootNamespace>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Platforms>AnyCPU</Platforms>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <NoWarn>$(NoWarn);NU5104</NoWarn>
-    
     <AssemblyTitle>Epoxy.WinUI.Core</AssemblyTitle>
-    <Product>Epoxy</Product>
-    <Trademark>Epoxy</Trademark>
-    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>An independent flexible XAML MVVM library for .NET</Description>
-
-    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
-    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageId>Epoxy.WinUI.Core</PackageId>
+    <PackageTags>$(PackageTags);winui</PackageTags>
+    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+    <NoWarn>$(NoWarn);NU5104</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -40,8 +19,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview4.210210.4" />
   </ItemGroup>
 
@@ -50,6 +27,7 @@
     <Compile Include="../Epoxy.Uwp.Core/Supplemental/UIThreadAwaiter.cs">
       <Link>Supplemental/UIThreadAwaiter.cs</Link>
     </Compile>
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

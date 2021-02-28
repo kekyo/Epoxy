@@ -28,8 +28,9 @@ open System.Windows
 open System.Windows.Media.Imaging
 
 open EpoxyHello.Models
+open EpoxyHello.Wpf.Controls
 
-type MainWindowViewModel() as self =
+type public MainWindowViewModel() as self =
     inherit ViewModel()
 
     do

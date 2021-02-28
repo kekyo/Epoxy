@@ -19,9 +19,9 @@
 
 namespace global
 
-    open System.Windows.Markup
+open System.Windows.Markup
 
-    [<assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")>]
-    [<assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")>]
+[<assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")>]
+[<assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")>]
 
-    do()
+do()

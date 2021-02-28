@@ -2,39 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
-
     <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
-    <GenerateLibraryLayout>false</GenerateLibraryLayout>
-    <RootNamespace>Epoxy</RootNamespace>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Platforms>AnyCPU</Platforms>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <NoWarn>$(NoWarn);NU5104</NoWarn>
-    
     <AssemblyTitle>Epoxy.WinUI</AssemblyTitle>
-    <Product>Epoxy</Product>
-    <Trademark>Epoxy</Trademark>
-    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
-    <Description>An independent flexible XAML MVVM library for .NET</Description>
-
     <PackageId>Epoxy.WinUI</PackageId>
-    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
-    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
-    <PackageIcon>Epoxy.100.png</PackageIcon>
-    <PackageTags>uwp;uap;mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageTags>$(PackageTags);winui</PackageTags>
+    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+    <NoWarn>$(NoWarn);NU5104</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -45,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview4.210210.4" />
   </ItemGroup>
 
   <ItemGroup>
