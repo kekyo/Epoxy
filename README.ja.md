@@ -33,6 +33,7 @@
   * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
+* F#は5.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
 * 小さなライブラリで、理解しやすいAPIです。
   * プラットフォーム標準以外のフレームワークやライブラリに依存していません。
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
@@ -55,13 +56,17 @@
 このサンプルは、Reddit掲示板のr/awwから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
-* [EpoxyHello.Core - 共通コード(Model)](samples/EpoxyHello.Core)。Redditにアクセスして投稿をダウンロードする。netstandard2.0で共通化している。
-* [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf)。WPFのViewとViewModel。
-* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms)。Xamarin FormsのViewとViewModel。(Android・iOS・Universal Windows)
-* [EpoxyHello.Avalonia - View,ViewModel](samples/EpoxyHello.Avalonia). AvaloniaのView and ViewModel。 (Win32・X11・macOS)
-* [EpoxyHello.Uwp - View,ViewModel](samples/EpoxyHello.Uwp)。Universal WindowsのViewとViewModel。
-* [EpoxyHello.WinUI - View,ViewModel](samples/EpoxyHello.WinUI)。Window UI 3のViewとViewModel。
-* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno)。Uno platformのViewとViewModel。 (`wasm`を含む多くの環境)
+| | プロジェクト | 役割 | 内容 |
+|:--|:--|:--|:--|
+|共通 | [EpoxyHello.Core](samples/EpoxyHello.Core) | Model | Redditから投稿をダウンロードする共通ライブラリ。 netstandard2.0で実装 |
+|All | [EpoxyHello.Wpf](samples/EpoxyHello.Wpf) | View,ViewModel | WPFで実装したViewとViewModel |
+|All | [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms) | View,ViewModel | Xamarin Formsで実装したViewとViewModel (Android・iOS・UWP) |
+|All | [EpoxyHello.Avalonia](samples/EpoxyHello.Avalonia) | View,ViewModel | Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
+|All | [EpoxyHello.Uwp](samples/EpoxyHello.Uwp) | View,ViewModel | UWPで実装したViewとViewModel |
+|All | [EpoxyHello.WinUI](samples/EpoxyHello.WinUI) | View,ViewModel | Windows UI 3で実装したViewとViewModel |
+|All | [EpoxyHello.Uno](samples/EpoxyHello.Uno) | View,ViewModel | Uno platformで実装したViewとViewModel (`wasm`を含む多くのプラットフォーム) |
+|F# | [EpoxyHello.Wpf](samples.FSharp/EpoxyHello.Wpf) | View,ViewModel | F# WPFで実装したViewとViewModel |
+|F# | [EpoxyHello.Avalonia](samples.FSharp/EpoxyHello.Avalonia) | View,ViewModel | F# Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
 
@@ -510,7 +515,6 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 Apache-v2
 
 ## History
-
 * 0.11.0:
   * F#のサポートを追加しました。
   * ValueConverterの一般的な引数をスワップしました。(Breaking)

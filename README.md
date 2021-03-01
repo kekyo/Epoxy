@@ -33,6 +33,7 @@
   * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
+* F# is 5.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
 * Smallest footprint and easy understandable.
   * No dependency on non-platform standard frameworks or libraries.
 * Supported simplest and minimalism Model-View-ViewModel design.
@@ -47,13 +48,17 @@
 You can refer multi-platform application sample code variation in.
 This sample displays a list of the latest posts and images from the Reddit forum r/aww, downloading them asynchronously and displays them in a list format.
 
-* [EpoxyHello.Core - Common(Model)](samples/EpoxyHello.Core). Go to Reddit and download the posts. netstandard2.0 for common use.
-* [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf). WPF View and ViewModel.
-* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms). Xamarin Forms View and ViewModel. (Contains Android, iOS and Universal Windows)
-* [EpoxyHello.Avalonia - View,ViewModel](samples/EpoxyHello.Avalonia). Avalonia View and ViewModel. (Contains Win32, X11 and macOS)
-* [EpoxyHello.Uwp - View,ViewModel](samples/EpoxyHello.Uwp). UWP View and ViewModel.
-* [EpoxyHello.WinUI - View,ViewModel](samples/EpoxyHello.WinUI). Windows UI 3 View and ViewModel.
-* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno). Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`)
+| | Project | Role | Description |
+|:--|:--|:--|:--|
+|Common | [EpoxyHello.Core](samples/EpoxyHello.Core) | Model | Go to Reddit and download the posts. netstandard2.0 for common use. |
+|All | [EpoxyHello.Wpf](samples/EpoxyHello.Wpf) | View, ViewModel | WPF View and ViewModel. |
+|All | [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms) | View, ViewModel | Xamarin Forms View and ViewModel. (Contains Android, iOS and Universal Windows) |
+|All | [EpoxyHello.Avalonia](samples/EpoxyHello.Avalonia) | View, ViewModel | Avalonia View and ViewModel. (Contains Win32, X11 and macOS) |
+|All | [EpoxyHello.Uwp](samples/EpoxyHello.Uwp) | View, ViewModel | UWP View and ViewModel. |
+|All | [EpoxyHello.WinUI](samples/EpoxyHello.WinUI) | View, ViewModel | Windows UI 3 View and ViewModel. |
+|All | [EpoxyHello.Uno](samples/EpoxyHello.Uno) | View, ViewModel | Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`) |
+|F# | [EpoxyHello.Wpf](samples.FSharp/EpoxyHello.Wpf) | View, ViewModel | F# WPF View and ViewModel. |
+|F# | [EpoxyHello.Avalonia](samples.FSharp/EpoxyHello.Avalonia) | View, ViewModel | F# Avalonia View and ViewModel. (Contains Win32, X11 and macOS) |
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
