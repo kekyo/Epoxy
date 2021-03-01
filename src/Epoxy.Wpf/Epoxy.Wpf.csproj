@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+    <TargetFrameworks>net45;net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <UseWpf>true</UseWpf>
+    <AssemblyTitle>Epoxy.Wpf</AssemblyTitle>
+    <PackageId>Epoxy.Wpf</PackageId>
+    <PackageTags>$(PackageTags);wpf</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;WINDOWS_WPF</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;WINDOWS_WPF</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,51 @@
+﻿////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy - An independent flexible XAML MVVM library for .NET
+// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////
+
+namespace Epoxy
+
+open Epoxy.Internal
+open Epoxy.Infrastructure
+
+open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
+open System.Threading.Tasks
+
+[<AbstractClass>]
+type public ViewModel() =
+    inherit ViewModelBase()
+
+    member self.getValue<'TValue> ([<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalGetValue<'TValue>(Unchecked.defaultof<_>, propertyName)
+    member self.getValue (defaultValue: 'TValue, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalGetValue<'TValue>(defaultValue, propertyName)
+
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskUnitAsValueTaskUnit |> asFunc1, propertyName)
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTaskUnit |> asFunc1, propertyName)
+    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> asyncUnitAsValueTaskUnit |> asFunc1, propertyName)
+
+    member self.setValue (newValue: 'TValue, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalSetValue<'TValue>(newValue, propertyName)
+
+    member self.onPropertyChanging ([<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalOnPropertyChanging(propertyName)
+    member self.onPropertyChanged ([<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
+        self.InternalOnPropertyChanged(propertyName)

@@ -89,7 +89,7 @@
     <AndroidResource Include="Resources\values\Styles.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Epoxy.Uno\Epoxy.Uno.csproj">
+    <ProjectReference Include="..\..\..\src\Epoxy.Uno\Epoxy.Uno.csproj">
       <Project>{db9561e0-8da3-4b07-83bf-98b86b6fe26d}</Project>
       <Name>Epoxy.Uno</Name>
     </ProjectReference>

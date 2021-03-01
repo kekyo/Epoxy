@@ -46,7 +46,7 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
             });
 
             // A handler for fetch button
-            this.Fetch = Command.Create(async () =>
+            this.Fetch = CommandFactory.Create(async () =>
             {
                 this.IsEnabled = false;
 

@@ -6,7 +6,7 @@
 
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-|Package|Status|Description|
+|Package|All (C#)|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -15,9 +15,15 @@
 |Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
+|Package|F# specialized|Description|
+|:--|:--|:--|
+|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
+
 ## これは何?
 
 * Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、独立した柔軟性のあるライブラリです。
+  * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
@@ -27,6 +33,7 @@
   * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
+* F#は5.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
 * 小さなライブラリで、理解しやすいAPIです。
   * プラットフォーム標準以外のフレームワークやライブラリに依存していません。
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
@@ -49,13 +56,17 @@
 このサンプルは、Reddit掲示板のr/awwから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
-* [EpoxyHello.Core - 共通コード(Model)](samples/EpoxyHello.Core)。Redditにアクセスして投稿をダウンロードする。netstandard2.0で共通化している。
-* [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf)。WPFのViewとViewModel。
-* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms)。Xamarin FormsのViewとViewModel。(Android・iOS・Universal Windows)
-* [EpoxyHello.Avalonia - View,ViewModel](samples/EpoxyHello.Avalonia). AvaloniaのView and ViewModel。 (Win32・X11・macOS)
-* [EpoxyHello.Uwp - View,ViewModel](samples/EpoxyHello.Uwp)。Universal WindowsのViewとViewModel。
-* [EpoxyHello.WinUI - View,ViewModel](samples/EpoxyHello.WinUI)。Window UI 3のViewとViewModel。
-* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno)。Uno platformのViewとViewModel。 (`wasm`を含む多くの環境)
+| | プロジェクト | 役割 | 内容 |
+|:--|:--|:--|:--|
+|共通 | [EpoxyHello.Core](samples/EpoxyHello.Core) | Model | Redditから投稿をダウンロードする共通ライブラリ。 netstandard2.0で実装 |
+|All | [EpoxyHello.Wpf](samples/EpoxyHello.Wpf) | View,ViewModel | WPFで実装したViewとViewModel |
+|All | [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms) | View,ViewModel | Xamarin Formsで実装したViewとViewModel (Android・iOS・UWP) |
+|All | [EpoxyHello.Avalonia](samples/EpoxyHello.Avalonia) | View,ViewModel | Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
+|All | [EpoxyHello.Uwp](samples/EpoxyHello.Uwp) | View,ViewModel | UWPで実装したViewとViewModel |
+|All | [EpoxyHello.WinUI](samples/EpoxyHello.WinUI) | View,ViewModel | Windows UI 3で実装したViewとViewModel |
+|All | [EpoxyHello.Uno](samples/EpoxyHello.Uno) | View,ViewModel | Uno platformで実装したViewとViewModel (`wasm`を含む多くのプラットフォーム) |
+|F# | [EpoxyHello.Wpf](samples.FSharp/EpoxyHello.Wpf) | View,ViewModel | F# WPFで実装したViewとViewModel |
+|F# | [EpoxyHello.Avalonia](samples.FSharp/EpoxyHello.Avalonia) | View,ViewModel | F# Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
 
@@ -79,7 +90,7 @@ Model-View-ViewModelの役割についてのおさらい:
 
 注意: MVVMの役割については諸説あります。
 はじめから完全な設計を目指さずに、ブラッシュアップすると良いでしょう。
-Epoxyは段階的に改善する事を想定して設計しています。
+Epoxyは段階的に改善する事を想定して開発しています。
 
 XAMLビューの定義とその実装を、MVVMに従って完全に分離しつつ、最小限の手間で実装する例です
 (このコードはWPFの例で、ポイントとなる点に絞っているため、完全な例はサンプルコードを参照して下さい):
@@ -90,6 +101,7 @@ XAMLビューの定義とその実装を、MVVMに従って完全に分離しつ
 <Window
     x:Class="EpoxyHello.Wpf.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
     Title="EpoxyHello.Wpf" Height="450" Width="800">
 
     <!-- ここに、ViewModelクラスのインスタンスを配置します。この定義によって、IDEがViewModelの型を認識できます。 -->
@@ -158,7 +170,7 @@ public sealed class MainWindowViewModel : ViewModel
         // ステップ 4: XAMLで定義したボタンがクリックされた時に、このラムダ式が呼び出されます。
         //   この式はもちろん async-await を使用した非同期処理で書くことが出来て、
         //   未処理の例外も正しく処理されます。
-        this.Fetch = Command.Create(async () =>
+        this.Fetch = CommandFactory.Create(async () =>
         {
             var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
@@ -262,7 +274,7 @@ public Command? Ready
 // ...
 
 // Loadedイベントが発生した場合の処理を記述
-this.Ready = Command.Create<EventArgs>(async _ =>
+this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 {
     // リストに表示する情報をModelから非同期で取得
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -272,7 +284,7 @@ this.Ready = Command.Create<EventArgs>(async _ =>
 });
 ```
 
-`Command.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
+`CommandFactory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
 現在のところ、チェックを厳しくしているため、この型は必ず指定する必要があります。
 但し、引数を使用しない場合や、重要でないと分かっている場合は、
 上の例のように、一律`EventArgs`としておくことが可能です。
@@ -352,7 +364,7 @@ await this.LogPile.ExecuteAsync(async textBox =>
 ```csharp
 // intの値を受け取り、Brush型に変換するコンバーターの実装です。
 // ジェネリック引数に、想定される型を指定します。
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
 {
     // 変換の必要が生じると、TryConvertが呼び出されます。
     public override bool TryConvert(int from, out Brush result)
@@ -372,7 +384,7 @@ public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
 ```csharp
 // この例では、ConverterParameterで指定された値を受け取ります。
 // その型は、ジェネリック第3引数で指定します。ここでは文字列を受け取る例を示します:
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
+public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 {
     // 第2引数にパラメータの値が渡されます。
     public override bool TryConvert(int from, string parameter, out Brush result)
@@ -411,6 +423,14 @@ await UIThread.Bind();
 // バインディングされたTextBlockに反映する
 this.Log = $"Read={read}";
 ```
+
+#### UWP環境で実行する場合の注意
+
+現在の実装では、UWPネイティブや、Xamarin Forms/UnoでのUWP環境においての実行、WinUIなどのUWP由来のランタイムで
+`UIThread`クラスを使う場合、`View`構築中の`ViewModel`のコンストラクタなどで使用すると、正しい結果が得られない場合があります。
+
+UWPは、ビューを保持するウインドウ毎に異なるUIスレッドが割り当てられていて、
+インスタンスを構築中に使用すると、ビューを判別できない事から、正しく判定できないためです。
 
 ### ChildrenBinder
 
@@ -493,3 +513,21 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 ## License
 
 Apache-v2
+
+## History
+* 0.11.0:
+  * F#のサポートを追加しました。
+  * ValueConverterの一般的な引数をスワップしました。(Breaking)
+  * いくつかのファクトリーメソッドを "Factory" と名のついた型に移動しました。(Breaking)
+* 0.10.0:
+  * WinUIに対応しました。
+* 0.9.0:
+  * Uno platformとAvaloniaに対応しました。
+* 0.8.0:
+  * GlobalServiceとEventBinder機能を追加しました。
+* 0.7.0:
+  * Xamarin Formsのサンプルコードを追加しました。
+* 0.6.0:
+  * 同期コマンドハンドラを分割しました。
+* 0.5.0:
+  * UIThreadとAnchor/Pile機能を追加しました。

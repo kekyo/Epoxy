@@ -1,0 +1,30 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+    
+  <PropertyGroup>
+    <AssemblyName>Epoxy.Core</AssemblyName>
+    <!-- <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0;monoandroid11.0</TargetFrameworks> -->
+    <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Core.Uno</AssemblyTitle>
+    <PackageId>Epoxy.Core.Uno</PackageId>
+    <PackageTags>$(PackageTags);uno</PackageTags>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="Uno.UI" Version="3.5.1" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;UNO</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;UNO</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy.Core/**/*.cs" />
+    <Compile Include="../Epoxy.Core.Uwp/Supplemental/UIThreadAwaiter.cs">
+        <Link>Supplemental/UIThreadAwaiter.cs</Link>
+    </Compile>
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>

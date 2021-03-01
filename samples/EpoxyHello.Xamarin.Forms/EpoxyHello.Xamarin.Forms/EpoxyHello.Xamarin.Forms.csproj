@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj" />
+    <ProjectReference Include="..\..\..\src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj" />
     <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 </Project>

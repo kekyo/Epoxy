@@ -25,7 +25,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -48,7 +47,7 @@ namespace EpoxyHello.Wpf.ViewModels
             });
 
             // A handler for fetch button
-            this.Fetch = Command.Create(async () =>
+            this.Fetch = CommandFactory.Create(async () =>
             {
                 this.IsEnabled = false;
 
@@ -94,45 +93,6 @@ namespace EpoxyHello.Wpf.ViewModels
                     IsEnabled = true;
                 }
             });
-
-            //////////////////////////////////////////////////////////////////////////
-            // Anchor/Pile:
-
-            // Pile is an safe accessor of a temporary UIElement reference in view model.
-            // CAUTION: NOT RECOMMENDED for normal usage on MVVM architecture,
-            //    Pile is a last solution for complex UI manipulation.
-            this.ButtonPile = Pile.Create<Button>();
-            this.ButtonPileInvoker = Command.Factory.CreateSync(() =>
-                this.ButtonPile.ExecuteSync(
-                    // Rent temporary UIElement reference only inside of lambda expression.
-                    button => button.Background = Brushes.Red));
-
-            //////////////////////////////////////////////////////////////////////////
-            // UIThread:
-
-            var _ = Task.Run(async () =>
-            {
-                try
-                {
-                    var count = 0;
-                    while (true)
-                    {
-                        // Disjoint UI thread from current task.
-                        await Task.Delay(500).ConfigureAwait(false);
-
-                        // Rejoint UI thread.
-                        // The bind method will cause InvalidOperationException if platform Application context was discarded.
-                        await UIThread.Bind();
-
-                        // Grant access UI contents.
-                        this.ThreadIncrementer = count.ToString();
-                        count++;
-                    }
-                }
-                catch
-                {
-                }
-            });
         }
 
         public Command? Ready
@@ -162,24 +122,6 @@ namespace EpoxyHello.Wpf.ViewModels
         public ObservableCollection<UIElement> Indicators
         {
             get => this.GetValue<ObservableCollection<UIElement>>();
-            private set => this.SetValue(value);
-        }
-
-        public Pile<Button>? ButtonPile
-        {
-            get => this.GetValue<Pile<Button>?>();
-            private set => this.SetValue(value);
-        }
-
-        public Command? ButtonPileInvoker
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
-
-        public string? ThreadIncrementer
-        {
-            get => this.GetValue();
             private set => this.SetValue(value);
         }
     }
