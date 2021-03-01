@@ -19,6 +19,7 @@
 
 namespace Epoxy
 
+open Epoxy
 open Epoxy.Internal
 
 open System
