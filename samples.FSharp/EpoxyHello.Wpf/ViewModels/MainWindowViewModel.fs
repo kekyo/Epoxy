@@ -43,7 +43,7 @@ type public MainWindowViewModel() as self =
             do self.IsEnabled <- false
             try
                 // Uses Reddit API
-                let! reddits = Reddit.FetchNewPostsAsync("r/aww")
+                let! reddits = Reddit.FetchNewPostsAsync "r/aww"
                 do self.Items.Clear()
 
                 let fetchImageAsync url = async {
@@ -73,16 +73,16 @@ type public MainWindowViewModel() as self =
 
     member __.Ready
         with get(): Command = __.getValue()
-        and set (value: Command) = __.setValue value
+        and private set (value: Command) = __.setValue value
 
     member __.IsEnabled
         with get(): bool = __.getValue()
-        and set (value: bool) = __.setValue value
+        and private set (value: bool) = __.setValue value
         
     member __.Fetch
         with get(): Command = __.getValue()
-        and set (value: Command) = __.setValue value
+        and private set (value: Command) = __.setValue value
 
     member __.Items
         with get(): ObservableCollection<ItemViewModel> = __.getValue()
-        and set (value: ObservableCollection<ItemViewModel>) = __.setValue value
+        and private set (value: ObservableCollection<ItemViewModel>) = __.setValue value

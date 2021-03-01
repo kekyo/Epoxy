@@ -32,13 +32,13 @@ open Epoxy
 module public CommandFactoryExtension =
     type public CommandFactoryInstance with
         member __.createSync (execute: unit -> unit) =
-            new SyncDelegatedCommand(new Action(execute))
+            new SyncDelegatedCommand(new Action(execute)) :> Command
         member __.createSync (execute: unit -> unit, canExecute: unit -> bool) =
-            new SyncDelegatedCommand(new Action(execute), new Func<bool>(canExecute))
+            new SyncDelegatedCommand(new Action(execute), new Func<bool>(canExecute)) :> Command
         member __.createSync<'TParameter> (execute: 'TParameter -> unit) =
-            new SyncDelegatedCommand<'TParameter>(new Action<'TParameter>(execute))
+            new SyncDelegatedCommand<'TParameter>(new Action<'TParameter>(execute)) :> Command
         member __.createSync<'TParameter> (execute: 'TParameter -> unit, canExecute: 'TParameter -> bool) =
-            new SyncDelegatedCommand<'TParameter>(new Action<'TParameter>(execute), new Func<'TParameter, bool>(canExecute))
+            new SyncDelegatedCommand<'TParameter>(new Action<'TParameter>(execute), new Func<'TParameter, bool>(canExecute)) :> Command
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]

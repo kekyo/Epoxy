@@ -28,8 +28,8 @@ module private ScoreToBrushConverterModule =
     let gray = new SolidColorBrush(Color.FromArgb(255uy, 96uy, 96uy, 96uy)) :> Brush
 
 [<Sealed>]
-type public ScoreToBrushConverter =
-    inherit ValueConverter<int, Brush>
+type public ScoreToBrushConverter() =
+    inherit ValueConverter<int, Brush>()
 
     override __.convert from =
         if from >= 5 then Some yellow else Some gray

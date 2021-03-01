@@ -24,8 +24,8 @@ open Epoxy.Infrastructure
 open System
 
 [<AbstractClass>]
-type public ValueConverter<'TFrom, 'TTo> =
-    inherit ValueConverterBase<'TFrom, 'TTo>
+type public ValueConverter<'TFrom, 'TTo>() =
+    inherit ValueConverterBase<'TFrom, 'TTo>()
 
     abstract convert: 'TFrom -> 'TTo option
 
@@ -52,8 +52,8 @@ type public ValueConverter<'TFrom, 'TTo> =
             false
 
 [<AbstractClass>]
-type public ValueConverter<'TFrom, 'TParameter, 'TTo> =
-    inherit ValueConverterBase<'TFrom, 'TParameter, 'TTo>
+type public ValueConverter<'TFrom, 'TParameter, 'TTo>() =
+    inherit ValueConverterBase<'TFrom, 'TParameter, 'TTo>()
 
     abstract convert: 'TFrom -> 'TParameter -> 'TTo option
 
