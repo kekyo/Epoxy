@@ -21,7 +21,7 @@
   </PropertyGroup>
     
   <ItemGroup>
-    <ProjectReference Include="..\Epoxy.Uwp.Core\Epoxy.Uwp.Core.csproj" />
+    <ProjectReference Include="..\Epoxy.Core.Uwp\Epoxy.Core.Uwp.csproj" />
   </ItemGroup>
 
   <ItemGroup>

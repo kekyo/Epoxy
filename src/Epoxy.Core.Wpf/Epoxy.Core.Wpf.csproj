@@ -4,8 +4,8 @@
     <AssemblyName>Epoxy.Core</AssemblyName>
     <TargetFrameworks>net45;net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <UseWpf>true</UseWpf>
-    <AssemblyTitle>Epoxy.Wpf.Core</AssemblyTitle>
-    <PackageId>Epoxy.Wpf.Core</PackageId>
+    <AssemblyTitle>Epoxy.Core.Wpf</AssemblyTitle>
+    <PackageId>Epoxy.Core.Wpf</PackageId>
     <PackageTags>$(PackageTags);wpf</PackageTags>
   </PropertyGroup>
 

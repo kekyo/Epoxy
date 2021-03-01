@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Epoxy.Avalonia.Core\Epoxy.Avalonia.Core.csproj" />
+    <ProjectReference Include="..\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj" />
   </ItemGroup>
 
   <ItemGroup>

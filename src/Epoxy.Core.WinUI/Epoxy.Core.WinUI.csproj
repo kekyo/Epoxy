@@ -4,8 +4,8 @@
     <AssemblyName>Epoxy.Core</AssemblyName>
     <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
-    <AssemblyTitle>Epoxy.WinUI.Core</AssemblyTitle>
-    <PackageId>Epoxy.WinUI.Core</PackageId>
+    <AssemblyTitle>Epoxy.Core.WinUI</AssemblyTitle>
+    <PackageId>Epoxy.Core.WinUI</PackageId>
     <PackageTags>$(PackageTags);winui</PackageTags>
     <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
     <NoWarn>$(NoWarn);NU5104</NoWarn>
@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
-    <Compile Include="../Epoxy.Uwp.Core/Supplemental/UIThreadAwaiter.cs">
+    <Compile Include="../Epoxy.Core.Uwp/Supplemental/UIThreadAwaiter.cs">
       <Link>Supplemental/UIThreadAwaiter.cs</Link>
     </Compile>
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />

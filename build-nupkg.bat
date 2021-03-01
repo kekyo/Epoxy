@@ -1,10 +1,10 @@
 @echo off
-msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Wpf.Core\Epoxy.Wpf.Core.csproj
-msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Xamarin.Forms.Core\Epoxy.Xamarin.Forms.Core.csproj
-msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Avalonia.Core\Epoxy.Avalonia.Core.csproj
-msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Uwp.Core\Epoxy.Uwp.Core.csproj
-msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Uno.Core\Epoxy.Uno.Core.csproj
-msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.WinUI.Core\Epoxy.WinUI.Core.csproj
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Xamarin.Forms\Epoxy.Core.Xamarin.Forms.csproj
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Uwp\Epoxy.Core.Uwp.csproj
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Uno\Epoxy.Core.Uno.csproj
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.WinUI\Epoxy.Core.WinUI.csproj
 
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Wpf\Epoxy.Wpf.csproj
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj

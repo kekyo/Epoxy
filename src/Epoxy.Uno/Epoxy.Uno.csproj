@@ -25,7 +25,7 @@
   </PropertyGroup>
     
   <ItemGroup>
-    <ProjectReference Include="..\Epoxy.Uno.Core\Epoxy.Uno.Core.csproj" />
+    <ProjectReference Include="..\Epoxy.Core.Uno\Epoxy.Core.Uno.csproj" />
   </ItemGroup>
 
   <ItemGroup>

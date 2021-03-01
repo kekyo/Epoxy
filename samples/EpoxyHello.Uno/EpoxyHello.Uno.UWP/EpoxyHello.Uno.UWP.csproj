@@ -129,9 +129,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\..\src\Epoxy.Uno.Core\Epoxy.Uno.Core.csproj">
+    <ProjectReference Include="..\..\..\src\Epoxy.Core.Uno\Epoxy.Core.Uno.csproj">
       <Project>{23D8F7DE-EF99-4EAA-8F17-FBF2DEA64254}</Project>
-      <Name>Epoxy.Uno.Core</Name>
+      <Name>Epoxy.Core.Uno</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Epoxy.Uno\Epoxy.Uno.csproj">
       <Project>{db9561e0-8da3-4b07-83bf-98b86b6fe26d}</Project>

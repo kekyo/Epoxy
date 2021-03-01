@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Epoxy.Wpf.Core\Epoxy.Wpf.Core.csproj" />
+    <ProjectReference Include="..\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj" />
   </ItemGroup>
 
   <ItemGroup>

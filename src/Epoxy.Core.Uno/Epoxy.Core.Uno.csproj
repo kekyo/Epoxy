@@ -4,8 +4,8 @@
     <AssemblyName>Epoxy.Core</AssemblyName>
     <!-- <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0;monoandroid11.0</TargetFrameworks> -->
     <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0</TargetFrameworks>
-    <AssemblyTitle>Epoxy.Uno.Core</AssemblyTitle>
-    <PackageId>Epoxy.Uno.Core</PackageId>
+    <AssemblyTitle>Epoxy.Core.Uno</AssemblyTitle>
+    <PackageId>Epoxy.Core.Uno</PackageId>
     <PackageTags>$(PackageTags);uno</PackageTags>
   </PropertyGroup>
     
@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
-    <Compile Include="../Epoxy.Uwp.Core/Supplemental/UIThreadAwaiter.cs">
+    <Compile Include="../Epoxy.Core.Uwp/Supplemental/UIThreadAwaiter.cs">
         <Link>Supplemental/UIThreadAwaiter.cs</Link>
     </Compile>
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Epoxy.WinUI.Core\Epoxy.WinUI.Core.csproj" />
+    <ProjectReference Include="..\Epoxy.Core.WinUI\Epoxy.Core.WinUI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

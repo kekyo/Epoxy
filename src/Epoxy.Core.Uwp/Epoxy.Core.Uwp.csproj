@@ -7,8 +7,8 @@
          https://devblogs.microsoft.com/dotnet/announcing-uwp-support-for-net-standard-2-0/
     -->
     <TargetFramework>uap10.0.16299</TargetFramework>
-    <AssemblyTitle>Epoxy.Uwp.Core</AssemblyTitle>
-    <PackageId>Epoxy.Uwp.Core</PackageId>
+    <AssemblyTitle>Epoxy.Core.Uwp</AssemblyTitle>
+    <PackageId>Epoxy.Core.Uwp</PackageId>
     <PackageTags>$(PackageTags);uwp;uap</PackageTags>
     <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
   </PropertyGroup>
@@ -23,7 +23,7 @@
   <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
-    <EmbeddedResource Include="Properties\Epoxy.Uwp.Core.rd.xml" />
+    <EmbeddedResource Include="Properties\Epoxy.Core.Uwp.rd.xml" />
   </ItemGroup>
 
 </Project>

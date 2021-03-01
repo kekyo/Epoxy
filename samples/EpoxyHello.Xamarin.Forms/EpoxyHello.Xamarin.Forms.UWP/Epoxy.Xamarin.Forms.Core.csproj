@@ -13,7 +13,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
 
-    <AssemblyTitle>Epoxy.Xamarin.Forms.Core</AssemblyTitle>
+    <AssemblyTitle>Epoxy.Core.Xamarin.Forms</AssemblyTitle>
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
     <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>

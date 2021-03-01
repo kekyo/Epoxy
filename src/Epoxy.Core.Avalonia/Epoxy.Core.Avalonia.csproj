@@ -2,21 +2,21 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyTitle>Epoxy.Xamarin.Forms.Core</AssemblyTitle>
-    <PackageId>Epoxy.Xamarin.Forms.Core</PackageId>
-    <PackageTags>$(PackageTags);xamarin</PackageTags>
+    <TargetFrameworks>net461;netcoreapp2.0;netstandard2.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Core.Avalonia</AssemblyTitle>
+    <PackageId>Epoxy.Core.Avalonia</PackageId>
+    <PackageTags>$(PackageTags);avalonia</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <DefineConstants>DEBUG;TRACE;XAMARIN_FORMS</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;AVALONIA</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DefineConstants>TRACE;XAMARIN_FORMS</DefineConstants>
+    <DefineConstants>TRACE;AVALONIA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
+    <PackageReference Include="Avalonia" Version="0.10.0" />
   </ItemGroup>
 
   <ItemGroup>
