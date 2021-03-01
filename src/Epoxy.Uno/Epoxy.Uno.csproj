@@ -1,0 +1,35 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+    
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+    <!-- <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0;monoandroid11.0</TargetFrameworks> -->
+    <TargetFrameworks>uap10.0.17763;netstandard2.0;xamarinios10;xamarinmac20;monoandroid10.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Uno</AssemblyTitle>
+    <PackageId>Epoxy.Uno</PackageId>
+    <PackageTags>$(PackageTags);uno</PackageTags>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <!-- HACK: ExcludeAssets="Build"
+       Uno's XamlCodeGenerator task may produce duplicating code fragment 'GlobalStaticResources' in Epoxy.Core namespace instead Epoxy.
+       The XAML static resource will not contain on Epoxy.Uno, so totally excluded build tasks in this script.
+    -->
+    <PackageReference Include="Uno.UI" Version="3.5.1" ExcludeAssets="Build" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;UNO</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;UNO</DefineConstants>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Uno\Epoxy.Core.Uno.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>

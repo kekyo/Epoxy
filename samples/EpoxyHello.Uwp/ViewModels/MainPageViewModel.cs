@@ -51,7 +51,7 @@ namespace EpoxyHello.Uwp.ViewModels
             });
 
             // A handler for fetch button
-            this.Fetch = Command.Create(async () =>
+            this.Fetch = CommandFactory.Create(async () =>
             {
                 this.IsEnabled = false;
 
@@ -94,7 +94,7 @@ namespace EpoxyHello.Uwp.ViewModels
             // Pile is an safe accessor of a temporary UIElement reference in view model.
             // CAUTION: NOT RECOMMENDED for normal usage on MVVM architecture,
             //    Pile is a last solution for complex UI manipulation.
-            this.ButtonPile = Pile.Create<Button>();
+            this.ButtonPile = PileFactory.Create<Button>();
             this.ButtonPileInvoker = Command.Factory.CreateSync(() =>
                 this.ButtonPile.ExecuteSync(
                     // Rent temporary UIElement reference only inside of lambda expression.

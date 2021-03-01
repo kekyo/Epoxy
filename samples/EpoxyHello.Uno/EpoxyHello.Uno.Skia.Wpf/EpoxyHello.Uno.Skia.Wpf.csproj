@@ -16,7 +16,7 @@
     <UpToDateCheckInput Include="..\EpoxyHello.Uno.Shared\**\*.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Epoxy.Uno\Epoxy.Uno.csproj" />
+    <ProjectReference Include="..\..\..\src\Epoxy.Uno\Epoxy.Uno.csproj" />
     <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
   <Import Project="..\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems" Label="Shared" />

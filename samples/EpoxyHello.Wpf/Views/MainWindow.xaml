@@ -38,14 +38,10 @@
     </epoxy:EventBinder.Events>
    
     <DockPanel>
-        <DockPanel DockPanel.Dock="Top">
-            <Button DockPanel.Dock="Right" Width="60" Height="30"
-                    Command="{Binding ButtonPileInvoker}" epoxy:Anchor.Pile="{Binding ButtonPile}">Pile test</Button>
-            <TextBlock DockPanel.Dock="Right" Width="60" Text="{Binding ThreadIncrementer}" />
-            <Button Height="30"
-                    IsEnabled="{Binding IsEnabled}"
-                    Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
-        </DockPanel>
+        <Button DockPanel.Dock="Top"
+                Height="30" Foreground="White" Background="Red"
+                IsEnabled="{Binding IsEnabled}"
+                Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
         <Grid>
             <ListBox ItemsSource="{Binding Items}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"

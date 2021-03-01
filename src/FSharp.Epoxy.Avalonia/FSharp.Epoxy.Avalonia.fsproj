@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>FSharp.Epoxy</AssemblyName>
+    <TargetFrameworks>net461;netcoreapp2.0;netstandard2.0</TargetFrameworks>
+    <AssemblyTitle>FSharp.Epoxy.Avalonia</AssemblyTitle>
+    <PackageId>FSharp.Epoxy.Avalonia</PackageId>
+    <PackageTags>$(PackageTags);fsharp;avalonia</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;AVALONIA</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;AVALONIA</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.fs" />
+    <Compile Include="../FSharp.Epoxy/Internal/*.fs" />
+    <Compile Include="../FSharp.Epoxy/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
+  </ItemGroup>
+
+</Project>

@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Epoxy.WinUI\Epoxy.WinUI.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Epoxy.WinUI\Epoxy.WinUI.csproj" />
     <ProjectReference Include="..\..\..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 </Project>

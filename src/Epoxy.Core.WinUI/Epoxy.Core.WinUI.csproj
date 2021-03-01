@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy.Core</AssemblyName>
+    <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <AssemblyTitle>Epoxy.Core.WinUI</AssemblyTitle>
+    <PackageId>Epoxy.Core.WinUI</PackageId>
+    <PackageTags>$(PackageTags);winui</PackageTags>
+    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+    <NoWarn>$(NoWarn);NU5104</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINUI</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;NETFX_CORE;WINUI</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview4.210210.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy.Core/**/*.cs" />
+    <Compile Include="../Epoxy.Core.Uwp/Supplemental/UIThreadAwaiter.cs">
+      <Link>Supplemental/UIThreadAwaiter.cs</Link>
+    </Compile>
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

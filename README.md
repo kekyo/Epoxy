@@ -6,7 +6,7 @@
 
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-|Package|Status|Description|
+|Package|All (C#)|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -15,9 +15,15 @@
 |Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
+|Package|F# specialized|Description|
+|:--|:--|:--|
+|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
+
 ## What is this ?
 
 * Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
+  * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
@@ -27,6 +33,7 @@
   * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
+* F# is 5.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
 * Smallest footprint and easy understandable.
   * No dependency on non-platform standard frameworks or libraries.
 * Supported simplest and minimalism Model-View-ViewModel design.
@@ -41,13 +48,17 @@
 You can refer multi-platform application sample code variation in.
 This sample displays a list of the latest posts and images from the Reddit forum r/aww, downloading them asynchronously and displays them in a list format.
 
-* [EpoxyHello.Core - Common(Model)](samples/EpoxyHello.Core). Go to Reddit and download the posts. netstandard2.0 for common use.
-* [EpoxyHello.Wpf - View,ViewModel](samples/EpoxyHello.Wpf). WPF View and ViewModel.
-* [EpoxyHello.Xamarin.Forms - View,ViewModel](samples/EpoxyHello.Xamarin.Forms). Xamarin Forms View and ViewModel. (Contains Android, iOS and Universal Windows)
-* [EpoxyHello.Avalonia - View,ViewModel](samples/EpoxyHello.Avalonia). Avalonia View and ViewModel. (Contains Win32, X11 and macOS)
-* [EpoxyHello.Uwp - View,ViewModel](samples/EpoxyHello.Uwp). UWP View and ViewModel.
-* [EpoxyHello.WinUI - View,ViewModel](samples/EpoxyHello.WinUI). Windows UI 3 View and ViewModel.
-* [EpoxyHello.Uno - View,ViewModel](samples/EpoxyHello.Uno). Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`)
+| | Project | Role | Description |
+|:--|:--|:--|:--|
+|Common | [EpoxyHello.Core](samples/EpoxyHello.Core) | Model | Go to Reddit and download the posts. netstandard2.0 for common use. |
+|All | [EpoxyHello.Wpf](samples/EpoxyHello.Wpf) | View, ViewModel | WPF View and ViewModel. |
+|All | [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms) | View, ViewModel | Xamarin Forms View and ViewModel. (Contains Android, iOS and Universal Windows) |
+|All | [EpoxyHello.Avalonia](samples/EpoxyHello.Avalonia) | View, ViewModel | Avalonia View and ViewModel. (Contains Win32, X11 and macOS) |
+|All | [EpoxyHello.Uwp](samples/EpoxyHello.Uwp) | View, ViewModel | UWP View and ViewModel. |
+|All | [EpoxyHello.WinUI](samples/EpoxyHello.WinUI) | View, ViewModel | Windows UI 3 View and ViewModel. |
+|All | [EpoxyHello.Uno](samples/EpoxyHello.Uno) | View, ViewModel | Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`) |
+|F# | [EpoxyHello.Wpf](samples.FSharp/EpoxyHello.Wpf) | View, ViewModel | F# WPF View and ViewModel. |
+|F# | [EpoxyHello.Avalonia](samples.FSharp/EpoxyHello.Avalonia) | View, ViewModel | F# Avalonia View and ViewModel. (Contains Win32, X11 and macOS) |
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
@@ -81,6 +92,7 @@ Completed separately xaml based view declarations.
 <Window
     x:Class="EpoxyHello.Wpf.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
     Title="EpoxyHello.Wpf" Height="450" Width="800">
 
     <!-- Place view model instance, it'll verify types (by IDE)  -->
@@ -143,7 +155,7 @@ public sealed class MainWindowViewModel : ViewModel
 
         // Step 4: A handler for fetch button.
         //   Ofcourse, we can use async/await safely in lambda expressions!
-        this.Fetch = Command.Create(async () =>
+        this.Fetch = CommandFactory.Create(async () =>
         {
             var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
@@ -246,7 +258,7 @@ public Command? Ready
 // ...
 
 // Describe what to do when the Loaded event occurs.
-this.Ready = Command.Create<EventArgs>(async _ =>
+this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 {
     // ex: Asynchronous acquisition of information to be displayed in the list from Model.
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -256,7 +268,7 @@ this.Ready = Command.Create<EventArgs>(async _ =>
 });
 ```
 
-The generic argument of `Command.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
+The generic argument of `CommandFactory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
 Currently, this type must be specified because of strict checking.
 However, if you do not use the argument, or if you know it is not important,
 you can use `EventArgs` uniformly, as in the example above.
@@ -333,7 +345,7 @@ then you have to change the base class to use when you receive this parameter or
 ```csharp
 // This is an implementation of a converter that takes an integer and converts it to a Brush.
 // Specify the expected type as a generic argument.
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int>
+public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
 {
     // When the need for conversion arises, TryConvert will be called.
     public override bool TryConvert(int from, out Brush result)
@@ -354,7 +366,7 @@ This is an example of receiving a converter parameter:
 // In this example, it receives the value specified by ConverterParameter.
 // Its type is specified by the generic third argument.
 // Here is an example of receiving a string:
-public sealed class ScoreToBrushConverter : ValueConverter<Brush, int, string>
+public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 {
     // The value of the parameter is passed as the second argument.
     public override bool TryConvert(int from, string parameter, out Brush result)
@@ -395,6 +407,17 @@ await UIThread.Bind();
 // We can handle any UI elements in the UI thread (include binding operation.)
 this.Log = $"Read={read}";
 ```
+
+#### Note on running in a UWP environment
+
+In the current implementation, if you use the `UIThread` class,
+in the constructor of a `ViewModel` while building a `View` and like,
+inside a UWP environment such as UWP native, Xamarin Forms/Uno, or a UWP-derived runtime such as WinUI,
+you may not get the correct results.
+
+UWP has a different UI thread assigned to each window that holds a view,
+and if you use it while constructing an instance,
+it will not be able to determine the view correctly.
 
 ### ChildrenBinder
 
@@ -481,3 +504,22 @@ Try not to use `GlobalService` in places where it is not really needed.
 ## License
 
 Apache-v2
+
+## History
+
+* 0.11.0:
+  * Added F# support.
+  * Swapped ValueConverter generic arguments. (Breaking)
+  * Moved some factory methods into "Factory" marked types. (Breaking)
+* 0.10.0:
+  * Supported WinUI platform.
+* 0.9.0:
+  * Supported Uno platform and Avalonia.
+* 0.8.0:
+  * Added GlobalService and EventBinder features.
+* 0.7.0:
+  * Added Xamarin Forms sample code.
+* 0.6.0:
+  * Split synchronous Command handler.
+* 0.5.0:
+  * Added UIThread and Anchor/Pile features.

@@ -1,0 +1,33 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+    <!-- Universal Windows Platform is used with netstandard2.0 (truly interoperable) has limitation,
+         bottom version requires 10.0.16299 or upper (Fall creators update)
+         https://devblogs.microsoft.com/dotnet/announcing-uwp-support-for-net-standard-2-0/
+    -->
+    <TargetFramework>uap10.0.16299</TargetFramework>
+    <AssemblyTitle>Epoxy.Uwp</AssemblyTitle>
+    <PackageId>Epoxy.Uwp</PackageId>
+    <PackageTags>$(PackageTags);uwp;uap</PackageTags>
+    <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Uwp\Epoxy.Core.Uwp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+    <EmbeddedResource Include="Properties\Epoxy.Uwp.rd.xml" />
+  </ItemGroup>
+
+</Project>

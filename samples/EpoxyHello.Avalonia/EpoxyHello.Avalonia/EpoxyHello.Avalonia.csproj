@@ -13,7 +13,7 @@
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Epoxy.Avalonia\Epoxy.Avalonia.csproj" />
+    <ProjectReference Include="..\..\..\src\Epoxy.Avalonia\Epoxy.Avalonia.csproj" />
     <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 </Project>
