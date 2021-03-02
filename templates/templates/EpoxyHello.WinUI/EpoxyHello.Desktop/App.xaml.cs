@@ -1,4 +1,14 @@
-﻿using Microsoft.UI.Xaml;
+﻿////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy template source code.
+// Write your own copyright and note.
+// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+//
+////////////////////////////////////////////////////////////////////////////
+
+#nullable enable
+
+using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
 
 using EpoxyHello.Views;
@@ -46,6 +56,6 @@ namespace EpoxyHello
             // Save application state and stop any background activity
         }
 
-        private Window m_window;
+        private Window? m_window;
     }
 }

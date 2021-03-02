@@ -12,7 +12,7 @@
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>EpoxyHello.WinUI.Desktop (Package)</DisplayName>
+    <DisplayName>EpoxyHello.Desktop (Package)</DisplayName>
     <PublisherDisplayName>k</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
@@ -31,8 +31,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="EpoxyHello.WinUI.Desktop (Package)"
-        Description="EpoxyHello.WinUI.Desktop (Package)"
+        DisplayName="EpoxyHello.Desktop (Package)"
+        Description="EpoxyHello.Desktop (Package)"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">

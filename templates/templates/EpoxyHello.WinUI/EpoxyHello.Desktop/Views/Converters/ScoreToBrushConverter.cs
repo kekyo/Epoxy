@@ -1,4 +1,14 @@
-﻿using Epoxy;
+﻿////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy template source code.
+// Write your own copyright and note.
+// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+//
+////////////////////////////////////////////////////////////////////////////
+
+#nullable enable
+
+using Epoxy;
 using Windows.UI;
 using Microsoft.UI.Xaml.Media;
 
