@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kouji Matsui",
+  "classifications": [ "Epoxy", "Xamarin Forms" ],
+  "identity": "Epoxy.Template.Xamarin.Forms",
+  "name": "Epoxy.Xamarin.Forms MVVM template",
+  "shortName": "epoxy-xamarin-forms",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Epoxy.Template.Xamarin.Forms"
+}

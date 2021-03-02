@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kouji Matsui",
+  "classifications": [ "Epoxy", "Uwp" ],
+  "identity": "Epoxy.Template.Uwp",
+  "name": "Epoxy.Uwp MVVM template",
+  "shortName": "epoxy-uwp",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Epoxy.Template.Uwp"
+}

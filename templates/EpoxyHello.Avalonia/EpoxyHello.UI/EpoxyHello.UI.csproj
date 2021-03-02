@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.0" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="Epoxy.Avalonia" Version="0.11.0" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
+  </ItemGroup>
+    
+</Project>
