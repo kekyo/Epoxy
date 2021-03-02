@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview4.210210.4" />
-    <PackageReference Include="Epoxy.WinUI" Version="0.11.0" />
+    <PackageReference Include="Epoxy.WinUI" Version="0.12.0" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
