@@ -33,6 +33,10 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 #endif
 
+#if WINUI
+using Microsoft.System;
+#endif
+
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 #endif
@@ -79,6 +83,14 @@ namespace Epoxy
 #if WINDOWS_UWP || WINUI || UNO
                         if (CoreWindow.GetForCurrentThread() is { } cw1 &&
                             (cw1.Dispatcher?.HasThreadAccess ?? false))
+                        {
+                            ids.Value = true;
+                            return true;
+                        }
+#endif
+#if WINUI
+                        if (DispatcherQueue.GetForCurrentThread() is { } queue &&
+                            queue.HasThreadAccess)
                         {
                             ids.Value = true;
                             return true;
