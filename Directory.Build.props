@@ -1,0 +1,32 @@
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>Enable</Nullable>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <Deterministic>true</Deterministic>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/kekyo/Epoxy.git</RepositoryUrl>
+
+    <Product>Epoxy</Product>
+    <Trademark>Epoxy</Trademark>
+    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
+    <Description>An independent flexible XAML MVVM library for .NET</Description>
+
+    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
+    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
+    <PackageIcon>Epoxy.100.png</PackageIcon>
+    <PackageTags>mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+  </PropertyGroup>
+
+</Project>

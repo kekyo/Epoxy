@@ -15,3 +15,5 @@ msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts sr
 
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj
+
+msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts templates\Epoxy.Templates.csproj
