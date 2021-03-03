@@ -73,15 +73,15 @@ dotnet build
 
 ### 現在サポートしているテンプレート一覧
 
-|dotnet new引数|言語|対象|
+|`dotnet new`引数|言語|対象|
 |:--|:--|:--|
-|`epoxy-wpf`|C#,F#|WPFのサンプルコード|
+|`epoxy-wpf`|C#, F#|WPFのサンプルコード|
 |`epoxy-uwp`|C#|UWPのサンプルコード|
 |`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
-|`epoxy-avalonia`|C#,F#|Avaloniaのサンプルコード|
+|`epoxy-avalonia`|C#, F#|Avaloniaのサンプルコード|
 |`epoxy-winui`|C#|WinUIのサンプルコード|
 
-* デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`-lang F#`をコマンドラインに加えます。
+* デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
 * 現在、WinUIはpreview版制限のために、正しく動作しない可能性があります。
 * Uno platformのテンプレートはまだ用意していません。
 
@@ -539,6 +539,7 @@ Apache-v2
 * 0.13.0:
   * dotnet CLIテンプレートを追加。
   * WinUIでのUIThread検出を強化。
+  * F# WPF NuGetパッケージで、XAMLを自動的にアセンブリリソースに配置するようにした。
 * 0.11.0:
   * F#のサポートを追加しました。
   * ValueConverterの一般的な引数をスワップしました。(Breaking)

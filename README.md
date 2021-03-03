@@ -65,15 +65,15 @@ dotnet build
 
 ### List of currently supported templates
 
-|dotnet new引数|言語|対象|
+|`dotnet new` parameter|Language|Target|
 |:--|:--|:--|
-|`epoxy-wpf`|C#,F#|Sample code for WPF|
+|`epoxy-wpf`|C#, F#|Sample code for WPF|
 |`epoxy-uwp`|C#|Sample code for UWP|
 |`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
-|`epoxy-avalonia`|C#,F#|Sample code for Avalonia|
+|`epoxy-avalonia`|C#, F#|Sample code for Avalonia|
 |`epoxy-winui`|C#|Sample code for WinUI|
 
-* By default, the C# sample code is extracted; to change to F#, add `-lang F#` to the command line.
+* By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
 * Currently, WinUI may not work properly due to preview version limitation.
 * We do not have a template for Uno platform yet.
 
@@ -525,9 +525,11 @@ Try not to use `GlobalService` in places where it is not really needed.
 Apache-v2
 
 ## History
+
 * 0.13.0:
   * Added dotnet CLI templates.
   * Improved UIThread detection on WinUI platform.
+  * In F# WPF NuGet package, it will place XAML code into assembly resource automatically.
 * 0.11.0:
   * Added F# support.
   * Swapped ValueConverter generic arguments. (Breaking)
