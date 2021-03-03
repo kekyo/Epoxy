@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+    <Content Include="build\*.*" CopyToOutputDirectory="Never" PackagePath="build/" />
+    <Content Include="buildMultiTargeting\*.*" CopyToOutputDirectory="Never" PackagePath="buildMultiTargeting/" />
   </ItemGroup>
 
   <ItemGroup>

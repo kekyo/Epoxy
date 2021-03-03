@@ -29,11 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="**/*.xaml" />
-    <Resource Include="**/*.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="Controls/**/*.fs" />
     <Compile Include="ViewModels/**/*.fs" />
     <Compile Include="Views/**/*.fs" />
