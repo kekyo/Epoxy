@@ -27,6 +27,7 @@
     <PackageTags>mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <NoWarn>$(NoWarn);NU1605;NU1701</NoWarn>
   </PropertyGroup>
 
 </Project>

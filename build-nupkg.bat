@@ -1,4 +1,10 @@
 @echo off
+
+git clean -xfd
+
+dotnet restore Epoxy.sln
+dotnet restore templates\Epoxy.Templates.csproj
+
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Xamarin.Forms\Epoxy.Core.Xamarin.Forms.csproj
 msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj

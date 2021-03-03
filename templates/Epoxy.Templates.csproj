@@ -20,10 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**;**\*.user" />
     <Compile Remove="**\*" />
-    <Content Remove="templates\EpoxyHello.WinUI\EpoxyHello.Desktop\Properties\AssemblyInfo.cs" />
-    <Compile Include="templates\EpoxyHello.WinUI\EpoxyHello.Desktop\Properties\AssemblyInfo.cs" />
+    <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**;**\*.user" />
     <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
