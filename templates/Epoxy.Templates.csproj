@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**" />
+    <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**;**\*.user" />
     <Compile Remove="**\*" />
     <Content Remove="templates\EpoxyHello.WinUI\EpoxyHello.Desktop\Properties\AssemblyInfo.cs" />
     <Compile Include="templates\EpoxyHello.WinUI\EpoxyHello.Desktop\Properties\AssemblyInfo.cs" />

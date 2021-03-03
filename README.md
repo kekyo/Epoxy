@@ -48,17 +48,36 @@
 You can refer multi-platform application sample code variation in.
 This sample displays a list of the latest posts and images from the Reddit forum r/aww, downloading them asynchronously and displays them in a list format.
 
-| | Project | Role | Description |
-|:--|:--|:--|:--|
-|Common | [EpoxyHello.Core](samples/EpoxyHello.Core) | Model | Go to Reddit and download the posts. netstandard2.0 for common use. |
-|All | [EpoxyHello.Wpf](samples/EpoxyHello.Wpf) | View, ViewModel | WPF View and ViewModel. |
-|All | [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms) | View, ViewModel | Xamarin Forms View and ViewModel. (Contains Android, iOS and Universal Windows) |
-|All | [EpoxyHello.Avalonia](samples/EpoxyHello.Avalonia) | View, ViewModel | Avalonia View and ViewModel. (Contains Win32, X11 and macOS) |
-|All | [EpoxyHello.Uwp](samples/EpoxyHello.Uwp) | View, ViewModel | UWP View and ViewModel. |
-|All | [EpoxyHello.WinUI](samples/EpoxyHello.WinUI) | View, ViewModel | Windows UI 3 View and ViewModel. |
-|All | [EpoxyHello.Uno](samples/EpoxyHello.Uno) | View, ViewModel | Uno platform View and ViewModel. (Contains a lot of platforms included `wasm`) |
-|F# | [EpoxyHello.Wpf](samples.FSharp/EpoxyHello.Wpf) | View, ViewModel | F# WPF View and ViewModel. |
-|F# | [EpoxyHello.Avalonia](samples.FSharp/EpoxyHello.Avalonia) | View, ViewModel | F# Avalonia View and ViewModel. (Contains Win32, X11 and macOS) |
+### How to get and build the sample code
+
+The .NET CLI template is supported. You can easily try the sample code in a clean state with the following command:
+
+```bash
+# Install the template package (you only need to do it once)
+dotnet new -i Epoxy.Templates
+
+# Extract the WPF sample code to the current directory.
+dotnet new epoxy-wpf
+
+# Build
+dotnet build
+```
+
+### List of currently supported templates
+
+|dotnet new引数|言語|対象|
+|:--|:--|:--|
+|`epoxy-wpf`|C#,F#|Sample code for WPF|
+|`epoxy-uwp`|C#|Sample code for UWP|
+|`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
+|`epoxy-avalonia`|C#,F#|Sample code for Avalonia|
+|`epoxy-winui`|C#|Sample code for WinUI|
+
+* By default, the C# sample code is extracted; to change to F#, add `-lang F#` to the command line.
+* Currently, WinUI may not work properly due to preview version limitation.
+* We do not have a template for Uno platform yet.
+
+### サンプルコードの解説
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
@@ -506,7 +525,9 @@ Try not to use `GlobalService` in places where it is not really needed.
 Apache-v2
 
 ## History
-
+* 0.13.0:
+  * Added dotnet CLI templates.
+  * Improved UIThread detection on WinUI platform.
 * 0.11.0:
   * Added F# support.
   * Swapped ValueConverter generic arguments. (Breaking)

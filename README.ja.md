@@ -56,23 +56,43 @@
 このサンプルは、Reddit掲示板のr/awwから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
-| | プロジェクト | 役割 | 内容 |
-|:--|:--|:--|:--|
-|共通 | [EpoxyHello.Core](samples/EpoxyHello.Core) | Model | Redditから投稿をダウンロードする共通ライブラリ。 netstandard2.0で実装 |
-|All | [EpoxyHello.Wpf](samples/EpoxyHello.Wpf) | View,ViewModel | WPFで実装したViewとViewModel |
-|All | [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms) | View,ViewModel | Xamarin Formsで実装したViewとViewModel (Android・iOS・UWP) |
-|All | [EpoxyHello.Avalonia](samples/EpoxyHello.Avalonia) | View,ViewModel | Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
-|All | [EpoxyHello.Uwp](samples/EpoxyHello.Uwp) | View,ViewModel | UWPで実装したViewとViewModel |
-|All | [EpoxyHello.WinUI](samples/EpoxyHello.WinUI) | View,ViewModel | Windows UI 3で実装したViewとViewModel |
-|All | [EpoxyHello.Uno](samples/EpoxyHello.Uno) | View,ViewModel | Uno platformで実装したViewとViewModel (`wasm`を含む多くのプラットフォーム) |
-|F# | [EpoxyHello.Wpf](samples.FSharp/EpoxyHello.Wpf) | View,ViewModel | F# WPFで実装したViewとViewModel |
-|F# | [EpoxyHello.Avalonia](samples.FSharp/EpoxyHello.Avalonia) | View,ViewModel | F# Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
+### サンプルコードの入手とビルド方法
+
+.NET CLIテンプレートに対応しています。以下のようなコマンドで、簡単にサンプルコードをクリーンな状態で試すことができます:
+
+```bash
+# テンプレートパッケージをインストール（1度だけでOK）
+dotnet new -i Epoxy.Templates
+
+# 現在のディレクトリにWPFサンプルコードを展開
+dotnet new epoxy-wpf
+
+# ビルド
+dotnet build
+```
+
+### 現在サポートしているテンプレート一覧
+
+|dotnet new引数|言語|対象|
+|:--|:--|:--|
+|`epoxy-wpf`|C#,F#|WPFのサンプルコード|
+|`epoxy-uwp`|C#|UWPのサンプルコード|
+|`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
+|`epoxy-avalonia`|C#,F#|Avaloniaのサンプルコード|
+|`epoxy-winui`|C#|WinUIのサンプルコード|
+
+* デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`-lang F#`をコマンドラインに加えます。
+* 現在、WinUIはpreview版制限のために、正しく動作しない可能性があります。
+* Uno platformのテンプレートはまだ用意していません。
+
+### サンプルコードの解説
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
 
 ![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Wpf.png)
 
 ![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
+
 
 ---
 
@@ -515,6 +535,10 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 Apache-v2
 
 ## History
+
+* 0.13.0:
+  * dotnet CLIテンプレートを追加。
+  * WinUIでのUIThread検出を強化。
 * 0.11.0:
   * F#のサポートを追加しました。
   * ValueConverterの一般的な引数をスワップしました。(Breaking)

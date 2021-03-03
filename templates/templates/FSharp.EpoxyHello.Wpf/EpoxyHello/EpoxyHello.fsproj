@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net461;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>Enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="FSharp.Core" Version="5.0.1" />
+    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="FSharp.Epoxy.Wpf" Version="0.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="**/*.xaml" />
+    <Resource Include="**/*.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Controls/**/*.fs" />
+    <Compile Include="ViewModels/**/*.fs" />
+    <Compile Include="Views/**/*.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>
