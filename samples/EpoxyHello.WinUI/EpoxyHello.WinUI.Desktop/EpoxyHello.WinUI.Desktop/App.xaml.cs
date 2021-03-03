@@ -17,6 +17,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#nullable enable
+
 using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
 
@@ -65,6 +67,6 @@ namespace EpoxyHello.WinUI.Desktop
             // Save application state and stop any background activity
         }
 
-        private Window m_window;
+        private Window? m_window;
     }
 }

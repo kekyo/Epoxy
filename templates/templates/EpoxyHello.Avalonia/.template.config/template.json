@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kouji Matsui",
+  "classifications": [ "Epoxy", "Avalonia" ],
+  "identity": "Epoxy.Template.Avalonia",
+  "name": "Epoxy.Avalonia MVVM template",
+  "shortName": "epoxy-avalonia",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Epoxy.Template.Avalonia"
+}

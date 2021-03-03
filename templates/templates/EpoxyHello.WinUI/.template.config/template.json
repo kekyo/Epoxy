@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kouji Matsui",
+  "classifications": [ "Epoxy", "WinUI" ],
+  "identity": "Epoxy.Template.WinUI",
+  "name": "Epoxy.WinUI MVVM template",
+  "shortName": "epoxy-winui",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Epoxy.Template.WinUI"
+}
