@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		build-nupkg.bat = build-nupkg.bat
-		src\Directory.Build.props = src\Directory.Build.props
+		Directory.Build.props = Directory.Build.props
 		Epoxy.sln.licenseheader = Epoxy.sln.licenseheader
 		LICENSE = LICENSE
 		README.ja.md = README.ja.md
@@ -105,6 +105,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EpoxyHello.Avalonia", "EpoxyHello.Avalonia", "{7B9B309F-0E1D-4EE6-A4AC-5EE432A2A2B4}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Avalonia.Desktop", "samples.FSharp\EpoxyHello.Avalonia\EpoxyHello.Avalonia.Desktop\EpoxyHello.Avalonia.Desktop.fsproj", "{3CC3285B-EB14-477E-B5D5-4182DC89CD48}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Templates", "templates\Epoxy.Templates.csproj", "{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -2277,6 +2279,34 @@ Global
 		{3CC3285B-EB14-477E-B5D5-4182DC89CD48}.Release|x64.Build.0 = Release|Any CPU
 		{3CC3285B-EB14-477E-B5D5-4182DC89CD48}.Release|x86.ActiveCfg = Release|Any CPU
 		{3CC3285B-EB14-477E-B5D5-4182DC89CD48}.Release|x86.Build.0 = Release|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Ad-Hoc|ARM.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Ad-Hoc|ARM64.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Ad-Hoc|x64.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Ad-Hoc|x86.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.AppStore|ARM.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.AppStore|ARM64.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.AppStore|x64.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.AppStore|x86.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|ARM.ActiveCfg = Release|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|x64.ActiveCfg = Release|Any CPU
+		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

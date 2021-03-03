@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <PackageId>Epoxy.Templates</PackageId>
+    <PackageType>Template</PackageType>
+    <PackageVersion>1.0</PackageVersion>
+    <PackageTags>$(PackageTags);dotnet-new;templates</PackageTags>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RelaxVersioner" Version="2.1.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="**\*" />
+    <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**;**\*.user" />
+    <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

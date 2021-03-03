@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy template source code.
+// Write your own copyright and note.
+// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+//
+////////////////////////////////////////////////////////////////////////////
+-->
+
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/launcher_background" />
+    <foreground android:drawable="@mipmap/launcher_foreground" />
+</adaptive-icon>

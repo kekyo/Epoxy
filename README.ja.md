@@ -12,7 +12,7 @@
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
-|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
+|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version (Broken?)|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
 |Package|F# specialized|Description|
@@ -29,7 +29,7 @@
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
   * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
-  * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/ja-jp/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper)
+  * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/ja-jp/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper, [但し、このissueと同じ問題で実行時エラーが発生する可能性があります](https://github.com/microsoft/microsoft-ui-xaml/issues/4226))
   * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
@@ -56,23 +56,43 @@
 このサンプルは、Reddit掲示板のr/awwから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
-| | プロジェクト | 役割 | 内容 |
-|:--|:--|:--|:--|
-|共通 | [EpoxyHello.Core](samples/EpoxyHello.Core) | Model | Redditから投稿をダウンロードする共通ライブラリ。 netstandard2.0で実装 |
-|All | [EpoxyHello.Wpf](samples/EpoxyHello.Wpf) | View,ViewModel | WPFで実装したViewとViewModel |
-|All | [EpoxyHello.Xamarin.Forms](samples/EpoxyHello.Xamarin.Forms) | View,ViewModel | Xamarin Formsで実装したViewとViewModel (Android・iOS・UWP) |
-|All | [EpoxyHello.Avalonia](samples/EpoxyHello.Avalonia) | View,ViewModel | Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
-|All | [EpoxyHello.Uwp](samples/EpoxyHello.Uwp) | View,ViewModel | UWPで実装したViewとViewModel |
-|All | [EpoxyHello.WinUI](samples/EpoxyHello.WinUI) | View,ViewModel | Windows UI 3で実装したViewとViewModel |
-|All | [EpoxyHello.Uno](samples/EpoxyHello.Uno) | View,ViewModel | Uno platformで実装したViewとViewModel (`wasm`を含む多くのプラットフォーム) |
-|F# | [EpoxyHello.Wpf](samples.FSharp/EpoxyHello.Wpf) | View,ViewModel | F# WPFで実装したViewとViewModel |
-|F# | [EpoxyHello.Avalonia](samples.FSharp/EpoxyHello.Avalonia) | View,ViewModel | F# Avaloniaで実装したViewとViewModel (Win32・X11・macOS) |
+### サンプルコードの入手とビルド方法
+
+.NET CLIテンプレートに対応しています。以下のようなコマンドで、簡単にサンプルコードをクリーンな状態で試すことができます:
+
+```bash
+# テンプレートパッケージをインストール（1度だけでOK）
+dotnet new -i Epoxy.Templates
+
+# 現在のディレクトリにWPFサンプルコードを展開
+dotnet new epoxy-wpf
+
+# ビルド
+dotnet build
+```
+
+### 現在サポートしているテンプレート一覧
+
+|`dotnet new`引数|言語|対象|
+|:--|:--|:--|
+|`epoxy-wpf`|C#, F#|WPFのサンプルコード|
+|`epoxy-uwp`|C#|UWPのサンプルコード|
+|`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
+|`epoxy-avalonia`|C#, F#|Avaloniaのサンプルコード|
+|`epoxy-winui`|C#|WinUIのサンプルコード|
+
+* デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
+* 現在、WinUIはpreview版制限のために、正しく動作しない可能性があります。
+* Uno platformのテンプレートはまだ用意していません。
+
+### サンプルコードの解説
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
 
 ![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Wpf.png)
 
 ![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
+
 
 ---
 
@@ -515,6 +535,11 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 Apache-v2
 
 ## History
+
+* 0.13.0:
+  * dotnet CLIテンプレートを追加。
+  * WinUIでのUIThread検出を強化。
+  * F# WPF NuGetパッケージで、XAMLを自動的にアセンブリリソースに配置するようにした。
 * 0.11.0:
   * F#のサポートを追加しました。
   * ValueConverterの一般的な引数をスワップしました。(Breaking)
