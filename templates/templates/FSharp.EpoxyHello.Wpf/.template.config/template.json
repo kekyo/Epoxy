@@ -1,13 +1,14 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "author": "Kouji Matsui",
+  "author": "Kouji Matsui (@kozy_kekyo, @kekyo2)",
   "classifications": [ "Epoxy", "Wpf" ],
   "identity": "FSharp.Epoxy.Template.Wpf",
+  "groupIdentity": "Epoxy.Template.Wpf",
   "name": "Epoxy.Wpf MVVM template",
   "shortName": "epoxy-wpf",
   "tags": {
     "language": "F#",
     "type": "project"
   },
-  "sourceName": "FSharp.Epoxy.Template.Wpf"
+  "sourceName": "Epoxy"
 }
