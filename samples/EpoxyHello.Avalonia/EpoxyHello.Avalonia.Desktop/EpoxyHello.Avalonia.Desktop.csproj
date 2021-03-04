@@ -11,6 +11,8 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
    </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EpoxyHello.Avalonia\EpoxyHello.Avalonia.csproj" />
+      <ProjectReference Include="..\..\..\src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj" />
+      <ProjectReference Include="..\..\..\src\Epoxy.Avalonia\Epoxy.Avalonia.csproj" />
+      <ProjectReference Include="..\EpoxyHello.Avalonia\EpoxyHello.Avalonia.csproj" />
   </ItemGroup>
 </Project>
