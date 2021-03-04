@@ -17,14 +17,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System;
+#nullable enable
 
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
+using Android.Runtime;
 
 namespace EpoxyHello.Xamarin.Forms.Droid
 {
@@ -42,7 +40,8 @@ namespace EpoxyHello.Xamarin.Forms.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        public override void OnRequestPermissionsResult(
+            int requestCode, string[]? permissions, [GeneratedEnum] Android.Content.PM.Permission[]? grantResults)
         {
             global::Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
