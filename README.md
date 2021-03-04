@@ -77,7 +77,7 @@ dotnet build
 * Currently, WinUI may not work properly due to preview version limitation.
 * We do not have a template for Uno platform yet.
 
-### サンプルコードの解説
+### Detail for sample code
 
 Full asynchronous fetching and updating into ListBox when you click a button.
 
@@ -90,6 +90,7 @@ Full asynchronous fetching and updating into ListBox when you click a button.
 ## Getting started minimum MVVM application
 
 Review of Model-View-ViewModel architecture:
+
 * `View`: Describes the user interface in XAML and write binding expressions to the `ViewModel` (without writing code-behinds).
 * `ViewModel`: Get information from `Model` and define properties that map to `View`.
 * `Model`: Implement processes that are not directly related to the user interface. In this case, the process of downloading posts from Reddit.
