@@ -93,7 +93,7 @@ namespace Epoxy
         static EventBinder() =>
             EventsProperty.Changed.Subscribe(e =>
             {
-                if (!object.ReferenceEquals(e.OldValue, e.NewValue))
+                if (!e.OldValue.Equals(e.NewValue))
                 {
                     if (e.OldValue.GetValueOrDefault() is EventsCollection oec)
                     {
