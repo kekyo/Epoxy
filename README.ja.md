@@ -536,6 +536,13 @@ Apache-v2
 
 ## History
 
+* 0.14.0:
+  * XamlDesignerクラスを追加。
+  * Avaloniaランタイムプラットフォームを追加: net48, netcoreapp2.1, netcoreapp3.1, net5.0.
+  * F#のcamel-case APIを追加。
+  * FSharp.Coreのバージョンを5.0.1から5.0.0にダウングレードした。
+  * Avalonia XAMLデザイン時に、実際にViewModelが駆動されてしまう不具合を修正。
+  * Avalonia C# XAMLデザイナが動作しなかった問題を修正。
 * 0.13.0:
   * dotnet CLIテンプレートを追加。
   * WinUIでのUIThread検出を強化。
