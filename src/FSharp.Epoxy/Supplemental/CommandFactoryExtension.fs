@@ -36,9 +36,28 @@ module private CommandFactoryExtensionGenerator =
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module public CommandFactoryExtension =
     type public CommandFactoryInstance with
+        member __.create executeAsync =
+            create0 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc0)
+        member __.create (executeAsync, canExecute) =
+            create1 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
+
+        member __.create (executeAsync: 'TParameter -> ValueTask<unit>) =
+            createP0 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc1)
+        member __.create (executeAsync: 'TParameter -> ValueTask<unit>, canExecute) =
+            createP1 (executeAsync >> valueTaskUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
+
+        member __.create (executeAsync: unit -> Task<unit>) =
+            create0 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc0)
+        member __.create (executeAsync: unit -> Task<unit>, canExecute) =
+            create1 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
+
+        member __.create (executeAsync: 'TParameter -> Task<unit>) =
+            createP0 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc1)
+        member __.create (executeAsync: 'TParameter -> Task<unit>, canExecute: 'TParameter -> bool) =
+            createP1 (executeAsync >> taskUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
+
         member __.create executeAsync =
             create0 (executeAsync >> valueTaskVoidAsValueTaskUnit |> asFunc0)
         member __.create (executeAsync, canExecute) =

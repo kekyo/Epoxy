@@ -17,25 +17,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-open System
+#nullable enable
 
-open Avalonia
-open Avalonia.Logging
+using Epoxy.Internal;
 
-open EpoxyHello.Avalonia
-
-// Avalonia configuration, don't remove; also used by visual designer.
-[<CompiledName "BuildAvaloniaApp">] 
-let buildAvaloniaApp() = 
-    AppBuilder.Configure<App>().
-        UsePlatformDetect().
-        LogToTrace(LogEventLevel.Warning)
-
-// Initialization code. Don't use any Avalonia, third-party APIs or any
-// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-// yet and stuff might break.
-[<STAThread>]
-[<EntryPoint>]
-let main args =
-    buildAvaloniaApp().
-        StartWithClassicDesktopLifetime(args)
+namespace Epoxy.Advanced
+{
+    public static class XamlDesigner
+    {
+        public static bool IsDesignTime =>
+            InternalXamlDesigner.IsDesignTime;
+    }
+}

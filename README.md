@@ -526,7 +526,13 @@ Try not to use `GlobalService` in places where it is not really needed.
 Apache-v2
 
 ## History
-
+* 0.14.0:
+  * Added XamlDesigner class.
+  * Added Avalonia runtime platforms on net48, netcoreapp2.1, netcoreapp3.1 and net5.0.
+  * Added F#'s camel-casing API entry points.
+  * Downgraded FSharp.Core version from 5.0.1 to 5.0.0.
+  * Fixed runnable view model on Avalonia XAML design time.
+  * Fixed failure editing on Avalonia C# XAML designer.
 * 0.13.0:
   * Added dotnet CLI templates.
   * Improved UIThread detection on WinUI platform.

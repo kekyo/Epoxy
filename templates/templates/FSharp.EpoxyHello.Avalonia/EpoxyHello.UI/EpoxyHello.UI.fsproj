@@ -13,11 +13,10 @@
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="FSharp.Core" Version="5.0.1" />
-    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.0" />
+    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.1" />
     <PackageReference Include="Avalonia" Version="0.10.0" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
-    <PackageReference Include="FSharp.Epoxy.Avalonia" Version="0.13.0" />
+    <PackageReference Include="FSharp.Epoxy.Avalonia" Version="0.14.0" />
   </ItemGroup>
 
   <ItemGroup>

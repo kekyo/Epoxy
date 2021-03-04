@@ -49,35 +49,20 @@ using UIElement = Avalonia.IStyledElement;
 
 namespace Epoxy.Synchronized
 {
+    [DebuggerStepThrough]
     public static class PileExtension
     {
-        [DebuggerStepThrough]
         public static void ExecuteSync<TUIElement>(
             this Pile<TUIElement> pile,
             Action<TUIElement> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.InternalExecuteAsync(element => { action(element); return default; }, canIgnore);
+            pile.InternalExecuteSync(action, canIgnore);
 
         public static TResult ExecuteSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
             Func<TUIElement, TResult> action)
-            where TUIElement : UIElement
-        {
-            var result = pile.InternalExecuteAsync(element =>
-            {
-                try
-                {
-                    return InternalHelpers.FromResult(InternalHelpers.Pair(action(element), default(ExceptionDispatchInfo)!));
-                }
-                catch (Exception ex)
-                {
-                    return InternalHelpers.FromResult(InternalHelpers.Pair(default(TResult)!, ExceptionDispatchInfo.Capture(ex)));
-                }
-            }).Result;  // Will not block
-
-            result.Value?.Throw();
-            return result.Key;
-        }
+            where TUIElement : UIElement =>
+            pile.InternalExecuteSync(action);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use ExecuteAsync instead.", true)]

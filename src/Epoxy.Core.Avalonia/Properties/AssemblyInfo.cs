@@ -25,5 +25,8 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Epoxy")]
 [assembly: InternalsVisibleTo("FSharp.Epoxy")]
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]
+// TODO: In 0.10.0, Avalonia XAML designer cause
+//   "XamlException: 'Unable to resolve type'" error when use XML namespace alias.
+//   Related?: https://github.com/AvaloniaUI/Avalonia/issues/3592
+//[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
+//[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]

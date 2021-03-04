@@ -24,6 +24,7 @@ using Epoxy.Internal;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 #if WINDOWS_UWP || UNO
@@ -189,6 +190,28 @@ namespace Epoxy
             {
                 throw new InvalidOperationException("Didn't moore a UIElement.");
             }
+        }
+
+        [DebuggerStepThrough]
+        internal void InternalExecuteSync(Action<TUIElement> action, bool canIgnore) =>
+            this.InternalExecuteAsync(element => { action(element); return default; }, canIgnore);
+
+        internal TResult InternalExecuteSync<TResult>(Func<TUIElement, TResult> action)
+        {
+            var result = this.InternalExecuteAsync(element =>
+            {
+                try
+                {
+                    return InternalHelpers.FromResult(InternalHelpers.Pair(action(element), default(ExceptionDispatchInfo)!));
+                }
+                catch (Exception ex)
+                {
+                    return InternalHelpers.FromResult(InternalHelpers.Pair(default(TResult)!, ExceptionDispatchInfo.Capture(ex)));
+                }
+            }).Result;  // Will not block
+
+            result.Value?.Throw();
+            return result.Key;
         }
 
         public override string ToString() =>

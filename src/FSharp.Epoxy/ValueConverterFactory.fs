@@ -35,7 +35,8 @@ module private ValueConverterFactoryGenerator =
     let inline create1 convert convertBack = new DelegatedValueConverter<'TFrom, 'TTo>(convert, convertBack) :> ValueConverter
     let inline createP1 convert convertBack = new DelegatedValueConverter<'TFrom, 'TParameter, 'TTo>(convert, convertBack) :> ValueConverter
 
-[<AbstractClass; Sealed>]
+[<AbstractClass>]
+[<Sealed>]
 type public ValueConverterFactory =
     static member create (convert: 'TFrom -> 'TTo) =
         create0 (convert |> asFunc1)

@@ -50,6 +50,7 @@ using DependencyObject = Avalonia.IAvaloniaObject;
 
 using Epoxy.Internal;
 using Epoxy.Supplemental;
+using Epoxy.Advanced;
 
 namespace Epoxy
 {
@@ -92,7 +93,7 @@ namespace Epoxy
         static EventBinder() =>
             EventsProperty.Changed.Subscribe(e =>
             {
-                if (!object.ReferenceEquals(e.OldValue, e.NewValue))
+                if (!e.OldValue.Equals(e.NewValue))
                 {
                     if (e.OldValue.GetValueOrDefault() is EventsCollection oec)
                     {
@@ -206,19 +207,16 @@ namespace Epoxy
                     throw new InvalidOperationException();
                 }
 
-#if WINDOWS_WPF
-                var isInDesignMode = GetValue(DesignerProperties.IsInDesignModeProperty) is bool iidm && iidm;
-                if (!isInDesignMode)
-#endif
+                if (!InternalXamlDesigner.IsDesignTime)
                 {
                     WritePreamble();
                     this.associatedObject = d;
                     WritePostscript();
-                }
 
-                foreach (var evt in this)
-                {
-                    evt.Attach(this.AssociatedObject);
+                    foreach (var evt in this)
+                    {
+                        evt.Attach(this.AssociatedObject);
+                    }
                 }
             }
         }

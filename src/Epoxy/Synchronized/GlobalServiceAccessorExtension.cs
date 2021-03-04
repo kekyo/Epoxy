@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -17,25 +17,26 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-open System
+#nullable enable
 
-open Avalonia
-open Avalonia.Logging
+using System;
 
-open EpoxyHello.Avalonia
+using Epoxy.Advanced;
+using Epoxy.Internal;
 
-// Avalonia configuration, don't remove; also used by visual designer.
-[<CompiledName "BuildAvaloniaApp">] 
-let buildAvaloniaApp() = 
-    AppBuilder.Configure<App>().
-        UsePlatformDetect().
-        LogToTrace(LogEventLevel.Warning)
+namespace Epoxy.Synchronized
+{
+    public static class GlobalServiceAccessorExtension
+    {
+        public static void ExecuteSync<TService>(
+            this GlobalServiceAccessor accessor,
+            Action<TService> action,
+            bool ignoreNotPresent = false) =>
+            InternalGlobalService.ExecuteSync(action, ignoreNotPresent);
 
-// Initialization code. Don't use any Avalonia, third-party APIs or any
-// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-// yet and stuff might break.
-[<STAThread>]
-[<EntryPoint>]
-let main args =
-    buildAvaloniaApp().
-        StartWithClassicDesktopLifetime(args)
+        public static TResult ExecuteSync<TService, TResult>(
+            this GlobalServiceAccessor accessor,
+            Func<TService, TResult> action) =>
+            InternalGlobalService.ExecuteSync(action);
+    }
+}

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>FSharp.Epoxy</AssemblyName>
-    <TargetFrameworks>net461;netcoreapp2.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net461;net48;netcoreapp2.0;netcoreapp2.1;netcoreapp3.0;netcoreapp3.1;netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
     <AssemblyTitle>FSharp.Epoxy.Avalonia</AssemblyTitle>
     <PackageId>FSharp.Epoxy.Avalonia</PackageId>
     <PackageTags>$(PackageTags);fsharp;avalonia</PackageTags>
@@ -34,6 +34,7 @@
     <Compile Include="../FSharp.Epoxy/*.fs" />
     <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
     <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Advanced/*.fs" />
   </ItemGroup>
 
 </Project>
