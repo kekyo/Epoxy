@@ -17,22 +17,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
-
-using System;
-
-using Epoxy.Advanced;
-
 namespace Epoxy.Synchronized
-{
-    public static class GlobalServiceAccessorExtension
-    {
-        public static void ExecuteSync<TService>(
-            this GlobalServiceAccessor accessor, Action<TService> action, bool ignoreNotPresent = false) =>
-            GlobalService.ExecuteSync(action, ignoreNotPresent);
 
-        public static TResult ExecuteSync<TService, TResult>(
-            this GlobalServiceAccessor accessor, Func<TService, TResult> action) =>
-            GlobalService.ExecuteSync(action);
-    }
-}
+open System
+open System.Diagnostics
+open System.Runtime.InteropServices
+
+open Epoxy.Advanced
+open Epoxy.Internal
+
+[<DebuggerStepThrough>]
+[<AutoOpen>]
+module public SyncGlobalServiceAccessorExtension =
+    type public GlobalServiceAccessor with
+        member __.executeSync (action: 'TService -> unit, [<Optional; DefaultParameterValue(false)>] ignoreNotPresent) =
+            InternalGlobalService.ExecuteSync(action |> asAction1, ignoreNotPresent)
+
+        member __.executeSync (action: 'TService -> 'TResult) =
+            InternalGlobalService.ExecuteSync(action |> asFunc1)

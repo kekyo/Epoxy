@@ -21,26 +21,22 @@
 
 using System;
 
-namespace Epoxy.Advanced
+using Epoxy.Advanced;
+using Epoxy.Internal;
+
+namespace Epoxy.Synchronized
 {
-    [AttributeUsage(AttributeTargets.Interface)]
-    public sealed class GlobalServiceAttribute : Attribute
+    public static class GlobalServiceAccessorExtension
     {
-        public GlobalServiceAttribute()
-        { }
-    }
+        public static void ExecuteSync<TService>(
+            this GlobalServiceAccessor accessor,
+            Action<TService> action,
+            bool ignoreNotPresent = false) =>
+            InternalGlobalService.ExecuteSync(action, ignoreNotPresent);
 
-    public enum RegisteringValidations
-    {
-        Strict,
-        UnsafePartial,
-        UnsafeOverride
-    }
-
-    public sealed class GlobalServiceAccessor
-    {
-        internal GlobalServiceAccessor()
-        {
-        }
+        public static TResult ExecuteSync<TService, TResult>(
+            this GlobalServiceAccessor accessor,
+            Func<TService, TResult> action) =>
+            InternalGlobalService.ExecuteSync(action);
     }
 }

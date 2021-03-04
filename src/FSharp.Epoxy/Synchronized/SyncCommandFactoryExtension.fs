@@ -25,20 +25,20 @@ open System.Diagnostics
 open System.Threading.Tasks
 
 open Epoxy
+open Epoxy.Internal
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module public CommandFactoryExtension =
+module public SyncCommandFactoryExtension =
     type public CommandFactoryInstance with
         member __.createSync (execute: unit -> unit) =
-            new SyncDelegatedCommand(new Action(execute)) :> Command
+            new SyncDelegatedCommand(execute |> asActionVoid) :> Command
         member __.createSync (execute: unit -> unit, canExecute: unit -> bool) =
-            new SyncDelegatedCommand(new Action(execute), new Func<bool>(canExecute)) :> Command
+            new SyncDelegatedCommand(execute |> asActionVoid, canExecute |> asFunc0) :> Command
         member __.createSync<'TParameter> (execute: 'TParameter -> unit) =
-            new SyncDelegatedCommand<'TParameter>(new Action<'TParameter>(execute)) :> Command
+            new SyncDelegatedCommand<'TParameter>(execute |> asAction1) :> Command
         member __.createSync<'TParameter> (execute: 'TParameter -> unit, canExecute: 'TParameter -> bool) =
-            new SyncDelegatedCommand<'TParameter>(new Action<'TParameter>(execute), new Func<'TParameter, bool>(canExecute)) :> Command
+            new SyncDelegatedCommand<'TParameter>(execute |> asAction1, canExecute |> asFunc1) :> Command
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]

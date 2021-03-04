@@ -35,10 +35,6 @@ type public ViewModel() =
     member self.getValue (defaultValue: 'TValue, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalGetValue<'TValue>(defaultValue, propertyName)
 
-    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
-        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskUnitAsValueTaskUnit |> asFunc1, propertyName)
-    member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
-        self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTaskUnit |> asFunc1, propertyName)
     member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
         self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> asyncUnitAsValueTaskUnit |> asFunc1, propertyName)
 

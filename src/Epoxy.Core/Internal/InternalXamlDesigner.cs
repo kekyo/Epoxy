@@ -44,9 +44,9 @@ using Avalonia.Controls;
 using Xamarin.Forms;
 #endif
 
-namespace Epoxy.Advanced
+namespace Epoxy.Internal
 {
-    public static class XamlDesigner
+    internal static class InternalXamlDesigner
     {
 #if WINDOWS_WPF
         private static readonly ThreadLocal<bool?> designMode = new ThreadLocal<bool?>();

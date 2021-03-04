@@ -24,6 +24,7 @@ open Epoxy.Internal
 
 open System
 open System.Threading.Tasks
+open System.Diagnostics
 
 #if WINDOWS_UWP || UNO
 open Windows.UI.Xaml
@@ -36,6 +37,7 @@ open Microsoft.UI.Xaml
 #if WINDOWS_WPF
 open System.Windows
 open System.Windows.Threading
+
 #endif
 
 #if XAMARIN_FORMS
@@ -47,14 +49,14 @@ open Avalonia
 open Avalonia.Threading
 #endif
 
+[<DebuggerStepThrough>]
 [<AutoOpen>]
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module public FSharpHelpers =
 
 #if WINDOWS_WPF
     type Dispatcher with
         member dispatcher.invokeAsync (action: unit -> unit) =
-            dispatcher.InvokeAsync<unit>(fun () -> action()).Task |> taskAsAsyncResult
+            dispatcher.InvokeAsync<unit>(action |> asFunc0).Task |> taskAsAsyncResult
 
         member dispatcher.invokeAsync (action: unit -> ValueTask<'TResult>) =
             dispatcher.Invoke(action >> valueTaskAsAsyncResult)

@@ -31,8 +31,7 @@ open Epoxy.Internal
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module public ViewModelExtension =
+module public SyncViewModelExtension =
     type public ViewModel with
         member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
             viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> unitAsValueTaskUnit |> asFunc1, propertyName)

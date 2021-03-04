@@ -60,6 +60,9 @@ namespace Epoxy.Internal
 
         public static async Task<U> MapAsTask<T, U>(this ValueTask<T> task, Func<T, U> mapper) =>
             mapper(await task.ConfigureAwait(false));
+
+        public static async ValueTask<T> MapAsValueTask<T>(this ValueTask task, Func<T> mapper)
+        { await task.ConfigureAwait(false); return mapper(); }
         public static async ValueTask<U> MapAsValueTask<T, U>(this ValueTask<T> task, Func<T, U> mapper) =>
             mapper(await task.ConfigureAwait(false));
 
@@ -70,11 +73,11 @@ namespace Epoxy.Internal
         public static async ValueTask AsValueTaskVoid<T>(this ValueTask<T> task) =>
             await task.ConfigureAwait(false);
         public static async ValueTask<Unit> AsValueTaskUnit(this Task task)
-            { await task.ConfigureAwait(false); return default; }
+        { await task.ConfigureAwait(false); return default; }
         public static async ValueTask<Unit> AsValueTaskUnit<T>(this Task<T> task)
         { await task.ConfigureAwait(false); return default; }
         public static async ValueTask<Unit> AsValueTaskUnit(this ValueTask task)
-            { await task.ConfigureAwait(false); return default; }
+        { await task.ConfigureAwait(false); return default; }
         public static async ValueTask<Unit> AsValueTaskUnit<T>(this ValueTask<T> task)
         { await task.ConfigureAwait(false); return default; }
 

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -19,28 +19,13 @@
 
 #nullable enable
 
-using System;
+using Epoxy.Internal;
 
 namespace Epoxy.Advanced
 {
-    [AttributeUsage(AttributeTargets.Interface)]
-    public sealed class GlobalServiceAttribute : Attribute
+    public static class XamlDesigner
     {
-        public GlobalServiceAttribute()
-        { }
-    }
-
-    public enum RegisteringValidations
-    {
-        Strict,
-        UnsafePartial,
-        UnsafeOverride
-    }
-
-    public sealed class GlobalServiceAccessor
-    {
-        internal GlobalServiceAccessor()
-        {
-        }
+        public static bool IsDesignTime =>
+            InternalXamlDesigner.IsDesignTime;
     }
 }
