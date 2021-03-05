@@ -1,4 +1,4 @@
-# Epoxy - An independent flexible XAML MVVM library for .NET
+# Epoxy - An independent flexible XAML MVVM library
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
@@ -19,6 +19,10 @@
 |:--|:--|:--|
 |FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
 |FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
+
+|Package|All|Description|
+|:--|:--|:--|
+|Epoxy.Templates|[![NuGet Epoxy.Templates](https://img.shields.io/nuget/v/Epoxy.Templates.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Templates)|dotnet CLI template package|
 
 ## これは何?
 
