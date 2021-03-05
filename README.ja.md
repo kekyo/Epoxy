@@ -403,7 +403,7 @@ public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
 
 ```csharp
 // この例では、ConverterParameterで指定された値を受け取ります。
-// その型は、ジェネリック第3引数で指定します。ここでは文字列を受け取る例を示します:
+// その型は、ジェネリック第2引数で指定します。ここでは文字列を受け取る例を示します:
 public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 {
     // 第2引数にパラメータの値が渡されます。

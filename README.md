@@ -384,7 +384,7 @@ This is an example of receiving a converter parameter:
 
 ```csharp
 // In this example, it receives the value specified by ConverterParameter.
-// Its type is specified by the generic third argument.
+// Its type is specified by the generic second argument.
 // Here is an example of receiving a string:
 public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 {
