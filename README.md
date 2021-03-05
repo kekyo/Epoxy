@@ -521,6 +521,92 @@ Try not to use `GlobalService` in places where it is not really needed.
 
 ---
 
+## About the F# version
+
+By using the F# version of the package, you can write code that follows the F# style as follows.
+The instances used are shared, you can use the preferred API for both C# and F# while maintaining the same instances.
+
+### camel-case function names
+
+All functions in FSharp.Epoxy are camel-cased. For example, instead of the `GetValue`/`SetValue` methods in the `ViewModel` base class, use the `getValue`/`setValue` functions.
+
+```fsharp
+open Epoxy
+type ItemViewModel() =
+    inherit ViewModel()
+
+    // Use the getValue and setValue functions to transfer properties.
+    // You can write the type where type inference is effective,
+    // so get() and set() can be written with type annotations.
+    member __.Title
+        with get(): string = __.getValue()
+        and set (value: string) = __.setValue value
+```
+
+### Direct support for F# types
+
+Function types instead of delegate types, and `Option` types instead of out parameters, to make it easier for F# to handle them.
+
+```fsharp
+// Arguments that receive a delegate can directly receive
+// F# function type instead.
+self.Ready <- Command.Factory.createSync(fun (e:RoutedEventArgs) ->
+    self.IsEnabled <- true)
+```
+
+```fsharp
+type public ScoreToBrushConverter() =
+    inherit ValueConverter<int, Brush>()
+
+    // The convert function has no out parameter and
+    // can be written to return the 'T option.
+    override __.convert from =
+        if from >= 5 then Some yellow else Some gray
+```
+
+### Use the type `Async` instead of `ValueTask` as the default asynchronous type
+
+Basically, all asynchronous operations are designed to be described smoothly with the type `Async`.
+
+```fsharp
+// Since the default function definitions are all defined to
+// accept F#'s `Async` type, so we can use asynchronous workflows
+// with `async { ... }`.
+self.Fetch <- CommandFactory.create(fun () -> async {
+    let! reddits = Reddit.fetchNewPostsAsync "r/aww"
+    // ...
+})
+```
+
+When used in conjunction with my other project [FusionTasks](https://github.com/kekyo/FSharp.Control.FusionTasks), it makes easier to work with existing libraries that use `Task`/`ValueTask` (such as `HttpClient.GetAsync`). dotnet CLI templates are enabled by default.
+
+`Epoxy.Supplements` namespace should be explicitly imported when directly passing methods that return `Task` or `ValueTask` types, or when providing computation expressions that constitute these types.
+
+NOTE: The preference for the `Async` type may change when [the `resumable` structure is released in a future F# release.](https://github.com/dotnet/fsharp/pull/6811)
+
+### Automatic resourceization of WPF XAML pages
+
+So the XAML build action is automatically changed so that it is added to the project as a resource. When you add the XAML file to the project, you don't need to do anything in particular to set it up correctly.
+
+One limitation of this feature is that XAML is always stored in the resource as raw source code (XML text) and is not converted to binary (BAML). Also, the assembly name must always be specified in the XAML namespace in order to be able to reference the type at runtime:
+
+```xml
+<!-- Always add the assembly directive to the clr-namespace directive -->
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:viewmodels="clr-namespace:EpoxyHello.ViewModels;assembly=EpoxyHello"
+    Title="EpoxyHello" Height="450" Width="800">
+
+    <Window.DataContext>
+        <viewmodels:MainWindowViewModel />
+    </Window.DataContext>
+
+    <!-- ... -->
+</Window>
+```
+
+---
+
 ## License
 
 Apache-v2

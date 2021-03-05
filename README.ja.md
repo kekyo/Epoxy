@@ -530,6 +530,91 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 
 ---
 
+## F#バージョンについて
+
+F#バージョンのパッケージを使う事で、以下のようなF#の流儀に沿うコードを記述できます。
+使用するインスタンスは共有されます。C#/F#混在プロジェクトにおいても、保持するインスタンスは同一でありながら、
+C#/F#それぞれで好ましいAPIを使い分けることができます。
+
+### camel-caseの関数名
+
+FSharp.Epoxyのすべての関数は、camel-case化されています。例えば、`ViewModel`基底クラスの、`GetValue`/`SetValue`メソッドの代わりに、`getValue`/`setValue`関数を使います。
+
+```fsharp
+open Epoxy
+type ItemViewModel() =
+    inherit ViewModel()
+
+    // プロパティの転送は、getValue, setValue関数を使う。
+    // 型推論が利く場所に型を書けるので、get()やset()に型注釈を寄せて書ける。
+    member __.Title
+        with get(): string = __.getValue()
+        and set (value: string) = __.setValue value
+```
+
+### F#型の直接サポート
+
+デリゲート型ではなく関数型、outパラメータではなく`Option`型、のように、F#で扱いやすいように配慮しています。
+
+```fsharp
+// デリゲートを受ける引数は、代わりにF#の関数型を直接受け取ることが出来る。
+self.Ready <- Command.Factory.createSync(fun (e:RoutedEventArgs) ->
+    self.IsEnabled <- true)
+```
+
+```fsharp
+type public ScoreToBrushConverter() =
+    inherit ValueConverter<int, Brush>()
+
+    // convert関数はoutパラメータを持たず、'T optionを返すように記述できる。
+    override __.convert from =
+        if from >= 5 then Some yellow else Some gray
+```
+
+### 既定の非同期型として`ValueTask`型ではなく`Async`型を使う
+
+基本的に、全ての非同期処理は`Async`型でスムーズに記述できるように配慮しています。
+
+```fsharp
+// デフォルトの関数定義は、全てF#の`Async`型を受け取るように定義されているため、
+// 以下のように非同期ワークフロー `async { ... }` で書くことが出来る。
+self.Fetch <- CommandFactory.create(fun () -> async {
+    let! reddits = Reddit.fetchNewPostsAsync "r/aww"
+    // ...
+})
+```
+
+私の別のプロジェクト、[FusionTasks](https://github.com/kekyo/FSharp.Control.FusionTasks)を併用すると、既存の`Task`/`ValueTask`を使うライブラリ（例えば`HttpClient.GetAsync`のような）を、更に簡単に扱うことが出来るようになります。dotnet CLIテンプレートは、既定で有効になっています。
+
+`Task`型や`ValueTask`型を返すメソッドを直接渡す場合や、これらの型を構成するコンピュテーション式を与える場合は、`Epoxy.Supplements`名前空間を明示的に参照してください。
+
+注意: `Async`型を優先する事については、[将来のF#で、`resumable`構造がリリース](https://github.com/dotnet/fsharp/pull/6811)された際に、変更される可能性があります。
+
+### WPF XAMLページの自動リソース化
+
+F#でWPFを扱う場合、XAMLをC#のpartial classに変換されるとビルド出来ないため、リソースとしてそのままプロジェクトに追加されるように、XAMLのビルドアクションが自動的に変更されます。
+
+プロジェクトにXAMLファイルを追加する際に、特に何もしなくても、正しく設定されます。
+
+この機能の制約として、XAMLは常にソースコード(XMLテキスト)のままリソースに保存され、バイナリ(BAML)には変換されません。また、実行時に型を参照できるようにするため、XAML名前空間には、常にアセンブリ名を指定する必要があります:
+
+```xml
+<!-- clr-namespaceの指定には、常にassembly指定を加える -->
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:viewmodels="clr-namespace:EpoxyHello.ViewModels;assembly=EpoxyHello"
+    Title="EpoxyHello" Height="450" Width="800">
+
+    <Window.DataContext>
+        <viewmodels:MainWindowViewModel />
+    </Window.DataContext>
+
+    <!-- ... -->
+</Window>
+```
+
+---
+
 ## License
 
 Apache-v2
