@@ -35,9 +35,9 @@ module public SyncCommandFactoryExtension =
             new SyncDelegatedCommand(execute |> asActionVoid) :> Command
         member __.createSync (execute: unit -> unit, canExecute: unit -> bool) =
             new SyncDelegatedCommand(execute |> asActionVoid, canExecute |> asFunc0) :> Command
-        member __.createSync<'TParameter> (execute: 'TParameter -> unit) =
+        member __.createSync (execute: 'TParameter -> unit) =
             new SyncDelegatedCommand<'TParameter>(execute |> asAction1) :> Command
-        member __.createSync<'TParameter> (execute: 'TParameter -> unit, canExecute: 'TParameter -> bool) =
+        member __.createSync (execute: 'TParameter -> unit, canExecute: 'TParameter -> bool) =
             new SyncDelegatedCommand<'TParameter>(execute |> asAction1, canExecute |> asFunc1) :> Command
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -50,11 +50,11 @@ module public SyncCommandFactoryExtension =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> ValueTask) =
+        member __.createSync (execute: 'TParameter -> ValueTask) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> ValueTask, canExecute: 'TParameter -> bool) =
+        member __.createSync (execute: 'TParameter -> ValueTask, canExecute: 'TParameter -> bool) =
             raise(InvalidOperationException("Use setValueAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -67,11 +67,11 @@ module public SyncCommandFactoryExtension =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> ValueTask<unit>) =
+        member __.createSync (execute: 'TParameter -> ValueTask<unit>) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> ValueTask<unit>, canExecute: 'TParameter -> bool) =
+        member __.createSync (execute: 'TParameter -> ValueTask<unit>, canExecute: 'TParameter -> bool) =
             raise(InvalidOperationException("Use setValueAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -84,11 +84,11 @@ module public SyncCommandFactoryExtension =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> Task) =
+        member __.createSync (execute: 'TParameter -> Task) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> Task, canExecute: 'TParameter -> bool) =
+        member __.createSync (execute: 'TParameter -> Task, canExecute: 'TParameter -> bool) =
             raise(InvalidOperationException("Use setValueAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -101,11 +101,11 @@ module public SyncCommandFactoryExtension =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> Task<unit>) =
+        member __.createSync (execute: 'TParameter -> Task<unit>) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> Task<unit>, canExecute: 'TParameter -> bool) =
+        member __.createSync (execute: 'TParameter -> Task<unit>, canExecute: 'TParameter -> bool) =
             raise(InvalidOperationException("Use setValueAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -118,9 +118,9 @@ module public SyncCommandFactoryExtension =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> Async<unit>) =
+        member __.createSync (execute: 'TParameter -> Async<unit>) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member __.createSync<'TParameter> (execute: 'TParameter -> Async<unit>, canExecute: 'TParameter -> bool) =
+        member __.createSync (execute: 'TParameter -> Async<unit>, canExecute: 'TParameter -> bool) =
             raise(InvalidOperationException("Use setValueAsync instead."))

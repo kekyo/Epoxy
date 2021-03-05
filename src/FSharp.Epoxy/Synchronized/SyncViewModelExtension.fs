@@ -33,26 +33,26 @@ open Epoxy.Internal
 [<AutoOpen>]
 module public SyncViewModelExtension =
     type public ViewModel with
-        member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
+        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
             viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> unitAsValueTaskUnit |> asFunc1, propertyName)
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =
+        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
+        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName>] propertyName) =
+        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
+        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
-        member viewModel.setValueSync<'TValue> (newValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName>] propertyName) =
+        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> Async<unit>, [<Optional; CallerMemberName>] propertyName) =
             raise(InvalidOperationException("Use setValueAsync instead."))
