@@ -19,6 +19,9 @@
 
 #nullable enable
 
+using Epoxy.Internal;
+
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -30,12 +33,19 @@ namespace Epoxy.Supplemental
             new UIThreadAwaiter();
     }
 
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
+    public sealed class UIThreadAwaiter : INotifyCompletion
     {
         internal UIThreadAwaiter()
         { }
 
         public bool IsCompleted { get; private set; }
+
+        public void OnCompleted(Action continuation) =>
+            InternalUIThread.ContinueOnUIThread(() =>
+            {
+                this.IsCompleted = true;
+                continuation();
+            });
 
         public void GetResult() =>
             Debug.Assert(this.IsCompleted);

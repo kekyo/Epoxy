@@ -21,35 +21,27 @@
 
 using System;
 
-using Xamarin.Forms;
+using Avalonia.Threading;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Internal
 {
-    partial class UIThreadAwaiter
+    internal static class InternalUIThread
     {
-        public void OnCompleted(Action continuation)
+        public static void ContinueOnUIThread(Action continuation)
         {
-            var dispatcher = Application.Current?.Dispatcher;
+            var dispatcher = Dispatcher.UIThread;
             if (dispatcher == null)
             {
-                // NOTE: Could't use SynchronizationContext.
-                //   Because multi-platform targetter is capable for separated threading UI message pumps (ex: UWP).
-
                 throw new InvalidOperationException("UI thread not found.");
             }
 
-            if (!dispatcher.IsInvokeRequired)
+            if (dispatcher.CheckAccess())
             {
-                this.IsCompleted = true;
                 continuation();
             }
             else
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    this.IsCompleted = true;
-                    continuation();
-                });
+                dispatcher.Post(continuation);
             }
         }
     }
