@@ -616,6 +616,10 @@ One limitation of this feature is that XAML is always stored in the resource as 
 Apache-v2
 
 ## History
+
+* 0.15.0:
+  * Added F#'s camel-casing UIThread API.
+  * Made safer handler for catching excedptions on Command infrastructure.
 * 0.14.0:
   * Added XamlDesigner class.
   * Added Avalonia runtime platforms on net48, netcoreapp2.1, netcoreapp3.1 and net5.0.

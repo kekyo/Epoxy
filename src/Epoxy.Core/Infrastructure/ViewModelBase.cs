@@ -27,7 +27,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Epoxy.Internal;
-using Epoxy.Supplemental;
 
 namespace Epoxy.Infrastructure
 {
@@ -58,7 +57,7 @@ namespace Epoxy.Infrastructure
             string? propertyName)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.UnsafeIsBound())
+            if (!InternalUIThread.UnsafeIsBound())
             {
                 throw new InvalidOperationException(
                     "Couldn't use GetValue() on worker thread context.");
@@ -80,7 +79,7 @@ namespace Epoxy.Infrastructure
             string? propertyName)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.UnsafeIsBound())
+            if (!InternalUIThread.UnsafeIsBound())
             {
                 throw new InvalidOperationException(
                     "Couldn't use GetValue<TValue>() on worker thread context.");
@@ -103,7 +102,7 @@ namespace Epoxy.Infrastructure
             string? propertyName = null)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.UnsafeIsBound())
+            if (!InternalUIThread.UnsafeIsBound())
             {
                 throw new InvalidOperationException(
                     "Couldn't use SetValue() on worker thread context.");
@@ -172,7 +171,7 @@ namespace Epoxy.Infrastructure
             string? propertyName)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.UnsafeIsBound())
+            if (!InternalUIThread.UnsafeIsBound())
             {
                 throw new InvalidOperationException(
                     "Couldn't use OnPropertyChanging() on worker thread context.");
@@ -185,7 +184,7 @@ namespace Epoxy.Infrastructure
             string? propertyName)
         {
             Debug.Assert(propertyName is string);
-            if (!UIThread.UnsafeIsBound())
+            if (!InternalUIThread.UnsafeIsBound())
             {
                 throw new InvalidOperationException(
                     "Couldn't use OnPropertyChanged() on worker thread context.");

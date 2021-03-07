@@ -20,55 +20,42 @@
 #nullable enable
 
 using System;
-
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Epoxy.Internal
 {
-    internal static class InternalUIThread
+    partial class InternalUIThread
     {
         public static void ContinueOnUIThread(Action continuation)
         {
-            if (CoreWindow.GetForCurrentThread()?.Dispatcher is { } d1)
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null)
             {
-                // Maybe anytime is true
-                if (d1.HasThreadAccess)
+                if (SynchronizationContext.Current is { } context)
                 {
-                    continuation();
+                    context.Post(_ => continuation(), null);
+                    return;
                 }
                 else
                 {
-                    var _ = d1.RunAsync(
-                        CoreDispatcherPriority.Normal,
-                        () => continuation());
-                }
-                return;
-            }
-
-            try
-            {
-                if (CoreApplication.MainView?.CoreWindow?.Dispatcher is { } d2)
-                {
-                    if (d2.HasThreadAccess)
-                    {
-                        continuation();
-                    }
-                    else
-                    {
-                        var _ = d2.RunAsync(
-                            CoreDispatcherPriority.Normal,
-                            () => continuation());
-                    }
-                    return;
+                    throw new InvalidOperationException("UI thread not found.");
                 }
             }
-            catch (InvalidOperationException ex)
-            {
-                throw new InvalidOperationException("UI thread not found.", ex);
-            }
 
-            throw new InvalidOperationException("UI thread not found.");
+            if (object.ReferenceEquals(
+                dispatcher.Thread,
+                Thread.CurrentThread))
+            {
+                continuation();
+            }
+            else
+            {
+                var _ = dispatcher.BeginInvoke(
+                    DispatcherPriority.Normal,
+                    continuation);
+            }
         }
     }
 }

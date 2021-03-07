@@ -625,6 +625,9 @@ Apache-v2
 
 ## History
 
+* 0.15.0:
+  * F#のcamel-casing UIThread関数を追加。
+  * Commandのハンドラで発生する例外の処理を改善した。
 * 0.14.0:
   * XamlDesignerクラスを追加。
   * Avaloniaランタイムプラットフォームを追加: net48, netcoreapp2.1, netcoreapp3.1, net5.0.

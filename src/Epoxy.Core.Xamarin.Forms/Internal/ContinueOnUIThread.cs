@@ -20,41 +20,31 @@
 #nullable enable
 
 using System;
-using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
+
+using Xamarin.Forms;
 
 namespace Epoxy.Internal
 {
-    internal static class InternalUIThread
+    partial class InternalUIThread
     {
         public static void ContinueOnUIThread(Action continuation)
         {
             var dispatcher = Application.Current?.Dispatcher;
             if (dispatcher == null)
             {
-                if (SynchronizationContext.Current is { } context)
-                {
-                    context.Post(_ => continuation(), null);
-                    return;
-                }
-                else
-                {
-                    throw new InvalidOperationException("UI thread not found.");
-                }
+                // NOTE: Could't use SynchronizationContext.
+                //   Because multi-platform targetter is capable for separated threading UI message pumps (ex: UWP).
+
+                throw new InvalidOperationException("UI thread not found.");
             }
 
-            if (object.ReferenceEquals(
-                dispatcher.Thread,
-                Thread.CurrentThread))
+            if (!dispatcher.IsInvokeRequired)
             {
                 continuation();
             }
             else
             {
-                var _ = dispatcher.BeginInvoke(
-                    DispatcherPriority.Normal,
-                    continuation);
+                Device.BeginInvokeOnMainThread(continuation);
             }
         }
     }

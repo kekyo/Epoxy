@@ -19,17 +19,9 @@
 
 #nullable enable
 
-using System;
-using System.ComponentModel;
 using System.Threading;
 
-#if WINDOWS_WPF
-using System.Diagnostics;
-using System.Windows;
-#endif
-
 #if WINDOWS_UWP || WINUI || UNO
-using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 #endif
 
@@ -37,19 +29,21 @@ using Windows.UI.Core;
 using Microsoft.System;
 #endif
 
+#if WINDOWS_WPF
+using System.Windows;
+#endif
+
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 #endif
 
 #if AVALONIA
-using Avalonia;
+using Avalonia.Threading;
 #endif
 
-using Epoxy.Supplemental;
-
-namespace Epoxy
+namespace Epoxy.Internal
 {
-    public static class UIThread
+    internal static partial class InternalUIThread
     {
         private static readonly ThreadLocal<bool?> ids = new ThreadLocal<bool?>();
 
@@ -74,7 +68,7 @@ namespace Epoxy
                         }
 #endif
 #if AVALONIA
-                        if (Avalonia.Threading.Dispatcher.UIThread?.CheckAccess() ?? false)
+                        if (Dispatcher.UIThread?.CheckAccess() ?? false)
                         {
                             ids.Value = true;
                             return true;
@@ -123,29 +117,23 @@ namespace Epoxy
                 }
             }
         }
-        
-        [EditorBrowsable(EditorBrowsableState.Never)]
+
         public static bool UnsafeIsBound()
         {
-#if XAMARIN_FORMS
             if (IsBound)
             {
                 return true;
             }
-
+#if XAMARIN_FORMS
             // Workaround XF on UWP:
             //   The dispatcher will make invalid result for IsInvokeRequired in
             //   BindableContext initialize sequence.
-            else if (Device.RuntimePlatform.Equals(Device.UWP))
+            if (Device.RuntimePlatform.Equals(Device.UWP))
             {
                 return true;
             }
-            else
 #endif
-            return IsBound;
+            return false;
         }
-
-        public static UIThreadAwaitable Bind() =>
-            new UIThreadAwaitable();
     }
 }

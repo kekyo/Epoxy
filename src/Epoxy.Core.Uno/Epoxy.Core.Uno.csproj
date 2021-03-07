@@ -22,8 +22,8 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
-    <Compile Include="../Epoxy.Core.Uwp/Internal/InternalUIThread.cs">
-        <Link>Internal/InternalUIThread.cs</Link>
+    <Compile Include="../Epoxy.Core.Uwp/Internal/ContinueOnUIThread.cs">
+        <Link>Internal/ContinueOnUIThread.cs</Link>
     </Compile>
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>

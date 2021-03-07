@@ -17,32 +17,25 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
+namespace Epoxy
 
-using System;
+open Epoxy.Internal
 
-using Avalonia.Threading;
+open System
+open System.ComponentModel
+open System.Diagnostics
 
-namespace Epoxy.Internal
-{
-    internal static class InternalUIThread
-    {
-        public static void ContinueOnUIThread(Action continuation)
-        {
-            var dispatcher = Dispatcher.UIThread;
-            if (dispatcher == null)
-            {
-                throw new InvalidOperationException("UI thread not found.");
-            }
+[<DebuggerStepThrough>]
+[<AbstractClass>]
+[<Sealed>]
+type public UIThread =
+    static member isBound =
+        InternalUIThread.IsBound
 
-            if (dispatcher.CheckAccess())
-            {
-                continuation();
-            }
-            else
-            {
-                dispatcher.Post(continuation);
-            }
-        }
-    }
-}
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member unsafeIsBound() =
+        InternalUIThread.UnsafeIsBound()
+
+    static member bind() : Async<unit> =
+        Async.FromContinuations(fun (resolve, _, _) ->
+            InternalUIThread.ContinueOnUIThread(new Action(resolve)))
