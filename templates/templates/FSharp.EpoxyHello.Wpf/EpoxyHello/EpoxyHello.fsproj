@@ -25,9 +25,9 @@
 
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.fs" />
-    <Compile Include="ViewModels/ItemViewModel.fs" />
-    <Compile Include="ViewModels/MainWindowViewModel.fs" />
-    <Compile Include="Views/Converters/ScoreToBrushConverter.fs" />
+    <Compile Include="ViewModels\ItemViewModel.fs" />
+    <Compile Include="ViewModels\MainWindowViewModel.fs" />
+    <Compile Include="Views\Converters\ScoreToBrushConverter.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
