@@ -25,14 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="**/*.xaml" />
-    <Resource Include="**/*.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Controls/**/*.fs" />
-    <Compile Include="ViewModels/**/*.fs" />
-    <Compile Include="Views/**/*.fs" />
+    <Compile Include="ViewModels/ItemViewModel.fs" />
+    <Compile Include="ViewModels/MainWindowViewModel.fs" />
+    <Compile Include="Views/Converters/ScoreToBrushConverter.fs" />
+    <Compile Include="Views/MainWindow.axaml.fs" />
     <Compile Include="App.axaml.fs" />
   </ItemGroup>
 
