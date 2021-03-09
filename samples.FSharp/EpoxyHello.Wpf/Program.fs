@@ -19,8 +19,6 @@
 
 open System
 open System.Windows
-open System.Reflection
-open EpoxyHello.Wpf.ViewModels
 
 [<STAThread>]
 [<EntryPoint>]
