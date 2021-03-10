@@ -31,28 +31,45 @@ namespace Epoxy.Infrastructure
 {
     [DebuggerDisplay("{PrettyPrint}")]
     public abstract class ViewModelBase :
-        INotifyPropertyChanging, INotifyPropertyChanged
+        IViewModelImplementer
     {
-        private Dictionary<string, object?>? properties;
+        private InternalPropertyBag? epoxy_properties__;
 
         [DebuggerStepThrough]
         private protected ViewModelBase()
         { }
 
-        public event PropertyChangingEventHandler? PropertyChanging;
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangingEventHandler? PropertyChanging
+        {
+            [DebuggerStepThrough]
+            add => InternalModelHelper.AddPropertyChanging(
+                value, ref this.epoxy_properties__);
+            [DebuggerStepThrough]
+            remove => InternalModelHelper.RemovePropertyChanging(
+                value, ref this.epoxy_properties__);
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged
+        {
+            [DebuggerStepThrough]
+            add => InternalModelHelper.AddPropertyChanged(
+                value, ref this.epoxy_properties__);
+            [DebuggerStepThrough]
+            remove => InternalModelHelper.RemovePropertyChanged(
+                value, ref this.epoxy_properties__);
+        }
 
         [DebuggerStepThrough]
         private protected object? InternalGetValue(
             object? defaultValue,
             string? propertyName) =>
-            InternalModelHelper.GetValue(defaultValue, propertyName, ref properties);
+            InternalModelHelper.GetValue(defaultValue, propertyName, ref epoxy_properties__);
 
         [DebuggerStepThrough]
         private protected TValue InternalGetValue<TValue>(
             TValue defaultValue,
             string? propertyName) =>
-            InternalModelHelper.GetValue(defaultValue, propertyName, ref properties);
+            InternalModelHelper.GetValue(defaultValue, propertyName, ref epoxy_properties__);
 
         [DebuggerStepThrough]
         internal ValueTask<Unit> InternalSetValueAsync<TValue>(
@@ -61,8 +78,7 @@ namespace Epoxy.Infrastructure
             string? propertyName) =>
             InternalModelHelper.SetValueAsync(
                 newValue, propertyChanged, propertyName,
-                this, this.PropertyChanging, this.PropertyChanged,
-                ref properties);
+                this, ref epoxy_properties__);
 
         [DebuggerStepThrough]
         internal void InternalSetValue<TValue>(
@@ -70,18 +86,19 @@ namespace Epoxy.Infrastructure
             string? propertyName) =>
             InternalModelHelper.SetValueAsync(
                 newValue, null, propertyName,
-                this, this.PropertyChanging, this.PropertyChanged,
-                ref properties);
+                this, ref epoxy_properties__);
 
         [DebuggerStepThrough]
         private protected void InternalOnPropertyChanging(
             string? propertyName) =>
-            InternalModelHelper.OnPropertyChanging(this, this.PropertyChanging, propertyName);
+            InternalModelHelper.OnPropertyChanging(
+                propertyName, this, this.epoxy_properties__);
 
         [DebuggerStepThrough]
         private protected void InternalOnPropertyChanged(
             string? propertyName) =>
-            InternalModelHelper.OnPropertyChanged(this, this.PropertyChanged, propertyName);
+            InternalModelHelper.OnPropertyChanged(
+                propertyName, this, this.epoxy_properties__);
 
         public string PrettyPrint =>
             InternalModelHelper.PrettyPrint(this, false);

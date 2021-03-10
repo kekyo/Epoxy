@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy.Build.Tasks</AssemblyName>
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Build.Tasks</AssemblyTitle>
+    <PackageId>Epoxy.Build</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Build" Version="15.9.20" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.9.20" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+    <Content Include="build\*.*" CopyToOutputDirectory="Never" PackagePath="build/" />
+    <Content Include="buildMultiTargeting\*.*" CopyToOutputDirectory="Never" PackagePath="buildMultiTargeting/" />
+  </ItemGroup>
+
+</Project>

@@ -28,16 +28,24 @@ using System.Threading.Tasks;
 
 namespace Epoxy.Internal
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public sealed class InternalPropertyBag :
+        Dictionary<string, object?>
+    {
+        internal PropertyChangingEventHandler? propertyChanging;
+        internal PropertyChangedEventHandler? propertyChanged;
+    }
+
     //[DebuggerStepThrough]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InternalModelHelper
     {
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static Dictionary<string, object?> Prepare(ref Dictionary<string, object?>? properties)
+        private static InternalPropertyBag Prepare(ref InternalPropertyBag? properties)
         {
-            if (!(properties is Dictionary<string, object>))
+            if (!(properties is InternalPropertyBag))
             {
-                properties = new Dictionary<string, object?>();
+                properties = new InternalPropertyBag();
             }
             return properties;
         }
@@ -46,7 +54,7 @@ namespace Epoxy.Internal
         public static object? GetValue(
             object? defaultValue,
             string? propertyName,
-            ref Dictionary<string, object?>? properties)
+            ref InternalPropertyBag? properties)
         {
             Debug.Assert(propertyName is string);
             if (!InternalUIThread.UnsafeIsBound())
@@ -70,7 +78,7 @@ namespace Epoxy.Internal
         public static TValue GetValue<TValue>(
             TValue defaultValue,
             string? propertyName,
-            ref Dictionary<string, object?>? properties)
+            ref InternalPropertyBag? properties)
         {
             Debug.Assert(propertyName is string);
             if (!InternalUIThread.UnsafeIsBound())
@@ -96,9 +104,7 @@ namespace Epoxy.Internal
             Func<TValue, ValueTask<Unit>>? propertyChanged,
             string? propertyName,
             object sender,
-            PropertyChangingEventHandler? propertyChangingHandler,
-            PropertyChangedEventHandler? propertyChangedHandler,
-            ref Dictionary<string, object?>? properties)
+            ref InternalPropertyBag? properties)
         {
             Debug.Assert(propertyName is string);
             if (!InternalUIThread.UnsafeIsBound())
@@ -112,7 +118,7 @@ namespace Epoxy.Internal
             {
                 if (!DefaultValue<TValue>.ValueEquals(oldValue, newValue))
                 {
-                    propertyChangingHandler?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
+                    p.propertyChanging?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
 
                     if (!DefaultValue.IsDefaultValue(newValue))
                     {
@@ -123,7 +129,7 @@ namespace Epoxy.Internal
                         p.Remove(propertyName!);
                     }
 
-                    propertyChangedHandler?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
+                    p.propertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
                     if (propertyChanged is { } pc)
                     {
                         return pc.Invoke(newValue);
@@ -132,7 +138,7 @@ namespace Epoxy.Internal
             }
             else
             {
-                propertyChangingHandler?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
+                p.propertyChanging?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
 
                 if (!DefaultValue.IsDefaultValue(newValue))
                 {
@@ -143,7 +149,7 @@ namespace Epoxy.Internal
                     p.Remove(propertyName!);
                 }
 
-                propertyChangedHandler?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
+                p.propertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
                 if (propertyChanged is { } pc)
                 {
                     return pc.Invoke(newValue);
@@ -154,10 +160,46 @@ namespace Epoxy.Internal
         }
 
         [DebuggerStepThrough]
+        public static void AddPropertyChanging(
+            PropertyChangingEventHandler? handler,
+            ref InternalPropertyBag? properties)
+        {
+            var p = Prepare(ref properties);
+            p.propertyChanging += handler;
+        }
+
+        [DebuggerStepThrough]
+        public static void RemovePropertyChanging(
+            PropertyChangingEventHandler? handler,
+            ref InternalPropertyBag? properties)
+        {
+            var p = Prepare(ref properties);
+            p.propertyChanging -= handler;
+        }
+
+        [DebuggerStepThrough]
+        public static void AddPropertyChanged(
+            PropertyChangedEventHandler? handler,
+            ref InternalPropertyBag? properties)
+        {
+            var p = Prepare(ref properties);
+            p.propertyChanged += handler;
+        }
+
+        [DebuggerStepThrough]
+        public static void RemovePropertyChanged(
+            PropertyChangedEventHandler? handler,
+            ref InternalPropertyBag? properties)
+        {
+            var p = Prepare(ref properties);
+            p.propertyChanged -= handler;
+        }
+
+        [DebuggerStepThrough]
         public static void OnPropertyChanging(
+            string? propertyName,
             object sender,
-            PropertyChangingEventHandler? propertyChangingHandler,
-            string? propertyName)
+            InternalPropertyBag? properties)
         {
             Debug.Assert(propertyName is string);
             if (!InternalUIThread.UnsafeIsBound())
@@ -166,14 +208,15 @@ namespace Epoxy.Internal
                     "Couldn't use OnPropertyChanging() on worker thread context.");
             }
 
-            propertyChangingHandler?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
+            properties?.propertyChanging?.Invoke(
+                sender, new PropertyChangingEventArgs(propertyName));
         }
 
         [DebuggerStepThrough]
         public static void OnPropertyChanged(
+            string? propertyName,
             object sender,
-            PropertyChangedEventHandler? propertyChangedHandler,
-            string? propertyName)
+            InternalPropertyBag? properties)
         {
             Debug.Assert(propertyName is string);
             if (!InternalUIThread.UnsafeIsBound())
@@ -182,7 +225,8 @@ namespace Epoxy.Internal
                     "Couldn't use OnPropertyChanged() on worker thread context.");
             }
 
-            propertyChangedHandler?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
+            properties?.propertyChanged?.Invoke(
+                sender, new PropertyChangedEventArgs(propertyName));
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
