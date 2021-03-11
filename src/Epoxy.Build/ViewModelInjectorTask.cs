@@ -24,8 +24,6 @@ using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-using Mono.Cecil;
-
 namespace Epoxy
 {
     public sealed class ViewModelInjectorTask : Task
@@ -46,13 +44,26 @@ namespace Epoxy
 
         public override bool Execute()
         {
-            var baseDir = Path.GetDirectoryName(this.TargetAssemblyPath!);
+            var targetAssemblyPath = this.TargetAssemblyPath!;
 
             var injector = new ViewModelInjector(
                 this.EpoxyCorePath!,
                 message => base.Log.LogMessage(MessageImportance.High, message));
 
-            injector.Inject(this.TargetAssemblyPath!);
+            if (injector.Inject(targetAssemblyPath, targetAssemblyPath + ".tmp"))
+            {
+                if (File.Exists(targetAssemblyPath + ".orig"))
+                {
+                    File.Delete(targetAssemblyPath + ".orig");
+                }
+
+                File.Move(targetAssemblyPath, targetAssemblyPath + ".orig");
+                File.Move(targetAssemblyPath + ".tmp", targetAssemblyPath);
+
+                base.Log.LogMessage
+                    (MessageImportance.High,
+                    $"Epoxy.Build: Replaced injected assembly: Assembly={Path.GetFileName(targetAssemblyPath)}");
+            }
 
             return true;
         }

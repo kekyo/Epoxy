@@ -27,10 +27,10 @@ namespace Epoxy
     {
         public NonTargettedViewModel()
         {
-            this.Prop1 = "ABC";
-            this.Prop2 = "ABC";
-            this.Prop3 = "ABC";
-            this.Prop4 = "ABC";
+            this.Prop1 = "ABC1";
+            this.Prop2 = "ABC2";
+            this.Prop3 = "ABC3";
+            this.Prop4 = "ABC4";
         }
 
         public string Prop1

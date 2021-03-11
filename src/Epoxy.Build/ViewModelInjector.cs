@@ -20,6 +20,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -37,6 +38,7 @@ namespace Epoxy
 
         private readonly TypeDefinition viewModelDetectionAttributeType;
         private readonly TypeDefinition viewModelAttributeType;
+        private readonly TypeDefinition ignoreInjectAttributeType;
         private readonly TypeDefinition iViewModelImplementerType;
         private readonly TypeDefinition internalPropertyBagType;
         private readonly TypeDefinition internalModelHelperType;
@@ -49,7 +51,8 @@ namespace Epoxy
         private readonly MethodDefinition addPropertyChanged;
         private readonly MethodDefinition removePropertyChanged;
 
-        private readonly MethodDefinition onPropertyChangingMethod;
+        private readonly MethodDefinition getValueTMethod;
+        private readonly MethodDefinition setValueAsyncTMethod;
 
         private readonly MethodDefinition itAddPropertyChanging;
         private readonly MethodDefinition itRemovePropertyChanging;
@@ -75,6 +78,8 @@ namespace Epoxy
                 "Epoxy.Supplemental.ViewModelDetectionAttribute")!;
             this.viewModelAttributeType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.ViewModelAttribute")!;
+            this.ignoreInjectAttributeType = epoxyCoreAssembly.MainModule.GetType(
+                "Epoxy.IgnoreInjectAttribute")!;
             this.iViewModelImplementerType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.Infrastructure.IViewModelImplementer")!;
             this.internalPropertyBagType = epoxyCoreAssembly.MainModule.GetType(
@@ -96,8 +101,10 @@ namespace Epoxy
             this.removePropertyChanged = this.internalModelHelperType.Methods.
                 First(m => m.Name == "RemovePropertyChanged");
 
-            this.onPropertyChangingMethod = this.internalModelHelperType.Methods.
-                First(m => m.Name == "OnPropertyChanging");
+            this.getValueTMethod = this.internalModelHelperType.Methods.
+                First(m => m.Name == "GetValueT");
+            this.setValueAsyncTMethod = this.internalModelHelperType.Methods.
+                First(m => m.Name == "SetValueAsyncT");
 
             var itPropertyChangingType = iViewModelImplementerType.Interfaces.
                 First(ii => ii.InterfaceType.FullName == "System.ComponentModel.INotifyPropertyChanging").InterfaceType.Resolve();
@@ -114,25 +121,20 @@ namespace Epoxy
                 First().RemoveMethod;
         }
 
-        private void InjectIntoType(ModuleDefinition module, TypeDefinition targetType)
+        private void InjectPropertyChangeEvents(
+            ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField)
         {
-            var propertiesField = new FieldDefinition(
-                "epoxy_properties__",
-                FieldAttributes.Private,
-                module.ImportReference(this.internalPropertyBagType));
-            targetType.Fields.Add(propertiesField);
-
-            var ii = new InterfaceImplementation(
-                module.ImportReference(this.iViewModelImplementerType));
-            targetType.Interfaces.Add(ii);
-
             MethodDefinition CreatePropertyChangeEventTransfer(
                 string name,
                 TypeReference handlerType,
                 MethodDefinition targetMethod)
             {
                 var method = new MethodDefinition(
-                    name, MethodAttributes.Public, this.typeSystem.Void);
+                    name, MethodAttributes.Public | MethodAttributes.Virtual, this.typeSystem.Void);
+
+                //public static void AddPropertyChanging(
+                //    PropertyChangingEventHandler? handler,
+                //    ref InternalPropertyBag? properties)
 
                 method.Parameters.Add(new ParameterDefinition(
                     module.ImportReference(handlerType)));
@@ -149,14 +151,14 @@ namespace Epoxy
             }
 
             var propertyChangingAddMethod = CreatePropertyChangeEventTransfer(
-                "epoxy_PropertyChanging_add__",
+                "epoxy_add_PropertyChanging__",
                 this.propertyChangingEventHandlerType,
                 this.addPropertyChanging);
             propertyChangingAddMethod.Overrides.Add(
                 module.ImportReference(this.itAddPropertyChanging));
 
             var propertyChangingRemoveMethod = CreatePropertyChangeEventTransfer(
-                "epoxy_PropertyChanging_remove__",
+                "epoxy_remove_PropertyChanging__",
                 this.propertyChangingEventHandlerType,
                 this.removePropertyChanging);
             propertyChangingRemoveMethod.Overrides.Add(
@@ -171,14 +173,14 @@ namespace Epoxy
             targetType.Events.Add(propertyChangingEvent);
 
             var propertyChangedAddMethod = CreatePropertyChangeEventTransfer(
-                "epoxy_PropertyChanged_add__",
+                "epoxy_add_PropertyChanged__",
                 this.propertyChangedEventHandlerType,
                 this.addPropertyChanged);
             propertyChangedAddMethod.Overrides.Add(
                 module.ImportReference(this.itAddPropertyChanged));
 
             var propertyChangedRemoveMethod = CreatePropertyChangeEventTransfer(
-                "epoxy_PropertyChanged_remove__",
+                "epoxy_remove_PropertyChanged__",
                 this.propertyChangedEventHandlerType,
                 this.removePropertyChanged);
             propertyChangedRemoveMethod.Overrides.Add(
@@ -193,7 +195,204 @@ namespace Epoxy
             targetType.Events.Add(propertyChangedEvent);
         }
 
-        public void Inject(string targetAssemblyPath)
+        private bool InjectGetterProperty(
+            ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField,
+            PropertyDefinition pd, MethodDefinition getter, MethodDefinition setter,
+            Dictionary<FieldDefinition, MethodDefinition> candidateFields)
+        {
+            var ilp = getter.Body.GetILProcessor();
+
+            if (getter.IsAbstract)
+            {
+                getter.IsAbstract = false;
+                getter.IsVirtual = true;
+            }
+            else
+            {
+                var backingStoreFields = ilp.Body.Instructions.
+                    Where(inst =>
+                        (inst.OpCode == OpCodes.Ldfld) &&
+                        inst.Operand is FieldReference fr &&
+                        fr.Resolve() is { } fd &&
+                        !fd.IsStatic && !fd.IsInitOnly &&
+                        (fd.FieldType.FullName == pd.PropertyType.FullName) &&
+                        fd.DeclaringType.FullName == targetType.FullName).
+                    Select(inst => (FieldReference)inst.Operand).
+                    ToArray();
+                if (backingStoreFields.Length != 1)
+                {
+                    return false;
+                }
+
+                var backingStoreField = module.ImportReference(backingStoreFields[0]).Resolve();
+                candidateFields[backingStoreField] = setter;
+            }
+
+            var body = ilp.Body;
+            body.Instructions.Clear();
+            body.Variables.Clear();
+
+            var propertyType = module.ImportReference(pd.PropertyType);
+
+            var defaultValueVariable = new VariableDefinition(propertyType);
+            body.Variables.Add(defaultValueVariable);
+
+            //public static TValue GetValueT<TValue>(
+            //    TValue defaultValue,
+            //    string? propertyName,
+            //    ref InternalPropertyBag? properties)
+
+            ilp.Append(Instruction.Create(OpCodes.Ldloc, defaultValueVariable));
+            ilp.Append(Instruction.Create(OpCodes.Ldstr, pd.Name));
+            ilp.Append(Instruction.Create(OpCodes.Ldarg_0));
+            ilp.Append(Instruction.Create(OpCodes.Ldflda, propertiesField));
+            var getValueTMethod = new GenericInstanceMethod(
+                module.ImportReference(this.getValueTMethod));
+            getValueTMethod.GenericArguments.Add(propertyType);
+            ilp.Append(Instruction.Create(OpCodes.Call, getValueTMethod));
+            ilp.Append(Instruction.Create(OpCodes.Ret));
+
+            return true;
+        }
+
+        private bool InjectSetterProperty(
+            ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField,
+            PropertyDefinition pd, MethodDefinition setter, 
+            Dictionary<FieldDefinition, MethodDefinition> candidateFields)
+        {
+            var ilp = setter.Body.GetILProcessor();
+
+            if (setter.IsAbstract)
+            {
+                setter.IsAbstract = false;
+                setter.IsVirtual = true;
+            }
+            else
+            {
+                var backingStoreFields = ilp.Body.Instructions.
+                    Where(inst =>
+                        (inst.OpCode == OpCodes.Stfld) &&
+                        inst.Operand is FieldReference fr &&
+                        fr.Resolve() is { } fd &&
+                        !fd.IsStatic && !fd.IsInitOnly &&
+                        (fd.FieldType.FullName == pd.PropertyType.FullName) &&
+                        fd.DeclaringType.FullName == targetType.FullName).
+                    Select(inst => (FieldReference)inst.Operand).
+                    ToArray();
+                if (backingStoreFields.Length != 1)
+                {
+                    return false;
+                }
+
+                var backingStoreField = module.ImportReference(backingStoreFields[0]).Resolve();
+                candidateFields[backingStoreField] = setter;
+            }
+
+            var body = ilp.Body;
+            body.Instructions.Clear();
+            body.Variables.Clear();
+
+            var propertyType = module.ImportReference(pd.PropertyType);
+
+            //public static ValueTask<Unit> SetValueAsyncT<TValue>(
+            //    TValue newValue,
+            //    Func<TValue, ValueTask<Unit>>? propertyChanged,
+            //    string? propertyName,
+            //    object sender,
+            //    ref InternalPropertyBag? properties)
+
+            ilp.Append(Instruction.Create(OpCodes.Ldarg_1));
+            ilp.Append(Instruction.Create(OpCodes.Ldnull));
+            ilp.Append(Instruction.Create(OpCodes.Ldstr, pd.Name));
+            ilp.Append(Instruction.Create(OpCodes.Ldarg_0));
+            ilp.Append(Instruction.Create(OpCodes.Dup));
+            ilp.Append(Instruction.Create(OpCodes.Ldflda, propertiesField));
+            var setValueAsyncTMethod = new GenericInstanceMethod(
+                module.ImportReference(this.setValueAsyncTMethod));
+            setValueAsyncTMethod.GenericArguments.Add(propertyType);
+            ilp.Append(Instruction.Create(OpCodes.Call, setValueAsyncTMethod));
+            ilp.Append(Instruction.Create(OpCodes.Pop));
+            ilp.Append(Instruction.Create(OpCodes.Ret));
+
+            return true;
+        }
+
+        private void RemoveBackingFields(
+            ModuleDefinition module, TypeDefinition targetType,
+            Dictionary<FieldDefinition, MethodDefinition> fields)
+        {
+            foreach (var ctor in targetType.Methods.
+                Where(m => m.IsConstructor))
+            {
+                var ilp = ctor.Body.GetILProcessor();
+                var index = 0;
+                var body = ilp.Body;
+                while (index < body.Instructions.Count)
+                {
+                    var inst = body.Instructions[index];
+
+                    if ((inst.OpCode == OpCodes.Stfld) &&
+                        inst.Operand is FieldReference fr &&
+                        fr.Resolve() is { } fd &&
+                        !fd.IsStatic && !fd.IsInitOnly &&
+                        fields.TryGetValue(fd, out var setter) &&
+                        fd.DeclaringType.FullName == targetType.FullName)
+                    {
+                        inst = Instruction.Create(OpCodes.Call, setter);
+                        body.Instructions[index] = inst;
+                    }
+
+                    index++;
+                }
+            }
+
+            foreach (var candidateField in fields.Keys)
+            {
+                targetType.Fields.Remove(candidateField);
+            }
+        }
+
+        private void InjectProperties(
+            ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField)
+        {
+            var candidateFields = new Dictionary<FieldDefinition, MethodDefinition>();
+
+            foreach (var pd in targetType.Properties.
+                Where(pd => !pd.CustomAttributes.
+                    Any(ca => ca.AttributeType.FullName == this.ignoreInjectAttributeType.FullName)))
+            {
+                if (pd.GetMethod is { } getter && !getter.IsStatic &&
+                    pd.SetMethod is { } setter && !setter.IsStatic)
+                {
+                    this.InjectGetterProperty(
+                        module, targetType, propertiesField, pd, getter, setter, candidateFields);
+                    this.InjectSetterProperty(
+                        module, targetType, propertiesField, pd, setter, candidateFields);
+                }
+            }
+
+            this.RemoveBackingFields(module, targetType, candidateFields);
+        }
+
+        private bool InjectIntoType(ModuleDefinition module, TypeDefinition targetType)
+        {
+            var propertiesField = new FieldDefinition(
+                "epoxy_properties__",
+                FieldAttributes.Private,
+                module.ImportReference(this.internalPropertyBagType));
+            targetType.Fields.Add(propertiesField);
+
+            var ii = new InterfaceImplementation(
+                module.ImportReference(this.iViewModelImplementerType));
+            targetType.Interfaces.Add(ii);
+
+            this.InjectPropertyChangeEvents(module, targetType, propertiesField);
+            this.InjectProperties(module, targetType, propertiesField);
+
+            return true;
+        }
+
+        public bool Inject(string targetAssemblyPath, string injectedAssemblyPath)
         {
             this.assemblyResolver.AddSearchDirectory(
                 Path.GetDirectoryName(targetAssemblyPath));
@@ -201,12 +400,13 @@ namespace Epoxy
             var targetAssemblyName = Path.GetFileNameWithoutExtension(
                 targetAssemblyPath);
 
-            var wrote = false;
-
             using (var targetAssembly = AssemblyDefinition.ReadAssembly(
                 targetAssemblyPath,
                 new ReaderParameters(ReadingMode.Immediate)
                 {
+                    ReadSymbols = true,
+                    ReadWrite = false,
+                    InMemory = true,
                     AssemblyResolver = this.assemblyResolver,
                 }))
             {
@@ -228,30 +428,41 @@ namespace Epoxy
 
                 if (targetTypes.Length >= 1)
                 {
+                    var injected = false;
+
                     foreach (var targetType in targetTypes)
                     {
-                        this.InjectIntoType(targetAssembly.MainModule, targetType);
-                        this.message($"Epoxy.Build: Injected a view model: Assembly={targetAssemblyName}, Type={targetType.FullName}");
+                        if (this.InjectIntoType(targetAssembly.MainModule, targetType))
+                        {
+                            injected = true;
+                            this.message($"Epoxy.Build: Injected a view model: Assembly={targetAssemblyName}, Type={targetType.FullName}");
+                        }
                     }
 
-                    targetAssembly.Write(targetAssemblyPath + ".tmp");
+                    if (injected)
+                    {
+                        if (File.Exists(injectedAssemblyPath))
+                        {
+                            File.Delete(injectedAssemblyPath);
+                        }
 
-                    wrote = true;
+                        var injectedName = Path.GetFileNameWithoutExtension(injectedAssemblyPath);
+                        targetAssembly.Name = new AssemblyNameDefinition(
+                            injectedName, targetAssembly.Name.Version);
+
+                        targetAssembly.Write(
+                            injectedAssemblyPath,
+                            new WriterParameters
+                            {
+                                WriteSymbols = true,
+                                DeterministicMvid = true,
+                            });
+                        return true;
+                    }
                 }
             }
 
-            if (wrote)
-            {
-                if (File.Exists(targetAssemblyPath + ".orig"))
-                {
-                    File.Delete(targetAssemblyPath + ".orig");
-                }
-
-                File.Move(targetAssemblyPath, targetAssemblyPath + ".orig");
-                File.Move(targetAssemblyPath + ".tmp", targetAssemblyPath);
-
-                this.message($"Epoxy.Build: Replaced injected assembly: Assembly={targetAssemblyName}");
-            }
+            return false;
         }
     }
 }

@@ -17,40 +17,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
-
-using Epoxy;
-
 namespace Epoxy
-{
-    [ViewModel]
-    public class TargettedViewModel1
-    {
-        public TargettedViewModel1()
-        {
-            this.Prop1 = "ABC1";
-            this.Prop2 = "ABC2";
-            this.Prop3 = "ABC3";
-            this.Prop4 = "ABC4";
-            this.Prop5 = "ABC5";
-        }
 
-        public string Prop1
-        { get; }
-        public string Prop2
-        { get; protected set; }
-        public string Prop3
-        { get; internal set; }
-        public string Prop4
-        { get; set; }
-        public string Prop5
-        { private get; set; }
+open Epoxy
 
-        public void SetProp2(string value) =>
-            this.Prop2 = value;
-        public void SetProp3(string value) =>
-            this.Prop3 = value;
-        public string GetProp5() =>
-            this.Prop5;
-    }
-}
+[<ViewModel>]
+type TargettedViewModel1() =
+
+    member __.Prop1 = "ABC1"
+    member val Prop2 = "ABC2"
+        with get, set

@@ -19,6 +19,8 @@
 
 #nullable enable
 
+using Epoxy.Infrastructure;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,6 +42,10 @@ namespace Epoxy.Internal
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InternalModelHelper
     {
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static ref InternalPropertyBag? GetPropertyBagReference(ViewModelBase viewModel) =>
+            ref viewModel.epoxy_properties__;
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static InternalPropertyBag Prepare(ref InternalPropertyBag? properties)
         {
@@ -75,7 +81,7 @@ namespace Epoxy.Internal
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static TValue GetValue<TValue>(
+        public static TValue GetValueT<TValue>(
             TValue defaultValue,
             string? propertyName,
             ref InternalPropertyBag? properties)
@@ -99,7 +105,7 @@ namespace Epoxy.Internal
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ValueTask<Unit> SetValueAsync<TValue>(
+        public static ValueTask<Unit> SetValueAsyncT<TValue>(
             TValue newValue,
             Func<TValue, ValueTask<Unit>>? propertyChanged,
             string? propertyName,

@@ -33,7 +33,7 @@ namespace Epoxy.Infrastructure
     public abstract class ViewModelBase :
         IViewModelImplementer
     {
-        private InternalPropertyBag? epoxy_properties__;
+        internal InternalPropertyBag? epoxy_properties__;
 
         [DebuggerStepThrough]
         private protected ViewModelBase()
@@ -69,14 +69,14 @@ namespace Epoxy.Infrastructure
         private protected TValue InternalGetValue<TValue>(
             TValue defaultValue,
             string? propertyName) =>
-            InternalModelHelper.GetValue(defaultValue, propertyName, ref epoxy_properties__);
+            InternalModelHelper.GetValueT(defaultValue, propertyName, ref epoxy_properties__);
 
         [DebuggerStepThrough]
         internal ValueTask<Unit> InternalSetValueAsync<TValue>(
             TValue newValue,
             Func<TValue, ValueTask<Unit>> propertyChanged,
             string? propertyName) =>
-            InternalModelHelper.SetValueAsync(
+            InternalModelHelper.SetValueAsyncT(
                 newValue, propertyChanged, propertyName,
                 this, ref epoxy_properties__);
 
@@ -84,7 +84,7 @@ namespace Epoxy.Infrastructure
         internal void InternalSetValue<TValue>(
             TValue newValue,
             string? propertyName) =>
-            InternalModelHelper.SetValueAsync(
+            _ = InternalModelHelper.SetValueAsyncT(
                 newValue, null, propertyName,
                 this, ref epoxy_properties__);
 
