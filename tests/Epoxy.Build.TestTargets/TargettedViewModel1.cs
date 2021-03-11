@@ -34,6 +34,10 @@ namespace Epoxy
             this.Prop4 = "ABC4";
             this.Prop5 = "ABC5";
             this.Prop6 = "ABC6";
+            
+            this.prop7 = "ABC7";
+            this.prop81 = "ABC8";
+            this.prop82 = "ABC8";
         }
 
         public string Prop1
@@ -56,5 +60,20 @@ namespace Epoxy
 
         public virtual string Prop6
         { get; set; }
+
+        private string prop7;
+        public string Prop7
+        {
+            get => this.prop7;
+            set => this.prop7 = value;
+        }
+
+        private string prop81;
+        private string prop82;
+        public string Prop8
+        {
+            get => this.prop81;
+            set => this.prop82 = value;
+        }
     }
 }

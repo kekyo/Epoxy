@@ -196,8 +196,8 @@ namespace Epoxy
         }
 
         private static FieldDefinition? GetBackingStore(
-            TypeDefinition targetType, Instruction inst, OpCode targetOpCode) =>
-            ((inst.OpCode == targetOpCode) &&
+            TypeDefinition targetType, Instruction inst, Func<OpCode, bool> targetOpCode) =>
+            (targetOpCode(inst.OpCode) &&
              inst.Operand is FieldReference fr &&
              fr.Resolve() is { } fd &&
              !fd.IsStatic && !fd.IsInitOnly &&
@@ -211,7 +211,7 @@ namespace Epoxy
 
             var backingStoreFields = ilp.Body.Instructions.
                 Where(inst =>
-                    GetBackingStore(targetType, inst, targetOpCode) is { } fd &&
+                    GetBackingStore(targetType, inst, opcode => opcode == targetOpCode) is { } fd &&
                     (fd.FieldType.FullName == pd.PropertyType.FullName)).
                 Select(inst => (FieldReference)inst.Operand).
                 ToArray();
@@ -289,7 +289,7 @@ namespace Epoxy
 
         private void RemoveBackingFields(
             TypeDefinition targetType,
-            Dictionary<FieldDefinition, MethodDefinition> fields)
+            Dictionary<FieldDefinition, (MethodDefinition getter, MethodDefinition setter)> fields)
         {
             if (fields.Count >= 1)
             {
@@ -303,10 +303,18 @@ namespace Epoxy
                     {
                         var inst = body.Instructions[index];
 
-                        if (GetBackingStore(targetType, inst, OpCodes.Stfld) is { } fd &&
-                            fields.TryGetValue(fd, out var setter))
+                        if (GetBackingStore(targetType, inst,
+                            opcode => (opcode == OpCodes.Ldfld) || (opcode == OpCodes.Stfld)) is { } fd &&
+                            fields.TryGetValue(fd, out var methods))
                         {
-                            inst = Instruction.Create(OpCodes.Call, setter);
+                            if (inst.OpCode == OpCodes.Ldfld)
+                            {
+                                inst = Instruction.Create(OpCodes.Call, methods.getter);
+                            }
+                            else
+                            {
+                                inst = Instruction.Create(OpCodes.Call, methods.setter);
+                            }
                             body.Instructions[index] = inst;
                         }
 
@@ -324,7 +332,7 @@ namespace Epoxy
         private void InjectProperties(
             ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField)
         {
-            var candidateFields = new Dictionary<FieldDefinition, MethodDefinition>();
+            var candidateFields = new Dictionary<FieldDefinition, (MethodDefinition getter, MethodDefinition setter)>();
 
             foreach (var pd in targetType.Properties.
                 Where(pd => !pd.CustomAttributes.
@@ -347,7 +355,7 @@ namespace Epoxy
                             module, targetType, propertiesField, pd, setter);
 
                         var backingStoreField = module.ImportReference(getterBackingStoreCandidates[0]).Resolve();
-                        candidateFields[backingStoreField] = setter;
+                        candidateFields[backingStoreField] = (getter, setter);
                     }
                 }
             }

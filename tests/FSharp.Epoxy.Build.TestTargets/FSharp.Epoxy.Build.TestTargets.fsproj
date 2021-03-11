@@ -19,7 +19,6 @@
     <ItemGroup>
         <Compile Include="NonTargettedViewModel.fs" />
         <Compile Include="TargettedViewModel1.fs" />
-        <Compile Include="TargettedViewModel2.fs" />
     </ItemGroup>
 
 </Project>

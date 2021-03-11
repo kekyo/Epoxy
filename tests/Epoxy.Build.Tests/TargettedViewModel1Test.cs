@@ -128,6 +128,28 @@ namespace Epoxy
 
             Assert.AreEqual("AAA6", dvm.Prop6);
             Assert.AreEqual(10, count);
+
+            ////////////////////////
+
+            Assert.AreEqual("ABC7", dvm.Prop7);
+            Assert.AreEqual(10, count);
+
+            dvm.Prop7 = "AAA7";
+            Assert.AreEqual(12, count);
+
+            Assert.AreEqual("AAA7", dvm.Prop7);
+            Assert.AreEqual(12, count);
+
+            ////////////////////////
+
+            Assert.AreEqual("ABC8", dvm.Prop8);
+            Assert.AreEqual(12, count);
+
+            dvm.Prop8 = "AAA8";
+            Assert.AreEqual(12, count);     // didn't inject
+
+            Assert.AreEqual("ABC8", dvm.Prop8);
+            Assert.AreEqual(12, count);
         }
     }
 }
