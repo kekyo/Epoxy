@@ -9,16 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="NonTargettedViewModel.fs" />
-    <Compile Include="TargettedViewModel1.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Epoxy.Avalonia\Epoxy.Avalonia.csproj" />
   </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="NonTargettedViewModel.fs" />
+        <Compile Include="TargettedViewModel1.fs" />
+        <Compile Include="TargettedViewModel2.fs" />
+    </ItemGroup>
 
 </Project>

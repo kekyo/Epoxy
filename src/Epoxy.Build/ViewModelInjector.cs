@@ -195,38 +195,35 @@ namespace Epoxy
             targetType.Events.Add(propertyChangedEvent);
         }
 
+        private static FieldDefinition? GetBackingStore(
+            TypeDefinition targetType, Instruction inst, OpCode targetOpCode) =>
+            ((inst.OpCode == targetOpCode) &&
+             inst.Operand is FieldReference fr &&
+             fr.Resolve() is { } fd &&
+             !fd.IsStatic && !fd.IsInitOnly &&
+             (fd.DeclaringType.FullName == targetType.FullName)) ?
+                fd : null;
+
+        private FieldReference[] GetBackingStoreCandidates(
+            TypeDefinition targetType, PropertyDefinition pd, MethodDefinition method, OpCode targetOpCode)
+        {
+            var ilp = method.Body.GetILProcessor();
+
+            var backingStoreFields = ilp.Body.Instructions.
+                Where(inst =>
+                    GetBackingStore(targetType, inst, targetOpCode) is { } fd &&
+                    (fd.FieldType.FullName == pd.PropertyType.FullName)).
+                Select(inst => (FieldReference)inst.Operand).
+                ToArray();
+
+            return backingStoreFields;
+        }
+
         private bool InjectGetterProperty(
             ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField,
-            PropertyDefinition pd, MethodDefinition getter, MethodDefinition setter,
-            Dictionary<FieldDefinition, MethodDefinition> candidateFields)
+            PropertyDefinition pd, MethodDefinition getter)
         {
             var ilp = getter.Body.GetILProcessor();
-
-            if (getter.IsAbstract)
-            {
-                getter.IsAbstract = false;
-                getter.IsVirtual = true;
-            }
-            else
-            {
-                var backingStoreFields = ilp.Body.Instructions.
-                    Where(inst =>
-                        (inst.OpCode == OpCodes.Ldfld) &&
-                        inst.Operand is FieldReference fr &&
-                        fr.Resolve() is { } fd &&
-                        !fd.IsStatic && !fd.IsInitOnly &&
-                        (fd.FieldType.FullName == pd.PropertyType.FullName) &&
-                        fd.DeclaringType.FullName == targetType.FullName).
-                    Select(inst => (FieldReference)inst.Operand).
-                    ToArray();
-                if (backingStoreFields.Length != 1)
-                {
-                    return false;
-                }
-
-                var backingStoreField = module.ImportReference(backingStoreFields[0]).Resolve();
-                candidateFields[backingStoreField] = setter;
-            }
 
             var body = ilp.Body;
             body.Instructions.Clear();
@@ -257,36 +254,9 @@ namespace Epoxy
 
         private bool InjectSetterProperty(
             ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField,
-            PropertyDefinition pd, MethodDefinition setter, 
-            Dictionary<FieldDefinition, MethodDefinition> candidateFields)
+            PropertyDefinition pd, MethodDefinition setter)
         {
             var ilp = setter.Body.GetILProcessor();
-
-            if (setter.IsAbstract)
-            {
-                setter.IsAbstract = false;
-                setter.IsVirtual = true;
-            }
-            else
-            {
-                var backingStoreFields = ilp.Body.Instructions.
-                    Where(inst =>
-                        (inst.OpCode == OpCodes.Stfld) &&
-                        inst.Operand is FieldReference fr &&
-                        fr.Resolve() is { } fd &&
-                        !fd.IsStatic && !fd.IsInitOnly &&
-                        (fd.FieldType.FullName == pd.PropertyType.FullName) &&
-                        fd.DeclaringType.FullName == targetType.FullName).
-                    Select(inst => (FieldReference)inst.Operand).
-                    ToArray();
-                if (backingStoreFields.Length != 1)
-                {
-                    return false;
-                }
-
-                var backingStoreField = module.ImportReference(backingStoreFields[0]).Resolve();
-                candidateFields[backingStoreField] = setter;
-            }
 
             var body = ilp.Body;
             body.Instructions.Clear();
@@ -318,37 +288,36 @@ namespace Epoxy
         }
 
         private void RemoveBackingFields(
-            ModuleDefinition module, TypeDefinition targetType,
+            TypeDefinition targetType,
             Dictionary<FieldDefinition, MethodDefinition> fields)
         {
-            foreach (var ctor in targetType.Methods.
-                Where(m => m.IsConstructor))
+            if (fields.Count >= 1)
             {
-                var ilp = ctor.Body.GetILProcessor();
-                var index = 0;
-                var body = ilp.Body;
-                while (index < body.Instructions.Count)
+                foreach (var method in targetType.Methods.
+                    Where(m => !m.IsStatic && !m.IsAbstract))
                 {
-                    var inst = body.Instructions[index];
-
-                    if ((inst.OpCode == OpCodes.Stfld) &&
-                        inst.Operand is FieldReference fr &&
-                        fr.Resolve() is { } fd &&
-                        !fd.IsStatic && !fd.IsInitOnly &&
-                        fields.TryGetValue(fd, out var setter) &&
-                        fd.DeclaringType.FullName == targetType.FullName)
+                    var ilp = method.Body.GetILProcessor();
+                    var index = 0;
+                    var body = ilp.Body;
+                    while (index < body.Instructions.Count)
                     {
-                        inst = Instruction.Create(OpCodes.Call, setter);
-                        body.Instructions[index] = inst;
+                        var inst = body.Instructions[index];
+
+                        if (GetBackingStore(targetType, inst, OpCodes.Stfld) is { } fd &&
+                            fields.TryGetValue(fd, out var setter))
+                        {
+                            inst = Instruction.Create(OpCodes.Call, setter);
+                            body.Instructions[index] = inst;
+                        }
+
+                        index++;
                     }
-
-                    index++;
                 }
-            }
 
-            foreach (var candidateField in fields.Keys)
-            {
-                targetType.Fields.Remove(candidateField);
+                foreach (var candidateField in fields.Keys)
+                {
+                    targetType.Fields.Remove(candidateField);
+                }
             }
         }
 
@@ -361,17 +330,29 @@ namespace Epoxy
                 Where(pd => !pd.CustomAttributes.
                     Any(ca => ca.AttributeType.FullName == this.ignoreInjectAttributeType.FullName)))
             {
-                if (pd.GetMethod is { } getter && !getter.IsStatic &&
-                    pd.SetMethod is { } setter && !setter.IsStatic)
+                if (pd.GetMethod is { } getter && !getter.IsStatic && !getter.IsAbstract &&
+                    pd.SetMethod is { } setter && !setter.IsStatic && !setter.IsAbstract)
                 {
-                    this.InjectGetterProperty(
-                        module, targetType, propertiesField, pd, getter, setter, candidateFields);
-                    this.InjectSetterProperty(
-                        module, targetType, propertiesField, pd, setter, candidateFields);
+                    var getterBackingStoreCandidates = this.GetBackingStoreCandidates(
+                        targetType, pd, getter, OpCodes.Ldfld);
+                    var setterBackingStoreCandidates = this.GetBackingStoreCandidates(
+                        targetType, pd, setter, OpCodes.Stfld);
+
+                    if ((getterBackingStoreCandidates.Length == 1) &&
+                        getterBackingStoreCandidates.SequenceEqual(setterBackingStoreCandidates))
+                    {
+                        this.InjectGetterProperty(
+                            module, targetType, propertiesField, pd, getter);
+                        this.InjectSetterProperty(
+                            module, targetType, propertiesField, pd, setter);
+
+                        var backingStoreField = module.ImportReference(getterBackingStoreCandidates[0]).Resolve();
+                        candidateFields[backingStoreField] = setter;
+                    }
                 }
             }
 
-            this.RemoveBackingFields(module, targetType, candidateFields);
+            this.RemoveBackingFields(targetType, candidateFields);
         }
 
         private bool InjectIntoType(ModuleDefinition module, TypeDefinition targetType)

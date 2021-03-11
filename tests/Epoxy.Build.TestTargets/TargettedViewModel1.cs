@@ -33,6 +33,7 @@ namespace Epoxy
             this.Prop3 = "ABC3";
             this.Prop4 = "ABC4";
             this.Prop5 = "ABC5";
+            this.Prop6 = "ABC6";
         }
 
         public string Prop1
@@ -52,5 +53,8 @@ namespace Epoxy
             this.Prop3 = value;
         public string GetProp5() =>
             this.Prop5;
+
+        public virtual string Prop6
+        { get; set; }
     }
 }

@@ -44,22 +44,9 @@ namespace Epoxy
                 "Release"
 #endif
                 ));
-        private static readonly string fsharpTargetBasePath =
-            Path.GetFullPath(Path.Combine(
-                typeof(ViewModelInjectorTest).Assembly.Location,
-                "..", "..", "..", "..", "..", "FSharp.Epoxy.Build.TestTargets", "bin",
-#if DEBUG
-                "Debug"
-#else
-                "Release"
-#endif
-                ));
 
         public static string[] TargetPaths =>
             Directory.GetFiles(targetBasePath, "Epoxy.Build.TestTargets.dll", SearchOption.AllDirectories);
-
-        public static string[] FSharpTargetPaths =>
-            Directory.GetFiles(fsharpTargetBasePath, "FSharp.Epoxy.Build.TestTargets.dll", SearchOption.AllDirectories);
 
         [TestCaseSource("TargetPaths")]
         public void TargettedViewModel1Test(string targetPath)
@@ -130,44 +117,17 @@ namespace Epoxy
 
             Assert.AreEqual("AAA5", dvm.GetProp5());
             Assert.AreEqual(8, count);
-        }
-
-        [TestCaseSource("FSharpTargetPaths")]
-        public void FSharpTargettedViewModel1Test(string targetPath)
-        {
-            var tfm = Path.GetFileName(Path.GetDirectoryName(targetPath));
-
-            var injectedPath = Path.Combine(
-                Path.GetDirectoryName(this.GetType().Assembly.Location)!,
-                $"{Path.GetFileNameWithoutExtension(targetPath)}_{tfm}_{nameof(TargettedViewModel1Test)}{Path.GetExtension(targetPath)}");
-
-            var injector = new ViewModelInjector(epoxyCorePath, message => Trace.WriteLine(message));
-            var actual = injector.Inject(targetPath, injectedPath);
-            Assert.IsTrue(actual);
-
-            var assembly = Assembly.LoadFrom(injectedPath);
-            var type = assembly.GetTypes().
-                First(t => t.FullName == "Epoxy.TargettedViewModel1");
-
-            var vm = (IViewModelImplementer)Activator.CreateInstance(type)!;
-
-            var count = 0;
-            var changing = false;
-            vm.PropertyChanging += (s, e) => { Assert.IsFalse(changing); changing = true; count++; };
-            vm.PropertyChanged += (s, e) => { Assert.IsTrue(changing); changing = false; count++; };
-
-            dynamic dvm = vm;
 
             ////////////////////////
 
-            Assert.AreEqual("ABC2", dvm.Prop2);
-            Assert.AreEqual(0, count);
+            Assert.AreEqual("ABC6", dvm.Prop6);
+            Assert.AreEqual(8, count);
 
-            dvm.Prop2 = "AAA2";
-            Assert.AreEqual(2, count);
+            dvm.Prop6 = "AAA6";
+            Assert.AreEqual(10, count);
 
-            Assert.AreEqual("AAA2", dvm.Prop2);
-            Assert.AreEqual(2, count);
+            Assert.AreEqual("AAA6", dvm.Prop6);
+            Assert.AreEqual(10, count);
         }
     }
 }
