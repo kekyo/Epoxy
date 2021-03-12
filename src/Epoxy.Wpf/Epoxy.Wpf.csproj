@@ -7,6 +7,7 @@
     <AssemblyTitle>Epoxy.Wpf</AssemblyTitle>
     <PackageId>Epoxy.Wpf</PackageId>
     <PackageTags>$(PackageTags);wpf</PackageTags>
+    <EpoxyBuildAppendPackageDependency>true</EpoxyBuildAppendPackageDependency>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

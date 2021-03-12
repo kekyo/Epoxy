@@ -6,6 +6,7 @@
     <AssemblyTitle>Epoxy.Avalonia</AssemblyTitle>
     <PackageId>Epoxy.Avalonia</PackageId>
     <PackageTags>$(PackageTags);avalonia</PackageTags>
+    <EpoxyBuildAppendPackageDependency>true</EpoxyBuildAppendPackageDependency>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

@@ -11,4 +11,58 @@
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
 
+  <UsingTask
+    TaskName="AppendNuspecPackageDepencency"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
+    <ParameterGroup>
+      <Parameter1 ParameterType="System.String" Required="true" />
+      <Parameter2 ParameterType="System.String" Required="true" />
+      <Parameter3 ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System"/>
+      <Using Namespace="System.IO"/>
+      <Using Namespace="System.Linq"/>
+      <Using Namespace="System.Xml.Linq"/>
+      <Code Type="Fragment" Language="cs">
+<![CDATA[
+foreach (var nuspecPath in Directory.GetFiles(Parameter1, "*.nuspec", SearchOption.AllDirectories))
+{
+    var nuspec = XDocument.Load(nuspecPath);
+    XNamespace ns = (string)nuspec.Root.Attribute("xmlns");
+    var package = nuspec.Element(ns + "package");
+    var metadata = package.Element(ns + "metadata");
+    var dependencies = metadata.Element(ns + "dependencies");
+    if (dependencies == null)
+    {
+        dependencies = new XElement(ns + "dependencies");
+        metadata.Add(dependencies);
+    }
+    foreach (var dependency in dependencies.Elements(ns + "dependency").
+        Where(dependency => (string)dependency.Attribute("id") == Parameter2).
+        ToArray())
+    {
+        dependency.Remove();
+    }
+    dependencies.Add(new XElement(
+        ns + "dependency",
+        new XAttribute("id", Parameter2),
+        new XAttribute("version", Parameter3),
+        new XAttribute("exclude", "all")));
+    nuspec.Save(nuspecPath);
+}
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="AppendPackageDepencency" AfterTargets="GenerateNuspec"
+    Condition="'$(EpoxyBuildAppendPackageDependency)' == 'true'">
+    <AppendNuspecPackageDepencency
+      Parameter1="$(NuspecOutputAbsolutePath)"
+      Parameter2="Epoxy.Build"
+      Parameter3="$(PackageVersion)" />
+  </Target>
+
 </Project>

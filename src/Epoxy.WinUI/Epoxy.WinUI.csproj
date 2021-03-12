@@ -9,6 +9,7 @@
     <PackageTags>$(PackageTags);winui</PackageTags>
     <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
     <NoWarn>$(NoWarn);NU5104</NoWarn>
+    <EpoxyBuildAppendPackageDependency>true</EpoxyBuildAppendPackageDependency>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

@@ -6,6 +6,7 @@
     <AssemblyTitle>Epoxy.Xamarin.Forms</AssemblyTitle>
     <PackageId>Epoxy.Xamarin.Forms</PackageId>
     <PackageTags>$(PackageTags);xamarin</PackageTags>
+    <EpoxyBuildAppendPackageDependency>true</EpoxyBuildAppendPackageDependency>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
