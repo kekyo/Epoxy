@@ -3,18 +3,17 @@
   <metadata>
     <id>Epoxy.Build</id>
     <version>$PackageVersion$</version>
-    <title>Epoxy.Build</title>
     <authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</authors>
-    <owners>Kouji Matsui (@kozy_kekyo, @kekyo2)</owners>
-    <description>An independent flexible XAML MVVM library for .NET</description>
-    <developmentDependency>true</developmentDependency>
-    <summary>An independent flexible XAML MVVM library for .NET</summary>
-    <copyright>Copyright (c) 2016-2021 Kouji Matsui</copyright>
-    <license type="expression">Apache-2.0</license>
-    <projectUrl>https://github.com/kekyo/Epoxy</projectUrl>
-    <icon>Epoxy.100.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</tags>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <icon>Epoxy.100.png</icon>
+    <projectUrl>https://github.com/kekyo/Epoxy.git</projectUrl>
+    <description>An independent flexible XAML MVVM library for .NET</description>
+    <releaseNotes>$PackageReleaseNotes$</releaseNotes>
+    <copyright>Copyright (c) 2019-2021 Kouji Matsui</copyright>
+    <tags>mvvm viewmodel easy simple combinable async awaitable command</tags>
+    <repository type="git" url="https://github.com/kekyo/Epoxy.git" />
   </metadata>
   <files>
     <file src="..\..\Images\Epoxy.100.png" target="/" />
