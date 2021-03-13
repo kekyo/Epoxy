@@ -86,6 +86,7 @@ dotnet build
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
 * Currently, WinUI may not work properly due to preview version limitation.
 * We do not have a template for Uno platform yet.
+* You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
 ### Detail for sample code
 

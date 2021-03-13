@@ -94,6 +94,7 @@ dotnet build
 * デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
 * 現在、WinUIはpreview版制限のために、正しく動作しない可能性があります。
 * Uno platformのテンプレートはまだ用意していません。
+* MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションをl使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
 ### サンプルコードの解説
 
