@@ -51,6 +51,6 @@
     </GetCombinedReferencesBasePath>
         
     <Exec WorkingDirectory="$(EpoxyBuildToolingDir)"
-          Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(TargetPath)&quot;" />
+          Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)&quot;" />
   </Target>
 </Project>
