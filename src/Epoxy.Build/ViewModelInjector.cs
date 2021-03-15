@@ -431,7 +431,7 @@ namespace Epoxy
             return true;
         }
 
-        public bool Inject(string targetAssemblyPath, string injectedAssemblyPath)
+        public bool Inject(string targetAssemblyPath, string? injectedAssemblyPath = null)
         {
             this.assemblyResolver.AddSearchDirectory(
                 Path.GetDirectoryName(targetAssemblyPath));
@@ -488,14 +488,7 @@ namespace Epoxy
 
                     if (injected)
                     {
-                        if (File.Exists(injectedAssemblyPath))
-                        {
-                            File.Delete(injectedAssemblyPath);
-                        }
-
-                        var injectedName = Path.GetFileNameWithoutExtension(injectedAssemblyPath);
-                        targetAssembly.Name = new AssemblyNameDefinition(
-                            injectedName, targetAssembly.Name.Version);
+                        injectedAssemblyPath = injectedAssemblyPath ?? targetAssemblyPath;
 
                         targetAssembly.Write(
                             injectedAssemblyPath,

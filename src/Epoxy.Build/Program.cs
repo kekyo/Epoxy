@@ -54,16 +54,8 @@ namespace Epoxy
 
                 var injector = new ViewModelInjector(referencesBasePath, Message);
 
-                if (injector.Inject(targetAssemblyPath, targetAssemblyPath + ".tmp"))
+                if (injector.Inject(targetAssemblyPath))
                 {
-                    if (File.Exists(targetAssemblyPath + ".orig"))
-                    {
-                        File.Delete(targetAssemblyPath + ".orig");
-                    }
-
-                    File.Move(targetAssemblyPath, targetAssemblyPath + ".orig");
-                    File.Move(targetAssemblyPath + ".tmp", targetAssemblyPath);
-
                     Message(
                         LogLevels.Information, 
                         $"Replaced injected assembly: Assembly={Path.GetFileName(targetAssemblyPath)}");
