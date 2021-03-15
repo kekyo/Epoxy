@@ -19,9 +19,5 @@
 ////////////////////////////////////////////////////////////////////////////
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Condition="'$(FSharpEpoxyAutoXamlResourcingInWpf)' == 'True'">
-    <Page Remove="**/*.xaml" />
-    <Resource Include="**/*.xaml" />
-  </ItemGroup>
   <Import Project="$(EpoxyBuildScriptBasePath)\Epoxy.Build.targets" />
 </Project>
