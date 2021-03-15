@@ -5,8 +5,10 @@
     <TargetFrameworks>net45;net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <UseWpf>true</UseWpf>
     <AssemblyTitle>Epoxy.Wpf</AssemblyTitle>
-    <PackageId>Epoxy.Wpf</PackageId>
-    <PackageTags>$(PackageTags);wpf</PackageTags>
+      
+    <NuspecFile>Epoxy.Wpf.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -26,7 +28,6 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy/**/*.cs" />
-    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

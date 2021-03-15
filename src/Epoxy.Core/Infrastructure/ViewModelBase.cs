@@ -23,182 +23,88 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Epoxy.Internal;
 
 namespace Epoxy.Infrastructure
 {
+    [DebuggerDisplay("{PrettyPrint}")]
     public abstract class ViewModelBase :
-        ModelBase, INotifyPropertyChanging, INotifyPropertyChanged
+        IViewModelImplementer
     {
-        private Dictionary<string, object?>? properties;
+        internal InternalPropertyBag? epoxy_properties__;
 
         [DebuggerStepThrough]
         private protected ViewModelBase()
         { }
 
-        public event PropertyChangingEventHandler? PropertyChanging;
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangingEventHandler? PropertyChanging
+        {
+            [DebuggerStepThrough]
+            add => InternalModelHelper.AddPropertyChanging(
+                value, ref this.epoxy_properties__);
+            [DebuggerStepThrough]
+            remove => InternalModelHelper.RemovePropertyChanging(
+                value, ref this.epoxy_properties__);
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged
+        {
+            [DebuggerStepThrough]
+            add => InternalModelHelper.AddPropertyChanged(
+                value, ref this.epoxy_properties__);
+            [DebuggerStepThrough]
+            remove => InternalModelHelper.RemovePropertyChanged(
+                value, ref this.epoxy_properties__);
+        }
 
         [DebuggerStepThrough]
-        private Dictionary<string, object?> Prepare()
-        {
-            if (!(properties is Dictionary<string, object>))
-            {
-                properties = new Dictionary<string, object?>();
-            }
-            return properties;
-        }
-
         private protected object? InternalGetValue(
             object? defaultValue,
-            string? propertyName)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use GetValue() on worker thread context.");
-            }
+            string? propertyName) =>
+            InternalModelHelper.GetValue(defaultValue, propertyName, ref epoxy_properties__);
 
-            var properties = this.Prepare();
-            if (properties.TryGetValue(propertyName!, out var value))
-            {
-                return value;
-            }
-            else
-            {
-                return defaultValue;
-            }
-        }
-
+        [DebuggerStepThrough]
         private protected TValue InternalGetValue<TValue>(
             TValue defaultValue,
-            string? propertyName)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use GetValue<TValue>() on worker thread context.");
-            }
-
-            var properties = this.Prepare();
-            if (properties.TryGetValue(propertyName!, out var value) && value is TValue v)
-            {
-                return v;
-            }
-            else
-            {
-                return defaultValue!;
-            }
-        }
-
-        private ValueTask<Unit> InternalPrivateSetValueAsync<TValue>(
-            TValue newValue,
-            Func<TValue, ValueTask<Unit>>? propertyChanged,
-            string? propertyName = null)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use SetValue() on worker thread context.");
-            }
-
-            var properties = this.Prepare();
-            if (properties.TryGetValue(propertyName!, out var oldValue))
-            {
-                if (!DefaultValue<TValue>.ValueEquals(oldValue, newValue))
-                {
-                    this.InternalOnPropertyChanging(propertyName);
-
-                    if (!DefaultValue.IsDefaultValue(newValue))
-                    {
-                        properties[propertyName!] = newValue!;
-                    }
-                    else
-                    {
-                        properties.Remove(propertyName!);
-                    }
-
-                    this.InternalOnPropertyChanged(propertyName);
-                    if (propertyChanged is { } pc)
-                    {
-                        return pc.Invoke(newValue);
-                    }
-                }
-            }
-            else
-            {
-                this.InternalOnPropertyChanging(propertyName);
-
-                if (!DefaultValue.IsDefaultValue(newValue))
-                {
-                    properties.Add(propertyName!, newValue!);
-                }
-                else
-                {
-                    properties.Remove(propertyName!);
-                }
-
-                this.InternalOnPropertyChanged(propertyName);
-                if (propertyChanged is { } pc)
-                {
-                    return pc.Invoke(newValue);
-                }
-            }
-
-            return default;
-        }
+            string? propertyName) =>
+            InternalModelHelper.GetValueT(defaultValue, propertyName, ref epoxy_properties__);
 
         [DebuggerStepThrough]
         internal ValueTask<Unit> InternalSetValueAsync<TValue>(
             TValue newValue,
             Func<TValue, ValueTask<Unit>> propertyChanged,
             string? propertyName) =>
-            this.InternalPrivateSetValueAsync(newValue, propertyChanged, propertyName);
+            InternalModelHelper.SetValueAsyncT(
+                newValue, propertyChanged, propertyName,
+                this, ref epoxy_properties__);
 
         [DebuggerStepThrough]
         internal void InternalSetValue<TValue>(
             TValue newValue,
             string? propertyName) =>
-            _ = this.InternalPrivateSetValueAsync(newValue, null, propertyName);
-
-        private protected void InternalOnPropertyChanging(
-            string? propertyName)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use OnPropertyChanging() on worker thread context.");
-            }
-
-            this.PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-        }
-
-        private protected void InternalOnPropertyChanged(
-            string? propertyName)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use OnPropertyChanged() on worker thread context.");
-            }
-
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            _ = InternalModelHelper.SetValueAsyncT(
+                newValue, null, propertyName,
+                this, ref epoxy_properties__);
 
         [DebuggerStepThrough]
-        protected override string OnPrettyPrint() =>
-            string.Join(
-                ",",
-                this.EnumerateProperties().
-                OrderBy(entry => entry.Key).
-                Select(entry => $"{entry.Key}={entry.Value ?? "(null)"}"));
+        private protected void InternalOnPropertyChanging(
+            string? propertyName) =>
+            InternalModelHelper.OnPropertyChanging(
+                propertyName, this, this.epoxy_properties__);
+
+        [DebuggerStepThrough]
+        private protected void InternalOnPropertyChanged(
+            string? propertyName) =>
+            InternalModelHelper.OnPropertyChanged(
+                propertyName, this, this.epoxy_properties__);
+
+        public string PrettyPrint =>
+            InternalModelHelper.PrettyPrint(this, false);
+
+        [DebuggerStepThrough]
+        public override string ToString() =>
+            $"{this.GetPrettyTypeName()}: {this.PrettyPrint}";
     }
 }

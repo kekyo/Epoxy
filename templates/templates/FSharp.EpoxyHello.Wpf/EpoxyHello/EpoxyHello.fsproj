@@ -14,7 +14,7 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="FSharp.Epoxy.Wpf" Version="0.14.0" />
+    <PackageReference Include="FSharp.Epoxy.Wpf" Version="*" />
   </ItemGroup>
 
   <ItemGroup>

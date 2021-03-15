@@ -19,16 +19,22 @@
 
 #nullable enable
 
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace Epoxy.Internal
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     [DebuggerStepThrough]
-    internal readonly struct Unit
+    public readonly struct Unit
     {
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool Equals(Unit unit) => true;
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(object? obj) => obj is Unit;
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override int GetHashCode() => 0;
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override string ToString() => "()";
     }
 }
