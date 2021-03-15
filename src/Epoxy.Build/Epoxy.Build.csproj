@@ -8,7 +8,6 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
     <NuspecFile>Epoxy.Build.nuspec</NuspecFile>
-    <DevelopmentDependency>true</DevelopmentDependency>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>

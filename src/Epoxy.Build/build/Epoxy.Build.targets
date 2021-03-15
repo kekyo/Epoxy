@@ -38,14 +38,15 @@
         CombinedReferencesBasePath = string.Join(";", References.
             Where(item => !string.IsNullOrWhitespace(item.ItemSpec)).
             GroupBy(item => Path.GetDirectoryName(Path.GetFullPath(item.ItemSpec))).
-            Select(g => g.Key));
+            Select(g => g.Key).
+            Distinct());
 ]]>
       </Code>
     </Task>
   </UsingTask>
     
   <Target Name="EpoxyBuild" BeforeTargets="AfterCompile">
-    <GetCombinedReferencesBasePath References="@(References)">
+    <GetCombinedReferencesBasePath References="@(ReferencePath)">
         <Output TaskParameter="CombinedReferencesBasePath" PropertyName="CombinedReferencesBasePath" />
     </GetCombinedReferencesBasePath>
         

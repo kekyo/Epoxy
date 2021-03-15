@@ -68,8 +68,11 @@ namespace Epoxy
                 this.assemblyResolver.AddSearchDirectory(referenceBasePath);
             }
 
+            var epoxyCorePath = referencesBasePath.
+                First(basePath => File.Exists(Path.Combine(basePath, "Epoxy.Core.dll")));
+
             var epoxyCoreAssembly = AssemblyDefinition.ReadAssembly(
-                "Epoxy.Core.dll",
+                epoxyCorePath,
                 new ReaderParameters
                 {
                     AssemblyResolver = assemblyResolver,
