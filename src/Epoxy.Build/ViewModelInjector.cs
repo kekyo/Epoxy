@@ -29,9 +29,17 @@ using Mono.Cecil.Cil;
 
 namespace Epoxy
 {
+    public enum LogLevels
+    {
+        Trace,
+        Information,
+        Warning,
+        Error
+    }
+
     public sealed class ViewModelInjector
     {
-        private readonly Action<string> message;
+        private readonly Action<LogLevels, string> message;
         private readonly DefaultAssemblyResolver assemblyResolver = new();
 
         private readonly TypeSystem typeSystem;
@@ -59,7 +67,7 @@ namespace Epoxy
         private readonly MethodDefinition itAddPropertyChanged;
         private readonly MethodDefinition itRemovePropertyChanged;
 
-        public ViewModelInjector(string[] referencesBasePath, Action<string> message)
+        public ViewModelInjector(string[] referencesBasePath, Action<LogLevels, string> message)
         {
             this.message = message;
 
@@ -79,6 +87,10 @@ namespace Epoxy
                     AssemblyResolver = assemblyResolver,
                 }
             );
+
+            message(
+                LogLevels.Trace,
+                $"Epoxy.Core.dll is loaded: Path={epoxyCorePath}");
 
             this.typeSystem = epoxyCoreAssembly.MainModule.TypeSystem;
 
@@ -304,6 +316,10 @@ namespace Epoxy
                 foreach (var method in targetType.Methods.
                     Where(m => !m.IsStatic && !m.IsAbstract))
                 {
+                    message(
+                        LogLevels.Trace,
+                        $"RemoveBackingFields: Checking field usage: Method={method.FullName}");
+
                     var ilp = method.Body.GetILProcessor();
                     var index = 0;
                     var body = ilp.Body;
@@ -315,6 +331,10 @@ namespace Epoxy
                             opcode => (opcode == OpCodes.Ldfld) || (opcode == OpCodes.Stfld)) is { } fd &&
                             fields.TryGetValue(fd, out var methods))
                         {
+                            message(
+                                LogLevels.Trace,
+                                $"RemoveBackingFields: Found and replaced: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
+
                             if (inst.OpCode == OpCodes.Ldfld)
                             {
                                 inst = Instruction.Create(OpCodes.Call, methods.getter);
@@ -334,6 +354,12 @@ namespace Epoxy
                 {
                     targetType.Fields.Remove(candidateField);
                 }
+            }
+            else
+            {
+                message(
+                    LogLevels.Trace,
+                    $"RemoveBackingFields: Target field isn't found.");
             }
         }
 
@@ -362,9 +388,25 @@ namespace Epoxy
                         this.InjectSetterProperty(
                             module, targetType, propertiesField, pd, setter);
 
+                        message(
+                            LogLevels.Trace,
+                            $"InjectProperties: Injected property: Property={pd.FullName}");
+
                         var backingStoreField = module.ImportReference(getterBackingStoreCandidates[0]).Resolve();
                         candidateFields[backingStoreField] = (getter, setter);
                     }
+                    else
+                    {
+                        message(
+                            LogLevels.Trace,
+                            $"InjectProperties: Ignored property [2]: Property={pd.FullName}");
+                    }
+                }
+                else
+                {
+                    message(
+                        LogLevels.Trace,
+                        $"InjectProperties: Ignored property [1]: Property={pd.FullName}");
                 }
             }
 
@@ -432,7 +474,15 @@ namespace Epoxy
                         if (this.InjectIntoType(targetAssembly.MainModule, targetType))
                         {
                             injected = true;
-                            this.message($"Epoxy.Build: Injected a view model: Assembly={targetAssemblyName}, Type={targetType.FullName}");
+                            this.message(
+                                LogLevels.Information,
+                                $"Injected a view model: Assembly={targetAssemblyName}, Type={targetType.FullName}");
+                        }
+                        else
+                        {
+                            message(
+                                LogLevels.Trace,
+                                $"InjectProperties: Ignored a type: Assembly={targetAssemblyName}, Type={targetType.FullName}");
                         }
                     }
 

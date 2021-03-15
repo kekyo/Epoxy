@@ -45,12 +45,12 @@
     </Task>
   </UsingTask>
     
-  <Target Name="EpoxyBuild" BeforeTargets="AfterCompile">
+  <Target Name="EpoxyBuild" AfterTargets="AfterCompile">
     <GetCombinedReferencesBasePath References="@(ReferencePath)">
         <Output TaskParameter="CombinedReferencesBasePath" PropertyName="CombinedReferencesBasePath" />
     </GetCombinedReferencesBasePath>
         
     <Exec WorkingDirectory="$(EpoxyBuildToolingDir)"
-          Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)&quot;" />
+          Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)&quot; $(EpoxyBuildTrace)" />
   </Target>
 </Project>
