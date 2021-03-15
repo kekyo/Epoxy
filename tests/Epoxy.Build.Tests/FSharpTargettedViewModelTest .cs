@@ -57,7 +57,8 @@ namespace Epoxy
                 Path.GetDirectoryName(this.GetType().Assembly.Location)!,
                 $"{Path.GetFileNameWithoutExtension(targetPath)}_{tfm}_{nameof(ViewModelTest)}{Path.GetExtension(targetPath)}");
 
-            var injector = new ViewModelInjector(epoxyCorePath, message => Trace.WriteLine(message));
+            var basePaths = new[] { epoxyCorePath, targetPath }.Select(Path.GetDirectoryName).ToArray();
+            var injector = new ViewModelInjector(basePaths!, message => Trace.WriteLine(message));
             var actual = injector.Inject(targetPath, injectedPath);
             Assert.IsTrue(actual);
 

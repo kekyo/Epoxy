@@ -19,8 +19,37 @@
 ////////////////////////////////////////////////////////////////////////////
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    
+  <UsingTask
+    TaskName="GetCombinedReferencesBasePath"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
+    <ParameterGroup>
+      <References ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <CombinedReferencesBasePath Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System"/>
+      <Using Namespace="System.IO"/>
+      <Using Namespace="System.Linq"/>
+      <Using Namespace="Microsoft.Build.Framework"/>
+      <Code Type="Fragment" Language="cs">
+<![CDATA[
+        CombinedReferencesBasePath = string.Join(";", References.
+            Where(item => !string.IsNullOrWhitespace(item.ItemSpec)).
+            GroupBy(item => Path.GetDirectoryName(Path.GetFullPath(item.ItemSpec))).
+            Select(g => g.Key));
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+    
   <Target Name="EpoxyBuild" BeforeTargets="AfterCompile">
+    <GetCombinedReferencesBasePath References="@(References)">
+        <Output TaskParameter="CombinedReferencesBasePath" PropertyName="CombinedReferencesBasePath" />
+    </GetCombinedReferencesBasePath>
+        
     <Exec WorkingDirectory="$(EpoxyBuildToolingDir)"
-          Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(TargetPath)&quot;" />
+          Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(TargetPath)&quot;" />
   </Target>
 </Project>

@@ -14,7 +14,7 @@
     <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.1" />
     <PackageReference Include="Avalonia" Version="0.10.0" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
-    <PackageReference Include="FSharp.Epoxy.Avalonia" Version="0.14.19" />
+    <PackageReference Include="FSharp.Epoxy.Avalonia" Version="0.14.20" />
   </ItemGroup>
 
   <ItemGroup>

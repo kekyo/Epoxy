@@ -59,13 +59,17 @@ namespace Epoxy
         private readonly MethodDefinition itAddPropertyChanged;
         private readonly MethodDefinition itRemovePropertyChanged;
 
-        public ViewModelInjector(string epoxyCorePath, Action<string> message)
+        public ViewModelInjector(string[] referencesBasePath, Action<string> message)
         {
             this.message = message;
-            this.assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(epoxyCorePath));
+
+            foreach (var referenceBasePath in referencesBasePath)
+            {
+                this.assemblyResolver.AddSearchDirectory(referenceBasePath);
+            }
 
             var epoxyCoreAssembly = AssemblyDefinition.ReadAssembly(
-                epoxyCorePath,
+                "Epoxy.Core.dll",
                 new ReaderParameters
                 {
                     AssemblyResolver = assemblyResolver,

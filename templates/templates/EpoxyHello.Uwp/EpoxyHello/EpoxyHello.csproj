@@ -149,7 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12" />
-    <PackageReference Include="Epoxy.Uwp" Version="0.14.19" />
+    <PackageReference Include="Epoxy.Uwp" Version="0.14.20" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />

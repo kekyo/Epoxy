@@ -31,12 +31,10 @@ namespace Epoxy
         {
             try
             {
-                var targetAssemblyPath = args[0];
-                var epoxyCorePath = Path.Combine(
-                    Path.GetDirectoryName(targetAssemblyPath),
-                    "Epoxy.Core.dll");
+                var referencesBasePath = args[0].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                var targetAssemblyPath = args[1];
 
-                var injector = new ViewModelInjector(epoxyCorePath, Console.WriteLine);
+                var injector = new ViewModelInjector(referencesBasePath, Console.WriteLine);
 
                 if (injector.Inject(targetAssemblyPath, targetAssemblyPath + ".tmp"))
                 {

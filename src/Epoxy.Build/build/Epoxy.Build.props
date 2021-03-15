@@ -41,6 +41,5 @@
     <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
     <EpoxyBuildToolingPath>$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_EB_ExecutableName)'))</EpoxyBuildToolingPath>
     <_EB_MSBuildTaskPath>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','$(_EB_TaskPlatformName)','EpoxyBuild.Tasks.dll'))</_EB_MSBuildTaskPath>
-    <FSharpEpoxyAutoXamlResourcingInWpf>True</FSharpEpoxyAutoXamlResourcingInWpf>
   </PropertyGroup>
 </Project>

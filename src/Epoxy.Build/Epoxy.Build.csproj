@@ -24,6 +24,10 @@
     <Content Include="buildMultiTargeting\*.*" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
   <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec">
     <PropertyGroup>
       <NuspecProperties>$(NuspecProperties);Configuration=$(Configuration);PackageVersion=$(PackageVersion);PackageReleaseNotes=$(PackageReleaseNotes)</NuspecProperties>

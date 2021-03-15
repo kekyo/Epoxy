@@ -16,32 +16,32 @@
     <repository type="git" url="https://github.com/kekyo/Epoxy.git" />
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Epoxy.Build" version="$PackageVersion$" exclude="all" />
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETFramework4.6.1">
-        <dependency id="Epoxy.Build" version="$PackageVersion$" exclude="all" />
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETFramework4.8">
-        <dependency id="Epoxy.Build" version="$PackageVersion$" exclude="all" />
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp3.0">
-        <dependency id="Epoxy.Build" version="$PackageVersion$" exclude="all" />
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp3.1">
-        <dependency id="Epoxy.Build" version="$PackageVersion$" exclude="all" />
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net5.0-windows7.0">
-        <dependency id="Epoxy.Build" version="$PackageVersion$" exclude="all" />
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
