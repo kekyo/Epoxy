@@ -36,6 +36,7 @@
     <_EB_ExecutableName>eb.exe</_EB_ExecutableName>
   </PropertyGroup>
   <PropertyGroup>
+    <EpoxyBuildScriptBasePath>$(MSBuildThisFileDirectory)</EpoxyBuildScriptBasePath>
     <EpoxyBuildToolingRuntimeName>$(_EB_RuntimeName)</EpoxyBuildToolingRuntimeName>
     <_EB_ToolingDir>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingDir>
     <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
