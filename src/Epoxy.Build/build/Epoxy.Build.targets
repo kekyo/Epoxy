@@ -36,7 +36,7 @@
       <Code Type="Fragment" Language="cs">
 <![CDATA[
         CombinedReferencesBasePath = string.Join(";", References.
-            Where(item => !string.IsNullOrWhitespace(item.ItemSpec)).
+            Where(item => !string.IsNullOrWhiteSpace(item.ItemSpec)).
             GroupBy(item => Path.GetDirectoryName(Path.GetFullPath(item.ItemSpec))).
             Select(g => g.Key).
             Distinct());

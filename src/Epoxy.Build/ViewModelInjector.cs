@@ -69,7 +69,8 @@ namespace Epoxy
             }
 
             var epoxyCorePath = referencesBasePath.
-                First(basePath => File.Exists(Path.Combine(basePath, "Epoxy.Core.dll")));
+                Select(basePath => Path.Combine(basePath, "Epoxy.Core.dll")).
+                First(File.Exists);
 
             var epoxyCoreAssembly = AssemblyDefinition.ReadAssembly(
                 epoxyCorePath,
