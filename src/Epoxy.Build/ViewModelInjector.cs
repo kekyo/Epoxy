@@ -59,6 +59,7 @@ namespace Epoxy
         private readonly MethodDefinition addPropertyChanged;
         private readonly MethodDefinition removePropertyChanged;
 
+        private readonly MethodDefinition initializeFSharpValueTMethod;
         private readonly MethodDefinition getValueTMethod;
         private readonly MethodDefinition setValueAsyncTMethod;
 
@@ -121,6 +122,8 @@ namespace Epoxy
             this.removePropertyChanged = this.internalModelHelperType.Methods.
                 First(m => m.Name == "RemovePropertyChanged");
 
+            this.initializeFSharpValueTMethod = this.internalModelHelperType.Methods.
+                First(m => m.Name == "InitializeFSharpValueT");
             this.getValueTMethod = this.internalModelHelperType.Methods.
                 First(m => m.Name == "GetValueT");
             this.setValueAsyncTMethod = this.internalModelHelperType.Methods.
@@ -307,12 +310,30 @@ namespace Epoxy
             return true;
         }
 
-        private void RemoveBackingFields(
-            TypeDefinition targetType,
-            Dictionary<FieldDefinition, (MethodDefinition getter, MethodDefinition setter)> fields)
+        private struct AccessorInformation
         {
-            if (fields.Count >= 1)
+            public readonly PropertyDefinition Property;
+            public readonly MethodDefinition Getter;
+            public readonly MethodDefinition Setter;
+
+            public AccessorInformation(
+                PropertyDefinition property, MethodDefinition getter, MethodDefinition setter)
             {
+                this.Property = property;
+                this.Getter = getter;
+                this.Setter = setter;
+            }
+        }
+
+        private void RemoveBackingFields(
+            ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField,
+            Dictionary<FieldDefinition, AccessorInformation> accessors)
+        {
+            if (accessors.Count >= 1)
+            {
+                var isFSharp = targetType.CustomAttributes.
+                    Any(ca => ca.AttributeType.FullName == "Microsoft.FSharp.Core.CompilationMappingAttribute");
+
                 foreach (var method in targetType.Methods.
                     Where(m => !m.IsStatic && !m.IsAbstract))
                 {
@@ -329,28 +350,52 @@ namespace Epoxy
 
                         if (GetBackingStore(targetType, inst,
                             opcode => (opcode == OpCodes.Ldfld) || (opcode == OpCodes.Stfld)) is { } fd &&
-                            fields.TryGetValue(fd, out var methods))
+                            accessors.TryGetValue(fd, out var accessor))
                         {
-                            message(
-                                LogLevels.Trace,
-                                $"RemoveBackingFields: Found and replaced: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
-
                             if (inst.OpCode == OpCodes.Ldfld)
                             {
-                                inst = Instruction.Create(OpCodes.Call, methods.getter);
+                                message(
+                                    LogLevels.Trace,
+                                    $"RemoveBackingFields: Found and replaced by getter: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
+
+                                body.Instructions[index] = Instruction.Create(OpCodes.Call, accessor.Getter);
+                            }
+                            // HACK: F#'s constructor contains backing-field from auto implemented property,
+                            //   but it will initialize at last sequence of constructor body.
+                            //   These hack replaces to specialized initialize method 'InitializeFSharpValueT<TValue>(...)'.
+                            //   The method will ignore if non-default value already assigned.
+                            else if (isFSharp && method.IsConstructor)
+                            {
+                                message(
+                                    LogLevels.Trace,
+                                    $"RemoveBackingFields: Found and replaced by F# initializer: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
+
+                                var initializeValueTMethod = new GenericInstanceMethod(
+                                    module.ImportReference(this.initializeFSharpValueTMethod));
+                                initializeValueTMethod.GenericArguments.Add(
+                                    module.ImportReference(fd.FieldType));
+
+                                body.Instructions[index++] = Instruction.Create(OpCodes.Ldstr, accessor.Property.Name);
+                                body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldarg_0));
+                                body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldflda, propertiesField));
+                                body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, initializeValueTMethod));
+                                body.Instructions.Insert(index++, Instruction.Create(OpCodes.Pop));
                             }
                             else
                             {
-                                inst = Instruction.Create(OpCodes.Call, methods.setter);
+                                message(
+                                    LogLevels.Trace,
+                                    $"RemoveBackingFields: Found and replaced by setter: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
+
+                                body.Instructions[index] = Instruction.Create(OpCodes.Call, accessor.Setter);
                             }
-                            body.Instructions[index] = inst;
                         }
 
                         index++;
                     }
                 }
 
-                foreach (var candidateField in fields.Keys)
+                foreach (var candidateField in accessors.Keys)
                 {
                     targetType.Fields.Remove(candidateField);
                 }
@@ -366,7 +411,7 @@ namespace Epoxy
         private void InjectProperties(
             ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField)
         {
-            var candidateFields = new Dictionary<FieldDefinition, (MethodDefinition getter, MethodDefinition setter)>();
+            var candidateAccessors = new Dictionary<FieldDefinition, AccessorInformation>();
 
             foreach (var pd in targetType.Properties.
                 Where(pd => !pd.CustomAttributes.
@@ -393,7 +438,8 @@ namespace Epoxy
                             $"InjectProperties: Injected property: Property={pd.FullName}");
 
                         var backingStoreField = module.ImportReference(getterBackingStoreCandidates[0]).Resolve();
-                        candidateFields[backingStoreField] = (getter, setter);
+                        candidateAccessors[backingStoreField] = new AccessorInformation(
+                            pd, getter, setter);
                     }
                     else
                     {
@@ -410,7 +456,7 @@ namespace Epoxy
                 }
             }
 
-            this.RemoveBackingFields(targetType, candidateFields);
+            this.RemoveBackingFields(module, targetType, propertiesField, candidateAccessors);
         }
 
         private bool InjectIntoType(ModuleDefinition module, TypeDefinition targetType)

@@ -105,6 +105,22 @@ namespace Epoxy.Internal
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void InitializeFSharpValueT<TValue>(
+            TValue initializeValue,
+            string propertyName,
+            ref InternalPropertyBag? properties)
+        {
+            Debug.Assert(propertyName is string);
+
+            var p = Prepare(ref properties);
+            if (!p.TryGetValue(propertyName, out var oldValue) ||
+                DefaultValue<TValue>.IsDefault(oldValue))
+            {
+                p[propertyName] = initializeValue;
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static ValueTask<Unit> SetValueAsyncT<TValue>(
             TValue newValue,
             Func<TValue, ValueTask<Unit>>? propertyChanged,
