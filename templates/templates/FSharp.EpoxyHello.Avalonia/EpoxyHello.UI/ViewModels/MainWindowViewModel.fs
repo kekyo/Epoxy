@@ -19,9 +19,8 @@ open Avalonia.Media.Imaging
 
 open EpoxyHello.Models
 
-[<Sealed>]
-type public MainWindowViewModel() as self =
-    inherit ViewModel()
+[<Sealed; ViewModel>]
+type MainWindowViewModel() as self =
     do
         self.Items <- new ObservableCollection<ItemViewModel>()
 
@@ -53,18 +52,7 @@ type public MainWindowViewModel() as self =
                 do self.IsEnabled <- true
         })
 
-    member __.Ready
-        with get(): Command = __.getValue()
-        and private set (value: Command) = __.setValue value
-
-    member __.IsEnabled
-        with get(): bool = __.getValue()
-        and private set (value: bool) = __.setValue value
-        
-    member __.Fetch
-        with get(): Command = __.getValue()
-        and private set (value: Command) = __.setValue value
-
-    member __.Items
-        with get(): ObservableCollection<ItemViewModel> = __.getValue()
-        and private set (value: ObservableCollection<ItemViewModel>) = __.setValue value
+    member val Ready: Command = null with get, set
+    member val IsEnabled: bool = false with get, set
+    member val Fetch: Command = null with get, set
+    member val Items: ObservableCollection<ItemViewModel> = null with get, set

@@ -11,18 +11,9 @@ namespace EpoxyHello.ViewModels
 open Epoxy
 open Avalonia.Media.Imaging
 
-[<Sealed>]
+[<Sealed; ViewModel>]
 type ItemViewModel() =
-    inherit ViewModel()
 
-    member __.Title
-        with get(): string = __.getValue()
-        and set (value: string) = __.setValue value
-
-    member __.Image
-        with get(): Bitmap = __.getValue()
-        and set (value: Bitmap) = __.setValue value
-
-    member __.Score
-        with get(): int = __.getValue()
-        and set (value: int) = __.setValue value
+    member val Title : string = "" with get, set
+    member val Image : Bitmap = null with get, set
+    member val Score : int = 0 with get, set
