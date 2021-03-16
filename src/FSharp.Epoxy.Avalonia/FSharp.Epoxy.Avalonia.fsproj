@@ -28,6 +28,8 @@
 
   <ItemGroup>
     <None Include="FSharp.Epoxy.Avalonia.nuspec" />
+    <None Include="build\*.*" CopyToOutputDirectory="Never" />
+    <None Include="buildMultiTargeting\*.*" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
   <ItemGroup>
