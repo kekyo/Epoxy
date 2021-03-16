@@ -475,7 +475,7 @@ namespace Epoxy
                         {
                             injected = true;
                             this.message(
-                                LogLevels.Information,
+                                LogLevels.Trace,
                                 $"Injected a view model: Assembly={targetAssemblyName}, Type={targetType.FullName}");
                         }
                         else

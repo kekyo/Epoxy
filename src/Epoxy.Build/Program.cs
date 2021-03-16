@@ -50,7 +50,7 @@ namespace Epoxy
             {
                 var referencesBasePath = args[0].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                 var targetAssemblyPath = args[1];
-                isTrace = args.ElementAtOrDefault(2) is { } arg2 && arg2 == "trace";
+                isTrace = args.ElementAtOrDefault(2) is { } arg2 && bool.TryParse(arg2, out var v) && v;
 
                 var injector = new ViewModelInjector(referencesBasePath, Message);
 
