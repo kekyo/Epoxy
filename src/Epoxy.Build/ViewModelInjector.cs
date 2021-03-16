@@ -58,6 +58,7 @@ namespace Epoxy
         private readonly MethodDefinition removePropertyChanging;
         private readonly MethodDefinition addPropertyChanged;
         private readonly MethodDefinition removePropertyChanged;
+        private readonly MethodDefinition prettyPrint;
 
         private readonly MethodDefinition initializeFSharpValueTMethod;
         private readonly MethodDefinition getValueTMethod;
@@ -121,6 +122,8 @@ namespace Epoxy
                 First(m => m.Name == "AddPropertyChanged");
             this.removePropertyChanged = this.internalModelHelperType.Methods.
                 First(m => m.Name == "RemovePropertyChanged");
+            this.prettyPrint = this.internalModelHelperType.Methods.
+                First(m => m.Name == "PrettyPrint");
 
             this.initializeFSharpValueTMethod = this.internalModelHelperType.Methods.
                 First(m => m.Name == "InitializeFSharpValueT");
@@ -216,6 +219,37 @@ namespace Epoxy
             propertyChangedEvent.AddMethod = propertyChangedAddMethod;
             propertyChangedEvent.RemoveMethod = propertyChangedRemoveMethod;
             targetType.Events.Add(propertyChangedEvent);
+        }
+
+        private void InjectPrettyPrint(
+            ModuleDefinition module, TypeDefinition targetType)
+        {
+            if (!targetType.Methods.
+                Any(m => (m.Name == "ToString") && m.IsPublic && m.IsVirtual && (m.Parameters.Count == 0)))
+            {
+                message(
+                    LogLevels.Trace,
+                    $"InjectPrettyPrint: Injected pretty printer: Type={targetType.FullName}");
+
+                var method = new MethodDefinition(
+                    "ToString", MethodAttributes.Public | MethodAttributes.Virtual, this.typeSystem.String);
+
+                // public static string PrettyPrint(object self, bool includeFields)
+
+                var ilp = method.Body.GetILProcessor();
+                ilp.Append(Instruction.Create(OpCodes.Ldarg_0));
+                ilp.Append(Instruction.Create(OpCodes.Ldc_I4_0));
+                ilp.Append(Instruction.Create(OpCodes.Call, module.ImportReference(this.prettyPrint)));
+                ilp.Append(Instruction.Create(OpCodes.Ret));
+
+                targetType.Methods.Add(method);
+            }
+            else
+            {
+                message(
+                    LogLevels.Trace,
+                    $"InjectPrettyPrint: Ignored injecting pretty printer: Type={targetType.FullName}");
+            }
         }
 
         private static FieldDefinition? GetBackingStore(
@@ -472,6 +506,7 @@ namespace Epoxy
             targetType.Interfaces.Add(ii);
 
             this.InjectPropertyChangeEvents(module, targetType, propertiesField);
+            this.InjectPrettyPrint(module, targetType);
             this.InjectProperties(module, targetType, propertiesField);
 
             return true;
