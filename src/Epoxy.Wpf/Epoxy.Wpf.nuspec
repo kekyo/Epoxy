@@ -62,8 +62,6 @@
     <file src="bin\$Configuration$\**\Epoxy.dll" target="lib" />
     <file src="bin\$Configuration$\**\Epoxy.pdb" target="lib" />
     <file src="bin\$Configuration$\**\Epoxy.xml" target="lib" />
-    <file src="build\*.*" target="build" />
-    <file src="buildMultiTargeting\*.*" target="buildMultiTargeting" />
     <file src="..\..\Images\Epoxy.100.png" target="/" />
   </files>
 </package>

@@ -27,8 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="build\*.*" CopyToOutputDirectory="Never" />
-    <None Include="buildMultiTargeting\*.*" CopyToOutputDirectory="Never" />
     <Compile Include="../Epoxy/**/*.cs" />
   </ItemGroup>
 

@@ -23,5 +23,4 @@
     <Page Remove="**/*.xaml" />
     <Resource Include="**/*.xaml" />
   </ItemGroup>
-  <Import Project="$(EpoxyBuildScriptBasePath)\Epoxy.Build.targets" />
 </Project>
