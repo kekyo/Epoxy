@@ -4,6 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>Epoxy</RootNamespace>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <ItemGroup>
