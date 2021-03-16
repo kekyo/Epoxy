@@ -16,7 +16,7 @@
     <repository type="git" url="https://github.com/kekyo/Epoxy.git" />
     <dependencies>
       <group targetFramework="UAP10.0.16299">
-        <dependency id="Epoxy.Build" version="$PackageVersion$" exclude="All" />
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Uwp" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
