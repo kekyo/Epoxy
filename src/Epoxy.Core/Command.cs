@@ -23,7 +23,7 @@ using Epoxy.Internal;
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -44,8 +44,6 @@ namespace Epoxy
 
     public abstract class Command : ICommand, IAsyncCommand
     {
-        public static EventHandler<UnobservedExceptionEventArgs>? UnobservedException;
-
         protected Command()
         { }
 
@@ -56,8 +54,22 @@ namespace Epoxy
 
         protected abstract bool OnCanExecute(object? parameter);
 
-        private protected virtual void OnExecute(object? parameter) =>
-            _ = this.OnExecuteAsync(parameter);
+        private protected virtual async void OnExecute(object? parameter)
+        {
+            try
+            {
+                var _ = await this.OnExecuteAsync(parameter).
+                    ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                // HACK: Because the exception will ignore by 'async void' bottom stack,
+                //   (And will reraise delaying UnobservedException on finalizer thread.)
+                //   This captures logical task context and reraise on UI thread pumps immediately.
+                var edi = ExceptionDispatchInfo.Capture(ex);
+                InternalUIThread.ContinueOnUIThread(() => edi.Throw());
+            }
+        }
 
         private protected virtual ValueTask<Unit> OnExecuteAsync(object? parameter)
         {
@@ -68,26 +80,8 @@ namespace Epoxy
         public bool CanExecute(object? parameter) =>
             this.OnCanExecute(parameter);
 
-        public async ValueTask ExecuteAsync(object? parameter)
-        {
-            var task = this.OnExecuteAsync(parameter);
-
-            try
-            {
-                await task.ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                if (UnobservedException is EventHandler<UnobservedExceptionEventArgs> ue)
-                {
-                    ue.Invoke(this, new UnobservedExceptionEventArgs(ex));
-                }
-                else
-                {
-                    Debug.Fail($"Epoxy.Command: unobserved {ex.GetType().FullName}: {ex.Message}");
-                }
-            }
-        }
+        public ValueTask ExecuteAsync(object? parameter) =>
+            this.OnExecuteAsync(parameter).AsValueTaskVoid();
 
         public void Execute(object? parameter) =>
             this.OnExecute(parameter);

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>eb</AssemblyName>
+    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Build</AssemblyTitle>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <NuspecFile>Epoxy.Build.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="build\*.*" CopyToOutputDirectory="Never" />
+    <Content Include="buildMultiTargeting\*.*" CopyToOutputDirectory="Never" />
+  </ItemGroup>
+
+  <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>$(NuspecProperties);Configuration=$(Configuration);PackageVersion=$(PackageVersion);PackageReleaseNotes=$(PackageReleaseNotes)</NuspecProperties>
+    </PropertyGroup>
+  </Target>
+
+</Project>

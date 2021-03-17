@@ -6,23 +6,29 @@
 
 [![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-|Package|All (C#)|Description|
-|:--|:--|:--|
-|Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
-|Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
-|Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
-|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
-|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version (Broken?)|
-|Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|Uno platform version (**BUGGY**)|
+## NuGet for All platform (C#)
 
-|Package|F# specialized|Description|
-|:--|:--|:--|
-|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
-|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
+|Package|main|devel|Description|
+|:--|:--|:--|:--|
+|Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|[![MyGet Epoxy.Wpf](https://img.shields.io/myget/epoxy/v/Epoxy.Wpf.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Wpf)|WPF version|
+|Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|[![MyGet Epoxy.Xamarin.Forms](https://img.shields.io/myget/epoxy/v/Epoxy.Xamarin.Forms.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Xamarin.Forms)|Xamarin Forms version|
+|Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|[![MyGet Epoxy.Avalonia](https://img.shields.io/myget/epoxy/v/Epoxy.Avalonia.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Avalonia)|Avalonia version|
+|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|[![MyGet Epoxy.Uwp](https://img.shields.io/myget/epoxy/v/Epoxy.Uwp.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Uwp)|Universal Windows version|
+|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|[![MyGet Epoxy.WinUI](https://img.shields.io/myget/epoxy/v/Epoxy.WinUI.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.WinUI)|WinUI 3 version (Broken?)|
+|Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|[![MyGet Epoxy.Uno](https://img.shields.io/myget/epoxy/v/Epoxy.Uno.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
-|Package|All|Description|
-|:--|:--|:--|
-|Epoxy.Templates|[![NuGet Epoxy.Templates](https://img.shields.io/nuget/v/Epoxy.Templates.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Templates)|dotnet CLI template package|
+## NuGet for F# specialized
+
+|Package|main|devel|Description|
+|:--|:--|:--|:--|
+|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|[![MyGet FSharp.Epoxy.Wpf](https://img.shields.io/myget/epoxy/v/FSharp.Epoxy.Wpf.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|[![MyGet FSharp.Epoxy.Avalonia](https://img.shields.io/myget/epoxy/v/FSharp.Epoxy.Avalonia.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/FSharp.Epoxy.Avalonia)|Avalonia version|
+
+## dotnet CLI template
+
+|Package|main|devel|Description|
+|:--|:--|:--|:--|
+|Epoxy.Templates|[![NuGet Epoxy.Templates](https://img.shields.io/nuget/v/Epoxy.Templates.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Templates)|[![MyGet Epoxy.Templates](https://img.shields.io/myget/epoxy/v/Epoxy.Templates.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Templates)|dotnet CLI template package|
 
 ## What is this ?
 
@@ -80,6 +86,7 @@ dotnet build
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
 * Currently, WinUI may not work properly due to preview version limitation.
 * We do not have a template for Uno platform yet.
+* You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
 ### Detail for sample code
 
@@ -153,24 +160,17 @@ Completed separately xaml based view declarations.
 Completed separately `ViewModel` implementation.
 
 ```csharp
-// Step 1: Write view model class deriving from Epoxy.ViewModel.
-public sealed class MainWindowViewModel : ViewModel
+// Step 1: Create a ViewModel class. Then add the ViewModel attribute.
+//    This attribute automatically implements PropertyChanged
+//    so that it can be propagated to the XAML side.
+[ViewModel]
+public sealed class MainWindowViewModel
 {
-    // Step 2: Expose properties to view.
+    // Step 2: Define the property you want to reference from XAML
+    //    in the auto-implemented property.
     //    Epoxy can handle with C# 8.0's nullable reference types.
-    public Command? Fetch
-    {
-        get => this.GetValue();
-        private set => this.SetValue(value);
-    }
-
-    public ObservableCollection<ImageSource>? Items
-    {
-        // Step 2-1: Can suppress the GetValue() generic argument
-        //   if use basic types (primitives, string, Command and etc).
-        get => this.GetValue<ObservableCollection<ImageSource>?>();
-        private set => this.SetValue(value);
-    }
+    public Command? Fetch { get; private set; }
+    public ObservableCollection<ImageSource>? Items { get; private set; }
 
     public MainWindowViewModel()
     {
@@ -230,10 +230,16 @@ public static async ValueTask<byte[]> FetchImageAsync(Uri url)
 Since the Model implementation does not directly manipulate the user interface fragments,
 it can isolate task contexts with `task.ConfigureAwait(false)` annotation to improve performance.
 
-### About ViewModel base class
+### About ViewModel attributes and ViewModel base classes
+
+When the `ViewModel` attribute is applied,` PropertyChanging` and `PropertyChanged` are automatically implemented at compile time. Also, the auto-implemented property setter handles these events so that they occur automatically. This function called `ViewModel injector.`
+
+In the previous implementation of Epoxy (<0.15), it was forced to inherit from the `ViewModel` base class, but by using this attribute, any class can be made into a ViewModel without any depends.
+
+However, this function cannot be finely controlled. In such cases, you can still derive and implement the `ViewModel` base class.
 
 `ViewModel` base class provides an implementation of the `GetValue`/`SetValue` methods.
-These methods automatically notify to the XAML control by property changes event `NotifyPropertyChanging`/`NotifyPropertyChanged`.
+These methods automatically notify to the XAML control by property changes event `PropertyChanging`/`PropertyChanged`.
 For example, when a property is changed upon a button click in `ViewModel`, the change will be notified to the XAML control and reflected to the user interface.
 
 As commented in the sample code above, the type argument may be omitted for `GetValue`.
@@ -530,6 +536,37 @@ Try not to use `GlobalService` in places where it is not really needed.
 By using the F# version of the package, you can write code that follows the F# style as follows.
 The instances used are shared, you can use the preferred API for both C# and F# while maintaining the same instances.
 
+### ViewModel Injector
+
+You can also use the `ViewModel injector` in F#. However, there are syntactic restrictions on auto-implemented properties:
+
+```fsharp
+open Epoxy
+
+// Use ViewModel injector.
+[<ViewModel>]
+type ItemViewModel() as self =
+    do
+        // This expression usually raises an exception,
+        // but it is legal when using the ViewModel injector.
+        self.Title <- "CCC"
+        // You can use this behavior to assign a Command within the `do` block.
+        self.Click <- CommandFactory.create(fun () -> async {
+            // ...
+        })
+
+    // The F# auto-implemented property requires an initialization expression,
+    // but it ignored if assigned any instance in the `do` block.
+    member val Title = "AAA" with get, set
+    member val Body = "BBB" with get, set
+    member val Click: Command = null with get, set
+
+// Result:
+let vm = new ItemViewModel()
+Debug.Assert(vm.Title = "CCC")
+Debug.Assert(vm.Body = "BBB")
+```
+
 ### camel-case function names
 
 All functions in FSharp.Epoxy are camel-cased. For example, instead of the `GetValue`/`SetValue` methods in the `ViewModel` base class, use the `getValue`/`setValue` functions.
@@ -616,6 +653,11 @@ One limitation of this feature is that XAML is always stored in the resource as 
 Apache-v2
 
 ## History
+
+* 0.15.0:
+  * Added ViewModel injector function that enables automatic implementation of ViewModel.
+  * Added F#'s camel-casing UIThread API.
+  * Made safer handler for catching excedptions on Command infrastructure.
 * 0.14.0:
   * Added XamlDesigner class.
   * Added Avalonia runtime platforms on net48, netcoreapp2.1, netcoreapp3.1 and net5.0.

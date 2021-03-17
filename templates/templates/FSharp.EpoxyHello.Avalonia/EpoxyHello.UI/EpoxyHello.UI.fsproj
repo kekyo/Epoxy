@@ -3,8 +3,6 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -16,7 +14,7 @@
     <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.1" />
     <PackageReference Include="Avalonia" Version="0.10.0" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
-    <PackageReference Include="FSharp.Epoxy.Avalonia" Version="0.14.0" />
+    <PackageReference Include="FSharp.Epoxy.Avalonia" Version="*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,17 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="**/*.xaml" />
-    <Resource Include="**/*.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Controls/**/*.fs" />
-    <Compile Include="ViewModels/**/*.fs" />
-    <Compile Include="Views/**/*.fs" />
+    <Compile Include="ViewModels\ItemViewModel.fs" />
+    <Compile Include="ViewModels\MainWindowViewModel.fs" />
+    <Compile Include="Views\Converters\ScoreToBrushConverter.fs" />
+    <Compile Include="Views\MainWindow.axaml.fs" />
     <Compile Include="App.axaml.fs" />
   </ItemGroup>
-
-  <ItemGroup />
 
 </Project>

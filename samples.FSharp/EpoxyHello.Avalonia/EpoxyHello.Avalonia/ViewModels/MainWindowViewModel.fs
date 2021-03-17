@@ -36,7 +36,7 @@ type public MainWindowViewModel() as self =
         self.Items <- new ObservableCollection<ItemViewModel>()
 
         // A handler for window loaded
-        self.Ready <- Command.Factory.createSync<EventArgs>(fun e ->
+        self.Ready <- Command.Factory.createSync(fun (e:EventArgs) ->
             self.IsEnabled <- true)
 
         // A handler for fetch button

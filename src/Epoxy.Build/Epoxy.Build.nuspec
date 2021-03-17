@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Epoxy.Build</id>
+    <version>$PackageVersion$</version>
+    <authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <icon>Epoxy.100.png</icon>
+    <projectUrl>https://github.com/kekyo/Epoxy.git</projectUrl>
+    <description>An independent flexible XAML MVVM library for .NET</description>
+    <releaseNotes>$PackageReleaseNotes$</releaseNotes>
+    <copyright>Copyright (c) 2019-2021 Kouji Matsui</copyright>
+    <tags>mvvm viewmodel easy simple combinable async awaitable command</tags>
+    <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
+  </metadata>
+  <files>
+    <file src="..\..\Images\Epoxy.100.png" target="/" />
+    <file src="build\*.*" target="build" />
+    <file src="buildMultiTargeting\*.*" target="buildMultiTargeting" />
+    <file src="bin\$Configuration$\net461\*.*" target="tools/net461" />
+    <file src="bin\$Configuration$\netcoreapp2.1\*.*" target="tools/netcoreapp2.1" />
+  </files>
+</package>

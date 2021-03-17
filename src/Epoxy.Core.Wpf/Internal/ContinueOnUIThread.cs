@@ -21,26 +21,21 @@
 
 using System;
 using System.Threading;
-
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Internal
 {
-    partial class UIThreadAwaiter
+    partial class InternalUIThread
     {
-        public void OnCompleted(Action continuation)
+        public static void ContinueOnUIThread(Action continuation)
         {
             var dispatcher = Application.Current?.Dispatcher;
             if (dispatcher == null)
             {
                 if (SynchronizationContext.Current is { } context)
                 {
-                    context.Post(_ =>
-                    {
-                        this.IsCompleted = true;
-                        continuation();
-                    }, null);
+                    context.Post(_ => continuation(), null);
                     return;
                 }
                 else
@@ -53,18 +48,13 @@ namespace Epoxy.Supplemental
                 dispatcher.Thread,
                 Thread.CurrentThread))
             {
-                this.IsCompleted = true;
                 continuation();
             }
             else
             {
                 var _ = dispatcher.BeginInvoke(
-                   DispatcherPriority.Normal,
-                    new Action(() =>
-                    {
-                        this.IsCompleted = true;
-                        continuation();
-                    }));
+                    DispatcherPriority.Normal,
+                    continuation);
             }
         }
     }

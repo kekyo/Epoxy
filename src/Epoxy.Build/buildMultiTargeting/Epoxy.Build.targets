@@ -1,4 +1,5 @@
-﻿////////////////////////////////////////////////////////////////////////////
+<!--
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -16,28 +17,7 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-
-#nullable enable
-
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-namespace Epoxy.Supplemental
-{
-    public struct UIThreadAwaitable
-    {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
-
-    public sealed partial class UIThreadAwaiter : INotifyCompletion
-    {
-        internal UIThreadAwaiter()
-        { }
-
-        public bool IsCompleted { get; private set; }
-
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
-    }
-}
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\build\Epoxy.Build.targets" />
+</Project>

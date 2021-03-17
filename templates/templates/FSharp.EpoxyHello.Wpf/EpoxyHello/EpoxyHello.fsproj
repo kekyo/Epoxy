@@ -3,8 +3,6 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net48;netcoreapp3.1;net5.0-windows</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
     <UseWPF>true</UseWPF>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -16,7 +14,7 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="FSharp.Epoxy.Wpf" Version="0.14.0" />
+    <PackageReference Include="FSharp.Epoxy.Wpf" Version="*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,12 +23,9 @@
 
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Controls/**/*.fs" />
-    <Compile Include="ViewModels/**/*.fs" />
-    <Compile Include="Views/**/*.fs" />
+    <Compile Include="ViewModels\ItemViewModel.fs" />
+    <Compile Include="ViewModels\MainWindowViewModel.fs" />
+    <Compile Include="Views\Converters\ScoreToBrushConverter.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

@@ -5,9 +5,11 @@
     <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
     <AssemblyTitle>Epoxy.WinUI</AssemblyTitle>
-    <PackageId>Epoxy.WinUI</PackageId>
-    <PackageTags>$(PackageTags);winui</PackageTags>
     <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+
+    <NuspecFile>Epoxy.WinUI.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <NoWarn>$(NoWarn);NU5104</NoWarn>
   </PropertyGroup>
 
@@ -28,7 +30,6 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy/**/*.cs" />
-    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

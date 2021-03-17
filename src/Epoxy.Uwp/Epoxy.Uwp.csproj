@@ -8,9 +8,11 @@
     -->
     <TargetFramework>uap10.0.16299</TargetFramework>
     <AssemblyTitle>Epoxy.Uwp</AssemblyTitle>
-    <PackageId>Epoxy.Uwp</PackageId>
-    <PackageTags>$(PackageTags);uwp;uap</PackageTags>
     <SkipMicrosoftUIXamlCheckTargetPlatformVersion>true</SkipMicrosoftUIXamlCheckTargetPlatformVersion>
+
+    <NuspecFile>Epoxy.Uwp.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -26,7 +28,6 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy/**/*.cs" />
-    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
     <EmbeddedResource Include="Properties\Epoxy.Uwp.rd.xml" />
   </ItemGroup>
 

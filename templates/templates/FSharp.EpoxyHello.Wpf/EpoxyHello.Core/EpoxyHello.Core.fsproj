@@ -2,21 +2,19 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Models\RedditPost.fs" />
-    <Compile Include="Models\Reddit.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="FSharp.Control.FusionTasks" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\RedditPost.fs" />
+    <Compile Include="Models\Reddit.fs" />
   </ItemGroup>
 
 </Project>

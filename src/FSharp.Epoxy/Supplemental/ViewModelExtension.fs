@@ -37,7 +37,7 @@ module public ViewModelExtension =
         member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
             self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTaskUnit |> asFunc1, propertyName)
 
-        member self.setValueAsync<'TValue>(newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
+        member self.setValueAsync (newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
             self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskVoidAsValueTaskUnit |> asFunc1, propertyName)
-        member self.setValueAsync<'TValue> (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
+        member self.setValueAsync (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
             self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskVoidAsValueTaskUnit |> asFunc1, propertyName)

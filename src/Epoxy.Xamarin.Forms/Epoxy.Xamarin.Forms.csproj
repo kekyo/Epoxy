@@ -4,8 +4,10 @@
     <AssemblyName>Epoxy</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyTitle>Epoxy.Xamarin.Forms</AssemblyTitle>
-    <PackageId>Epoxy.Xamarin.Forms</PackageId>
-    <PackageTags>$(PackageTags);xamarin</PackageTags>
+      
+    <NuspecFile>Epoxy.Xamarin.Forms.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -21,7 +23,6 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy/**/*.cs" />
-    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

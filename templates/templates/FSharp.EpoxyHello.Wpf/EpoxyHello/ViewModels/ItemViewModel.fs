@@ -11,18 +11,9 @@ namespace EpoxyHello.ViewModels
 open Epoxy
 open System.Windows.Media
 
-[<Sealed>]
+[<Sealed; ViewModel>]
 type ItemViewModel() =
-    inherit ViewModel()
 
-    member __.Title
-        with get(): string = __.getValue()
-        and set (value: string) = __.setValue value
-
-    member __.Image
-        with get(): ImageSource = __.getValue()
-        and set (value: ImageSource) = __.setValue value
-
-    member __.Score
-        with get(): int = __.getValue()
-        and set (value: int) = __.setValue value
+    member val Title : string = "" with get, set
+    member val Image : ImageSource = null with get, set
+    member val Score : int = 0 with get, set

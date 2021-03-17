@@ -19,35 +19,27 @@
 
 #nullable enable
 
-using System;
+using Epoxy;
 
-using Avalonia.Threading;
-
-namespace Epoxy.Supplemental
+namespace Epoxy
 {
-    partial class UIThreadAwaiter
+    public class NonTargettedViewModel
     {
-        public void OnCompleted(Action continuation)
+        public NonTargettedViewModel()
         {
-            var dispatcher = Dispatcher.UIThread;
-            if (dispatcher == null)
-            {
-                throw new InvalidOperationException("UI thread not found.");
-            }
-
-            if (dispatcher.CheckAccess())
-            {
-                this.IsCompleted = true;
-                continuation();
-            }
-            else
-            {
-                dispatcher.Post(() =>
-                {
-                    this.IsCompleted = true;
-                    continuation();
-                });
-            }
+            this.Prop1 = "ABC1";
+            this.Prop2 = "ABC2";
+            this.Prop3 = "ABC3";
+            this.Prop4 = "ABC4";
         }
+
+        public string Prop1
+        { get; }
+        public string Prop2
+        { get; protected set; }
+        public string Prop3
+        { get; internal set; }
+        public string Prop4
+        { get; set; }
     }
 }

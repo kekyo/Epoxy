@@ -24,29 +24,24 @@ using System;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Internal
 {
-    partial class UIThreadAwaiter
+    partial class InternalUIThread
     {
-        public void OnCompleted(Action continuation)
+        public static void ContinueOnUIThread(Action continuation)
         {
             if (CoreWindow.GetForCurrentThread()?.Dispatcher is { } d1)
             {
                 // Maybe anytime is true
                 if (d1.HasThreadAccess)
                 {
-                    this.IsCompleted = true;
                     continuation();
                 }
                 else
                 {
                     var _ = d1.RunAsync(
                         CoreDispatcherPriority.Normal,
-                        () =>
-                        {
-                            this.IsCompleted = true;
-                            continuation();
-                        });
+                        () => continuation());
                 }
                 return;
             }
@@ -57,24 +52,20 @@ namespace Epoxy.Supplemental
                 {
                     if (d2.HasThreadAccess)
                     {
-                        this.IsCompleted = true;
                         continuation();
                     }
                     else
                     {
                         var _ = d2.RunAsync(
                             CoreDispatcherPriority.Normal,
-                            () =>
-                            {
-                                this.IsCompleted = true;
-                                continuation();
-                            });
+                            () => continuation());
                     }
                     return;
                 }
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                throw new InvalidOperationException("UI thread not found.", ex);
             }
 
             throw new InvalidOperationException("UI thread not found.");
