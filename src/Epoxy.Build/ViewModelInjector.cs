@@ -286,6 +286,8 @@ namespace Epoxy
             body.Instructions.Clear();
             body.Variables.Clear();
 
+            body.InitLocals = true;
+
             var propertyType = module.ImportReference(pd.PropertyType);
 
             var defaultValueVariable = new VariableDefinition(propertyType);
