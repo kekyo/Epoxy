@@ -113,10 +113,16 @@ namespace Epoxy.Internal
             Debug.Assert(propertyName is string);
 
             var p = Prepare(ref properties);
+
             if (!p.TryGetValue(propertyName, out var oldValue) ||
                 DefaultValue<TValue>.IsDefault(oldValue))
             {
+                Trace.WriteLine($"InitializeFSharpValueT<{typeof(TValue).Name}>({initializeValue}, \"{propertyName}\", ref {p.GetHashCode()}) [1], oldValue={oldValue}");
                 p[propertyName] = initializeValue;
+            }
+            else
+            {
+                Trace.WriteLine($"InitializeFSharpValueT<{typeof(TValue).Name}>({initializeValue}, \"{propertyName}\", ref {p.GetHashCode()}) [2]");
             }
         }
 
@@ -140,6 +146,8 @@ namespace Epoxy.Internal
             {
                 if (!DefaultValue<TValue>.ValueEquals(oldValue, newValue))
                 {
+                    Trace.WriteLine($"SetValueAsyncT<{typeof(TValue).Name}>({newValue}, \"{propertyName}\", ref {p.GetHashCode()}) [1], oldValue={oldValue}");
+
                     p.propertyChanging?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
 
                     if (!DefaultValue.IsDefaultValue(newValue))
@@ -157,6 +165,10 @@ namespace Epoxy.Internal
                         return pc.Invoke(newValue);
                     }
                 }
+                else
+                {
+                    Trace.WriteLine($"SetValueAsyncT<{typeof(TValue).Name}>({newValue}, \"{propertyName}\", ref {p.GetHashCode()}) [2], oldValue={oldValue}");
+                }
             }
             else
             {
@@ -164,10 +176,14 @@ namespace Epoxy.Internal
 
                 if (!DefaultValue.IsDefaultValue(newValue))
                 {
+                    Trace.WriteLine($"SetValueAsyncT<{typeof(TValue).Name}>({newValue}, \"{propertyName}\", ref {p.GetHashCode()}) [3]");
+
                     p.Add(propertyName!, newValue!);
                 }
                 else
                 {
+                    Trace.WriteLine($"SetValueAsyncT<{typeof(TValue).Name}>({newValue}, \"{propertyName}\", ref {p.GetHashCode()}) [4]");
+
                     p.Remove(propertyName!);
                 }
 
