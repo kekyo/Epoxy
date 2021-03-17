@@ -94,7 +94,7 @@ dotnet build
 * デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
 * 現在、WinUIはpreview版制限のために、正しく動作しない可能性があります。
 * Uno platformのテンプレートはまだ用意していません。
-* MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションをl使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
+* MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
 ### サンプルコードの解説
 
@@ -167,34 +167,23 @@ XAMLビューの定義とその実装を、MVVMに従って完全に分離しつ
 ### ViewModel (WPF)の実装例
 
 完全に分離された、ViewModelクラスの実装です。
-完全に、とは、つまりViewクラス[(MainWindow.xaml.cs)](samples/EpoxyHello.Wpf/Views/MainWindow.xaml.cs)に、コードビハインドを一切記述しないことを指します。
+完全に、とは、つまりViewクラスに、コードビハインドを一切記述しないことを指します。
 
 ```csharp
-// ステップ 1: ViewModelクラスを、 Epoxy.ViewModel から継承して作ります。
-public sealed class MainWindowViewModel : ViewModel
+// ステップ 1: ViewModelクラスを作ります。そしてViewModel属性を付与します。
+//    この属性は、PropertyChangedを自動的に実装して、XAML側に伝搬できるようにします。
+[ViewModel]
+public sealed class MainWindowViewModel
 {
-    // ステップ 2: XAMLから参照したいプロパティを定義します。
+    // ステップ 2: XAMLから参照したいプロパティを自動実装プロパティで定義します。
     //    Epoxyは、 C# 8.0 で追加された、null許容参照型定義に対応しています。
-    public Command? Fetch
-    {
-        // ステップ 2-1: 一般的な型であれば、GetValue(), SetValue()の引数に、
-        //    プロパティ名を書いたり型キャストを書く必要はありません。
-        get => this.GetValue();
-        private set => this.SetValue(value);
-    }
-
-    public ObservableCollection<ImageSource>? Items
-    {
-        // ステップ 2-2: このように、複雑な型やジェネリック型の場合にのみ、
-        //    GetValue()にジェネリック型引数を与える必要があります。
-        get => this.GetValue<ObservableCollection<ImageSource>?>();
-        private set => this.SetValue(value);
-    }
+    public Command? Fetch { get; private set; }
+    public ObservableCollection<ImageSource>? Items { get; private set; }
 
     // ViewModelのコンストラクタ
     public MainWindowViewModel()
     {
-        // ステップ 3: プロパティに定義したSetValue()が呼び出されると、
+        // ステップ 3: プロパティのsetterが呼び出されると、
         //    PropertyChangedイベントが発生して、XAML側に変更が通知されます。
         this.Items = new ObservableCollection<ItemViewModel>();
 
@@ -253,10 +242,16 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 非同期操作でタスクコンテキストを分離 `task.ConfigureAwait(false)` することで、
 パフォーマンスを向上させることが出来ます。
 
-### ViewModel基底クラスについて
+### ViewModel属性とViewModel基底クラスについて
+
+`ViewModel`属性が適用されると、コンパイル時に自動的に`PropertyChanging`、`PropertyChanged`が実装されます。また、自動実装プロパティのsetterで、これらのイベントが自動的に発生するように処理されます。この機能を、`ViewModelインジェクタ`と呼びます。
+
+以前のEpoxy(<0.15)の実装では、`ViewModel`基底クラスから継承する事を強制していましたが、この属性を使用することで、任意のクラスを負担なしでViewModelにすることが出来ます。
+
+但し、この機能は細かい制御を行うことが出来ません。そのような場合は、従来通り`ViewModel`基底クラスを派生して実装することも出来ます。
 
 `ViewModel`基底クラスは、`GetValue`/`SetValue`メソッドの実装を提供します。
-これらのメソッドは、XAML側にプロパティの変更通知 `NotifyPropertyChanging`/`NotifyPropertyChanged` を自動的に行います。
+これらのメソッドは、XAML側にプロパティの変更通知 `PropertyChanging`/`PropertyChanged` を自動的に行います。
 たとえば、ボタンクリックの契機で`ViewModel`からプロパティを変更すると、変更がXAMLのコントロールに通知され、ユーザーインターフェイスに反映されます。
 
 上記サンプルコードのコメントにあるように、`GetValue`については型引数を省略できる場合があります。
@@ -547,12 +542,43 @@ F#バージョンのパッケージを使う事で、以下のようなF#の流�
 使用するインスタンスは共有されます。C#/F#混在プロジェクトにおいても、保持するインスタンスは同一でありながら、
 C#/F#それぞれで好ましいAPIを使い分けることができます。
 
+### ViewModelインジェクタ
+
+F#でもViewModelインジェクタは使用できます。但し、自動実装プロパティの構文上の制約があります:
+
+```fsharp
+open Epoxy
+
+// ViewModelインジェクタを使う
+[<ViewModel>]
+type ItemViewModel() as self =
+    do
+        // 通常、この式は例外を起こすが、ViewModelインジェクタを使用した場合は合法となる。
+        self.Title <- "CCC"
+        // この挙動を使用して、doブロック内でCommandを割り当てることが出来る。
+        self.Click <- CommandFactory.create(fun () -> async {
+            // ...
+        })
+
+    // F#の自動実装プロパティには初期化式が必要だが、doブロックでインスタンスが
+    // 割り当てられた場合は無視される。
+    member val Title = "AAA" with get, set
+    member val Body = "BBB" with get, set
+    member val Click: Command = null with get, set
+
+// 結果:
+let vm = new ItemViewModel()
+Debug.Assert(vm.Title = "CCC")
+Debug.Assert(vm.Body = "BBB")
+```
+
 ### camel-caseの関数名
 
 FSharp.Epoxyのすべての関数は、camel-case化されています。例えば、`ViewModel`基底クラスの、`GetValue`/`SetValue`メソッドの代わりに、`getValue`/`setValue`関数を使います。
 
 ```fsharp
 open Epoxy
+
 type ItemViewModel() =
     inherit ViewModel()
 
@@ -633,6 +659,7 @@ Apache-v2
 ## History
 
 * 0.15.0:
+  * ViewModelの自動実装を可能にする、ViewModelインジェクタ機能を追加しました。
   * F#のcamel-casing UIThread関数を追加。
   * Commandのハンドラで発生する例外の処理を改善した。
 * 0.14.0:
