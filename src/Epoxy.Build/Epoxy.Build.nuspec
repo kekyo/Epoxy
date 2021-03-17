@@ -13,7 +13,7 @@
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <copyright>Copyright (c) 2019-2021 Kouji Matsui</copyright>
     <tags>mvvm viewmodel easy simple combinable async awaitable command</tags>
-    <repository type="git" url="https://github.com/kekyo/Epoxy.git" />
+    <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
   </metadata>
   <files>
     <file src="..\..\Images\Epoxy.100.png" target="/" />

@@ -13,7 +13,7 @@
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <copyright>Copyright (c) 2019-2021 Kouji Matsui</copyright>
     <tags>mvvm viewmodel easy simple combinable async awaitable command wpf</tags>
-    <repository type="git" url="https://github.com/kekyo/Epoxy.git" />
+    <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
