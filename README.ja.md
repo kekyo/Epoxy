@@ -254,9 +254,6 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 これらのメソッドは、XAML側にプロパティの変更通知 `PropertyChanging`/`PropertyChanged` を自動的に行います。
 たとえば、ボタンクリックの契機で`ViewModel`からプロパティを変更すると、変更がXAMLのコントロールに通知され、ユーザーインターフェイスに反映されます。
 
-上記サンプルコードのコメントにあるように、`GetValue`については型引数を省略できる場合があります。
-省略可能な型は、[implicit operatorの定義](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/Epoxy/ValueHolder.cs#L61)を参照してください。
-
 なお、`GetValue`には、デフォルト値の定義が、
 `SetValue`には、値変更時に追加操作を行うことが出来るオーバーロードが定義されています。
 

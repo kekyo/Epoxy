@@ -242,9 +242,6 @@ However, this function cannot be finely controlled. In such cases, you can still
 These methods automatically notify to the XAML control by property changes event `PropertyChanging`/`PropertyChanged`.
 For example, when a property is changed upon a button click in `ViewModel`, the change will be notified to the XAML control and reflected to the user interface.
 
-As commented in the sample code above, the type argument may be omitted for `GetValue`.
-See [definition of implicit operator](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/Epoxy/ValueHolder.cs#L61) for the optional types.
-
 In addition, `GetValue` defines the default value,
 and `SetValue` defines an overload that can perform additional operations when the value is changed.
 
