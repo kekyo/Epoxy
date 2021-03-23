@@ -19,26 +19,35 @@
 
 #nullable enable
 
+using Epoxy.Internal;
+
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-using Epoxy.Internal;
-
 namespace Epoxy.Infrastructure
 {
+    /// <summary>
+    /// The ViewModel base class using internal only.
+    /// </summary>
+    /// <remarks>You have to use Epoxy.ViewModel class instead this class directly.</remarks>
     [DebuggerDisplay("{PrettyPrint}")]
     public abstract class ViewModelBase :
         IViewModelImplementer
     {
         internal InternalPropertyBag? epoxy_properties__;
 
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         [DebuggerStepThrough]
         private protected ViewModelBase()
         { }
 
+        /// <summary>
+        /// Occurs when a property value is changing.
+        /// </summary>
         public event PropertyChangingEventHandler? PropertyChanging
         {
             [DebuggerStepThrough]
@@ -49,6 +58,9 @@ namespace Epoxy.Infrastructure
                 value, ref this.epoxy_properties__);
         }
 
+        /// <summary>
+        /// Occurs when a property value is changed.
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged
         {
             [DebuggerStepThrough]
@@ -100,8 +112,14 @@ namespace Epoxy.Infrastructure
             InternalModelHelper.OnPropertyChanged(
                 propertyName, this, this.epoxy_properties__);
 
-        public string PrettyPrint =>
-            InternalModelHelper.PrettyPrint(this, false);
+        /// <summary>
+        /// Pretty printer for this class.
+        /// </summary>
+        public string PrettyPrint
+        {
+            [DebuggerStepThrough]
+            get => InternalModelHelper.PrettyPrint(this, false);
+        }
 
         [DebuggerStepThrough]
         public override string ToString() =>

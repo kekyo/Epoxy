@@ -51,25 +51,61 @@ using UIElement = Avalonia.IStyledElement;
 
 namespace Epoxy
 {
+    /// <summary>
+    /// The Pile factory.
+    /// </summary>
+    /// <remarks>You can manipulate XAML controls directly inside ViewModels
+    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
     [DebuggerStepThrough]
     public static class PileFactory
     {
+        /// <summary>
+        /// Create an anonymous control typed Pile.
+        /// </summary>
+        /// <returns>Pile instance</returns>
         public static Pile<UIElement> Create() =>
             new Pile<UIElement>();
 
+        /// <summary>
+        /// Create a Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">Target control type</typeparam>
+        /// <returns>Pile instance</returns>
         public static Pile<TUIElement> Create<TUIElement>()
             where TUIElement : UIElement =>
             new Pile<TUIElement>();
     }
 
+    /// <summary>
+    /// Pile manipulator class.
+    /// </summary>
+    /// <remarks>You can manipulate XAML controls directly inside ViewModels
+    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
     [DebuggerStepThrough]
     public static class PileExtension
     {
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">Target control type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Predicts when rents control instance</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>ValueTask instance</returns>
         public static ValueTask ExecuteAsync<TUIElement>(
             this Pile<TUIElement> pile, Func<TUIElement, ValueTask> action, bool canIgnore = false)
             where TUIElement : UIElement =>
             pile.InternalExecuteAsync(e => action(e).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
 
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">Target control type</typeparam>
+        /// <typeparam name="TResult">Action result type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Predicts when rents control instance</param>
+        /// <returns>Result for action</returns>
+        /// <remarks>This overload has to complete XAML data-binding.</remarks>
         public static ValueTask<TResult> ExecuteAsync<TUIElement, TResult>(
             this Pile<TUIElement> pile, Func<TUIElement, ValueTask<TResult>> action)
             where TUIElement : UIElement =>

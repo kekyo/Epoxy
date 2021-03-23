@@ -52,18 +52,54 @@ type DependencyObject = Avalonia.IAvaloniaObject
 type UIElement = Avalonia.IStyledElement
 #endif
 
+/// <summary>
+/// The Pile factory.
+/// </summary>
+/// <remarks>You can manipulate XAML controls directly inside ViewModels
+/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
 [<AbstractClass; Sealed>]
 type public PileFactory =
+    /// <summary>
+    /// Create an anonymous control typed Pile.
+    /// </summary>
+    /// <returns>Pile instance</returns>
     static member create() =
         new Pile<UIElement>()
+    /// <summary>
+    /// Create a Pile.
+    /// </summary>
+    /// <typeparam name="'TUIElement">Target control type</typeparam>
+    /// <returns>Pile instance</returns>
     static member create<'TUIElement when 'TUIElement :> UIElement>() =
         new Pile<'TUIElement>()
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public PileExtension =
+    /// <summary>
+    /// Pile manipulator class.
+    /// </summary>
+    /// <remarks>You can manipulate XAML controls directly inside ViewModels
+    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
     type public Pile<'TUIElement when 'TUIElement :> UIElement> with
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">Target control type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Predicts when rents control instance</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
         member self.executeAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
             self.InternalExecuteAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">Target control type</typeparam>
+        /// <typeparam name="'TResult">Action result type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Predicts when rents control instance</param>
+        /// <returns>Async result for action</returns>
+        /// <remarks>This overload has to complete XAML data-binding.</remarks>
         member self.executeAsync (action: 'TUIElement -> Async<'TResult>) =
             self.InternalExecuteAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
