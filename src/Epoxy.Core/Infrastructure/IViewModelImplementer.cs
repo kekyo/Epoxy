@@ -23,6 +23,11 @@ using System.ComponentModel;
 
 namespace Epoxy.Infrastructure
 {
+    /// <summary>
+    /// The ViewModel implementation indicator.
+    /// </summary>
+    /// <remarks>Epoxy.ViewModel class and injected ViewModel type are
+    /// exactly implemented this interface.</remarks>
     public interface IViewModelImplementer :
         INotifyPropertyChanging, INotifyPropertyChanged
     {

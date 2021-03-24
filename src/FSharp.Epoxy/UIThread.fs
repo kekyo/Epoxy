@@ -29,13 +29,37 @@ open System.Diagnostics
 [<AbstractClass>]
 [<Sealed>]
 type public UIThread =
+    /// <summary>
+    /// Detects current thread context on the UI thread.
+    /// </summary>
     static member isBound =
         InternalUIThread.IsBound
 
+    /// <summary>
+    /// Detects current thread context on the UI thread.
+    /// </summary>
+    /// <remarks>This function is used internal only.
+    /// You may have to use isBound property instead.</remarks>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member unsafeIsBound() =
         InternalUIThread.UnsafeIsBound()
 
+    /// <summary>
+    /// Binds current async workflow to the UI thread context manually.
+    /// </summary>
+    /// <returns>Async object for the UI thread continuation.</returns>
+    /// <example>
+    /// <code>
+    /// async {
+    ///   // (On the arbitrary thread context here)
+    /// 
+    ///   // Switch to UI thread context uses async-await.
+    ///   do! UIThread.bind()
+    /// 
+    ///   // (On the UI thread context here)
+    /// }
+    /// </code>
+    /// </example>
     static member bind() : Async<unit> =
         Async.FromContinuations(fun (resolve, _, _) ->
             InternalUIThread.ContinueOnUIThread(new Action(resolve)))

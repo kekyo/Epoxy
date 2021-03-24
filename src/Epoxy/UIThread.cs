@@ -26,15 +26,40 @@ using System.ComponentModel;
 
 namespace Epoxy
 {
+    /// <summary>
+    /// UI thread commonly manipulator.
+    /// </summary>
     public static class UIThread
     {
+        /// <summary>
+        /// Detects current thread context on the UI thread.
+        /// </summary>
         public static bool IsBound =>
             InternalUIThread.IsBound;
 
+        /// <summary>
+        /// Detects current thread context on the UI thread.
+        /// </summary>
+        /// <remarks>This method is used internal only.
+        /// You may have to use IsBound property instead.</remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool UnsafeIsBound() =>
             InternalUIThread.UnsafeIsBound();
 
+        /// <summary>
+        /// Binds current task to the UI thread context manually.
+        /// </summary>
+        /// <returns>Awaitable UI thread object.</returns>
+        /// <example>
+        /// <code>
+        /// // (On the arbitrary thread context here)
+        /// 
+        /// // Switch to UI thread context uses async-await.
+        /// await UIThread.Bind();
+        /// 
+        /// // (On the UI thread context here)
+        /// </code>
+        /// </example>
         public static UIThreadAwaitable Bind() =>
             new UIThreadAwaitable();
     }

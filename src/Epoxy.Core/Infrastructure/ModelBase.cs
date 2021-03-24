@@ -19,14 +19,14 @@
 
 #nullable enable
 
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-
 using Epoxy.Internal;
+using System.Diagnostics;
 
 namespace Epoxy.Infrastructure
 {
+    /// <summary>
+    /// The Model base class.
+    /// </summary>
     [DebuggerDisplay("{PrettyPrint}")]
     public abstract class ModelBase
     {
@@ -34,8 +34,14 @@ namespace Epoxy.Infrastructure
         private protected ModelBase()
         { }
 
-        public string PrettyPrint =>
-            InternalModelHelper.PrettyPrint(this, true);
+        /// <summary>
+        /// Pretty printer for this class.
+        /// </summary>
+        public string PrettyPrint
+        {
+            [DebuggerStepThrough]
+            get => InternalModelHelper.PrettyPrint(this, true);
+        }
 
         [DebuggerStepThrough]
         public override string ToString() =>
