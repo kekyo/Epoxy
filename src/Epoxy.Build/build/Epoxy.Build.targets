@@ -21,11 +21,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     
   <PropertyGroup>
-    <EpoxyBuildToolingRuntimeName>$(_EB_RuntimeName)</EpoxyBuildToolingRuntimeName>
-    <_EB_ToolingDir>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingDir>
-    <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
-    <EpoxyBuildToolingPath>$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_EB_ExecutableName)'))</EpoxyBuildToolingPath>
-    <_EB_MSBuildTaskPath>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','$(_EB_TaskPlatformName)','EpoxyBuild.Tasks.dll'))</_EB_MSBuildTaskPath>
     <EpoxyBuildTrace Condition="'$(EpoxyBuildTrace)' == ''">False</EpoxyBuildTrace>
   </PropertyGroup>
 
@@ -69,7 +64,7 @@
       <EpoxyBuildToolingRuntimeName Condition="'$(EpoxyBuildToolingRuntimeName)' == ''">$(_EB_RuntimeName)</EpoxyBuildToolingRuntimeName>
       <_EB_ToolingDir>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingDir>
       <EpoxyBuildToolingDir Condition="'$(EpoxyBuildToolingDir)' == ''">$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
-      <EpoxyBuildToolingPath Condition="'$(EpoxyBuildToolingPath)' == ''">$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_RV_ExecutableName)'))</EpoxyBuildToolingPath>
+      <EpoxyBuildToolingPath Condition="'$(EpoxyBuildToolingPath)' == ''">$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_EB_ExecutableName)'))</EpoxyBuildToolingPath>
     </PropertyGroup>
 
     <GetCombinedReferencesBasePath References="@(ReferencePath)">
