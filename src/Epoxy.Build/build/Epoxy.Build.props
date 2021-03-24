@@ -18,29 +18,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 -->
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-    TreatAsLocalProperty="_EB_PlatformName;_EB_RuntimeName;_EB_ExecutableName;_EB_ToolingDir;_EB_TaskPlatformName;_EB_MSBuildTaskPath">
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
   <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
-    <_EB_PlatformName>netcoreapp2.1</_EB_PlatformName>
     <_EB_RuntimeName>dotnet </_EB_RuntimeName>
     <_EB_ExecutableName>eb.dll</_EB_ExecutableName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Full'">
-    <_EB_PlatformName>net461</_EB_PlatformName>
     <_EB_RuntimeName></_EB_RuntimeName>
     <_EB_ExecutableName>eb.exe</_EB_ExecutableName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Mono'">
-    <_EB_PlatformName>net461</_EB_PlatformName>
     <_EB_RuntimeName>mono </_EB_RuntimeName>
     <_EB_ExecutableName>eb.exe</_EB_ExecutableName>
   </PropertyGroup>
-  <PropertyGroup>
-    <EpoxyBuildToolingRuntimeName>$(_EB_RuntimeName)</EpoxyBuildToolingRuntimeName>
-    <_EB_ToolingDir>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingDir>
-    <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
-    <EpoxyBuildToolingPath>$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_EB_ExecutableName)'))</EpoxyBuildToolingPath>
-    <_EB_MSBuildTaskPath>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','$(_EB_TaskPlatformName)','EpoxyBuild.Tasks.dll'))</_EB_MSBuildTaskPath>
-    <EpoxyBuildTrace>False</EpoxyBuildTrace>
-  </PropertyGroup>
+
 </Project>
