@@ -655,6 +655,8 @@ Apache-v2
 
 ## History
 
+* 0.16.0:
+  * .NET SDK3.1又は5.0のみをインストールした環境でViewModelインジェクタ実行時にエラーが発生する問題を修正。
 * 0.15.0:
   * ViewModelの自動実装を可能にする、ViewModelインジェクタ機能を追加しました。
   * F#のcamel-casing UIThread関数を追加。

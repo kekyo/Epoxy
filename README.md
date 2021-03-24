@@ -651,6 +651,8 @@ Apache-v2
 
 ## History
 
+* 0.16.0:
+  * Fixed failure injecting on only installed sdk3.1 or 5.0.
 * 0.15.0:
   * Added ViewModel injector function that enables automatic implementation of ViewModel.
   * Added F#'s camel-casing UIThread API.
