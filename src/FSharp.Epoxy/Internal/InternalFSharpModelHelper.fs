@@ -48,11 +48,11 @@ type public InternalFSharpModelHelper =
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member setValueWithHookAsyncT
-        (newValue, propertyChanged: PropertyChangedFSharpAsyncDelegate<'TValue>, propertyName, sender, properties: InternalPropertyBag ref) =
+        (newValue, propertyChanged: PropertyChangedFSharpAsyncDelegate<'TValue>, propertyName, sender: obj, properties: byref<InternalPropertyBag>) =
         InternalModelHelper.SetValueAsyncT<'TValue>(
             newValue,
             new Func<'TValue, ValueTask<Epoxy.Internal.Unit>>(
                 fun v -> propertyChanged.Invoke(v) |> asyncUnitAsValueTaskUnit),
             propertyName,
             sender,
-            properties)
+            &properties)

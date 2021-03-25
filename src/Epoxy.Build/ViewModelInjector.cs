@@ -49,11 +49,15 @@ namespace Epoxy
         private readonly TypeDefinition ignoreInjectAttributeType;
         private readonly TypeDefinition iViewModelImplementerType;
         private readonly TypeDefinition internalPropertyBagType;
+
         private readonly TypeDefinition internalModelHelperType;
+        private readonly TypeReference propertyChangedAsyncDelegateTypeT;
+
+        private readonly TypeDefinition? internalFSharpModelHelperType;
+        private readonly TypeReference? propertyChangedFSharpAsyncDelegateTypeT;
 
         private readonly TypeReference propertyChangingEventHandlerType;
         private readonly TypeReference propertyChangedEventHandlerType;
-        private readonly TypeReference propertyChangedAsyncDelegateTypeT;
 
         private readonly MethodDefinition addPropertyChanging;
         private readonly MethodDefinition removePropertyChanging;
@@ -64,8 +68,12 @@ namespace Epoxy
         private readonly MethodDefinition initializeFSharpValueTMethod;
         private readonly MethodDefinition getValueTMethod;
         private readonly MethodDefinition setValueAsyncTMethod;
+
         private readonly MethodDefinition setValueWithHookAsyncTMethod;
         private readonly MethodDefinition createPropertyChangedAsyncDelegateTMethod;
+
+        private readonly MethodDefinition? setValueWithHookAsyncTFunction;
+        private readonly MethodDefinition? createPropertyChangedAsyncDelegateTFunction;
 
         private readonly MethodDefinition itAddPropertyChanging;
         private readonly MethodDefinition itRemovePropertyChanging;
@@ -109,6 +117,12 @@ namespace Epoxy
             message(
                 LogLevels.Trace,
                 $"Epoxy.Core.dll is loaded: Path={epoxyCorePath}");
+            if (fsharpEpoxyAssembly != null)
+            {
+                message(
+                    LogLevels.Trace,
+                    $"FSharp.Epoxy.dll is loaded: Path={fsharpEpoxyPath}");
+            }
 
             this.typeSystem = epoxyCoreAssembly.MainModule.TypeSystem;
 
@@ -122,15 +136,21 @@ namespace Epoxy
                 "Epoxy.Infrastructure.IViewModelImplementer")!;
             this.internalPropertyBagType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.Internal.InternalPropertyBag")!;
+
             this.internalModelHelperType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.Internal.InternalModelHelper")!;
+            this.propertyChangedAsyncDelegateTypeT = epoxyCoreAssembly.MainModule.GetType(
+                "Epoxy.Internal.PropertyChangedAsyncDelegate`1")!;
+
+            this.internalFSharpModelHelperType = fsharpEpoxyAssembly?.MainModule.GetType(
+                "Epoxy.Internal.InternalFSharpModelHelper")!;
+            this.propertyChangedFSharpAsyncDelegateTypeT = fsharpEpoxyAssembly?.MainModule.GetType(
+                "Epoxy.Internal.PropertyChangedFSharpAsyncDelegate`1")!;
 
             this.propertyChangingEventHandlerType = internalPropertyBagType.Fields.
                 First(f => f.Name == "propertyChanging").FieldType;
             this.propertyChangedEventHandlerType = internalPropertyBagType.Fields.
                 First(f => f.Name == "propertyChanged").FieldType;
-            this.propertyChangedAsyncDelegateTypeT = internalModelHelperType.NestedTypes.
-                First(t => t.Name == "PropertyChangedAsyncDelegate`1")!;
 
             this.addPropertyChanging = this.internalModelHelperType.Methods.
                 First(m => m.Name == "AddPropertyChanging");
@@ -149,10 +169,16 @@ namespace Epoxy
                 First(m => m.Name == "GetValueT");
             this.setValueAsyncTMethod = this.internalModelHelperType.Methods.
                 First(m => m.Name == "SetValueAsyncT");
+
             this.setValueWithHookAsyncTMethod = this.internalModelHelperType.Methods.
                 First(m => m.Name == "SetValueWithHookAsyncT");
             this.createPropertyChangedAsyncDelegateTMethod = this.internalModelHelperType.Methods.
                 First(m => m.Name == "CreatePropertyChangedAsyncDelegate");
+
+            this.setValueWithHookAsyncTFunction = this.internalFSharpModelHelperType?.Methods.
+                First(m => m.Name == "setValueWithHookAsyncT");
+            this.createPropertyChangedAsyncDelegateTFunction = this.internalFSharpModelHelperType?.Methods.
+                First(m => m.Name == "createPropertyChangedAsyncDelegate");
 
             var itPropertyChangingType = iViewModelImplementerType.Interfaces.
                 First(ii => ii.InterfaceType.FullName == "System.ComponentModel.INotifyPropertyChanging").InterfaceType.Resolve();
@@ -354,7 +380,7 @@ namespace Epoxy
                 $"on{pd.Name}ChangedAsync" :
                 $"On{pd.Name}ChangedAsync";
             var onChangedAsyncReturnTypeName = isFSharpType ?
-                "Micosoft.FSharp.Control.Async<Microsoft.FSharp.Unit>" :
+                "Microsoft.FSharp.Control.FSharpAsync`1<Microsoft.FSharp.Core.Unit>" :
                 "System.Threading.Tasks.ValueTask";
             var onChangedAsyncMethod = targetType.Methods.
                 FirstOrDefault(m =>
@@ -366,7 +392,7 @@ namespace Epoxy
 
             var setValueAsyncMethod = new GenericInstanceMethod(
                 module.ImportReference((onChangedAsyncMethod != null) ?
-                    this.setValueWithHookAsyncTMethod :
+                    (isFSharpType ? this.setValueWithHookAsyncTFunction : this.setValueWithHookAsyncTMethod) :
                     this.setValueAsyncTMethod));
             setValueAsyncMethod.GenericArguments.Add(propertyType);
 
@@ -381,11 +407,12 @@ namespace Epoxy
 
             if (onChangedAsyncMethod != null)
             {
-                // TODO: F#
-
                 // CreatePropertyChangedAsyncDelegate<TValue>(this, OnChangedAsync)
+                // createPropertyChangedAsyncDelegate<TValue>(this, onChangedAsync)
                 var createPropertyChangedAsyncDelegateMethod = new GenericInstanceMethod(
-                    module.ImportReference(this.createPropertyChangedAsyncDelegateTMethod));
+                    module.ImportReference(isFSharpType ?
+                        this.createPropertyChangedAsyncDelegateTFunction :
+                        this.createPropertyChangedAsyncDelegateTMethod));
                 createPropertyChangedAsyncDelegateMethod.GenericArguments.Add(propertyType);
 
                 ilp.Append(Instruction.Create(OpCodes.Ldarg_0));

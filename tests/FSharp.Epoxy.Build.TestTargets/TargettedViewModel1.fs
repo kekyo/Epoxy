@@ -27,3 +27,10 @@ type TargettedViewModel1() =
     member __.Prop1 = "ABC1"
     member val Prop2 = "ABC2"
         with get, set
+    member val Prop9Set = ""
+        with get, set
+    member val Prop9 = ""
+        with get, set
+    member self.onProp9ChangedAsync value = async {
+        do self.Prop9Set <- value
+    }

@@ -57,7 +57,7 @@ namespace Epoxy
                 Path.GetDirectoryName(this.GetType().Assembly.Location)!,
                 $"{Path.GetFileNameWithoutExtension(targetPath)}_{tfm}_{nameof(ViewModelTest)}{Path.GetExtension(targetPath)}");
 
-            var basePaths = new[] { epoxyCorePath, targetPath }.Select(Path.GetDirectoryName).ToArray();
+            var basePaths = new[] { Path.GetDirectoryName(targetPath) };
             var injector = new ViewModelInjector(basePaths!, (_,  message) => Trace.WriteLine(message));
             var actual = injector.Inject(targetPath, injectedPath);
             Assert.IsTrue(actual);
@@ -85,6 +85,19 @@ namespace Epoxy
 
             Assert.AreEqual("AAA2", dvm.Prop2);
             Assert.AreEqual(2, count);
+
+            ////////////////////////
+
+            Assert.IsNull(dvm.Prop9);
+            Assert.AreEqual(2, count);
+
+            dvm.Prop9 = "AAA9";
+            Assert.AreEqual(4, count);
+
+            Assert.AreEqual("AAA9", dvm.Prop9);
+            Assert.AreEqual(4, count);
+            Assert.AreEqual("AAA9", dvm.Prop9Set);
+            Assert.AreEqual(4, count);
         }
     }
 }
