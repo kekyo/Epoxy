@@ -93,6 +93,19 @@ namespace Epoxy
                 }
             );
 
+            var fsharpEpoxyPath = referencesBasePath.
+                Select(basePath => Path.Combine(basePath, "FSharp.Epoxy.dll")).
+                FirstOrDefault(File.Exists);
+
+            var fsharpEpoxyAssembly = (fsharpEpoxyPath != null) ?
+                AssemblyDefinition.ReadAssembly(
+                    fsharpEpoxyPath,
+                    new ReaderParameters
+                    {
+                        AssemblyResolver = assemblyResolver,
+                    }
+                ) : null;
+
             message(
                 LogLevels.Trace,
                 $"Epoxy.Core.dll is loaded: Path={epoxyCorePath}");

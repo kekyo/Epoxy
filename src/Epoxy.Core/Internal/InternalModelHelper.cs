@@ -32,6 +32,7 @@ using System.Threading.Tasks;
 namespace Epoxy.Internal
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [DebuggerStepThrough]
     public sealed class InternalPropertyBag :
         Dictionary<string, object?>
     {
@@ -39,7 +40,10 @@ namespace Epoxy.Internal
         internal PropertyChangedEventHandler? propertyChanged;
     }
 
-    //[DebuggerStepThrough]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public delegate ValueTask PropertyChangedAsyncDelegate<TValue>(TValue value);
+
+    [DebuggerStepThrough]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InternalModelHelper
     {
@@ -121,9 +125,6 @@ namespace Epoxy.Internal
                 p[propertyName] = initializeValue;
             }
         }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public delegate ValueTask PropertyChangedAsyncDelegate<TValue>(TValue value);
 
         // Injector helper: create delegate
         // Dodged inline generation: https://github.com/jbevain/cecil/discussions/737
