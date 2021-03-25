@@ -151,6 +151,19 @@ namespace Epoxy
 
             Assert.AreEqual("ABC8", dvm.Prop8);
             Assert.AreEqual(12, count);
+
+            ////////////////////////
+
+            Assert.IsNull(dvm.Prop9);
+            Assert.AreEqual(12, count);
+
+            dvm.Prop9 = "AAA9";
+            Assert.AreEqual(14, count);
+
+            Assert.AreEqual("AAA9", dvm.Prop9);
+            Assert.AreEqual(14, count);
+            Assert.AreEqual("AAA9", dvm.Prop9Set);
+            Assert.AreEqual(14, count);
         }
     }
 }
