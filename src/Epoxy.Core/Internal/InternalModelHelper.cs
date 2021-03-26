@@ -26,11 +26,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Epoxy.Internal
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [DebuggerStepThrough]
     public sealed class InternalPropertyBag :
         Dictionary<string, object?>
     {
@@ -38,7 +40,10 @@ namespace Epoxy.Internal
         internal PropertyChangedEventHandler? propertyChanged;
     }
 
-    //[DebuggerStepThrough]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public delegate ValueTask PropertyChangedAsyncDelegate<TValue>(TValue value);
+
+    [DebuggerStepThrough]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InternalModelHelper
     {
@@ -120,6 +125,30 @@ namespace Epoxy.Internal
                 p[propertyName] = initializeValue;
             }
         }
+
+        // Injector helper: create delegate
+        // Dodged inline generation: https://github.com/jbevain/cecil/discussions/737
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static PropertyChangedAsyncDelegate<TValue> CreatePropertyChangedAsyncDelegate<TValue>(
+            object? target, RuntimeMethodHandle method) =>
+            (PropertyChangedAsyncDelegate<TValue>)Delegate.CreateDelegate(
+                typeof(PropertyChangedAsyncDelegate<TValue>),
+                target!,
+                (MethodInfo)MethodBase.GetMethodFromHandle(method)!);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static ValueTask<Unit> SetValueWithHookAsyncT<TValue>(
+            TValue newValue,
+            PropertyChangedAsyncDelegate<TValue> propertyChanged,
+            string propertyName,
+            object sender,
+            ref InternalPropertyBag? properties) =>
+            SetValueAsyncT<TValue>(
+                newValue,
+                async v => { await propertyChanged(v).ConfigureAwait(false); return default(Unit); },
+                propertyName,
+                sender,
+                ref properties);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static ValueTask<Unit> SetValueAsyncT<TValue>(
