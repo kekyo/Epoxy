@@ -235,3 +235,5 @@ _Pvt_Extensions
 *.VC.db
 
 .idea/
+
+test-templates/
