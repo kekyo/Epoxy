@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 
 namespace Epoxy
 {
@@ -46,58 +47,83 @@ namespace Epoxy
                 ));
 
         public static string[] TargetPaths =>
-            Directory.GetFiles(targetBasePath, "FSharp.Epoxy.Build.TestTargets.dll", SearchOption.AllDirectories);
+            Directory.EnumerateFiles(targetBasePath, "FSharp.Epoxy.Build.TestTargets.dll", SearchOption.AllDirectories).
+#if NETFRAMEWORK
+            Where(p => !(p.Contains("netcoreapp") || p.Contains("netstandard"))).
+#else
+            Where(p => p.Contains("netcoreapp") || p.Contains("netstandard")).
+#endif
+            ToArray();
 
         [TestCaseSource("TargetPaths")]
         public void ViewModelTest(string targetPath)
         {
-            var tfm = Path.GetFileName(Path.GetDirectoryName(targetPath));
+            var targetBasePath = Path.GetDirectoryName(targetPath)!;
+            var tfm = Path.GetFileName(targetBasePath);
 
             var injectedPath = Path.Combine(
                 Path.GetDirectoryName(this.GetType().Assembly.Location)!,
                 $"{Path.GetFileNameWithoutExtension(targetPath)}_{tfm}_{nameof(ViewModelTest)}{Path.GetExtension(targetPath)}");
 
-            var basePaths = new[] { Path.GetDirectoryName(targetPath) };
+            var basePaths = new[] { targetBasePath };
             var injector = new ViewModelInjector(basePaths!, (_,  message) => Trace.WriteLine(message));
             var actual = injector.Inject(targetPath, injectedPath);
             Assert.IsTrue(actual);
 
-            var assembly = Assembly.LoadFrom(injectedPath);
-            var type = assembly.GetTypes().
-                First(t => t.FullName == "Epoxy.TargettedViewModel1");
+            var context = new AssemblyLoadContext("test_" + Guid.NewGuid().ToString(), true);
+            try
+            {
+                context.Resolving += (c, an) =>
+                {
+                    var p = Path.Combine(targetBasePath, an.Name + ".dll");
+                    if (File.Exists(p))
+                    {
+                        return c.LoadFromAssemblyPath(p);
+                    }
+                    return null;
+                };
 
-            var vm = (IViewModelImplementer)Activator.CreateInstance(type)!;
+                var assembly = context.LoadFromAssemblyPath(injectedPath);
+                var type = assembly.GetTypes().
+                    First(t => t.FullName == "Epoxy.TargettedViewModel1");
 
-            var count = 0;
-            var changing = false;
-            vm.PropertyChanging += (s, e) => { Assert.IsFalse(changing); changing = true; count++; };
-            vm.PropertyChanged += (s, e) => { Assert.IsTrue(changing); changing = false; count++; };
+                var vm = (IViewModelImplementer)Activator.CreateInstance(type)!;
 
-            dynamic dvm = vm;
+                var count = 0;
+                var changing = false;
+                vm.PropertyChanging += (s, e) => { Assert.IsFalse(changing); changing = true; count++; };
+                vm.PropertyChanged += (s, e) => { Assert.IsTrue(changing); changing = false; count++; };
 
-            ////////////////////////
+                dynamic dvm = vm;
 
-            Assert.AreEqual("ABC2", dvm.Prop2);
-            Assert.AreEqual(0, count);
+                ////////////////////////
 
-            dvm.Prop2 = "AAA2";
-            Assert.AreEqual(2, count);
+                Assert.AreEqual("ABC2", dvm.Prop2);
+                Assert.AreEqual(0, count);
 
-            Assert.AreEqual("AAA2", dvm.Prop2);
-            Assert.AreEqual(2, count);
+                dvm.Prop2 = "AAA2";
+                Assert.AreEqual(2, count);
 
-            ////////////////////////
+                Assert.AreEqual("AAA2", dvm.Prop2);
+                Assert.AreEqual(2, count);
 
-            Assert.IsNull(dvm.Prop9);
-            Assert.AreEqual(2, count);
+                ////////////////////////
 
-            dvm.Prop9 = "AAA9";
-            Assert.AreEqual(4, count);
+                Assert.IsNull(dvm.Prop9);
+                Assert.AreEqual(2, count);
 
-            Assert.AreEqual("AAA9", dvm.Prop9);
-            Assert.AreEqual(4, count);
-            Assert.AreEqual("AAA9", dvm.Prop9Set);
-            Assert.AreEqual(4, count);
+                dvm.Prop9 = "AAA9";
+                Assert.AreEqual(4, count);
+
+                Assert.AreEqual("AAA9", dvm.Prop9);
+                Assert.AreEqual(4, count);
+                Assert.AreEqual("AAA9", dvm.Prop9Set);
+                Assert.AreEqual(4, count);
+            }
+            finally
+            {
+                context.Unload();
+            }
         }
     }
 }
