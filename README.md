@@ -63,7 +63,7 @@ This sample displays a list of the latest posts and images from the Reddit forum
 The .NET CLI template is supported. You can easily try the sample code in a clean state with the following command:
 
 ```bash
-# Install the template package (you only need to do it once)
+# Install the template package (Only at the first time or version update)
 dotnet new -i Epoxy.Templates
 
 # Extract the WPF sample code to the current directory.
