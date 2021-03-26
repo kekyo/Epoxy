@@ -119,6 +119,17 @@ namespace Epoxy
                 Assert.AreEqual(4, count);
                 Assert.AreEqual("AAA9", dvm.Prop9Set);
                 Assert.AreEqual(4, count);
+
+                ////////////////////////
+
+                Assert.AreEqual("ABC10", dvm.Prop10);
+                Assert.AreEqual(4, count);
+
+                dvm.Prop10 = "AAA10";
+                Assert.AreEqual(4, count);     // didn't inject
+
+                Assert.AreEqual("AAA10", dvm.Prop10);
+                Assert.AreEqual(4, count);
             }
             finally
             {

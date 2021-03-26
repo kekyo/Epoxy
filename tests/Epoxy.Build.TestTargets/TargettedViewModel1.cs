@@ -39,6 +39,7 @@ namespace Epoxy
             this.prop7 = "ABC7";
             this.prop81 = "ABC8";
             this.prop82 = "ABC8";
+            this.Prop10 = "ABC10";
         }
 
         public string Prop1
@@ -69,6 +70,7 @@ namespace Epoxy
             set => this.prop7 = value;
         }
 
+        // Different backing store field
         private string prop81;
         private string prop82;
         public string Prop8
@@ -87,5 +89,9 @@ namespace Epoxy
             this.Prop9Set = value;
             return default;
         }
+
+        [IgnoreInject]
+        public string Prop10
+        { get; set; }
     }
 }

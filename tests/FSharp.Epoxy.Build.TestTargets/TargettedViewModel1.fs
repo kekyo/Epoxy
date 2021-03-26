@@ -37,3 +37,7 @@ type TargettedViewModel1() =
     member self.onProp9ChangedAsync value = async {
         do self.Prop9Set <- value
     }
+
+    [<IgnoreInject>]
+    member val Prop10 = "ABC10"
+        with get, set
