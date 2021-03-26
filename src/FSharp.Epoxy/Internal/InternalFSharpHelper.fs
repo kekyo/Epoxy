@@ -27,7 +27,7 @@ open System.Threading.Tasks
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
-module internal InternalFSharpHelpers =
+module internal InternalFSharpHelper =
     let inline asFunc0 (f: unit -> 'TResult) = new Func<'TResult>(f)
     let inline asFunc1 (f: 'T0 -> 'TResult) = new Func<'T0, 'TResult>(f)
     let inline asFunc2 (f: 'T0 -> 'T1 -> 'TResult) = new Func<'T0, 'T1, 'TResult>(f)

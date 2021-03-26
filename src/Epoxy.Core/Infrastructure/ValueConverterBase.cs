@@ -51,8 +51,17 @@ using Epoxy.Internal;
 
 namespace Epoxy.Infrastructure
 {
+    /// <summary>
+    /// The ValueConverter base class using internal only.
+    /// </summary>
+    /// <typeparam name="TFrom">Value conversion from this type.</typeparam>
+    /// <typeparam name="TTo">Value conversion to this type.</typeparam>
+    /// <remarks>You have to use Epoxy.ViewModel class instead this class directly.</remarks>
     public abstract class ValueConverterBase<TFrom, TTo> : ValueConverter
     {
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         private protected ValueConverterBase()
         { }
 
@@ -109,8 +118,18 @@ namespace Epoxy.Infrastructure
         }
     }
 
+    /// <summary>
+    /// The ValueConverter base class using internal only.
+    /// </summary>
+    /// <typeparam name="TFrom">Value conversion from this type.</typeparam>
+    /// <typeparam name="TParameter">Value conversion with this type parameter.</typeparam>
+    /// <typeparam name="TTo">Value conversion to this type.</typeparam>
+    /// <remarks>You have to use Epoxy.ViewModel class instead this class directly.</remarks>
     public abstract class ValueConverterBase<TFrom, TParameter, TTo> : ValueConverter
     {
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         private protected ValueConverterBase()
         { }
 

@@ -49,7 +49,12 @@ namespace Epoxy
         private readonly TypeDefinition ignoreInjectAttributeType;
         private readonly TypeDefinition iViewModelImplementerType;
         private readonly TypeDefinition internalPropertyBagType;
+
         private readonly TypeDefinition internalModelHelperType;
+        private readonly TypeReference propertyChangedAsyncDelegateTypeT;
+
+        private readonly TypeDefinition? internalFSharpModelHelperType;
+        private readonly TypeReference? propertyChangedFSharpAsyncDelegateTypeT;
 
         private readonly TypeReference propertyChangingEventHandlerType;
         private readonly TypeReference propertyChangedEventHandlerType;
@@ -63,6 +68,12 @@ namespace Epoxy
         private readonly MethodDefinition initializeFSharpValueTMethod;
         private readonly MethodDefinition getValueTMethod;
         private readonly MethodDefinition setValueAsyncTMethod;
+
+        private readonly MethodDefinition setValueWithHookAsyncTMethod;
+        private readonly MethodDefinition createPropertyChangedAsyncDelegateTMethod;
+
+        private readonly MethodDefinition? setValueWithHookAsyncTFunction;
+        private readonly MethodDefinition? createPropertyChangedAsyncDelegateTFunction;
 
         private readonly MethodDefinition itAddPropertyChanging;
         private readonly MethodDefinition itRemovePropertyChanging;
@@ -90,9 +101,28 @@ namespace Epoxy
                 }
             );
 
+            var fsharpEpoxyPath = referencesBasePath.
+                Select(basePath => Path.Combine(basePath, "FSharp.Epoxy.dll")).
+                FirstOrDefault(File.Exists);
+
+            var fsharpEpoxyAssembly = (fsharpEpoxyPath != null) ?
+                AssemblyDefinition.ReadAssembly(
+                    fsharpEpoxyPath,
+                    new ReaderParameters
+                    {
+                        AssemblyResolver = assemblyResolver,
+                    }
+                ) : null;
+
             message(
                 LogLevels.Trace,
                 $"Epoxy.Core.dll is loaded: Path={epoxyCorePath}");
+            if (fsharpEpoxyAssembly != null)
+            {
+                message(
+                    LogLevels.Trace,
+                    $"FSharp.Epoxy.dll is loaded: Path={fsharpEpoxyPath}");
+            }
 
             this.typeSystem = epoxyCoreAssembly.MainModule.TypeSystem;
 
@@ -106,8 +136,16 @@ namespace Epoxy
                 "Epoxy.Infrastructure.IViewModelImplementer")!;
             this.internalPropertyBagType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.Internal.InternalPropertyBag")!;
+
             this.internalModelHelperType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.Internal.InternalModelHelper")!;
+            this.propertyChangedAsyncDelegateTypeT = epoxyCoreAssembly.MainModule.GetType(
+                "Epoxy.Internal.PropertyChangedAsyncDelegate`1")!;
+
+            this.internalFSharpModelHelperType = fsharpEpoxyAssembly?.MainModule.GetType(
+                "Epoxy.Internal.InternalFSharpModelHelper")!;
+            this.propertyChangedFSharpAsyncDelegateTypeT = fsharpEpoxyAssembly?.MainModule.GetType(
+                "Epoxy.Internal.PropertyChangedFSharpAsyncDelegate`1")!;
 
             this.propertyChangingEventHandlerType = internalPropertyBagType.Fields.
                 First(f => f.Name == "propertyChanging").FieldType;
@@ -131,6 +169,16 @@ namespace Epoxy
                 First(m => m.Name == "GetValueT");
             this.setValueAsyncTMethod = this.internalModelHelperType.Methods.
                 First(m => m.Name == "SetValueAsyncT");
+
+            this.setValueWithHookAsyncTMethod = this.internalModelHelperType.Methods.
+                First(m => m.Name == "SetValueWithHookAsyncT");
+            this.createPropertyChangedAsyncDelegateTMethod = this.internalModelHelperType.Methods.
+                First(m => m.Name == "CreatePropertyChangedAsyncDelegate");
+
+            this.setValueWithHookAsyncTFunction = this.internalFSharpModelHelperType?.Methods.
+                First(m => m.Name == "setValueWithHookAsyncT");
+            this.createPropertyChangedAsyncDelegateTFunction = this.internalFSharpModelHelperType?.Methods.
+                First(m => m.Name == "createPropertyChangedAsyncDelegate");
 
             var itPropertyChangingType = iViewModelImplementerType.Interfaces.
                 First(ii => ii.InterfaceType.FullName == "System.ComponentModel.INotifyPropertyChanging").InterfaceType.Resolve();
@@ -168,7 +216,9 @@ namespace Epoxy
                 ilp.Append(Instruction.Create(OpCodes.Ldarg_1));
                 ilp.Append(Instruction.Create(OpCodes.Ldarg_0));
                 ilp.Append(Instruction.Create(OpCodes.Ldflda, propertiesField));
-                ilp.Append(Instruction.Create(OpCodes.Call, module.ImportReference(targetMethod)));
+                ilp.Append(Instruction.Create(
+                    targetMethod.IsVirtual ? OpCodes.Callvirt : OpCodes.Call,
+                    module.ImportReference(targetMethod)));
                 ilp.Append(Instruction.Create(OpCodes.Ret));
 
                 targetType.Methods.Add(method);
@@ -302,10 +352,10 @@ namespace Epoxy
             ilp.Append(Instruction.Create(OpCodes.Ldstr, pd.Name));
             ilp.Append(Instruction.Create(OpCodes.Ldarg_0));
             ilp.Append(Instruction.Create(OpCodes.Ldflda, propertiesField));
-            var getValueTMethod = new GenericInstanceMethod(
+            var getValueMethod = new GenericInstanceMethod(
                 module.ImportReference(this.getValueTMethod));
-            getValueTMethod.GenericArguments.Add(propertyType);
-            ilp.Append(Instruction.Create(OpCodes.Call, getValueTMethod));
+            getValueMethod.GenericArguments.Add(propertyType);
+            ilp.Append(Instruction.Create(OpCodes.Call, getValueMethod));
             ilp.Append(Instruction.Create(OpCodes.Ret));
 
             return true;
@@ -313,7 +363,7 @@ namespace Epoxy
 
         private bool InjectSetterProperty(
             ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField,
-            PropertyDefinition pd, MethodDefinition setter)
+            PropertyDefinition pd, MethodDefinition setter, bool isFSharpType)
         {
             var ilp = setter.Body.GetILProcessor();
 
@@ -323,6 +373,29 @@ namespace Epoxy
 
             var propertyType = module.ImportReference(pd.PropertyType);
 
+            //public ValueTask On[PropertyName]ChangedAsync(TValue value) { ... }
+            //public Async<FSharpUnit> on[PropertyName]ChangedAsync(TValue value) { ... }
+
+            var onChangedAsyncMethodName = isFSharpType ?
+                $"on{pd.Name}ChangedAsync" :
+                $"On{pd.Name}ChangedAsync";
+            var onChangedAsyncReturnTypeName = isFSharpType ?
+                "Microsoft.FSharp.Control.FSharpAsync`1<Microsoft.FSharp.Core.Unit>" :
+                "System.Threading.Tasks.ValueTask";
+            var onChangedAsyncMethod = targetType.Methods.
+                FirstOrDefault(m =>
+                    !m.IsStatic &&
+                    (m.Name == onChangedAsyncMethodName) &&
+                    (m.ReturnType.FullName == onChangedAsyncReturnTypeName) &&
+                    (m.Parameters.Count == 1) &&
+                    (m.Parameters[0].ParameterType.FullName == propertyType.FullName));
+
+            var setValueAsyncMethod = new GenericInstanceMethod(
+                module.ImportReference((onChangedAsyncMethod != null) ?
+                    (isFSharpType ? this.setValueWithHookAsyncTFunction : this.setValueWithHookAsyncTMethod) :
+                    this.setValueAsyncTMethod));
+            setValueAsyncMethod.GenericArguments.Add(propertyType);
+
             //public static ValueTask<Unit> SetValueAsyncT<TValue>(
             //    TValue newValue,
             //    Func<TValue, ValueTask<Unit>>? propertyChanged,
@@ -331,15 +404,33 @@ namespace Epoxy
             //    ref InternalPropertyBag? properties)
 
             ilp.Append(Instruction.Create(OpCodes.Ldarg_1));
-            ilp.Append(Instruction.Create(OpCodes.Ldnull));
+
+            if (onChangedAsyncMethod != null)
+            {
+                // CreatePropertyChangedAsyncDelegate<TValue>(this, OnChangedAsync)
+                // createPropertyChangedAsyncDelegate<TValue>(this, onChangedAsync)
+                var createPropertyChangedAsyncDelegateMethod = new GenericInstanceMethod(
+                    module.ImportReference(isFSharpType ?
+                        this.createPropertyChangedAsyncDelegateTFunction :
+                        this.createPropertyChangedAsyncDelegateTMethod));
+                createPropertyChangedAsyncDelegateMethod.GenericArguments.Add(propertyType);
+
+                ilp.Append(Instruction.Create(OpCodes.Ldarg_0));
+                ilp.Append(Instruction.Create(OpCodes.Ldtoken,
+                    module.ImportReference(onChangedAsyncMethod)));
+                ilp.Append(Instruction.Create(OpCodes.Call,
+                    module.ImportReference(createPropertyChangedAsyncDelegateMethod)));
+            }
+            else
+            {
+                ilp.Append(Instruction.Create(OpCodes.Ldnull));
+            }
+
             ilp.Append(Instruction.Create(OpCodes.Ldstr, pd.Name));
             ilp.Append(Instruction.Create(OpCodes.Ldarg_0));
             ilp.Append(Instruction.Create(OpCodes.Dup));
             ilp.Append(Instruction.Create(OpCodes.Ldflda, propertiesField));
-            var setValueAsyncTMethod = new GenericInstanceMethod(
-                module.ImportReference(this.setValueAsyncTMethod));
-            setValueAsyncTMethod.GenericArguments.Add(propertyType);
-            ilp.Append(Instruction.Create(OpCodes.Call, setValueAsyncTMethod));
+            ilp.Append(Instruction.Create(OpCodes.Call, setValueAsyncMethod));
             ilp.Append(Instruction.Create(OpCodes.Pop));
             ilp.Append(Instruction.Create(OpCodes.Ret));
 
@@ -361,14 +452,17 @@ namespace Epoxy
             }
         }
 
+        private static bool IsFSharpType(TypeDefinition targetType) =>
+            targetType.CustomAttributes.
+                Any(ca => ca.AttributeType.FullName == "Microsoft.FSharp.Core.CompilationMappingAttribute");
+
         private void RemoveBackingFields(
             ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField,
             Dictionary<FieldDefinition, AccessorInformation> accessors)
         {
             if (accessors.Count >= 1)
             {
-                var isFSharp = targetType.CustomAttributes.
-                    Any(ca => ca.AttributeType.FullName == "Microsoft.FSharp.Core.CompilationMappingAttribute");
+                var isFSharpType = IsFSharpType(targetType);
 
                 foreach (var method in targetType.Methods.
                     Where(m => !m.IsStatic && !m.IsAbstract))
@@ -394,27 +488,29 @@ namespace Epoxy
                                     LogLevels.Trace,
                                     $"RemoveBackingFields: Found and replaced by getter: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
 
-                                body.Instructions[index] = Instruction.Create(OpCodes.Call, accessor.Getter);
+                                body.Instructions[index] = Instruction.Create(
+                                    accessor.Getter.IsVirtual ? OpCodes.Callvirt : OpCodes.Call,
+                                    accessor.Getter);
                             }
                             // HACK: F#'s constructor contains backing-field from auto implemented property,
                             //   but it will initialize at last sequence of constructor body.
                             //   These hack replaces to specialized initialize method 'InitializeFSharpValueT<TValue>(...)'.
                             //   The method will ignore if non-default value already assigned.
-                            else if (isFSharp && method.IsConstructor)
+                            else if (isFSharpType && method.IsConstructor)
                             {
                                 message(
                                     LogLevels.Trace,
                                     $"RemoveBackingFields: Found and replaced by F# initializer: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
 
-                                var initializeValueTMethod = new GenericInstanceMethod(
+                                var initializeValueMethod = new GenericInstanceMethod(
                                     module.ImportReference(this.initializeFSharpValueTMethod));
-                                initializeValueTMethod.GenericArguments.Add(
+                                initializeValueMethod.GenericArguments.Add(
                                     module.ImportReference(fd.FieldType));
 
                                 body.Instructions[index++] = Instruction.Create(OpCodes.Ldstr, accessor.Property.Name);
                                 body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldarg_0));
                                 body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldflda, propertiesField));
-                                body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, initializeValueTMethod));
+                                body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, initializeValueMethod));
                                 body.Instructions.Insert(index++, Instruction.Create(OpCodes.Pop));
                             }
                             else
@@ -423,7 +519,9 @@ namespace Epoxy
                                     LogLevels.Trace,
                                     $"RemoveBackingFields: Found and replaced by setter: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
 
-                                body.Instructions[index] = Instruction.Create(OpCodes.Call, accessor.Setter);
+                                body.Instructions[index] = Instruction.Create(
+                                    accessor.Setter.IsVirtual ? OpCodes.Callvirt : OpCodes.Call,
+                                    accessor.Setter);
                             }
                         }
 
@@ -449,6 +547,8 @@ namespace Epoxy
         {
             var candidateAccessors = new Dictionary<FieldDefinition, AccessorInformation>();
 
+            var isFSharpType = IsFSharpType(targetType);
+
             foreach (var pd in targetType.Properties.
                 Where(pd => !pd.CustomAttributes.
                     Any(ca => ca.AttributeType.FullName == this.ignoreInjectAttributeType.FullName)))
@@ -467,7 +567,7 @@ namespace Epoxy
                         this.InjectGetterProperty(
                             module, targetType, propertiesField, pd, getter);
                         this.InjectSetterProperty(
-                            module, targetType, propertiesField, pd, setter);
+                            module, targetType, propertiesField, pd, setter, isFSharpType);
 
                         message(
                             LogLevels.Trace,

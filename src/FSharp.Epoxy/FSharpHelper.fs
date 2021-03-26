@@ -51,7 +51,7 @@ open Avalonia.Threading
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]
-module public FSharpHelpers =
+module public FSharpHelper =
 
 #if WINDOWS_WPF
     type Dispatcher with

@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Build.Tests</AssemblyName>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <AssemblyTitle>Epoxy.Build.Tests</AssemblyTitle>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>

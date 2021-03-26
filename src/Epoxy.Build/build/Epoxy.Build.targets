@@ -20,6 +20,10 @@
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     
+  <PropertyGroup>
+    <EpoxyBuildTrace Condition="'$(EpoxyBuildTrace)' == ''">False</EpoxyBuildTrace>
+  </PropertyGroup>
+
   <UsingTask
     TaskName="GetCombinedReferencesBasePath"
     TaskFactory="RoslynCodeTaskFactory"
@@ -46,11 +50,28 @@
   </UsingTask>
     
   <Target Name="EpoxyBuild" AfterTargets="AfterCompile">
+      
+    <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
+      <_EB_PlatformName Condition="('$(MicrosoftNETBuildTasksTFM)' == '') AND ('$(BundledNETCoreAppTargetFrameworkVersion)' == '')">netcoreapp2.0</_EB_PlatformName>
+      <_EB_PlatformName Condition="'$(MicrosoftNETBuildTasksTFM)' == ''">netcoreapp$(BundledNETCoreAppTargetFrameworkVersion)</_EB_PlatformName>
+      <_EB_PlatformName Condition="'$(MicrosoftNETBuildTasksTFM)' != ''">$(MicrosoftNETBuildTasksTFM)</_EB_PlatformName>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(MSBuildRuntimeType)' != 'Core'">
+      <_EB_PlatformName>net461</_EB_PlatformName>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <EpoxyBuildToolingRuntimeName Condition="'$(EpoxyBuildToolingRuntimeName)' == ''">$(_EB_RuntimeName)</EpoxyBuildToolingRuntimeName>
+      <_EB_ToolingDir>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingDir>
+      <EpoxyBuildToolingDir Condition="'$(EpoxyBuildToolingDir)' == ''">$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
+      <EpoxyBuildToolingPath Condition="'$(EpoxyBuildToolingPath)' == ''">$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_EB_ExecutableName)'))</EpoxyBuildToolingPath>
+    </PropertyGroup>
+
     <GetCombinedReferencesBasePath References="@(ReferencePath)">
-        <Output TaskParameter="CombinedReferencesBasePath" PropertyName="CombinedReferencesBasePath" />
+      <Output TaskParameter="CombinedReferencesBasePath" PropertyName="CombinedReferencesBasePath" />
     </GetCombinedReferencesBasePath>
         
     <Exec WorkingDirectory="$(EpoxyBuildToolingDir)"
-          Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)&quot; $(EpoxyBuildTrace)" />
+        Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)&quot; $(EpoxyBuildTrace)" />
   </Target>
 </Project>

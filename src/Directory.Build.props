@@ -5,10 +5,12 @@
   <PropertyGroup>
     <RootNamespace>Epoxy</RootNamespace>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.2.0" PrivateAssets="all" />
+    <PackageReference Include="RelaxVersioner" Version="2.3.0" PrivateAssets="all" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
 

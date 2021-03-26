@@ -230,13 +230,39 @@ public static async ValueTask<byte[]> FetchImageAsync(Uri url)
 Since the Model implementation does not directly manipulate the user interface fragments,
 it can isolate task contexts with `task.ConfigureAwait(false)` annotation to improve performance.
 
-### About ViewModel attributes and ViewModel base classes
+---
+
+## Features
+
+Since each function is independent, it can be used in any combination.
+(For example, it is NOT necessary to inherit from `ViewModel` to use it.)
+
+### ViewModel injector and ViewModel base class
 
 When the `ViewModel` attribute is applied,` PropertyChanging` and `PropertyChanged` are automatically implemented at compile time. Also, the auto-implemented property setter handles these events so that they occur automatically. This function called `ViewModel injector.`
 
 In the previous implementation of Epoxy (<0.15), it was forced to inherit from the `ViewModel` base class, but by using this attribute, any class can be made into a ViewModel without any depends.
 
-However, this function cannot be finely controlled. In such cases, you can still derive and implement the `ViewModel` base class.
+Also, if you apply the `IgnoreInject` attribute to a property, it can be excluded from the processing of `PropertyChanging` and `PropertyChanged`.
+
+By adding the following signature method, you can easily add the process when changing the property:
+
+```csharp
+// Defined property
+public string Title { get; set; }
+
+// Called when the property changes.
+// Signatures are not enforced, so the following conditions must be applied:
+// * The method name is "On<property name>ChangedAsync"
+// * The argument is same type as the property (argument name is arbitrary)
+// * Return value must be ValueTask type
+private ValueTask OnTitleChangedAsync(string value)
+{
+    // What to do if the value changes ...
+}
+```
+
+You can also derive and implement the `ViewModel` base class as before without using the `ViewModel injector`.
 
 `ViewModel` base class provides an implementation of the `GetValue`/`SetValue` methods.
 These methods automatically notify to the XAML control by property changes event `PropertyChanging`/`PropertyChanged`.
@@ -244,13 +270,6 @@ For example, when a property is changed upon a button click in `ViewModel`, the 
 
 In addition, `GetValue` defines the default value,
 and `SetValue` defines an overload that can perform additional operations when the value is changed.
-
----
-
-## Minor but useful features
-
-Since each function is independent, it can be used in any combination.
-(For example, it is NOT necessary to inherit from `ViewModel` to use it.)
 
 ### EventBinder
 
@@ -564,6 +583,23 @@ Debug.Assert(vm.Title = "CCC")
 Debug.Assert(vm.Body = "BBB")
 ```
 
+The `IgnoreInject` attribute can be used in F# as well. The process when changing properties returns `Async<unit>` as described below:
+
+```fsharp
+// Defined property
+member val Title = "Unknown"
+    with get, set
+
+// Called when the property changes.
+// Signatures are not enforced, so the following conditions must be applied:
+// * The function name is "on<property name>ChangedAsync"
+// * The argument is same type as the property (argument name is arbitrary)
+// * Return value must be Async<unit> type
+member self.onTitleChangedAsync (value: string) = async {
+    // What to do if the value changes ...
+}
+```
+
 ### camel-case function names
 
 All functions in FSharp.Epoxy are camel-cased. For example, instead of the `GetValue`/`SetValue` methods in the `ViewModel` base class, use the `getValue`/`setValue` functions.
@@ -651,6 +687,9 @@ Apache-v2
 
 ## History
 
+* 0.16.0:
+  * Added IgnoreInject attribute and support for custom SetValue handlers to ViewModel injectors.
+  * Fixed failure injecting on only installed sdk3.1 or 5.0.
 * 0.15.0:
   * Added ViewModel injector function that enables automatic implementation of ViewModel.
   * Added F#'s camel-casing UIThread API.

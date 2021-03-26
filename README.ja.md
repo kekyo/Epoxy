@@ -242,13 +242,39 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 非同期操作でタスクコンテキストを分離 `task.ConfigureAwait(false)` することで、
 パフォーマンスを向上させることが出来ます。
 
-### ViewModel属性とViewModel基底クラスについて
+---
+
+## 機能一覧
+
+それぞれの機能は独立しているため、自由に組み合わせて使用出来ます
+（例えば、`ViewModel`を継承していないと使えない、と言うような事はありません）。
+
+### ViewModelインジェクタとViewModel基底クラス
 
 `ViewModel`属性が適用されると、コンパイル時に自動的に`PropertyChanging`、`PropertyChanged`が実装されます。また、自動実装プロパティのsetterで、これらのイベントが自動的に発生するように処理されます。この機能を、`ViewModelインジェクタ`と呼びます。
 
 以前のEpoxy(<0.15)の実装では、`ViewModel`基底クラスから継承する事を強制していましたが、この属性を使用することで、任意のクラスを負担なしでViewModelにすることが出来ます。
 
-但し、この機能は細かい制御を行うことが出来ません。そのような場合は、従来通り`ViewModel`基底クラスを派生して実装することも出来ます。
+また、プロパティに`IgnoreInject`属性を適用すると、そのプロパティは`PropertyChanging`、`PropertyChanged`の処理対象から除外出来ます。
+
+次のようなシグネチャのメソッドを併設することで、プロパティ変更時の処理を簡単に追加出来ます:
+
+```csharp
+// 定義したプロパティ
+public string Title { get; set; }
+
+// プロパティが変更された場合に呼び出される。
+// シグネチャは強制されないので、以下の条件を守る必要がある:
+// * メソッド名は、"On<プロパティ名>ChangedAsync"
+// * 引数は、プロパティと同じ型 (引数名は任意)
+// * 戻り値はValueTaskでなければならない
+private ValueTask OnTitleChangedAsync(string value)
+{
+  // 値が変更された場合の処理...
+}
+```
+
+`ViewModelインジェクタ`を使わず、従来通り`ViewModel`基底クラスを派生して実装することも出来ます。
 
 `ViewModel`基底クラスは、`GetValue`/`SetValue`メソッドの実装を提供します。
 これらのメソッドは、XAML側にプロパティの変更通知 `PropertyChanging`/`PropertyChanged` を自動的に行います。
@@ -256,13 +282,6 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 
 なお、`GetValue`には、デフォルト値の定義が、
 `SetValue`には、値変更時に追加操作を行うことが出来るオーバーロードが定義されています。
-
----
-
-## その他の有用な機能
-
-それぞれの機能は独立しているため、自由に組み合わせて使用出来ます
-（例えば、`ViewModel`を継承していないと使えない、と言うような事はありません）。
 
 ### EventBinder
 
@@ -569,6 +588,23 @@ Debug.Assert(vm.Title = "CCC")
 Debug.Assert(vm.Body = "BBB")
 ```
 
+`IgnoreInject`属性も、F#で同様に使用出来ます。プロパティ変更時の処理は、後述のように`Async<unit>`を返却します:
+
+```fsharp
+// 定義したプロパティ
+member val Title = "Unknown"
+    with get, set
+
+// プロパティが変更された場合に呼び出される。
+// シグネチャは強制されないので、以下の条件を守る必要がある:
+// * 関数名は、"on<プロパティ名>ChangedAsync"
+// * 引数は、プロパティと同じ型 (引数名は任意)
+// * 戻り値はAsync<unit>でなければならない
+member self.onTitleChangedAsync (value: string) = async {
+    // 値が変更された場合の処理...
+}
+```
+
 ### camel-caseの関数名
 
 FSharp.Epoxyのすべての関数は、camel-case化されています。例えば、`ViewModel`基底クラスの、`GetValue`/`SetValue`メソッドの代わりに、`getValue`/`setValue`関数を使います。
@@ -655,6 +691,9 @@ Apache-v2
 
 ## History
 
+* 0.16.0:
+  * ViewModelインジェクタに、IgnoreInject属性の追加と、カスタムSetValueハンドラのサポートを追加。
+  * .NET SDK3.1又は5.0のみをインストールした環境でViewModelインジェクタ実行時にエラーが発生する問題を修正。
 * 0.15.0:
   * ViewModelの自動実装を可能にする、ViewModelインジェクタ機能を追加しました。
   * F#のcamel-casing UIThread関数を追加。

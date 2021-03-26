@@ -24,6 +24,20 @@ open Epoxy
 [<ViewModel>]
 type TargettedViewModel1() =
 
+    [<DefaultValue>]
+    val mutable Prop9Set: string
+
     member __.Prop1 = "ABC1"
     member val Prop2 = "ABC2"
+        with get, set
+    
+    member val Prop9 = Unchecked.defaultof<string>
+        with get, set
+
+    member self.onProp9ChangedAsync value = async {
+        do self.Prop9Set <- value
+    }
+
+    [<IgnoreInject>]
+    member val Prop10 = "ABC10"
         with get, set

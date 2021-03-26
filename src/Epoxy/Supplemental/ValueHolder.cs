@@ -55,6 +55,11 @@ using Avalonia.Media.Imaging;
 
 namespace Epoxy.Supplemental
 {
+    /// <summary>
+    /// The variant value holder struct.
+    /// </summary>
+    /// <remarks>This struct is helper type,
+    /// will automatically convert some standard exactly matched types.</remarks>
     public struct ValueHolder
     {
         private readonly object? value;

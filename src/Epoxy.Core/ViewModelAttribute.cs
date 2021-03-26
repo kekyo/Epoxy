@@ -23,10 +23,20 @@ using System;
 
 namespace Epoxy
 {
+    /// <summary>
+    /// ViewModel marker attribute for ViewModel injector.
+    /// </summary>
+    /// <remarks>You can choose for using ViewModel implementation:
+    /// * Applies ViewModel attribute (this class) onto your pure ViewModel type and places auto-implemented properties.
+    /// * Your ViewModel type derives from ViewModel base class and use GetValue/SetValue methods.
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public sealed class ViewModelAttribute :
         Attribute
     {
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         public ViewModelAttribute()
         { }
     }
