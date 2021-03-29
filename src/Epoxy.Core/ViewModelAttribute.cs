@@ -29,7 +29,22 @@ namespace Epoxy
     /// <remarks>You can choose for using ViewModel implementation:
     /// * Applies ViewModel attribute (this class) onto your pure ViewModel type and places auto-implemented properties.
     /// * Your ViewModel type derives from ViewModel base class and use GetValue/SetValue methods.
+    /// 
+    /// See ViewModel injector guide: https://github.com/kekyo/Epoxy#viewmodel-injector-and-viewmodel-base-class
     /// </remarks>
+    /// <example>
+    /// <code>
+    /// // Enable ViewModel injector on this class
+    /// [ViewModel]
+    /// public sealed class ImageData
+    /// {
+    ///     // Will inject (auto-implemented) properties:
+    ///     public string Title { get; set; }
+    ///     public Uri Url { get; private set; }
+    ///     public ImageSource Image { get; internal set; }
+    /// }
+    /// </code>
+    /// </example>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public sealed class ViewModelAttribute :
         Attribute
