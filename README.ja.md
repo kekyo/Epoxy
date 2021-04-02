@@ -217,7 +217,7 @@ Redditにアクセスする共通コードは、`EpoxyHello.Core` プロジェ�
 小規模な開発であれば、`Model`の実装を`ViewModel`と同じプロジェクトに配置してもかまいません
 (分離しておけば、意図せず依存してしまったという失敗を排除出来ます)。
 
-[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/samples/EpoxyHello.Core/Models/Reddit.cs#L63)を抜粋します:
+[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/Reddit.cs#L63)を抜粋します:
 
 ```csharp
 // Modelの実装: netstandard2.0の純粋なライブラリ
@@ -346,10 +346,10 @@ public event RoutedEventHandler Loaded;
 UWPの実行環境はセキュリティチェックが厳しいため、
 動的にイベントをフックする場合に制約が存在するためです。
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
-* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
-* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
 ### Anchor/Pile
 
@@ -391,8 +391,8 @@ await this.LogPile.ExecuteAsync(async textBox =>
 });
 ```
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
 
 ### ValueConverter
 
@@ -441,12 +441,12 @@ public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 XAMLコンバーター内で非同期処理を行わないようにしましょう
 （そうしたくなった場合は、ModelやViewModel側で実装すれば、デッドロックなどのトラブルを回避できます）。
 
-* [For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
+* [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
 ### UIThread
 
 UIスレッドの取り扱いは、異なるプラットフォームにおいても重要な点です。
-Epoxyでは[UIThreadクラス](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/Epoxy/UIThread.cs#L29)で同じ操作が行えるようにしています。
+Epoxyでは[UIThreadクラス](https://github.com/kekyo/Epoxy/blob/main/Epoxy/UIThread.cs#L29)で同じ操作が行えるようにしています。
 また、このクラスを使うことで、UIの操作と非同期処理を簡単に組み合わせる事が出来ます。
 
 ```csharp
@@ -478,8 +478,8 @@ UWPは、ビューを保持するウインドウ毎に異なるUIスレッドが
 
 TODO:
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
 
 ### GlobalService (高度なトピック)
 
@@ -550,6 +550,18 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 本来必要のない場所で`GlobalService`を使わないようにして下さい。
 少しでも区別できるように、`GlobalService`は`Epoxy.Advanced`名前空間に配置されています（using宣言が必要です）。
 
+### Designer (高度なトピック)
+
+`Designer`クラスは、デザイン編集に関係のある処理を記述するために使用出来ます。
+
+カスタムコントロールやユーザーコントロールを実装した場合、
+IDE(Visual StudioやRiderなど)が、コントロールのビジュアル編集を行っている時に、
+実際にコントロールのインスタンスを、IDE内で生成する可能性があります。
+
+そのような場合は、本当のコントロールの動作を行うのではなく、デザイン編集にふさわしい見た目や挙動に変えたい場合があります。
+
+`IsDesignTime`プロパティを参照する事で、デザイン時編集を行っているかどうかを、プラットフォームに依存しない方法で取得できます。
+
 ---
 
 ## F#バージョンについて
@@ -557,53 +569,6 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 F#バージョンのパッケージを使う事で、以下のようなF#の流儀に沿うコードを記述できます。
 使用するインスタンスは共有されます。C#/F#混在プロジェクトにおいても、保持するインスタンスは同一でありながら、
 C#/F#それぞれで好ましいAPIを使い分けることができます。
-
-### ViewModelインジェクタ
-
-F#でもViewModelインジェクタは使用できます。但し、自動実装プロパティの構文上の制約があります:
-
-```fsharp
-open Epoxy
-
-// ViewModelインジェクタを使う
-[<ViewModel>]
-type ItemViewModel() as self =
-    do
-        // 通常、この式は例外を起こすが、ViewModelインジェクタを使用した場合は合法となる。
-        self.Title <- "CCC"
-        // この挙動を使用して、doブロック内でCommandを割り当てることが出来る。
-        self.Click <- CommandFactory.create(fun () -> async {
-            // ...
-        })
-
-    // F#の自動実装プロパティには初期化式が必要だが、doブロックでインスタンスが
-    // 割り当てられた場合は無視される。
-    member val Title = "AAA" with get, set
-    member val Body = "BBB" with get, set
-    member val Click: Command = null with get, set
-
-// 結果:
-let vm = new ItemViewModel()
-Debug.Assert(vm.Title = "CCC")
-Debug.Assert(vm.Body = "BBB")
-```
-
-`IgnoreInject`属性も、F#で同様に使用出来ます。プロパティ変更時の処理は、後述のように`Async<unit>`を返却します:
-
-```fsharp
-// 定義したプロパティ
-member val Title = "Unknown"
-    with get, set
-
-// プロパティが変更された場合に呼び出される。
-// シグネチャは強制されないので、以下の条件を守る必要がある:
-// * 関数名は、"on<プロパティ名>ChangedAsync"
-// * 引数は、プロパティと同じ型 (引数名は任意)
-// * 戻り値はAsync<unit>でなければならない
-member self.onTitleChangedAsync (value: string) = async {
-    // 値が変更された場合の処理...
-}
-```
 
 ### camel-caseの関数名
 
@@ -659,6 +624,53 @@ self.Fetch <- CommandFactory.create(fun () -> async {
 `Task`型や`ValueTask`型を返すメソッドを直接渡す場合や、これらの型を構成するコンピュテーション式を与える場合は、`Epoxy.Supplements`名前空間を明示的に参照してください。
 
 注意: `Async`型を優先する事については、[将来のF#で、`resumable`構造がリリース](https://github.com/dotnet/fsharp/pull/6811)された際に、変更される可能性があります。
+
+### ViewModelインジェクタ
+
+F#でもViewModelインジェクタは使用できます。但し、自動実装プロパティの構文上の制約があります:
+
+```fsharp
+open Epoxy
+
+// ViewModelインジェクタを使う
+[<ViewModel>]
+type ItemViewModel() as self =
+    do
+        // 通常、この式は例外を起こすが、ViewModelインジェクタを使用した場合は合法となる。
+        self.Title <- "CCC"
+        // この挙動を使用して、doブロック内でCommandを割り当てることが出来る。
+        self.Click <- CommandFactory.create(fun () -> async {
+            // ...
+        })
+
+    // F#の自動実装プロパティには初期化式が必要だが、doブロックでインスタンスが
+    // 割り当てられた場合は無視される。
+    member val Title = "AAA" with get, set
+    member val Body = "BBB" with get, set
+    member val Click: Command = null with get, set
+
+// 結果:
+let vm = new ItemViewModel()
+Debug.Assert(vm.Title = "CCC")
+Debug.Assert(vm.Body = "BBB")
+```
+
+`IgnoreInject`属性も、F#で同様に使用出来ます。プロパティ変更時の処理は、`Async<unit>`を返却します:
+
+```fsharp
+// 定義したプロパティ
+member val Title = "Unknown"
+    with get, set
+
+// プロパティが変更された場合に呼び出される。
+// シグネチャは強制されないので、以下の条件を守る必要がある:
+// * 関数名は、"on<プロパティ名>ChangedAsync"
+// * 引数は、プロパティと同じ型 (引数名は任意)
+// * 戻り値はAsync<unit>でなければならない
+member self.onTitleChangedAsync (value: string) = async {
+    // 値が変更された場合の処理...
+}
+```
 
 ### WPF XAMLページの自動リソース化
 
