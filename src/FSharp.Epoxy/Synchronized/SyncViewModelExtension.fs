@@ -29,13 +29,26 @@ open System.Threading.Tasks
 open Epoxy
 open Epoxy.Internal
 
+/// <summary>
+/// The ViewModel synchronous functions.
+/// </summary>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public SyncViewModelExtension =
-    type public ViewModel with
-        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
-            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> unitAsValueTaskUnit |> asFunc1, propertyName)
 
+    type public ViewModel with
+
+        /// <summary>
+        /// Set value directly.
+        /// </summary>
+        /// <typeparam name="'TValue">Value type</typeparam>
+        /// <param name="newValue">Value</param>
+        /// <param name="propertyChanged">Callback function when value has changed</param>
+        /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
+        member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
+            viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> unitAsValueTaskUnit |> asFunc1, propertyName) |> ignore
+
+        // Dodge mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =

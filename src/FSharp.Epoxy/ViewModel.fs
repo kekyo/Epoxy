@@ -60,7 +60,7 @@ type public ViewModel() =
     /// </summary>
     /// <typeparam name="TValue">Value type</typeparam>
     /// <param name="newValue">A value</param>
-    /// <param name="propertyChanged">Callback delegate if value has changed</param>
+    /// <param name="propertyChanged">Callback delegate when value has changed</param>
     /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
     /// <returns>Async&lt;unit&gt; instance</returns>
     /// <remarks>This function will return with Async&lt;unit&gt;, you may have to bind this on async workflow.</remarks>

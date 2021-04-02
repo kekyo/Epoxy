@@ -20,15 +20,27 @@
 #nullable enable
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Epoxy.Synchronized
 {
+    /// <summary>
+    /// The ViewModel synchronous methods.
+    /// </summary>
     [DebuggerStepThrough]
     public static class SyncViewModelExtension
     {
+        /// <summary>
+        /// Set value directly.
+        /// </summary>
+        /// <typeparam name="TValue">Value type</typeparam>
+        /// <param name="viewModel">ViewModel instance</param>
+        /// <param name="newValue">Value</param>
+        /// <param name="propertyChanged">Callback delegate when value has changed</param>
+        /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
         public static void SetValueSync<TValue>(
             this ViewModel viewModel,
             TValue newValue,
@@ -39,6 +51,8 @@ namespace Epoxy.Synchronized
                 value => { propertyChanged(value); return default; },
                 propertyName);
 
+        #region Dodge mistake choicing asynchronously overloads
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use SetValueAsync instead.", true)]
         public static void SetValueSync<TValue>(
             this ViewModel viewModel,
@@ -46,5 +60,6 @@ namespace Epoxy.Synchronized
             Func<TValue, ValueTask> propertyChanged,
             [CallerMemberName] string? propertyName = null) =>
             throw new InvalidOperationException("Use SetValueAsync instead.");
+        #endregion
     }
 }

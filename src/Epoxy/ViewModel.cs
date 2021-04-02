@@ -76,7 +76,7 @@ namespace Epoxy
         /// </summary>
         /// <typeparam name="TValue">Value type</typeparam>
         /// <param name="newValue">A value</param>
-        /// <param name="propertyChanged">Callback delegate if value has changed</param>
+        /// <param name="propertyChanged">Callback delegate when value has changed</param>
         /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
         /// <returns>ValueTask instance</returns>
         /// <remarks>This method will return with ValueTask, you may have to await this.</remarks>

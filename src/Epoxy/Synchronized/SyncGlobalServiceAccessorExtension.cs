@@ -20,7 +20,8 @@
 #nullable enable
 
 using System;
-
+using System.ComponentModel;
+using System.Threading.Tasks;
 using Epoxy.Advanced;
 using Epoxy.Internal;
 
@@ -62,5 +63,22 @@ namespace Epoxy.Synchronized
             this GlobalServiceAccessor accessor,
             Func<TService, TResult> action) =>
             InternalGlobalService.ExecuteSync(action);
+
+        #region Dodge mistake choicing asynchronously overloads
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Use ExecuteAsync instead.", true)]
+        public static void ExecuteSync<TService>(
+            this GlobalServiceAccessor accessor,
+            Func<TService, ValueTask> action,
+            bool ignoreNotPresent = false) =>
+            throw new InvalidOperationException("Use ExecuteAsync instead.");
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Use ExecuteAsync instead.", true)]
+        public static TResult ExecuteSync<TService, TResult>(
+            this GlobalServiceAccessor accessor,
+            Func<TService, ValueTask<TResult>> action) =>
+            throw new InvalidOperationException("Use ExecuteAsync instead.");
+        #endregion
     }
 }
