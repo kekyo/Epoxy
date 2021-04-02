@@ -26,14 +26,38 @@ using Epoxy.Internal;
 
 namespace Epoxy.Synchronized
 {
+    /// <summary>
+    /// GlobalService is a simple and lightweight dependency injection infrastructure.
+    /// </summary>
+    /// <remarks>Notice: They handle with synchronous handler.
+    /// You can use asynchronous version instead.</remarks>
     public static class SyncGlobalServiceAccessorExtension
     {
+        /// <summary>
+        /// Execute target interface type synchronously.
+        /// </summary>
+        /// <typeparam name="TService">Target interface type</typeparam>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <param name="ignoreNotPresent">Ignore if didn't presend target instance.</param>
+        /// <remarks>Notice: They handle with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         public static void ExecuteSync<TService>(
             this GlobalServiceAccessor accessor,
             Action<TService> action,
             bool ignoreNotPresent = false) =>
             InternalGlobalService.ExecuteSync(action, ignoreNotPresent);
 
+        /// <summary>
+        /// Execute target interface type synchronously.
+        /// </summary>
+        /// <typeparam name="TService">Target interface type</typeparam>
+        /// <typeparam name="TResult">Result type</typeparam>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <returns>Result value</returns>
+        /// <remarks>Notice: They handle with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         public static TResult ExecuteSync<TService, TResult>(
             this GlobalServiceAccessor accessor,
             Func<TService, TResult> action) =>

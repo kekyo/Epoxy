@@ -79,7 +79,7 @@ namespace Epoxy.Internal
             }
         }
 
-        public static void UnRegister(object instance)
+        public static void Unregister(object instance)
         {
             var targetType = instance.GetType();
             var interfaces = targetType.GetInterfaces().

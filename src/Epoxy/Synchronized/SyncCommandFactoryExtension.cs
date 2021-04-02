@@ -29,7 +29,8 @@ namespace Epoxy.Synchronized
     /// <summary>
     /// Command factory methods for synchronous handler.
     /// </summary>
-    /// <remarks>Notice: They handle with synchronous handler. You can use asynchronous version instead.</remarks>
+    /// <remarks>Notice: They handle with synchronous handler.
+    /// You can use asynchronous version instead.</remarks>
     [DebuggerStepThrough]
     public static class SyncCommandFactoryExtension
     {
@@ -39,7 +40,8 @@ namespace Epoxy.Synchronized
         /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
         /// <param name="execute">Synchronous handler</param>
         /// <returns>A Command instance</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        /// <remarks>Notice: It handles with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         public static Command CreateSync(
             this CommandFactoryInstance factory,
             Action execute) =>
@@ -52,7 +54,8 @@ namespace Epoxy.Synchronized
         /// <param name="execute">Synchronous handler</param>
         /// <param name="canExecute">Responder for be able to execute</param>
         /// <returns>A Command instance</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        /// <remarks>Notice: It handles with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         public static Command CreateSync(
             this CommandFactoryInstance factory,
             Action execute,
@@ -66,7 +69,8 @@ namespace Epoxy.Synchronized
         /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
         /// <param name="execute">Synchronous handler</param>
         /// <returns>A Command instance</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        /// <remarks>Notice: It handles with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         public static Command CreateSync<TParameter>(
             this CommandFactoryInstance factory,
             Action<TParameter> execute) =>
@@ -80,7 +84,8 @@ namespace Epoxy.Synchronized
         /// <param name="execute">Synchronous handler</param>
         /// <param name="canExecute">Responder for be able to execute</param>
         /// <returns>A Command instance</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        /// <remarks>Notice: It handles with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         public static Command CreateSync<TParameter>(
             this CommandFactoryInstance factory,
             Action<TParameter> execute,

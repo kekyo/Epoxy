@@ -23,22 +23,49 @@ using System;
 
 namespace Epoxy.Advanced
 {
+    /// <summary>
+    /// Marks target inferface type for using GlobalService.
+    /// </summary>\
+    /// <remarks>The GlobalService will find target interface types when applied this attribute.</remarks>
     [AttributeUsage(AttributeTargets.Interface)]
     public sealed class GlobalServiceAttribute : Attribute
     {
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         public GlobalServiceAttribute()
         { }
     }
 
+    /// <summary>
+    /// GlobalService registering validation methods.
+    /// </summary>
     public enum RegisteringValidations
     {
+        /// <summary>
+        /// Strict method is totally declined when one or more interface type already registered.
+        /// </summary>
         Strict,
+
+        /// <summary>
+        /// Unsafe partial method is ignored when interface type already registered.
+        /// </summary>
         UnsafePartial,
+
+        /// <summary>
+        /// Unsafe override method is force overrided when interface type already registered.
+        /// </summary>
         UnsafeOverride
     }
 
+    /// <summary>
+    /// GlobalService accessor class.
+    /// </summary>
     public sealed class GlobalServiceAccessor
     {
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         internal GlobalServiceAccessor()
         {
         }

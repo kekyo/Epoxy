@@ -51,7 +51,10 @@ open Epoxy.Internal
 /// Pile functions for ValueTask/Task based asynchronous execution.
 /// </summary>
 /// <remarks>You can manipulate XAML controls directly inside ViewModels
-/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+/// when places and binds both an Anchor (in XAML) and a Pile.
+/// 
+/// Notice: They handle with synchronous handler.
+/// You can use asynchronous version instead.</remarks>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public PileExtension =
