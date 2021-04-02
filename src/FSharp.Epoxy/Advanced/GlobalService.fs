@@ -52,6 +52,7 @@ open Epoxy.Internal
 /// // To use it on asynchronously.
 /// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
 ///     // 'bluetooth' argument is registered instance.
+///     do! bluetooth.enableAsync "Primary"
 /// })
 /// </code>
 /// </example>
@@ -108,12 +109,13 @@ type public GlobalService =
     /// <typeparam name="'TService">Target interface type</typeparam>
     /// <param name="action">Asynchronous continuation delegate</param>
     /// <param name="ignoreNotPresent">Ignore if didn't presend target instance.</param>
-    /// <returns>ValueTask</returns>
+    /// <returns>Async&lt;unit&gt; instance</returns>
     /// <example>
     /// <code>
     /// // Use the interface.
     /// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
     ///     // 'bluetooth' argument is registered instance.
+    ///     do! bluetooth.enableAsync "Primary"
     /// })
     /// </code>
     /// </example>
@@ -127,14 +129,14 @@ type public GlobalService =
     /// <typeparam name="'TService">Target interface type</typeparam>
     /// <typeparam name="'TResult">Result type</typeparam>
     /// <param name="action">Asynchronous continuation delegate</param>
-    /// <returns>ValueTask</returns>
+    /// <returns>Async&lt;'TResult&gt; instance</returns>
     /// <example>
     /// <code>
     /// // Use the interface.
     /// let! result = GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
     ///     // 'bluetooth' argument is registered instance.
-    ///     // ...
-    ///     return result
+    ///     do! bluetooth.enableAsync "Primary"
+    ///     return 100
     /// })
     /// </code>
     /// </example>
@@ -156,12 +158,13 @@ module public GlobalServiceAccessorExtension =
         /// <typeparam name="'TService">Target interface type</typeparam>
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="ignoreNotPresent">Ignore if didn't presend target instance.</param>
-        /// <returns>ValueTask</returns>
+        /// <returns>Async&lt;unit&gt; instance</returns>
         /// <example>
         /// <code>
         /// // Use the interface.
         /// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
         ///     // 'bluetooth' argument is registered instance.
+        ///     do! bluetooth.enableAsync "Primary"
         /// })
         /// </code>
         /// </example>
@@ -175,14 +178,14 @@ module public GlobalServiceAccessorExtension =
         /// <typeparam name="'TService">Target interface type</typeparam>
         /// <typeparam name="'TResult">Result type</typeparam>
         /// <param name="action">Asynchronous continuation delegate</param>
-        /// <returns>ValueTask</returns>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
         /// <example>
         /// <code>
         /// // Use the interface.
         /// let! result = GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
         ///     // 'bluetooth' argument is registered instance.
-        ///     // ...
-        ///     return result
+        ///     do! bluetooth.enableAsync "Primary"
+        ///     return 100
         /// })
         /// </code>
         /// </example>

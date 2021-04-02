@@ -57,6 +57,7 @@ namespace Epoxy.Advanced
     /// await GlobalService.ExecuteAsync&lt;IBluetooth&gt;(async bluetooth =>
     /// {
     ///     // 'bluetooth' argument is registered instance.
+    ///     await bluetooth.EnableAsync("Primary");
     /// });
     /// </code>
     /// </example>
@@ -122,6 +123,7 @@ namespace Epoxy.Advanced
         /// await GlobalService.ExecuteAsync&lt;IBluetooth&gt;(async bluetooth =>
         /// {
         ///     // 'bluetooth' argument is registered instance.
+        ///     await bluetooth.EnableAsync("Primary");
         /// });
         /// </code>
         /// </example>
@@ -142,8 +144,8 @@ namespace Epoxy.Advanced
         /// var result = await GlobalService.ExecuteAsync&lt;IBluetooth, int&gt;(async bluetooth =>
         /// {
         ///     // 'bluetooth' argument is registered instance.
-        ///     // ...
-        ///     return result;
+        ///     await bluetooth.EnableAsync("Primary");
+        ///     return 100;
         /// });
         /// </code>
         /// </example>
@@ -165,6 +167,7 @@ namespace Epoxy.Advanced
         /// await GlobalService.Accessor.ExecuteAsync&lt;IBluetooth&gt;(async bluetooth =>
         /// {
         ///     // 'bluetooth' argument is registered instance.
+        ///     await bluetooth.EnableAsync("Primary");
         /// });
         /// </code>
         /// </example>
@@ -188,8 +191,8 @@ namespace Epoxy.Advanced
         /// var result = await GlobalService.Accessor.ExecuteAsync&lt;IBluetooth, int&gt;(async bluetooth =>
         /// {
         ///     // 'bluetooth' argument is registered instance.
-        ///     // ...
-        ///     return result;
+        ///     await bluetooth.EnableAsync("Primary");
+        ///     return 100;
         /// });
         /// </code>
         /// </example>
