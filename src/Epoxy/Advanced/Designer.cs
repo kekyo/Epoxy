@@ -17,15 +17,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#nullable enable
+
+using Epoxy.Internal;
+
 namespace Epoxy.Advanced
-
-open Epoxy.Internal
-
-open System.Diagnostics
-
-[<DebuggerStepThrough>]
-[<AbstractClass>]
-[<Sealed>]
-type public XamlDesigner =
-    static member isDesignTime =
-        InternalXamlDesigner.IsDesignTime
+{
+    /// <summary>
+    /// Design time utility class.
+    /// </summary>
+    public static class Designer
+    {
+        /// <summary>
+        /// Get current design time execution mode.
+        /// </summary>
+        public static bool IsDesignTime =>
+            InternalDesigner.IsDesignTime;
+    }
+}

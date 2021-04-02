@@ -277,7 +277,7 @@ namespace Epoxy
                     throw new InvalidOperationException();
                 }
 
-                if (!InternalXamlDesigner.IsDesignTime)
+                if (!InternalDesigner.IsDesignTime)
                 {
                     WritePreamble();
                     this.associatedObject = d;
