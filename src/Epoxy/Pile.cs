@@ -77,7 +77,7 @@ namespace Epoxy
     }
 
     /// <summary>
-    /// Pile manipulator class.
+    /// Pile methods for ValueTask based asynchronous execution.
     /// </summary>
     /// <remarks>You can manipulate XAML controls directly inside ViewModels
     /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
@@ -89,7 +89,7 @@ namespace Epoxy
         /// </summary>
         /// <typeparam name="TUIElement">Target control type</typeparam>
         /// <param name="pile">Pile instance</param>
-        /// <param name="action">Predicts when rents control instance</param>
+        /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>ValueTask instance</returns>
         public static ValueTask ExecuteAsync<TUIElement>(

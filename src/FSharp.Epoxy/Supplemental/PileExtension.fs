@@ -47,20 +47,74 @@ type UIElement = Avalonia.IStyledElement
 open Epoxy
 open Epoxy.Internal
 
+/// <summary>
+/// Pile functions for ValueTask/Task based asynchronous execution.
+/// </summary>
+/// <remarks>You can manipulate XAML controls directly inside ViewModels
+/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public PileExtension =
     type public Pile<'TUIElement when 'TUIElement :> UIElement> with
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
         member self.executeAsync (action: 'TUIElement -> ValueTask<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
             self.InternalExecuteAsync(action >> valueTaskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
         member self.executeAsync (action: 'TUIElement -> Task<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
             self.InternalExecuteAsync(action >> taskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
         member self.executeAsync (action: 'TUIElement -> ValueTask<'TResult>) =
             self.InternalExecuteAsync<'TResult>(action |> asFunc1) |> valueTaskAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
         member self.executeAsync (action: 'TUIElement -> Task<'TResult>) =
             self.InternalExecuteAsync<'TResult>(action >> taskAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
 
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
         member self.executeAsync (action: 'TUIElement -> ValueTask, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
             self.InternalExecuteAsync(action >> valueTaskVoidAsValueTaskUnit |> asFunc1, canIgnore)
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
         member self.executeAsync (action: 'TUIElement -> Task, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
             self.InternalExecuteAsync(action >> taskVoidAsValueTaskUnit |> asFunc1, canIgnore)

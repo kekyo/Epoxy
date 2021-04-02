@@ -59,12 +59,14 @@ type UIElement = Avalonia.IStyledElement
 /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
 [<AbstractClass; Sealed>]
 type public PileFactory =
+
     /// <summary>
     /// Create an anonymous control typed Pile.
     /// </summary>
     /// <returns>Pile instance</returns>
     static member create() =
         new Pile<UIElement>()
+
     /// <summary>
     /// Create a Pile.
     /// </summary>
@@ -73,25 +75,27 @@ type public PileFactory =
     static member create<'TUIElement when 'TUIElement :> UIElement>() =
         new Pile<'TUIElement>()
 
+/// <summary>
+/// Pile manipulator class.
+/// </summary>
+/// <remarks>You can manipulate XAML controls directly inside ViewModels
+/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public PileExtension =
-    /// <summary>
-    /// Pile manipulator class.
-    /// </summary>
-    /// <remarks>You can manipulate XAML controls directly inside ViewModels
-    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+
     type public Pile<'TUIElement when 'TUIElement :> UIElement> with
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
         /// </summary>
-        /// <typeparam name="TUIElement">Target control type</typeparam>
+        /// <typeparam name="'TUIElement">Target control type</typeparam>
         /// <param name="pile">Pile instance</param>
         /// <param name="action">Predicts when rents control instance</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async&lt;unit&gt; instance</returns>
         member self.executeAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
             self.InternalExecuteAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
         /// </summary>

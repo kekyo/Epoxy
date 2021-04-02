@@ -46,17 +46,38 @@ using Epoxy.Internal;
 
 namespace Epoxy.Supplemental
 {
+    /// <summary>
+    /// Pile methods for Task based asynchronous execution.
+    /// </summary>
+    /// <remarks>You can manipulate XAML controls directly inside ViewModels
+    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
     public static class PileExtension
     {
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">UI element type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>ValueTask</returns>
         public static ValueTask ExecuteAsync<TUIElement>(
             this Pile<TUIElement> pile,
             Func<TUIElement, Task> action, bool canIgnore = false)
             where TUIElement : UIElement =>
             pile.InternalExecuteAsync(element => action(element).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
 
-        public static ValueTask<T> ExecuteAsync<TUIElement, T>(
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">UI element type</typeparam>
+        /// <typeparam name="TResult">Result type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <returns>Result value</returns>
+        public static ValueTask<TResult> ExecuteAsync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
-            Func<TUIElement, Task<T>> action)
+            Func<TUIElement, Task<TResult>> action)
             where TUIElement : UIElement =>
             pile.InternalExecuteAsync(element => InternalHelpers.AsValueTask(action(element)));
     }
