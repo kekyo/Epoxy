@@ -50,7 +50,7 @@ using UIElement = Avalonia.IStyledElement;
 namespace Epoxy.Synchronized
 {
     [DebuggerStepThrough]
-    public static class PileExtension
+    public static class SyncPileExtension
     {
         public static void ExecuteSync<TUIElement>(
             this Pile<TUIElement> pile,

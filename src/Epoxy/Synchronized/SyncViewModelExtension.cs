@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 namespace Epoxy.Synchronized
 {
     [DebuggerStepThrough]
-    public static class ViewModelExtension
+    public static class SyncViewModelExtension
     {
         public static void SetValueSync<TValue>(
             this ViewModel viewModel,

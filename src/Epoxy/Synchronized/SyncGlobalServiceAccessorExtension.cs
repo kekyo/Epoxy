@@ -26,7 +26,7 @@ using Epoxy.Internal;
 
 namespace Epoxy.Synchronized
 {
-    public static class GlobalServiceAccessorExtension
+    public static class SyncGlobalServiceAccessorExtension
     {
         public static void ExecuteSync<TService>(
             this GlobalServiceAccessor accessor,
