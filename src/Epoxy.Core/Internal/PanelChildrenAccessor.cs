@@ -20,6 +20,7 @@
 #nullable enable
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -41,16 +42,12 @@ using System.Windows.Controls;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
-using DependencyObject = Xamarin.Forms.BindableObject;
-using DependencyProperty = Xamarin.Forms.BindableProperty;
 using UIElement = Xamarin.Forms.VisualElement;
 using Panel = Xamarin.Forms.Layout;
 #endif
 
 #if AVALONIA
 using Avalonia;
-using DependencyObject = Avalonia.IAvaloniaObject;
-using DependencyProperty = Avalonia.AvaloniaProperty;
 using UIElement = Avalonia.Controls.IControl;
 using Panel = Avalonia.Controls.IPanel;
 #endif
@@ -62,13 +59,17 @@ namespace Epoxy.Internal
     internal abstract class PanelChildrenAccessor
     {
         public abstract int Count(Panel panel);
+        public abstract bool Contains(Panel panel, UIElement element);
+        public abstract bool CopyTo(Panel panel, UIElement[] array, int index);
         public abstract int IndexOf(Panel panel, UIElement element);
         public abstract void Clear(Panel panel);
         public abstract void Add(Panel panel, UIElement element);
         public abstract void Insert(Panel panel, int index, UIElement element);
+        public abstract UIElement Get(Panel panel, int index);
         public abstract void Set(Panel panel, int index, UIElement element);
-        public abstract void Remove(Panel panel, UIElement element);
+        public abstract bool Remove(Panel panel, UIElement element);
         public abstract void RemoveAt(Panel panel, int index);
+        public abstract IEnumerable GetEnumerable(Panel panel);
 
         public static readonly Dictionary<Type, PanelChildrenAccessor> accessors =
             new Dictionary<Type, PanelChildrenAccessor>();
@@ -100,6 +101,12 @@ namespace Epoxy.Internal
         public override int Count(Panel panel) =>
             ((IViewContainer<T>)panel).Children.Count;
 
+        public override bool Contains(Panel panel, UIElement element) =>
+            ((IViewContainer<T>)panel).Children.Contains(element);
+
+        public override bool CopyTo(Panel panel, UIElement[] array, int index) =>
+            throw new NotImplementedException();
+
         public override int IndexOf(Panel panel, UIElement element) =>
             ((IViewContainer<T>)panel).Children.IndexOf((T)element);
 
@@ -112,14 +119,20 @@ namespace Epoxy.Internal
         public override void Insert(Panel panel, int index, UIElement element) =>
             ((IViewContainer<T>)panel).Children.Insert(index, (T)element);
 
+        public override UIElement Get(Panel panel, int index) =>
+            ((IViewContainer<T>)panel).Children[index];
+
         public override void Set(Panel panel, int index, UIElement element) =>
             ((IViewContainer<T>)panel).Children[index] = (T)element;
 
-        public override void Remove(Panel panel, UIElement element) =>
+        public override bool Remove(Panel panel, UIElement element) =>
             ((IViewContainer<T>)panel).Children.Remove((T)element);
 
         public override void RemoveAt(Panel panel, int index) =>
             ((IViewContainer<T>)panel).Children.RemoveAt(index);
+
+        public override IEnumerable GetEnumerable(Panel panel) =>
+            ((IViewContainer<T>)panel).Children;
     }
 #else
     [DebuggerStepThrough]
@@ -130,6 +143,12 @@ namespace Epoxy.Internal
 
         public int Count(Panel panel) =>
             panel.Children.Count;
+
+        public bool Contains(Panel panel, UIElement element) =>
+            panel.Children.Contains(element);
+
+        public bool CopyTo(Panel panel, UIElement[] array, int index) =>
+            throw new NotImplementedException();
 
         public int IndexOf(Panel panel, UIElement element) =>
             panel.Children.IndexOf(element);
@@ -143,14 +162,30 @@ namespace Epoxy.Internal
         public void Insert(Panel panel, int index, UIElement element) =>
             panel.Children.Insert(index, element);
 
+        public UIElement Get(Panel panel, int index) =>
+            panel.Children[index];
+
         public void Set(Panel panel, int index, UIElement element) =>
             panel.Children[index] = element;
 
-        public void Remove(Panel panel, UIElement element) =>
-            panel.Children.Remove(element);
+        public bool Remove(Panel panel, UIElement element)
+        {
+            if (panel.Children.IndexOf(element) is { } index && index >= 0)
+            {
+                panel.Children.RemoveAt(index);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public void RemoveAt(Panel panel, int index) =>
             panel.Children.RemoveAt(index);
+
+        public IEnumerable GetEnumerable(Panel panel) =>
+            panel.Children;
 
         private static readonly PanelChildrenAccessor accessor =
             new PanelChildrenAccessor();
