@@ -47,7 +47,6 @@ using Panel = Xamarin.Forms.Layout;
 #endif
 
 #if AVALONIA
-using Avalonia;
 using UIElement = Avalonia.Controls.IControl;
 using Panel = Avalonia.Controls.IPanel;
 #endif

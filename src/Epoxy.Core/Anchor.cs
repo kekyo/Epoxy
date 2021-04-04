@@ -42,13 +42,13 @@ using System.Windows;
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
-using UIElement = Xamarin.Forms.Element;
+using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
-using UIElement = Avalonia.IStyledElement;
+using UIElement = Avalonia.Controls.IControl;
 #endif
 
 namespace Epoxy
@@ -226,7 +226,10 @@ namespace Epoxy
         /// <param name="element">Target anchoring element</param>
         internal override void Moore(UIElement element)
         {
-            Debug.Assert(element is TUIElement);
+            if (!(element is TUIElement))
+            {
+                throw new InvalidOperationException($"Couldn't moore {element.GetType().FullName}.");
+            }
             this.element.Target = (TUIElement)element;
         }
 

@@ -23,7 +23,6 @@ using Epoxy.Internal;
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -46,7 +45,6 @@ using System.Windows.Controls;
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
-using DependencyProperty = Xamarin.Forms.BindableProperty;
 using UIElement = Xamarin.Forms.VisualElement;
 using Panel = Xamarin.Forms.Layout;
 #endif
@@ -54,7 +52,6 @@ using Panel = Xamarin.Forms.Layout;
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
-using DependencyProperty = Avalonia.AvaloniaProperty;
 using UIElement = Avalonia.Controls.IControl;
 using Panel = Avalonia.Controls.IPanel;
 #endif
@@ -221,7 +218,10 @@ namespace Epoxy
         /// <param name="element">Target anchoring element</param>
         internal override void Moore(UIElement element)
         {
-            Debug.Assert(element is Panel);
+            if (!(element is Panel))
+            {
+                throw new InvalidOperationException($"Couldn't moore {element.GetType().FullName}.");
+            }
             this.element.Target = (Panel)element;
         }
 

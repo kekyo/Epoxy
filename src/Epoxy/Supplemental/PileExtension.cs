@@ -35,11 +35,11 @@ using System.Windows;
 #endif
 
 #if XAMARIN_FORMS
-using UIElement = Xamarin.Forms.Element;
+using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
 #if AVALONIA
-using UIElement = Avalonia.IStyledElement;
+using UIElement = Avalonia.Controls.IControl;
 #endif
 
 using Epoxy.Internal;

@@ -41,14 +41,6 @@ open System.Windows
 open System.Runtime.InteropServices
 #endif
 
-#if XAMARIN_FORMS
-type UIElement = Xamarin.Forms.Element
-#endif
-
-#if AVALONIA
-type UIElement = Avalonia.IStyledElement
-#endif
-
 /// <summary>
 /// Pile functions for synchronous execution.
 /// </summary>

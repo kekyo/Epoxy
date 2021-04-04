@@ -36,14 +36,6 @@ open Microsoft.UI.Xaml
 open System.Windows
 #endif
 
-#if XAMARIN_FORMS
-type UIElement = Xamarin.Forms.Element
-#endif
-
-#if AVALONIA
-type UIElement = Avalonia.IStyledElement
-#endif
-
 open Epoxy
 open Epoxy.Internal
 
