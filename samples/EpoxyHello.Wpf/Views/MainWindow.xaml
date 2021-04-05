@@ -69,7 +69,7 @@
                   Margin="0,0,30,30"
                   HorizontalAlignment="Right"
                   VerticalAlignment="Bottom"
-                  epoxy:ChildrenBinder.Collection="{Binding Indicators}">
+                  epoxy:ChildrenAnchor.Pile="{Binding IndicatorPile}">
             </Grid>
         </Grid>
     </DockPanel>

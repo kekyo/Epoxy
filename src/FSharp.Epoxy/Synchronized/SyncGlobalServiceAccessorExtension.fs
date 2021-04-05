@@ -19,19 +19,56 @@
 
 namespace Epoxy.Synchronized
 
-open System
-open System.Diagnostics
-open System.Runtime.InteropServices
-
 open Epoxy.Advanced
 open Epoxy.Internal
 
+open System
+open System.ComponentModel
+open System.Diagnostics
+open System.Runtime.InteropServices
+
+/// <summary>
+/// GlobalService is a simple and lightweight dependency injection infrastructure.
+/// </summary>
+/// <remarks>Notice: They handle with synchronous handler.
+/// You can use asynchronous version instead.</remarks>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public SyncGlobalServiceAccessorExtension =
+
     type public GlobalServiceAccessor with
+
+        /// <summary>
+        /// Execute target interface type synchronously.
+        /// </summary>
+        /// <typeparam name="'TService">Target interface type</typeparam>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <param name="ignoreNotPresent">Ignore if didn't presend target instance.</param>
+        /// <remarks>Notice: They handle with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         member __.executeSync (action: 'TService -> unit, [<Optional; DefaultParameterValue(false)>] ignoreNotPresent) =
             InternalGlobalService.ExecuteSync(action |> asAction1, ignoreNotPresent)
 
+        /// <summary>
+        /// Execute target interface type synchronously.
+        /// </summary>
+        /// <typeparam name="'TService">Target interface type</typeparam>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <returns>Result value</returns>
+        /// <remarks>Notice: They handle with synchronous handler.
+        /// You can use asynchronous version instead.</remarks>
         member __.executeSync (action: 'TService -> 'TResult) =
             InternalGlobalService.ExecuteSync(action |> asFunc1)
+
+        // Dodge mistake choicing asynchronously overloads
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        [<Obsolete("Use executeAsync instead.", true)>]
+        member __.executeSync (action: 'TService -> Async<unit>, [<Optional; DefaultParameterValue(false)>] ignoreNotPresent) =
+            raise(InvalidOperationException("Use executeAsync instead."))
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        [<Obsolete("Use executeAsync instead.", true)>]
+        member __.executeSync (action: 'TService -> Async<'TResult>) =
+            raise(InvalidOperationException("Use executeAsync instead."))

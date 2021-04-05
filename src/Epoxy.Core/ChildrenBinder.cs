@@ -57,6 +57,7 @@ using Panel = Avalonia.Controls.IPanel;
 
 namespace Epoxy
 {
+    [Obsolete("Use ChildrenAnchor instead.")]
     public sealed class ChildrenBinder
     {
         private ChildrenBinder()
@@ -91,6 +92,7 @@ namespace Epoxy
             d.ClearValue(ChildrenBridgeProperty);
 
 #if XAMARIN_FORMS
+        [Obsolete("Use ChildrenAnchor instead.")]
         public static readonly BindableProperty CollectionProperty =
             BindableProperty.CreateAttached(
                 "Collection",
@@ -107,6 +109,7 @@ namespace Epoxy
         static ChildrenBinder() =>
             CollectionProperty.Changed.Subscribe(OnPropertyChanged);
 #else
+        [Obsolete("Use ChildrenAnchor instead.")]
         public static readonly DependencyProperty CollectionProperty =
             DependencyProperty.RegisterAttached(
                 "Collection",
@@ -115,9 +118,11 @@ namespace Epoxy
                 new PropertyMetadata(null, OnPropertyChanged));
 #endif
 
+        [Obsolete("Use ChildrenAnchor instead.")]
         public static IList<UIElement>? GetCollection(DependencyObject d) =>
             (IList<UIElement>?)d.GetValue(CollectionProperty);
 
+        [Obsolete("Use ChildrenAnchor instead.")]
         public static void SetCollection(DependencyObject d, IList<UIElement>? children) =>
             d.SetValue(CollectionProperty, children);
 

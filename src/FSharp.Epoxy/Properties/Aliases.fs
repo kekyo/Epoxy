@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -17,15 +17,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace Epoxy.Advanced
+namespace global
 
-open Epoxy.Internal
+#if XAMARIN_FORMS
+type private UIElement = Xamarin.Forms.VisualElement
+#endif
 
-open System.Diagnostics
-
-[<DebuggerStepThrough>]
-[<AbstractClass>]
-[<Sealed>]
-type public XamlDesigner =
-    static member isDesignTime =
-        InternalXamlDesigner.IsDesignTime
+#if AVALONIA
+type private UIElement = Avalonia.Controls.IControl
+#endif

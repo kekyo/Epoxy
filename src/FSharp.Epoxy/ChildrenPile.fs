@@ -22,9 +22,8 @@ namespace Epoxy
 open Epoxy
 open Epoxy.Internal
 
-open System
+open System.Collections.Generic
 open System.Diagnostics
-open System.Threading.Tasks
 open System.Runtime.InteropServices
 
 #if WINDOWS_UWP || UNO
@@ -40,58 +39,58 @@ open System.Windows
 #endif
 
 /// <summary>
-/// The Pile factory.
+/// The ChildrenPile factory.
 /// </summary>
 /// <remarks>You can manipulate XAML controls directly inside ViewModels
-/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+/// when places and binds both a ChildrenAnchor (in XAML) and a ChildrenPile.</remarks>
 [<DebuggerStepThrough>]
 [<AbstractClass; Sealed>]
-type public PileFactory =
+type public ChildrenPileFactory =
 
     /// <summary>
-    /// Create an anonymous control typed Pile.
+    /// Create an anonymous child control typed ChildrenPile.
     /// </summary>
-    /// <returns>Pile instance</returns>
+    /// <returns>ChildrenPile instance</returns>
     static member create() =
-        new Pile<UIElement>()
+        new ChildrenPile<UIElement>()
 
     /// <summary>
-    /// Create a Pile.
+    /// Create a ChildrenPile.
     /// </summary>
-    /// <typeparam name="'TUIElement">Target control type</typeparam>
-    /// <returns>Pile instance</returns>
+    /// <typeparam name="'TUIElement">Target child control type</typeparam>
+    /// <returns>ChildrenPile instance</returns>
     static member create<'TUIElement when 'TUIElement :> UIElement>() =
-        new Pile<'TUIElement>()
+        new ChildrenPile<'TUIElement>()
 
 /// <summary>
-/// Pile manipulator class.
+/// ChildrenPile manipulator class.
 /// </summary>
 /// <remarks>You can manipulate XAML controls directly inside ViewModels
-/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+/// when places and binds both an Anchor (in XAML) and a ChildrenPile.</remarks>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
-module public PileExtension =
+module public ChildrenPileExtension =
 
-    type public Pile<'TUIElement when 'TUIElement :> UIElement> with
+    type public ChildrenPile<'TUIElement when 'TUIElement :> UIElement> with
         /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// Manipulate anchoring element.
         /// </summary>
-        /// <typeparam name="'TUIElement">Target control type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Predicts when rents control instance</param>
+        /// <typeparam name="'TUIElement">Target child control type</typeparam>
+        /// <param name="pile">ChildrenPile instance</param>
+        /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async&lt;unit&gt; instance</returns>
-        member self.executeAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+        member self.manipulateAsync (action: IList<'TUIElement> -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalManipulateAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
 
         /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// Manipulate anchoring element.
         /// </summary>
-        /// <typeparam name="'TUIElement">Target control type</typeparam>
+        /// <typeparam name="'TUIElement">Target child control type</typeparam>
         /// <typeparam name="'TResult">Action result type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Predicts when rents control instance</param>
+        /// <param name="pile">ChildrenPile instance</param>
+        /// <param name="action">Asynchronous continuation delegate</param>
         /// <returns>Async result for action</returns>
         /// <remarks>This overload has to complete XAML data-binding.</remarks>
-        member self.executeAsync (action: 'TUIElement -> Async<'TResult>) =
-            self.InternalExecuteAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
+        member self.manipulateAsync (action: IList<'TUIElement> -> Async<'TResult>) =
+            self.InternalManipulateAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult

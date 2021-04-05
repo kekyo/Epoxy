@@ -43,6 +43,10 @@ namespace Epoxy.Infrastructure
             get => InternalModelHelper.PrettyPrint(this, true);
         }
 
+        /// <summary>
+        /// Get pretty printing string.
+        /// </summary>
+        /// <returns>Pretty printing string</returns>
         [DebuggerStepThrough]
         public override string ToString() =>
             $"{this.GetPrettyTypeName()}: {this.PrettyPrint}";

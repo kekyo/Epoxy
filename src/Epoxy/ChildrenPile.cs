@@ -22,6 +22,7 @@
 using Epoxy.Internal;
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -38,77 +39,73 @@ using System.Windows;
 #endif
 
 #if XAMARIN_FORMS
-using Xamarin.Forms;
-using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
 #if AVALONIA
-using Avalonia;
-using DependencyObject = Avalonia.IAvaloniaObject;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
 namespace Epoxy
 {
     /// <summary>
-    /// The Pile factory.
+    /// The ChildrenPile factory.
     /// </summary>
     /// <remarks>You can manipulate XAML controls directly inside ViewModels
-    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+    /// when places and binds both a ChildrenAnchor (in XAML) and a ChildrenPile.</remarks>
     [DebuggerStepThrough]
-    public static class PileFactory
+    public static class ChildrenPileFactory
     {
         /// <summary>
-        /// Create an anonymous control typed Pile.
+        /// Create an anonymous child control typed ChildrenPile.
         /// </summary>
-        /// <returns>Pile instance</returns>
-        public static Pile<UIElement> Create() =>
-            new Pile<UIElement>();
+        /// <returns>ChildrenPile instance</returns>
+        public static ChildrenPile<UIElement> Create() =>
+            new ChildrenPile<UIElement>();
 
         /// <summary>
-        /// Create a Pile.
+        /// Create a ChildrenPile.
         /// </summary>
-        /// <typeparam name="TUIElement">Target control type</typeparam>
-        /// <returns>Pile instance</returns>
-        public static Pile<TUIElement> Create<TUIElement>()
+        /// <typeparam name="TUIElement">Target child control type</typeparam>
+        /// <returns>ChildrenPile instance</returns>
+        public static ChildrenPile<TUIElement> Create<TUIElement>()
             where TUIElement : UIElement =>
-            new Pile<TUIElement>();
+            new ChildrenPile<TUIElement>();
     }
 
     /// <summary>
-    /// Pile methods for ValueTask based asynchronous execution.
+    /// ChildrenPile manipulator class.
     /// </summary>
     /// <remarks>You can manipulate XAML controls directly inside ViewModels
-    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+    /// when places and binds both an Anchor (in XAML) and a ChildrenPile.</remarks>
     [DebuggerStepThrough]
-    public static class PileExtension
+    public static class ChildrenPileExtension
     {
         /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// Manipulate anchoring element.
         /// </summary>
-        /// <typeparam name="TUIElement">Target control type</typeparam>
-        /// <param name="pile">Pile instance</param>
+        /// <typeparam name="TUIElement">Target child control type</typeparam>
+        /// <param name="pile">ChildrenPile instance</param>
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>ValueTask instance</returns>
-        public static ValueTask ExecuteAsync<TUIElement>(
-            this Pile<TUIElement> pile, Func<TUIElement, ValueTask> action, bool canIgnore = false)
+        public static ValueTask ManipulateAsync<TUIElement>(
+            this ChildrenPile<TUIElement> pile, Func<IList<TUIElement>, ValueTask> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.InternalExecuteAsync(e => action(e).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
+            pile.InternalManipulateAsync(c => action(c).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
 
         /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// Manipulate anchoring element.
         /// </summary>
-        /// <typeparam name="TUIElement">Target control type</typeparam>
+        /// <typeparam name="TUIElement">Target child control type</typeparam>
         /// <typeparam name="TResult">Action result type</typeparam>
-        /// <param name="pile">Pile instance</param>
+        /// <param name="pile">ChildrenPile instance</param>
         /// <param name="action">Predicts when rents control instance</param>
         /// <returns>Result for action</returns>
         /// <remarks>This overload has to complete XAML data-binding.</remarks>
-        public static ValueTask<TResult> ExecuteAsync<TUIElement, TResult>(
-            this Pile<TUIElement> pile, Func<TUIElement, ValueTask<TResult>> action)
+        public static ValueTask<TResult> ManipulateAsync<TUIElement, TResult>(
+            this ChildrenPile<TUIElement> pile, Func<IList<TUIElement>, ValueTask<TResult>> action)
             where TUIElement : UIElement =>
-            pile.InternalExecuteAsync<TResult>(action);
+            pile.InternalManipulateAsync<TResult>(action);
     }
 }

@@ -49,31 +49,94 @@ open Avalonia
 open Avalonia.Threading
 #endif
 
+/// <summary>
+/// Usable functions for F#.
+/// </summary>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public FSharpHelper =
 
 #if WINDOWS_WPF
     type Dispatcher with
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> unit) =
             dispatcher.InvokeAsync<unit>(action |> asFunc0).Task |> taskAsAsyncResult
 
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> ValueTask<'TResult>) =
             dispatcher.Invoke(action >> valueTaskAsAsyncResult)
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> Task<'TResult>) =
             dispatcher.Invoke(action) |> taskAsAsyncResult
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> Async<'TResult>) =
             dispatcher.Invoke(action) |> asyncAsAsyncResult
 #endif
 #if AVALONIA
     type Dispatcher with
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> unit) =
             dispatcher.InvokeAsync<unit>(action) |> taskAsAsyncResult
 
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> ValueTask<'TResult>) =
             dispatcher.InvokeAsync<'TResult>(action >> valueTaskAsTask) |> taskAsAsyncResult
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> Task<'TResult>) =
             dispatcher.InvokeAsync<'TResult>(action) |> taskAsAsyncResult
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> Async<'TResult>) =
             dispatcher.InvokeAsync<'TResult>(action >> Async.StartImmediateAsTask) |> taskAsAsyncResult
 #endif

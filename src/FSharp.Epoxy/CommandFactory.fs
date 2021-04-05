@@ -34,30 +34,89 @@ module private CommandFactoryGenerator =
     let inline createP0 executeAsync = new DelegatedCommand<'TParameter>(executeAsync) :> Command
     let inline createP1 executeAsync canExecute = new DelegatedCommand<'TParameter>(executeAsync, canExecute) :> Command
 
+/// <summary>
+/// Command factory functions for Async&lt;unit&gt; based asynchronous handler.
+/// </summary>
 [<DebuggerStepThrough>]
 [<AbstractClass>]
 [<Sealed>]
 type public CommandFactory =
+    /// <summary>
+    /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+    /// </summary>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <returns>A Command instance</returns>
     static member create executeAsync =
         create0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0)
+
+    /// <summary>
+    /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+    /// </summary>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <param name="canExecute">Responder for be able to execute</param>
+    /// <returns>A Command instance</returns>
     static member create (executeAsync, canExecute) =
         create1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
+    /// <summary>
+    /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+    /// </summary>
+    /// <typeparam name="'TParameter">Handler parameter type</typeparam>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <returns>A Command instance</returns>
     static member create (executeAsync: 'TParameter -> Async<unit>) =
         createP0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1)
+
+    /// <summary>
+    /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+    /// </summary>
+    /// <typeparam name="'TParameter">Handler parameter type</typeparam>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <param name="canExecute">Responder for be able to execute</param>
+    /// <returns>A Command instance</returns>
     static member create (executeAsync: 'TParameter -> Async<unit>, canExecute) =
         createP1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
 
+/// <summary>
+/// Command factory functions for Async&lt;unit&gt; based asynchronous handler.
+/// </summary>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public CommandFactoryExtension =
+
     type public CommandFactoryInstance with
+        /// <summary>
+        /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+        /// </summary>
+        /// <param name="executeAsync">Asynchronous handler</param>
+        /// <returns>A Command instance</returns>
         member __.create executeAsync =
             create0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0)
+
+        /// <summary>
+        /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+        /// </summary>
+        /// <param name="executeAsync">Asynchronous handler</param>
+        /// <param name="canExecute">Responder for be able to execute</param>
+        /// <returns>A Command instance</returns>
         member __.create (executeAsync, canExecute) =
             create1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
 
+        /// <summary>
+        /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+        /// </summary>
+        /// <typeparam name="'TParameter">Handler parameter type</typeparam>
+        /// <param name="executeAsync">Asynchronous handler</param>
+        /// <returns>A Command instance</returns>
         member __.create (executeAsync: 'TParameter -> Async<unit>) =
             createP0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1)
+
+        /// <summary>
+        /// Generate a Command instance with Async&lt;unit&gt; based asynchronous handler.
+        /// </summary>
+        /// <typeparam name="'TParameter">Handler parameter type</typeparam>
+        /// <param name="executeAsync">Asynchronous handler</param>
+        /// <param name="canExecute">Responder for be able to execute</param>
+        /// <returns>A Command instance</returns>
         member __.create (executeAsync: 'TParameter -> Async<unit>, canExecute) =
             createP1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)

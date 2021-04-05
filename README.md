@@ -206,7 +206,7 @@ By eliminating dependencies in this way, we can achieve commonality for multi-pl
 However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
 (separating them eliminates the possibility of unintentional dependencies).
 
-[Image downloader from Reddit post (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/1b16a9e447876a5e109166c7c5f5902a1dc52947/samples/EpoxyHello.Core/Models/Reddit.cs#L63):
+[Image downloader from Reddit post (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/Reddit.cs#L63):
 
 ```csharp
 // Model implementation: The pure netstandard2.0 library.
@@ -335,10 +335,10 @@ In other words, only events published with the RoutedEventHandler type are eligi
 The UWP runtime environment has strict security checks.
 This is because the UWP runtime environment has strict security checks, and there are restrictions when dynamically hooking events.
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
-* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
-* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/21d16d00311f9379f0e0d431bcd856594b446cf0/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
 ### Anchor/Pile
 
@@ -376,8 +376,42 @@ await this.LogPile.ExecuteAsync(async textBox =>
 });
 ```
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+
+### ChildrenAnchor/ChildrenPile
+
+`ChildrenAnchor` and` ChildrenPile` allow you to directly manipulate the child elements of
+the container control in same way as Anchor/Pile.
+With these, you can manipulate the child elements of the container control as a collection.
+
+In WPF, container controls like `ItemsControl` usually manipulate by binding `ItemsSource` property to a collection,
+You can manipulate any container control that does not have such properties.
+
+For example, to manipulate the child elements of the `Grid` control, write:
+
+```xml
+<!-- Allow child elements of Grid to be operated directly using ChildrenAnchor -->
+<Grid epoxy:ChildrenAnchor.Pile="{Binding IndicatorPile}" />
+```
+
+```csharp
+// Place the ChildrenPile in the ViewModel.
+// (In this example, place a control called 'Indicator' in the child element)
+this.IndicatorPile = ChildrenPile.Create<Indicator>();
+
+// If you want to work with Grid's child elements,
+// rent a reference through ChildrenPile:
+await this.IndicatorPile.ManipulateAsync(async children =>
+{
+    // Get information asynchronously from the model.
+    await foreach (var result in ServerAccessor.GetResultsAsync())
+    {
+        // You can directly manipulate the child elements of Grid (children: IList<Indicator>)
+        children.Add(new Indicator { ... });
+    }
+});
+```
 
 ### ValueConverter
 
@@ -428,12 +462,12 @@ This means that the `TryConvert` method cannot be made to behave like `TryConver
 Try not to do asynchronous processing in the XAML converter!
 (If you want to do so, you can implement it on the `Model` or `ViewModel` side to avoid problems such as deadlocks).
 
-* [For example](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
+* [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
 ### UIThread
 
 Some different platform contains different UI thread manipulation.
-Epoxy can handle only one [UIThread class](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/Epoxy/UIThread.cs#L29),
+Epoxy can handle only one [UIThread class](https://github.com/kekyo/Epoxy/blob/main/Epoxy/UIThread.cs#L29),
 it has commonly manipulation methods.
 We can easier combine both UI manipulation and asynchronous operations.
 
@@ -464,13 +498,6 @@ you may not get the correct results.
 UWP has a different UI thread assigned to each window that holds a view,
 and if you use it while constructing an instance,
 it will not be able to determine the view correctly.
-
-### ChildrenBinder
-
-TODO:
-
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L71)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/09a274bd2852cf8120347411d898aca414a16baa/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L119)
 
 ### GlobalService (Advanced topic)
 
@@ -545,6 +572,20 @@ NOTE: As the name "Global" implies, `GlobalService` behaves like a kind of globa
 Try not to use `GlobalService` in places where it is not really needed.
 `Epoxy.Advanced` namespace (using declarations are required) to make it a bit more distinguishable.
 
+### Designer (advanced topic)
+
+The `Designer` class can be used to describe processes related to design editing.
+
+If you implement a custom control or user control,
+when an IDE (such as Visual Studio or Rider) is doing visual editing of a control,
+it is possible to actually create an instance of the control within the IDE.
+
+In such cases, you may want to change the look and behavior of
+your design edits rather than doing the real control behavior.
+
+By referring to `IsDesignTime` property, you can get whether or
+not you are editing at design time in a platform-independent way.
+
 ---
 
 ## About the F# version
@@ -552,55 +593,7 @@ Try not to use `GlobalService` in places where it is not really needed.
 By using the F# version of the package, you can write code that follows the F# style as follows.
 The instances used are shared, you can use the preferred API for both C# and F# while maintaining the same instances.
 
-### ViewModel Injector
-
-You can also use the `ViewModel injector` in F#. However, there are syntactic restrictions on auto-implemented properties:
-
-```fsharp
-open Epoxy
-
-// Use ViewModel injector.
-[<ViewModel>]
-type ItemViewModel() as self =
-    do
-        // This expression usually raises an exception,
-        // but it is legal when using the ViewModel injector.
-        self.Title <- "CCC"
-        // You can use this behavior to assign a Command within the `do` block.
-        self.Click <- CommandFactory.create(fun () -> async {
-            // ...
-        })
-
-    // The F# auto-implemented property requires an initialization expression,
-    // but it ignored if assigned any instance in the `do` block.
-    member val Title = "AAA" with get, set
-    member val Body = "BBB" with get, set
-    member val Click: Command = null with get, set
-
-// Result:
-let vm = new ItemViewModel()
-Debug.Assert(vm.Title = "CCC")
-Debug.Assert(vm.Body = "BBB")
-```
-
-The `IgnoreInject` attribute can be used in F# as well. The process when changing properties returns `Async<unit>` as described below:
-
-```fsharp
-// Defined property
-member val Title = "Unknown"
-    with get, set
-
-// Called when the property changes.
-// Signatures are not enforced, so the following conditions must be applied:
-// * The function name is "on<property name>ChangedAsync"
-// * The argument is same type as the property (argument name is arbitrary)
-// * Return value must be Async<unit> type
-member self.onTitleChangedAsync (value: string) = async {
-    // What to do if the value changes ...
-}
-```
-
-### camel-case function names
+### Camel-case function names
 
 All functions in FSharp.Epoxy are camel-cased. For example, instead of the `GetValue`/`SetValue` methods in the `ViewModel` base class, use the `getValue`/`setValue` functions.
 
@@ -658,6 +651,54 @@ When used in conjunction with my other project [FusionTasks](https://github.com/
 
 NOTE: The preference for the `Async` type may change when [the `resumable` structure is released in a future F# release.](https://github.com/dotnet/fsharp/pull/6811)
 
+### ViewModel Injector
+
+You can also use the `ViewModel injector` in F#. However, there are syntactic restrictions on auto-implemented properties:
+
+```fsharp
+open Epoxy
+
+// Use ViewModel injector.
+[<ViewModel>]
+type ItemViewModel() as self =
+    do
+        // This expression usually raises an exception,
+        // but it is legal when using the ViewModel injector.
+        self.Title <- "CCC"
+        // You can use this behavior to assign a Command within the `do` block.
+        self.Click <- CommandFactory.create(fun () -> async {
+            // ...
+        })
+
+    // The F# auto-implemented property requires an initialization expression,
+    // but it ignored if assigned any instance in the `do` block.
+    member val Title = "AAA" with get, set
+    member val Body = "BBB" with get, set
+    member val Click: Command = null with get, set
+
+// Result:
+let vm = new ItemViewModel()
+Debug.Assert(vm.Title = "CCC")
+Debug.Assert(vm.Body = "BBB")
+```
+
+The `IgnoreInject` attribute can be used in F# as well. The process when changing properties returns `Async<unit>`:
+
+```fsharp
+// Defined property
+member val Title = "Unknown"
+    with get, set
+
+// Called when the property changes.
+// Signatures are not enforced, so the following conditions must be applied:
+// * The function name is "on<property name>ChangedAsync"
+// * The argument is same type as the property (argument name is arbitrary)
+// * Return value must be Async<unit> type
+member self.onTitleChangedAsync (value: string) = async {
+    // What to do if the value changes ...
+}
+```
+
 ### Automatic resourceization of WPF XAML pages
 
 So the XAML build action is automatically changed so that it is added to the project as a resource. When you add the XAML file to the project, you don't need to do anything in particular to set it up correctly.
@@ -687,6 +728,11 @@ Apache-v2
 
 ## History
 
+* 0.17.0:
+  * Added ChildrenAnchor and ChildrenPile. ChildrenBinder will be discontinued.
+  * Expanded XML comments.
+  * Minor interface cleanups and fixes.
+  * Will be close formal release :)
 * 0.16.0:
   * Added IgnoreInject attribute and support for custom SetValue handlers to ViewModel injectors.
   * Fixed failure injecting on only installed sdk3.1 or 5.0.

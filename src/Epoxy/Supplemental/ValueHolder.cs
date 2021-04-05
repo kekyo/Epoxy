@@ -159,5 +159,7 @@ namespace Epoxy.Supplemental
             vh.GetValue<Command?>();
         public static implicit operator Pile?(ValueHolder vh) =>
             vh.GetValue<Pile?>();
+        public static implicit operator ChildrenPile?(ValueHolder vh) =>
+            vh.GetValue<ChildrenPile?>();
     }
 }

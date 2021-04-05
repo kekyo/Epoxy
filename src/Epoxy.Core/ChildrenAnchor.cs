@@ -22,41 +22,46 @@
 using Epoxy.Internal;
 
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 #if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 #endif
 
 #if WINUI
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 #endif
 
 #if WINDOWS_WPF
 using System.Windows;
+using System.Windows.Controls;
 #endif
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.VisualElement;
+using Panel = Xamarin.Forms.Layout;
 #endif
 
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
 using UIElement = Avalonia.Controls.IControl;
+using Panel = Avalonia.Controls.IPanel;
 #endif
 
 namespace Epoxy
 {
     /// <summary>
-    /// The Anchor is used with Pile, there will bind loosely and can rent control temporarily.
+    /// The ChildrenAnchor is used with ChildrenPile, there will bind loosely and can rent control and manipulate children temporarily.
     /// </summary>
-    /// <remarks>See Anchor/Pile guide: https://github.com/kekyo/Epoxy#anchorpile</remarks>
+    /// <remarks>See ChildrenAnchor/ChildrenPile guide: https://github.com/kekyo/Epoxy#anchorpile</remarks>
     /// <example>
     /// <code>
     /// &lt;Window xmlns:epoxy="https://github.com/kekyo/Epoxy"&gt;
@@ -66,42 +71,42 @@ namespace Epoxy
     /// &lt;/Window&gt;
     /// </code>
     /// </example>
-    public sealed class Anchor
+    public sealed class ChildrenAnchor
     {
         /// <summary>
         /// The constructor.
         /// </summary>
-        private Anchor()
+        private ChildrenAnchor()
         { }
 
 #if XAMARIN_FORMS
         private static readonly BindableProperty PileProperty =
             BindableProperty.CreateAttached(
                 "Pile",
-                typeof(Pile),
-                typeof(Anchor),
+                typeof(ChildrenPile),
+                typeof(ChildrenAnchor),
                 null,
                 BindingMode.OneWay,
                 null,
                 (b, o, n) =>
                 {
-                    if (o is Pile op)
+                    if (o is ChildrenPile op)
                     {
                         op.Release((UIElement)b);
                     }
-                    if (n is Pile np)
+                    if (n is ChildrenPile np)
                     {
                         np.Moore((UIElement)b);
                     }
                 });
 #elif AVALONIA
-        private static readonly AvaloniaProperty<Pile?> PileProperty =
-            AvaloniaProperty.RegisterAttached<Anchor, UIElement, Pile?>("Pile");
+        private static readonly AvaloniaProperty<ChildrenPile?> PileProperty =
+            AvaloniaProperty.RegisterAttached<ChildrenAnchor, UIElement, ChildrenPile?>("Pile");
 
         /// <summary>
         /// The type initializer.
         /// </summary>
-        static Anchor() =>
+        static ChildrenAnchor() =>
             PileProperty.Changed.Subscribe(e =>
             {
                 if (e.OldValue.GetValueOrDefault() is { } op)
@@ -117,15 +122,15 @@ namespace Epoxy
         private static readonly DependencyProperty PileProperty =
             DependencyProperty.RegisterAttached(
                 "Pile",
-                typeof(Pile),
-                typeof(Anchor),
+                typeof(ChildrenPile),
+                typeof(ChildrenAnchor),
                 new PropertyMetadata(null, (d, e) =>
                 {
-                    if (e.OldValue is Pile op)
+                    if (e.OldValue is ChildrenPile op)
                     {
                         op.Release((UIElement)d);
                     }
-                    if (e.NewValue is Pile np)
+                    if (e.NewValue is ChildrenPile np)
                     {
                         np.Moore((UIElement)d);
                     }
@@ -133,82 +138,69 @@ namespace Epoxy
 #endif
 
         /// <summary>
-        /// Get Pile from this Anchor.
+        /// Get ChildrenPile from this ChildrenAnchor.
         /// </summary>
-        public static Pile? GetPile(DependencyObject d) =>
-            (Pile?)d.GetValue(PileProperty);
+        public static ChildrenPile? GetPile(DependencyObject d) =>
+            (ChildrenPile?)d.GetValue(PileProperty);
 
         /// <summary>
-        /// Set Pile from this Anchor.
+        /// Set ChildrenPile from this ChildrenAnchor.
         /// </summary>
-        public static void SetPile(DependencyObject d, Pile? pile) =>
+        public static void SetPile(DependencyObject d, ChildrenPile? pile) =>
             d.SetValue(PileProperty, pile);
 
         /// <summary>
-        /// Clear Pile from this Anchor.
+        /// Clear ChildrenPile from this ChildrenAnchor.
         /// </summary>
         public static void ClearPile(DependencyObject d) =>
             d.ClearValue(PileProperty);
     }
 
     /// <summary>
-    /// The Pile base class is used with Anchor.
+    /// The ChildrenPile base class is used with ChildrenAnchor.
     /// </summary>
-    /// <remarks>You can use with generic Pile&lt;T&gt; class.</remarks>
-    public abstract class Pile
+    /// <remarks>You can use with generic ChildrenPile&lt;T&gt; class.</remarks>
+    public abstract class ChildrenPile
     {
         /// <summary>
         /// The constructor.
         /// </summary>
-        private protected Pile()
+        private protected ChildrenPile()
         { }
 
         /// <summary>
-        /// Will bind an Anchor.
+        /// Will bind an ChildrenAnchor.
         /// </summary>
         /// <param name="element">Target anchoring element</param>
         internal abstract void Moore(UIElement element);
 
         /// <summary>
-        /// Will release an Anchor.
+        /// Will release an ChildrenAnchor.
         /// </summary>
         /// <param name="element">Target anchoring element</param>
         internal abstract void Release(UIElement element);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
-        public static Pile<UIElement> Create() =>
-            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
-        public static Pile<TUIElement> Create<TUIElement>()
-            where TUIElement : UIElement =>
-            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
     }
 
     /// <summary>
-    /// The Pile is used with Anchor, there will bind loosely and can rent control temporarily.
+    /// The ChildrenPile is used with ChildrenAnchor, there will bind loosely and can rent control and manipulate children temporarily.
     /// </summary>
-    /// <remarks>See Anchor/Pile guide: https://github.com/kekyo/Epoxy#anchorpile</remarks>
+    /// <remarks>See ChildrenAnchor/ChildrenPile guide: https://github.com/kekyo/Epoxy#anchorpile</remarks>
     /// <example>
     /// <code>
-    /// // Declared a Pile into the ViewModel.
-    /// this.LogPile = Pile.Create&lt;TextBox&gt;();
+    /// // Declared a ChildrenPile into the ViewModel.
+    /// this.ButtonPanelPile = ChildrenPile.Create&lt;Button&gt;();
     ///
     /// // ...
     ///
-    /// // Do rent by Pile when we have to manipulate the TextBox directly:
-    /// await this.LogPile.ExecuteAsync(async textBox =>
+    /// // Do rent by ChildrenPile when we have to manipulate the Button directly:
+    /// await this.ButtonPanelPile.ManipulateAsync(async children =>
     /// {
-    ///    // Fetch information from related model.
-    ///    var result = await ServerAccessor.GetResultTextAsync();
-    ///    // We can manipulate safer directly TextBox.
-    ///    textBox.AppendText(result);
+    ///    // Manipulate children directly.
+    ///    children.Add(new Button { ... });
     /// });
     /// </code>
     /// </example>
-    public sealed class Pile<TUIElement> : Pile
+    public sealed class ChildrenPile<TUIElement> : ChildrenPile
         where TUIElement : UIElement
     {
         private readonly WeakReference element =
@@ -217,44 +209,44 @@ namespace Epoxy
         /// <summary>
         /// The constructor.
         /// </summary>
-        internal Pile()
+        internal ChildrenPile()
         { }
 
         /// <summary>
-        /// Will bind an Anchor.
+        /// Will bind a ChildrenAnchor.
         /// </summary>
         /// <param name="element">Target anchoring element</param>
         internal override void Moore(UIElement element)
         {
-            if (!(element is TUIElement))
+            if (!(element is Panel))
             {
                 throw new InvalidOperationException($"Couldn't moore {element.GetType().FullName}.");
             }
-            this.element.Target = (TUIElement)element;
+            this.element.Target = (Panel)element;
         }
 
         /// <summary>
-        /// Will release an Anchor.
+        /// Will release a ChildrenAnchor.
         /// </summary>
         /// <param name="element">Target anchoring element</param>
         internal override void Release(UIElement element)
         {
-            Debug.Assert(this.element.Target is TUIElement e && object.ReferenceEquals(e, element));
+            Debug.Assert(this.element.Target is Panel e && object.ReferenceEquals(e, element));
             this.element.Target = null;
         }
 
         /// <summary>
-        /// Execute with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <param name="action">Continuation delegate</param>
         /// <param name="canIgnore">Ignore if not present mooring Anchor</param>
         /// <returns>ValueTask</returns>
         /// <remarks>This method is used internal only.</remarks>
-        internal ValueTask<Unit> InternalExecuteAsync(Func<TUIElement, ValueTask<Unit>> action, bool canIgnore = false)
+        internal ValueTask<Unit> InternalManipulateAsync(Func<IList<TUIElement>, ValueTask<Unit>> action, bool canIgnore = false)
         {
-            if (this.element.Target is TUIElement element)
+            if (this.element.Target is Panel panel)
             {
-                return action(element);
+                return action(new PanelChildrenCollection<TUIElement>(panel));
             }
             else if (!canIgnore)
             {
@@ -267,17 +259,17 @@ namespace Epoxy
         }
 
         /// <summary>
-        /// Execute with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <typeparam name="TResult">Result type</typeparam>
         /// <param name="action">Continuation delegate</param>
         /// <returns>ValueTask&lt;TResult&gt;</returns>
         /// <remarks>This method is used internal only.</remarks>
-        internal ValueTask<TResult> InternalExecuteAsync<TResult>(Func<TUIElement, ValueTask<TResult>> action)
+        internal ValueTask<TResult> InternalManipulateAsync<TResult>(Func<IList<TUIElement>, ValueTask<TResult>> action)
         {
-            if (this.element.Target is TUIElement element)
+            if (this.element.Target is Panel panel)
             {
-                return action(element);
+                return action(new PanelChildrenCollection<TUIElement>(panel));
             }
             else
             {
@@ -292,8 +284,8 @@ namespace Epoxy
         /// <param name="canIgnore">Ignore if not present mooring Anchor</param>
         /// <remarks>This method is used internal only.</remarks>
         [DebuggerStepThrough]
-        internal void InternalExecuteSync(Action<TUIElement> action, bool canIgnore) =>
-            this.InternalExecuteAsync(element => { action(element); return default; }, canIgnore);
+        internal void InternalManipulateSync(Action<IList<TUIElement>> action, bool canIgnore) =>
+            this.InternalManipulateAsync(children => { action(children); return default; }, canIgnore);
 
         /// <summary>
         /// Synchronous execute with anchoring element.
@@ -302,13 +294,13 @@ namespace Epoxy
         /// <param name="action">Continuation delegate</param>
         /// <returns>TResult</returns>
         /// <remarks>This method is used internal only.</remarks>
-        internal TResult InternalExecuteSync<TResult>(Func<TUIElement, TResult> action)
+        internal TResult InternalManipulateSync<TResult>(Func<IList<TUIElement>, TResult> action)
         {
-            var result = this.InternalExecuteAsync(element =>
+            var result = this.InternalManipulateAsync(children =>
             {
                 try
                 {
-                    return InternalHelpers.FromResult(InternalHelpers.Pair(action(element), default(ExceptionDispatchInfo)!));
+                    return InternalHelpers.FromResult(InternalHelpers.Pair(action(children), default(ExceptionDispatchInfo)!));
                 }
                 catch (Exception ex)
                 {
@@ -325,8 +317,8 @@ namespace Epoxy
         /// </summary>
         /// <returns>Formatted string</returns>
         public override string ToString() =>
-            this.element.Target is TUIElement element ?
-                $"Mooring: {element.GetType().FullName}" :
+            this.element.Target is Panel panel ?
+                $"Mooring: {panel.GetType().FullName}" :
                 "Released";
     }
 }

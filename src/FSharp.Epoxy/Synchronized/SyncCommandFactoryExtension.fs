@@ -27,19 +27,56 @@ open System.Threading.Tasks
 open Epoxy
 open Epoxy.Internal
 
+/// <summary>
+/// Command factory functions for synchronous handler.
+/// </summary>
+/// <remarks>Notice: They handle with synchronous handler. You can use asynchronous version instead.</remarks>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public SyncCommandFactoryExtension =
+
     type public CommandFactoryInstance with
+        /// <summary>
+        /// Generate a Command instance with synchronous handler.
+        /// </summary>
+        /// <param name="execute">Synchronous handler</param>
+        /// <returns>A Command instance</returns>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
         member __.createSync (execute: unit -> unit) =
             new SyncDelegatedCommand(execute |> asActionVoid) :> Command
+
+        /// <summary>
+        /// Generate a Command instance with synchronous handler.
+        /// </summary>
+        /// <param name="execute">Synchronous handler</param>
+        /// <param name="canExecute">Responder for be able to execute</param>
+        /// <returns>A Command instance</returns>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
         member __.createSync (execute: unit -> unit, canExecute: unit -> bool) =
             new SyncDelegatedCommand(execute |> asActionVoid, canExecute |> asFunc0) :> Command
+
+        /// <summary>
+        /// Generate a Command instance with synchronous handler.
+        /// </summary>
+        /// <typeparam name="'TParameter">Handler parameter type</typeparam>
+        /// <param name="execute">Synchronous handler</param>
+        /// <returns>A Command instance</returns>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
         member __.createSync (execute: 'TParameter -> unit) =
             new SyncDelegatedCommand<'TParameter>(execute |> asAction1) :> Command
+
+        /// <summary>
+        /// Generate a Command instance with synchronous handler.
+        /// </summary>
+        /// <typeparam name="'TParameter">Handler parameter type</typeparam>
+        /// <param name="execute">Synchronous handler</param>
+        /// <param name="canExecute">Responder for be able to execute</param>
+        /// <returns>A Command instance</returns>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
         member __.createSync (execute: 'TParameter -> unit, canExecute: 'TParameter -> bool) =
             new SyncDelegatedCommand<'TParameter>(execute |> asAction1, canExecute |> asFunc1) :> Command
 
+        // Dodge mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member __.createSync (execute: unit -> ValueTask) =

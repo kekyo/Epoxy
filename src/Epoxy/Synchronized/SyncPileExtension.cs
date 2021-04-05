@@ -40,30 +40,56 @@ using System.Windows;
 #endif
 
 #if XAMARIN_FORMS
-using UIElement = Xamarin.Forms.Element;
+using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
 #if AVALONIA
-using UIElement = Avalonia.IStyledElement;
+using UIElement = Avalonia.Controls.IControl;
 #endif
 
 namespace Epoxy.Synchronized
 {
+    /// <summary>
+    /// Pile methods for synchronous execution.
+    /// </summary>
+    /// <remarks>You can manipulate XAML controls directly inside ViewModels
+    /// when places and binds both an Anchor (in XAML) and a Pile.
+    /// 
+    /// Notice: They handle with synchronous handler.
+    /// You can use asynchronous version instead.</remarks>
     [DebuggerStepThrough]
-    public static class PileExtension
+    public static class SyncPileExtension
     {
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">UI element type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
         public static void ExecuteSync<TUIElement>(
             this Pile<TUIElement> pile,
             Action<TUIElement> action, bool canIgnore = false)
             where TUIElement : UIElement =>
             pile.InternalExecuteSync(action, canIgnore);
 
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">UI element type</typeparam>
+        /// <typeparam name="TResult">Result type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <returns>Result value</returns>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
         public static TResult ExecuteSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
             Func<TUIElement, TResult> action)
             where TUIElement : UIElement =>
             pile.InternalExecuteSync(action);
 
+        #region Dodge mistake choicing asynchronously overloads
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use ExecuteAsync instead.", true)]
         public static void ExecuteSync<TUIElement>(
@@ -79,5 +105,6 @@ namespace Epoxy.Synchronized
             Func<TUIElement, ValueTask<TResult>> action)
             where TUIElement : UIElement =>
             throw new InvalidOperationException("Use ExecuteAsync instead.");
+        #endregion
     }
 }

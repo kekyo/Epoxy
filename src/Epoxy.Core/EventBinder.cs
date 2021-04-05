@@ -54,8 +54,27 @@ using Epoxy.Advanced;
 
 namespace Epoxy
 {
+    /// <summary>
+    /// The EventBinder give bindable ability for standard CLR events by ICommand infrastructure.
+    /// </summary>
+    /// <remarks>See EventBinder guide: https://github.com/kekyo/Epoxy#eventbinder</remarks>
+    /// <example>
+    /// <code>
+    /// &lt;Window xmlns:epoxy="https://github.com/kekyo/Epoxy"&gt;
+    ///    &lt;!-- ... --&gt;
+    ///    &lt;epoxy:EventBinder.Events&gt;
+    ///         &lt;!-- Binding the Window.Loaded event to the ViewModel's Ready property --&gt;
+    ///         &lt;epoxy:Event Name = "Loaded" Command="{Binding Ready}" /&gt;
+    ///    &lt;/epoxy:EventBinder.Events&gt;
+    /// &lt;/Window&gt;
+    /// </code>
+    /// </example>
     public sealed class EventBinder
     {
+        /// <summary>
+        /// The constructor.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private EventBinder()
         { }
 
@@ -77,12 +96,22 @@ namespace Epoxy
                     collection.Attach(d);
                     return collection;
                 });
+
+        /// <summary>
+        /// Declared Events attached property.
+        /// </summary>
         public static readonly BindableProperty EventsProperty =
             EventsPropertyKey.BindableProperty;
 
+        /// <summary>
+        /// Get EventsCollection instance.
+        /// </summary>
         public static EventsCollection? GetEvents(DependencyObject d) =>
             (EventsCollection?)d.GetValue(EventsProperty);
 #elif AVALONIA
+        /// <summary>
+        /// Declared Events attached property.
+        /// </summary>
         private static readonly AttachedProperty<EventsCollection?> EventsProperty =
             AvaloniaProperty.RegisterAttached<EventBinder, AvaloniaObject, EventsCollection?>(
                 "Events",
@@ -90,6 +119,9 @@ namespace Epoxy
                 false,
                 BindingMode.OneTime);
 
+        /// <summary>
+        /// The type initializer.
+        /// </summary>
         static EventBinder() =>
             EventsProperty.Changed.Subscribe(e =>
             {
@@ -106,6 +138,9 @@ namespace Epoxy
                 }
             });
 
+        /// <summary>
+        /// Get EventsCollection instance.
+        /// </summary>
         public static EventsCollection? GetEvents(DependencyObject d)
         {
             var collection = d.GetValue(EventsProperty);
@@ -118,11 +153,18 @@ namespace Epoxy
             return collection;
         }
 
+        /// <summary>
+        /// Set EventsCollection instance.
+        /// </summary>
+        /// <remarks>It's used internal only.
         // It's required for Avalonia XAML compiler.
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetEvents(DependencyObject d, EventsCollection? value) =>
             d.SetValue(EventsProperty, value ?? new EventsCollection());
 #else
+        /// <summary>
+        /// Declared Events attached property.
+        /// </summary>
         private static readonly DependencyProperty EventsProperty =
             DependencyProperty.RegisterAttached(
 #if UNO
@@ -147,6 +189,9 @@ namespace Epoxy
                     }
                 }));
 
+        /// <summary>
+        /// Get EventsCollection instance.
+        /// </summary>
         public static EventsCollection? GetEvents(DependencyObject d)
         {
             var collection = (EventsCollection?)d.GetValue(EventsProperty);
@@ -161,14 +206,27 @@ namespace Epoxy
 #endif
     }
 
+    /// <summary>
+    /// Event declaration holding collection class.
+    /// </summary>
+    /// <remarks>It will be implicitly used on the XAML code.
+    /// 
+    /// See EventBinder guide: https://github.com/kekyo/Epoxy#eventbinder</remarks>
     public sealed class EventsCollection :
         PlainObjectCollection<EventsCollection, Event>
     {
         private DependencyObject? associatedObject;
 
+        /// <summary>
+        /// The constructor.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public EventsCollection()
         { }
 
+        /// <summary>
+        /// Get bound parent element instance.
+        /// </summary>
         private DependencyObject? AssociatedObject
         {
             get
@@ -178,6 +236,10 @@ namespace Epoxy
             }
         }
 
+        /// <summary>
+        /// An event will be added.
+        /// </summary>
+        /// <param name="evt">Event instance</param>
         protected override void OnAdded(Event evt)
         {
             if (this.AssociatedObject != null)
@@ -186,6 +248,10 @@ namespace Epoxy
             }
         }
 
+        /// <summary>
+        /// An event will be removing.
+        /// </summary>
+        /// <param name="evt">Event instance</param>
         protected override void OnRemoving(Event evt)
         {
             if (evt.AssociatedObject != null)
@@ -194,6 +260,10 @@ namespace Epoxy
             }
         }
 
+        /// <summary>
+        /// Attach a parent element.
+        /// </summary>
+        /// <param name="d">Parent element instance</param>
         internal void Attach(DependencyObject d)
         {
 #if XAMARIN_FORMS
@@ -207,7 +277,7 @@ namespace Epoxy
                     throw new InvalidOperationException();
                 }
 
-                if (!InternalXamlDesigner.IsDesignTime)
+                if (!InternalDesigner.IsDesignTime)
                 {
                     WritePreamble();
                     this.associatedObject = d;
@@ -221,6 +291,9 @@ namespace Epoxy
             }
         }
 
+        /// <summary>
+        /// Detach already attached parent element.
+        /// </summary>
         internal void Detach()
         {
             foreach (var evt in this)
@@ -250,6 +323,21 @@ namespace Epoxy
 #endif
     }
 
+    /// <summary>
+    /// EventBinder's event declaration class.
+    /// </summary>
+    /// <remarks>See EventBinder guide: https://github.com/kekyo/Epoxy#eventbinder</remarks>
+    /// <example>
+    /// <code>
+    /// &lt;Window xmlns:epoxy="https://github.com/kekyo/Epoxy"&gt;
+    ///    &lt;!-- ... --&gt;
+    ///    &lt;epoxy:EventBinder.Events&gt;
+    ///         &lt;!-- Binding the Window.Loaded event to the ViewModel's Ready property --&gt;
+    ///         &lt;epoxy:Event Name = "Loaded" Command="{Binding Ready}" /&gt;
+    ///    &lt;/epoxy:EventBinder.Events&gt;
+    /// &lt;/Window&gt;
+    /// </code>
+    /// </example>
 #if WINDOWS_UWP || UNO
     [Windows.UI.Xaml.Data.Bindable]
 #endif
@@ -268,6 +356,9 @@ namespace Epoxy
 #endif
     {
 #if XAMARIN_FORMS
+        /// <summary>
+        /// Binds target CLR event name bindable property declaration.
+        /// </summary>
         public static readonly BindableProperty NameProperty =
             BindableProperty.Create(
                 "Name",
@@ -278,6 +369,9 @@ namespace Epoxy
                 null,
                 (d, ov, nv) => ((Event)d).OnNamePropertyChanged(ov, nv));
 
+        /// <summary>
+        /// Binds ICommand expression bindable property declaration.
+        /// </summary>
         public static readonly BindableProperty CommandProperty =
             BindableProperty.Create(
                 "Command",
@@ -288,18 +382,30 @@ namespace Epoxy
                 null,
                 (d, _, nv) => ((Event)d).OnCommandPropertyChanged(nv));
 #elif AVALONIA
+        /// <summary>
+        /// Binds target CLR event name bindable property declaration.
+        /// </summary>
         public static readonly AvaloniaProperty<string> NameProperty =
             AvaloniaProperty.Register<Event, string>("Name");
 
+        /// <summary>
+        /// Binds ICommand expression bindable property declaration.
+        /// </summary>
         public static readonly AvaloniaProperty<ICommand> CommandProperty =
             AvaloniaProperty.Register<Event, ICommand>("Command");
 
+        /// <summary>
+        /// The type initializer.
+        /// </summary>
         static Event()
         {
             NameProperty.Changed.Subscribe(e => ((Event)e.Sender).OnNamePropertyChanged(e.OldValue, e.NewValue));
             CommandProperty.Changed.Subscribe(e => ((Event)e.Sender).OnCommandPropertyChanged(e.NewValue));
         }
 #else
+        /// <summary>
+        /// Binds target CLR event name bindable property declaration.
+        /// </summary>
         public static readonly DependencyProperty NameProperty =
             DependencyProperty.Register(
                 "Name",
@@ -307,6 +413,9 @@ namespace Epoxy
                 typeof(Event),
                 new PropertyMetadata(null, (d, e) => ((Event)d).OnNamePropertyChanged(e.OldValue, e.NewValue)));
 
+        /// <summary>
+        /// Binds ICommand expression bindable property declaration.
+        /// </summary>
         public static readonly DependencyProperty CommandProperty =
             DependencyProperty.Register(
                 "Command",
@@ -315,22 +424,38 @@ namespace Epoxy
                 new PropertyMetadata(null, (d, e) => ((Event)d).OnCommandPropertyChanged(e.NewValue)));
 #endif
 
+        /// <summary>
+        /// The constructor.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public Event()
         { }
 
 #if WINDOWS_WPF
+        /// <summary>
+        /// Create this class instance.
+        /// </summary>
+        /// <returns>Event instance</returns>
+        /// <remarks>It will be used internal only.</remarks>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override Freezable CreateInstanceCore() =>
             new Event();
 #endif
 
         internal DependencyObject? AssociatedObject { get; private set; }
 
+        /// <summary>
+        /// Binds target CLR event name.
+        /// </summary>
         public string? Name
         {
             get => (string?)this.GetValue(NameProperty);
             set => this.SetValue(NameProperty, value);
         }
 
+        /// <summary>
+        /// Binds ICommand expression.
+        /// </summary>
         public ICommand? Command
         {
             get => (ICommand?)this.GetValue(CommandProperty);
@@ -382,6 +507,10 @@ namespace Epoxy
             this.AddHandler(this.AssociatedObject, this.Name, newCommand);
         }
 
+        /// <summary>
+        /// Attach a parent element.
+        /// </summary>
+        /// <param name="associatedObject">Parent element instance</param>
         internal void Attach(DependencyObject? associatedObject)
         {
             this.RemoveHandler(this.AssociatedObject, this.Name);
@@ -390,6 +519,9 @@ namespace Epoxy
             this.AssociatedObject = associatedObject;
         }
 
+        /// <summary>
+        /// Detach already attached parent element.
+        /// </summary>
         internal void Detach()
         {
             this.RemoveHandler(this.AssociatedObject, this.Name);

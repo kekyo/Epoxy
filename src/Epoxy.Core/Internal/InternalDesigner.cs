@@ -46,7 +46,7 @@ using Xamarin.Forms;
 
 namespace Epoxy.Internal
 {
-    internal static class InternalXamlDesigner
+    internal static class InternalDesigner
     {
 #if WINDOWS_WPF
         private static readonly ThreadLocal<bool?> designMode = new ThreadLocal<bool?>();

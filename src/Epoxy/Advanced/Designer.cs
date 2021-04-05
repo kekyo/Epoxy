@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
@@ -19,24 +19,19 @@
 
 #nullable enable
 
-using System;
-
-using Epoxy.Advanced;
 using Epoxy.Internal;
 
-namespace Epoxy.Synchronized
+namespace Epoxy.Advanced
 {
-    public static class GlobalServiceAccessorExtension
+    /// <summary>
+    /// Design time utility class.
+    /// </summary>
+    public static class Designer
     {
-        public static void ExecuteSync<TService>(
-            this GlobalServiceAccessor accessor,
-            Action<TService> action,
-            bool ignoreNotPresent = false) =>
-            InternalGlobalService.ExecuteSync(action, ignoreNotPresent);
-
-        public static TResult ExecuteSync<TService, TResult>(
-            this GlobalServiceAccessor accessor,
-            Func<TService, TResult> action) =>
-            InternalGlobalService.ExecuteSync(action);
+        /// <summary>
+        /// Get current design time execution mode.
+        /// </summary>
+        public static bool IsDesignTime =>
+            InternalDesigner.IsDesignTime;
     }
 }

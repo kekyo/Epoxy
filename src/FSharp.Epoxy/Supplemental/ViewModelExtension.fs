@@ -28,16 +28,59 @@ open System.Threading.Tasks
 open Epoxy
 open Epoxy.Internal
 
+/// <summary>
+/// The ViewModel functions.
+/// </summary>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public ViewModelExtension =
+
     type public ViewModel with
+
+        /// <summary>
+        /// Set value directly.
+        /// </summary>
+        /// <typeparam name="'TValue">Value type</typeparam>
+        /// <param name="newValue">Value</param>
+        /// <param name="propertyChanged">Callback delegate when value has changed</param>
+        /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
         member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
             self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskUnitAsValueTaskUnit |> asFunc1, propertyName)
+            |> valueTaskUnitAsAsyncResult
+
+        /// <summary>
+        /// Set value directly.
+        /// </summary>
+        /// <typeparam name="'TValue">Value type</typeparam>
+        /// <param name="newValue">Value</param>
+        /// <param name="propertyChanged">Callback delegate when value has changed</param>
+        /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
         member self.setValueAsync (newValue: 'TValue, propertyChanged: 'TValue -> Task<unit>, [<Optional; CallerMemberName; DefaultParameterValue("")>] propertyName) =
             self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskUnitAsValueTaskUnit |> asFunc1, propertyName)
+            |> valueTaskUnitAsAsyncResult
 
+        /// <summary>
+        /// Set value directly.
+        /// </summary>
+        /// <typeparam name="'TValue">Value type</typeparam>
+        /// <param name="newValue">Value</param>
+        /// <param name="propertyChanged">Callback delegate when value has changed</param>
+        /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
         member self.setValueAsync (newValue, propertyChanged: 'TValue -> ValueTask, [<Optional; CallerMemberName>] propertyName) =
             self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> valueTaskVoidAsValueTaskUnit |> asFunc1, propertyName)
+            |> valueTaskUnitAsAsyncResult
+
+        /// <summary>
+        /// Set value directly.
+        /// </summary>
+        /// <typeparam name="'TValue">Value type</typeparam>
+        /// <param name="newValue">Value</param>
+        /// <param name="propertyChanged">Callback delegate when value has changed</param>
+        /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
         member self.setValueAsync (newValue, propertyChanged: 'TValue -> Task, [<Optional; CallerMemberName>] propertyName) =
             self.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> taskVoidAsValueTaskUnit |> asFunc1, propertyName)
+            |> valueTaskUnitAsAsyncResult
