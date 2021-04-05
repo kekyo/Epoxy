@@ -38,7 +38,7 @@ namespace EpoxyHello.Wpf.ViewModels
         public MainWindowViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
-            this.Indicators = new ObservableCollection<UIElement>();
+            this.IndicatorPile = ChildrenPileFactory.Create<WaitingBlock>();
 
             // A handler for window loaded
             this.Ready = Command.Factory.CreateSync<RoutedEventArgs>(e =>
@@ -49,49 +49,58 @@ namespace EpoxyHello.Wpf.ViewModels
             // A handler for fetch button
             this.Fetch = CommandFactory.Create(async () =>
             {
+                // Disable button
                 this.IsEnabled = false;
 
-                var waitingBlock = new WaitingBlock();
-                this.Indicators.Add(waitingBlock);
-
-                try
+                // Temporary rent Grid children accessor
+                await this.IndicatorPile.ManipulateAsync(async children =>
                 {
-                    // Uses Reddit API
-                    var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+                    // Show WaitingBlock control
+                    var waitingBlock = new WaitingBlock();
+                    children.Add(waitingBlock);
 
-                    this.Items.Clear();
-
-                    static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
+                    try
                     {
-                        try
+                        // Uses Reddit API
+                        var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+
+                        this.Items.Clear();
+
+                        static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
                         {
-                            var bitmap = new WriteableBitmap(
-                                BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
-                            bitmap.Freeze();
-                            return bitmap;
+                            try
+                            {
+                                var bitmap = new WriteableBitmap(
+                                    BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
+                                bitmap.Freeze();
+                                return bitmap;
+                            }
+                            // Some images will cause decoding error by WPF's BitmapFrame, so ignoring it.
+                            catch (FileFormatException)
+                            {
+                                return null;
+                            }
                         }
-                        // Some images will cause decoding error by WPF's BitmapFrame, so ignoring it.
-                        catch (FileFormatException)
+
+                        foreach (var reddit in reddits)
                         {
-                            return null;
+                            this.Items.Add(new ItemViewModel
+                            {
+                                Title = reddit.Title,
+                                Score = reddit.Score,
+                                Image = await FetchImageAsync(reddit.Url)
+                            });
                         }
                     }
-
-                    foreach (var reddit in reddits)
+                    finally
                     {
-                        this.Items.Add(new ItemViewModel
-                        {
-                            Title = reddit.Title,
-                            Score = reddit.Score,
-                            Image = await FetchImageAsync(reddit.Url)
-                        });
+                        // Hide WaitingBlock control
+                        children.Remove(waitingBlock);
+
+                        // Re-enable button
+                        this.IsEnabled = true;
                     }
-                }
-                finally
-                {
-                    this.Indicators.Remove(waitingBlock);
-                    IsEnabled = true;
-                }
+                });
             });
         }
 
@@ -119,9 +128,9 @@ namespace EpoxyHello.Wpf.ViewModels
             private set => this.SetValue(value);
         }
 
-        public ObservableCollection<UIElement> Indicators
+        public ChildrenPile<WaitingBlock>? IndicatorPile
         {
-            get => this.GetValue<ObservableCollection<UIElement>>();
+            get => this.GetValue<ChildrenPile<WaitingBlock>>();
             private set => this.SetValue(value);
         }
     }

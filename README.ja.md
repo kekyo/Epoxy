@@ -703,6 +703,11 @@ Apache-v2
 
 ## History
 
+* 0.17.0:
+  * ChildrenAnchor/ChildrenPileの追加。ChildrenBinderは廃止予定。
+  * XMLコメントを拡充。
+  * 細かなインターフェイスの整理と修正。
+  * 正式リリース候補 :)
 * 0.16.0:
   * ViewModelインジェクタに、IgnoreInject属性の追加と、カスタムSetValueハンドラのサポートを追加。
   * .NET SDK3.1又は5.0のみをインストールした環境でViewModelインジェクタ実行時にエラーが発生する問題を修正。

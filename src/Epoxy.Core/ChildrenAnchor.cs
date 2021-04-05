@@ -80,9 +80,9 @@ namespace Epoxy
         { }
 
 #if XAMARIN_FORMS
-        private static readonly BindableProperty ChildrenPileProperty =
+        private static readonly BindableProperty PileProperty =
             BindableProperty.CreateAttached(
-                "ChildrenPile",
+                "Pile",
                 typeof(ChildrenPile),
                 typeof(ChildrenAnchor),
                 null,
@@ -100,14 +100,14 @@ namespace Epoxy
                     }
                 });
 #elif AVALONIA
-        private static readonly AvaloniaProperty<ChildrenPile?> ChildrenPileProperty =
-            AvaloniaProperty.RegisterAttached<ChildrenAnchor, UIElement, ChildrenPile?>("ChildrenPile");
+        private static readonly AvaloniaProperty<ChildrenPile?> PileProperty =
+            AvaloniaProperty.RegisterAttached<ChildrenAnchor, UIElement, ChildrenPile?>("Pile");
 
         /// <summary>
         /// The type initializer.
         /// </summary>
         static ChildrenAnchor() =>
-            ChildrenPileProperty.Changed.Subscribe(e =>
+            PileProperty.Changed.Subscribe(e =>
             {
                 if (e.OldValue.GetValueOrDefault() is { } op)
                 {
@@ -119,9 +119,9 @@ namespace Epoxy
                 }
             });
 #else
-        private static readonly DependencyProperty ChildrenPileProperty =
+        private static readonly DependencyProperty PileProperty =
             DependencyProperty.RegisterAttached(
-                "ChildrenPile",
+                "Pile",
                 typeof(ChildrenPile),
                 typeof(ChildrenAnchor),
                 new PropertyMetadata(null, (d, e) =>
@@ -140,20 +140,20 @@ namespace Epoxy
         /// <summary>
         /// Get ChildrenPile from this ChildrenAnchor.
         /// </summary>
-        public static ChildrenPile? GetChildrenPile(DependencyObject d) =>
-            (ChildrenPile?)d.GetValue(ChildrenPileProperty);
+        public static ChildrenPile? GetPile(DependencyObject d) =>
+            (ChildrenPile?)d.GetValue(PileProperty);
 
         /// <summary>
         /// Set ChildrenPile from this ChildrenAnchor.
         /// </summary>
-        public static void SetChildrenPile(DependencyObject d, ChildrenPile? pile) =>
-            d.SetValue(ChildrenPileProperty, pile);
+        public static void SetPile(DependencyObject d, ChildrenPile? pile) =>
+            d.SetValue(PileProperty, pile);
 
         /// <summary>
         /// Clear ChildrenPile from this ChildrenAnchor.
         /// </summary>
-        public static void ClearChildrenPile(DependencyObject d) =>
-            d.ClearValue(ChildrenPileProperty);
+        public static void ClearPile(DependencyObject d) =>
+            d.ClearValue(PileProperty);
     }
 
     /// <summary>
@@ -236,7 +236,7 @@ namespace Epoxy
         }
 
         /// <summary>
-        /// Manipulate with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <param name="action">Continuation delegate</param>
         /// <param name="canIgnore">Ignore if not present mooring Anchor</param>
@@ -259,7 +259,7 @@ namespace Epoxy
         }
 
         /// <summary>
-        /// Manipulate with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <typeparam name="TResult">Result type</typeparam>
         /// <param name="action">Continuation delegate</param>

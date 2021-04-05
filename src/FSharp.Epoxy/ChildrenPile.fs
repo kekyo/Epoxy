@@ -73,7 +73,7 @@ module public ChildrenPileExtension =
 
     type public ChildrenPile<'TUIElement when 'TUIElement :> UIElement> with
         /// <summary>
-        /// Manipulate with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <typeparam name="'TUIElement">Target child control type</typeparam>
         /// <param name="pile">ChildrenPile instance</param>
@@ -84,7 +84,7 @@ module public ChildrenPileExtension =
             self.InternalManipulateAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
 
         /// <summary>
-        /// Manipulate with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <typeparam name="'TUIElement">Target child control type</typeparam>
         /// <typeparam name="'TResult">Action result type</typeparam>

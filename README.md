@@ -701,6 +701,11 @@ Apache-v2
 
 ## History
 
+* 0.17.0:
+  * Added ChildrenAnchor and ChildrenPile. ChildrenBinder will be discontinued.
+  * Expanded XML comments.
+  * Minor interface cleanups and fixes.
+  * Will be close formal release :)
 * 0.16.0:
   * Added IgnoreInject attribute and support for custom SetValue handlers to ViewModel injectors.
   * Fixed failure injecting on only installed sdk3.1 or 5.0.

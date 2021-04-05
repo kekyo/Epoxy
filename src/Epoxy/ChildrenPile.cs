@@ -82,7 +82,7 @@ namespace Epoxy
     public static class ChildrenPileExtension
     {
         /// <summary>
-        /// Manipulate with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <typeparam name="TUIElement">Target child control type</typeparam>
         /// <param name="pile">ChildrenPile instance</param>
@@ -95,7 +95,7 @@ namespace Epoxy
             pile.InternalManipulateAsync(c => action(c).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
 
         /// <summary>
-        /// Manipulate with anchoring element.
+        /// Manipulate anchoring element.
         /// </summary>
         /// <typeparam name="TUIElement">Target child control type</typeparam>
         /// <typeparam name="TResult">Action result type</typeparam>
