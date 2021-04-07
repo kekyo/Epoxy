@@ -4,7 +4,7 @@
 
 [![Japanese language](Images/Japanese.256.png)](https://github.com/kekyo/Epoxy/blob/main/README.ja.md)
 
-[![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#wip)
 
 ## NuGet for All platform (C#)
 
@@ -378,40 +378,6 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 * [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 * [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
-
-### ChildrenAnchor/ChildrenPile
-
-`ChildrenAnchor` and` ChildrenPile` allow you to directly manipulate the child elements of
-the container control in same way as Anchor/Pile.
-With these, you can manipulate the child elements of the container control as a collection.
-
-In WPF, container controls like `ItemsControl` usually manipulate by binding `ItemsSource` property to a collection,
-You can manipulate any container control that does not have such properties.
-
-For example, to manipulate the child elements of the `Grid` control, write:
-
-```xml
-<!-- Allow child elements of Grid to be operated directly using ChildrenAnchor -->
-<Grid epoxy:ChildrenAnchor.Pile="{Binding IndicatorPile}" />
-```
-
-```csharp
-// Place the ChildrenPile in the ViewModel.
-// (In this example, place a control called 'Indicator' in the child element)
-this.IndicatorPile = ChildrenPile.Create<Indicator>();
-
-// If you want to work with Grid's child elements,
-// rent a reference through ChildrenPile:
-await this.IndicatorPile.ManipulateAsync(async children =>
-{
-    // Get information asynchronously from the model.
-    await foreach (var result in ServerAccessor.GetResultsAsync())
-    {
-        // You can directly manipulate the child elements of Grid (children: IList<Indicator>)
-        children.Add(new Indicator { ... });
-    }
-});
-```
 
 ### ValueConverter
 

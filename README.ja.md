@@ -4,7 +4,7 @@
 
 [English language is here](https://github.com/kekyo/Epoxy)
 
-[![Project Status: WIP – Initial development is in progress, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#wip)
 
 ## NuGetパッケージ (C#)
 
@@ -393,38 +393,6 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 * [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 * [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
-
-### ChildrenAnchor/ChildrenPile
-
-Anchor/Pileの操作とほぼ同じ手法で、コンテナコントロールの子要素を直接操作可能にするのが、`ChildrenAnchor`と`ChildrenPile`です。
-これらを使用すると、コンテナコントロールの子要素群を、コレクションとして操作出来ます。
-
-WPFでは通常、`ItemsControl`のようなコンテナコントロールは、`ItemsSource`プロパティをコレクションにバインディングして操作しますが、
-このようなプロパティが用意されていない、任意のコンテナコントロールを操作する事が出来ます。
-
-例えば、`Grid`コントロールの子要素を操作するには、以下のように記述します:
-
-```xml
-<!-- Gridの子要素群を、ChildrenAnchorを使って直接操作出来るようにする -->
-<Grid epoxy:ChildrenAnchor.Pile="{Binding IndicatorPile}" />
-```
-
-```csharp
-// ChildrenPileをViewModelに配置します。
-// （この例ではIndicatorというコントロールを子要素に配置します）
-this.IndicatorPile = ChildrenPile.Create<Indicator>();
-
-// Gridの子要素を操作したくなったら、ChildrenPileを通じて参照をレンタルします:
-await this.IndicatorPile.ManipulateAsync(async children =>
-{
-    // モデルから情報を非同期で取得します
-    await foreach (var result in ServerAccessor.GetResultsAsync())
-    {
-        // Gridの子要素を直接操作できます（children: IList<Indicator>）
-        children.Add(new Indicator { ... });
-    }
-});
-```
 
 ### ValueConverter
 
