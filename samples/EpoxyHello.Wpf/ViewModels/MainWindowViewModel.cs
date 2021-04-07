@@ -25,6 +25,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -38,7 +39,7 @@ namespace EpoxyHello.Wpf.ViewModels
         public MainWindowViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
-            this.IndicatorPile = ChildrenPileFactory.Create<WaitingBlock>();
+            this.IndicatorPile = PileFactory.Create<Panel>();
 
             // A handler for window loaded
             this.Ready = Command.Factory.CreateSync<RoutedEventArgs>(e =>
@@ -53,11 +54,11 @@ namespace EpoxyHello.Wpf.ViewModels
                 this.IsEnabled = false;
 
                 // Temporary rent Grid children accessor
-                await this.IndicatorPile.ManipulateAsync(async children =>
+                await this.IndicatorPile.ExecuteAsync(async indicator =>
                 {
                     // Show WaitingBlock control
                     var waitingBlock = new WaitingBlock();
-                    children.Add(waitingBlock);
+                    indicator.Children.Add(waitingBlock);
 
                     try
                     {
@@ -95,7 +96,7 @@ namespace EpoxyHello.Wpf.ViewModels
                     finally
                     {
                         // Hide WaitingBlock control
-                        children.Remove(waitingBlock);
+                        indicator.Children.Remove(waitingBlock);
 
                         // Re-enable button
                         this.IsEnabled = true;
@@ -128,9 +129,9 @@ namespace EpoxyHello.Wpf.ViewModels
             private set => this.SetValue(value);
         }
 
-        public ChildrenPile<WaitingBlock>? IndicatorPile
+        public Pile<Panel>? IndicatorPile
         {
-            get => this.GetValue<ChildrenPile<WaitingBlock>>();
+            get => this.GetValue<Pile<Panel>>();
             private set => this.SetValue(value);
         }
     }
