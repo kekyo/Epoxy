@@ -728,6 +728,8 @@ Apache-v2
 
 ## History
 
+* 1.0 正式リリース 🎉
+  * ChildrenAnchor/ChildrenPile/ChildrenBinderは廃止しました。 [See #5](https://github.com/kekyo/Epoxy/issues/5)
 * 0.17.0:
   * ChildrenAnchor/ChildrenPileの追加。ChildrenBinderは廃止予定。
   * XMLコメントを拡充。
