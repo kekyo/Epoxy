@@ -237,6 +237,19 @@ it can isolate task contexts with `task.ConfigureAwait(false)` annotation to imp
 Since each function is independent, it can be used in any combination.
 (For example, it is NOT necessary to inherit from `ViewModel` to use it.)
 
+|Function|Summary|
+|:---|:---|
+|ViewModel Injector|This function allows you to automatically implement the PropertyChanged event and other events required for ViewModel at build time. Simply apply the attributes to the target class, and you can skip the complicated code implementation.|
+|ViewModel base class|The ViewModel Injector provides an orthodox base class for the ViewModel's PropertyChanged events, etc. It can be used in scenarios where the ViewModel Injector is not suitable.|
+|EventBinder|An attached property that allows you to bind CLR events of any XAML control as Command.|
+|Anchor/Pile|Enables any XAML control to be temporarily and safely referenced from the ViewModel,eliminating all code binding and improving implementation visibility when using MVVM.|
+|ValueConverter|Provides a base class for the XAML value converter. It provides a base class for XAML value converters, and can be implemented with type constraints in place.|
+|UIThread|It can also be used as a continuation of asynchronous operations, so threads can be handled seamlessly in async-await and F# asynchronous workflows.|
+|GlobalService|It is a compact infrastructure for dependency injection. It is very fast and simple, suitable for many scenarios, and can be implemented in a uniform way across platforms.|
+|Designer|Supports design-time editing.|
+
+---
+
 ### ViewModel injector and ViewModel base class
 
 When the `ViewModel` attribute is applied,` PropertyChanging` and `PropertyChanged` are automatically implemented at compile time. Also, the auto-implemented property setter handles these events so that they occur automatically. This function called `ViewModel injector.`
@@ -270,6 +283,8 @@ For example, when a property is changed upon a button click in `ViewModel`, the 
 
 In addition, `GetValue` defines the default value,
 and `SetValue` defines an overload that can perform additional operations when the value is changed.
+
+---
 
 ### EventBinder
 
@@ -340,6 +355,8 @@ This is because the UWP runtime environment has strict security checks, and ther
 * [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
 * [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
+---
+
 ### Anchor/Pile
 
 `Anchor`/`Pile` pair is a loose connection between `UIElement` (Xamarin Forms `Element`) and `ViewModel`s.
@@ -378,6 +395,8 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 * [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 * [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+
+---
 
 ### ValueConverter
 
@@ -430,6 +449,8 @@ Try not to do asynchronous processing in the XAML converter!
 
 * [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
+---
+
 ### UIThread
 
 Some different platform contains different UI thread manipulation.
@@ -464,6 +485,8 @@ you may not get the correct results.
 UWP has a different UI thread assigned to each window that holds a view,
 and if you use it while constructing an instance,
 it will not be able to determine the view correctly.
+
+---
 
 ### GlobalService (Advanced topic)
 
@@ -537,6 +560,8 @@ Rather, it is preferable to use it only when necessary, each time.
 NOTE: As the name "Global" implies, `GlobalService` behaves like a kind of global variable.
 Try not to use `GlobalService` in places where it is not really needed.
 `Epoxy.Advanced` namespace (using declarations are required) to make it a bit more distinguishable.
+
+---
 
 ### Designer (advanced topic)
 

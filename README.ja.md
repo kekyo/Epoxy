@@ -249,6 +249,19 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 それぞれの機能は独立しているため、自由に組み合わせて使用出来ます
 （例えば、`ViewModel`を継承していないと使えない、と言うような事はありません）。
 
+|機能名|概要|
+|:---|:---|
+|ViewModelインジェクタ|ViewModelに必要なPropertyChangedイベントなどを、ビルド時に自動的に実装出来る機能です。対象のクラスに属性を適用するだけで、煩雑なコードの実装を省略出来ます。|
+|ViewModel基底クラス|ViewModelに必要なPropertyChangedイベントなどを、オーソドックスな基底クラスとして提供します。ViewModelインジェクタが適さないシナリオで、使用することが出来ます。|
+|EventBinder|任意のXAMLコントロールのCLRイベントを、Commandとしてバインディング可能にする添付プロパティです。Commandプロパティが提供されていない任意のイベントを、安全にバインディング出来ます。|
+|Anchor/Pile|任意のXAMLコントロールを、一時的かつ安全にViewModelから参照出来るようにします。Anchor/Pileを使用すると、全てのコードビハインドを排除出来るため、MVVMを使用する場合の実装の見通しが良くなります。|
+|ValueConverter|XAMLの値コンバーターの基底クラスを提供します。事前に型判定が行われ、型制約がある状態で実装することが出来ます。|
+|UIThread|UIスレッドの扱いを、プラットフォーム間で統一出来ます。また、非同期操作の継続として扱えるため、async-awaitやF#の非同期ワークフローで、シームレスにスレッドを扱うことが出来ます。|
+|GlobalService|コンパクトな、依存注入のためのインフラです。非常に高速で単純なため、多くのシナリオに適し、プラットフォーム間で実装方法を統一出来ます。|
+|Designer|デザイン時編集をサポートします。|
+
+---
+
 ### ViewModelインジェクタとViewModel基底クラス
 
 `ViewModel`属性が適用されると、コンパイル時に自動的に`PropertyChanging`、`PropertyChanged`が実装されます。また、自動実装プロパティのsetterで、これらのイベントが自動的に発生するように処理されます。この機能を、`ViewModelインジェクタ`と呼びます。
@@ -282,6 +295,8 @@ private ValueTask OnTitleChangedAsync(string value)
 
 なお、`GetValue`には、デフォルト値の定義が、
 `SetValue`には、値変更時に追加操作を行うことが出来るオーバーロードが定義されています。
+
+---
 
 ### EventBinder
 
@@ -351,6 +366,8 @@ UWPの実行環境はセキュリティチェックが厳しいため、
 * [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
 * [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
+---
+
 ### Anchor/Pile
 
 `Anchor`/`Pile`は、XAMLと`ViewModel`をゆるく結合して、XAML側のコントロールの完全な操作を、一時的に可能にします。
@@ -393,6 +410,8 @@ await this.LogPile.ExecuteAsync(async textBox =>
 
 * [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 * [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+
+---
 
 ### ValueConverter
 
@@ -443,6 +462,8 @@ XAMLコンバーター内で非同期処理を行わないようにしましょ�
 
 * [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
+---
+
 ### UIThread
 
 UIスレッドの取り扱いは、異なるプラットフォームにおいても重要な点です。
@@ -473,6 +494,8 @@ this.Log = $"Read={read}";
 
 UWPは、ビューを保持するウインドウ毎に異なるUIスレッドが割り当てられていて、
 インスタンスを構築中に使用すると、ビューを判別できない事から、正しく判定できないためです。
+
+---
 
 ### GlobalService (高度なトピック)
 
@@ -542,6 +565,8 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 注意: "Global"の名の通り、`GlobalService`は、一種のグローバル変数のように振る舞います。
 本来必要のない場所で`GlobalService`を使わないようにして下さい。
 少しでも区別できるように、`GlobalService`は`Epoxy.Advanced`名前空間に配置されています（using宣言が必要です）。
+
+---
 
 ### Designer (高度なトピック)
 
