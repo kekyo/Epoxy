@@ -241,12 +241,20 @@ Since each function is independent, it can be used in any combination.
 |:---|:---|
 |ViewModel Injector|This function allows you to automatically implement the PropertyChanged event and other events required for ViewModel at build time. Simply apply the attributes to the target class, and you can skip the complicated code implementation.|
 |ViewModel base class|The ViewModel Injector provides an orthodox base class for the ViewModel's PropertyChanged events, etc. It can be used in scenarios where the ViewModel Injector is not suitable.|
-|EventBinder|An attached property that allows you to bind CLR events of any XAML control as Command.|
-|Anchor/Pile|Enables any XAML control to be temporarily and safely referenced from the ViewModel,eliminating all code binding and improving implementation visibility when using MVVM.|
+|CommandFactory|Enables arbitrary asynchronous delegates to be used as ICommand. You can safely implement asynchronous processing as an ICommand. |
+|EventBinder|An attached property that allows you to bind CLR events of any XAML control as ICommand.|
+|Anchor/Pile|Enables any XAML control to be temporarily and safely referenced from the ViewModel,eliminating all code binding and improving implementation visibility when using MVVM. The technique known as the Messenger pattern can also be integrated into the ViewModel with Anchor/Pile.|
 |ValueConverter|Provides a base class for the XAML value converter. It provides a base class for XAML value converters, and can be implemented with type constraints in place.|
 |UIThread|It can also be used as a continuation of asynchronous operations, so threads can be handled seamlessly in async-await and F# asynchronous workflows.|
 |GlobalService|It is a compact infrastructure for dependency injection. It is very fast and simple, suitable for many scenarios, and can be implemented in a uniform way across platforms.|
 |Designer|Supports design-time editing.|
+
+Although it is not described in detail in the following sections, Epoxy is designed with asynchronous processing in mind throughout its functions.
+
+* As a rule, method signatures use asynchronous (`ValueTask` return).
+* Potentially misused overloads are absent or located only in the `Epoxy.Synchronized` namespace.
+Synchronized namespace.
+* Overloads that use `Task` are separated into the `Epoxy.Supplemental` namespace. This is to reduce the possibility of accidentally using `Task` instead of `ValueTask`.
 
 ---
 
