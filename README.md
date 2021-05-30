@@ -292,6 +292,10 @@ For example, when a property is changed upon a button click in `ViewModel`, the 
 In addition, `GetValue` defines the default value,
 and `SetValue` defines an overload that can perform additional operations when the value is changed.
 
+If you don't use the ViewModel injector at entire in your project,
+you can disable it to stop parsing code automatically and speed up the build.
+Specify `False` for` EpoxyBuildEnable` of `PropertyGroup` of csproj.
+
 ---
 
 ### EventBinder

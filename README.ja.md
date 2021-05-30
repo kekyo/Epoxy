@@ -303,6 +303,10 @@ private ValueTask OnTitleChangedAsync(string value)
 なお、`GetValue`には、デフォルト値の定義が、
 `SetValue`には、値変更時に追加操作を行うことが出来るオーバーロードが定義されています。
 
+プロジェクト内で全くViewModelインジェクタを使用しない場合は、
+ViewModelインジェクタを無効化する事で、自動的なコードを解析を停止させ、ビルドを高速化出来ます。
+csprojの`PropertyGroup`の`EpoxyBuildEnable`に`False`を指定して下さい。
+
 ---
 
 ### EventBinder
