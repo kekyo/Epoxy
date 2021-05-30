@@ -96,7 +96,7 @@ namespace EpoxyHello.Uwp.ViewModels
             //    Pile is a last solution for complex UI manipulation.
             this.ButtonPile = PileFactory.Create<Button>();
             this.ButtonPileInvoker = Command.Factory.CreateSync(() =>
-                this.ButtonPile.ExecuteSync(
+                this.ButtonPile.RentSync(
                     // Rent temporary UIElement reference only inside of lambda expression.
                     button => button.Background = new SolidColorBrush(Color.FromArgb(0, 255, 0, 0))));
 

@@ -59,8 +59,71 @@ module public PileExtension =
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
+        member self.rentAsync (action: 'TUIElement -> ValueTask<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalRentAsync(action >> valueTaskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
+        member self.rentAsync (action: 'TUIElement -> Task<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalRentAsync(action >> taskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
+        member self.rentAsync (action: 'TUIElement -> ValueTask<'TResult>) =
+            self.InternalRentAsync<'TResult>(action |> asFunc1) |> valueTaskAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
+        member self.rentAsync (action: 'TUIElement -> Task<'TResult>) =
+            self.InternalRentAsync<'TResult>(action >> taskAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
+        member self.rentAsync (action: 'TUIElement -> ValueTask, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalRentAsync(action >> valueTaskVoidAsValueTaskUnit |> asFunc1, canIgnore)
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
+        member self.rentAsync (action: 'TUIElement -> Task, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalRentAsync(action >> taskVoidAsValueTaskUnit |> asFunc1, canIgnore)
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Asynchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async instance</returns>
+        [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> ValueTask<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> valueTaskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+            self.InternalRentAsync(action >> valueTaskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -69,8 +132,9 @@ module public PileExtension =
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
+        [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> Task<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> taskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+            self.InternalRentAsync(action >> taskUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -80,8 +144,9 @@ module public PileExtension =
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
+        [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> ValueTask<'TResult>) =
-            self.InternalExecuteAsync<'TResult>(action |> asFunc1) |> valueTaskAsAsyncResult
+            self.InternalRentAsync<'TResult>(action |> asFunc1) |> valueTaskAsAsyncResult
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -91,8 +156,9 @@ module public PileExtension =
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
+        [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> Task<'TResult>) =
-            self.InternalExecuteAsync<'TResult>(action >> taskAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
+            self.InternalRentAsync<'TResult>(action >> taskAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -101,8 +167,9 @@ module public PileExtension =
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
+        [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> ValueTask, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> valueTaskVoidAsValueTaskUnit |> asFunc1, canIgnore)
+            self.InternalRentAsync(action >> valueTaskVoidAsValueTaskUnit |> asFunc1, canIgnore)
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -111,5 +178,6 @@ module public PileExtension =
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
+        [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> Task, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> taskVoidAsValueTaskUnit |> asFunc1, canIgnore)
+            self.InternalRentAsync(action >> taskVoidAsValueTaskUnit |> asFunc1, canIgnore)

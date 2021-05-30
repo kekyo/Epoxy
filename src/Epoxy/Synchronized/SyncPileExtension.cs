@@ -68,11 +68,11 @@ namespace Epoxy.Synchronized
         /// <param name="action">Synchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        public static void ExecuteSync<TUIElement>(
+        public static void RentSync<TUIElement>(
             this Pile<TUIElement> pile,
             Action<TUIElement> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            pile.InternalExecuteSync(action, canIgnore);
+            pile.InternalRentSync(action, canIgnore);
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -83,28 +83,59 @@ namespace Epoxy.Synchronized
         /// <param name="action">Synchronous continuation delegate</param>
         /// <returns>Result value</returns>
         /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        public static TResult RentSync<TUIElement, TResult>(
+            this Pile<TUIElement> pile,
+            Func<TUIElement, TResult> action)
+            where TUIElement : UIElement =>
+            pile.InternalRentSync(action);
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">UI element type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        [Obsolete("Use RentSync instead.")]
+        public static void ExecuteSync<TUIElement>(
+            this Pile<TUIElement> pile,
+            Action<TUIElement> action, bool canIgnore = false)
+            where TUIElement : UIElement =>
+            pile.InternalRentSync(action, canIgnore);
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="TUIElement">UI element type</typeparam>
+        /// <typeparam name="TResult">Result type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <returns>Result value</returns>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        [Obsolete("Use RentSync instead.")]
         public static TResult ExecuteSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
             Func<TUIElement, TResult> action)
             where TUIElement : UIElement =>
-            pile.InternalExecuteSync(action);
+            pile.InternalRentSync(action);
 
         #region Dodge mistake choicing asynchronously overloads
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use ExecuteAsync instead.", true)]
+        [Obsolete("Use RentAsync instead.", true)]
         public static void ExecuteSync<TUIElement>(
             this Pile<TUIElement> pile,
             Func<TUIElement, ValueTask> action, bool canIgnore = false)
             where TUIElement : UIElement =>
-            throw new InvalidOperationException("Use ExecuteAsync instead.");
+            throw new InvalidOperationException("Use RentAsync instead.");
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use ExecuteAsync instead.", true)]
+        [Obsolete("Use RentAsync instead.", true)]
         public static TResult ExecuteSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
             Func<TUIElement, ValueTask<TResult>> action)
             where TUIElement : UIElement =>
-            throw new InvalidOperationException("Use ExecuteAsync instead.");
+            throw new InvalidOperationException("Use RentAsync instead.");
         #endregion
     }
 }

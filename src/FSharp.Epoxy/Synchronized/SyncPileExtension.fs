@@ -54,6 +54,7 @@ open System.Runtime.InteropServices
 module public SyncPileExtension =
 
     type public Pile<'TUIElement when 'TUIElement :> UIElement> with
+    
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
         /// </summary>
@@ -61,8 +62,8 @@ module public SyncPileExtension =
         /// <param name="action">Synchronous continuation delegate</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        member pile.executeSync(action: 'TUIElement -> unit, [<Optional; DefaultParameterValue(false)>] canIgnore) =
-            pile.InternalExecuteSync(action |> asAction1, canIgnore)
+        member pile.rentSync(action: 'TUIElement -> unit, [<Optional; DefaultParameterValue(false)>] canIgnore) =
+            pile.InternalRentSync(action |> asAction1, canIgnore)
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -72,29 +73,75 @@ module public SyncPileExtension =
         /// <param name="action">Synchronous continuation delegate</param>
         /// <returns>Result value</returns>
         /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        member pile.rentSync(action: 'TUIElement -> 'TResult) =
+            pile.InternalRentSync(action |> asFunc1)
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        [<Obsolete("Use rentSync instead.")>]
+        member pile.executeSync(action: 'TUIElement -> unit, [<Optional; DefaultParameterValue(false)>] canIgnore) =
+            pile.InternalRentSync(action |> asAction1, canIgnore)
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">UI element type</typeparam>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Synchronous continuation delegate</param>
+        /// <returns>Result value</returns>
+        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+        [<Obsolete("Use rentSync instead.")>]
         member pile.executeSync(action: 'TUIElement -> 'TResult) =
-            pile.InternalExecuteSync(action |> asFunc1)
+            pile.InternalRentSync(action |> asFunc1)
 
         // Dodge mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use executeAsync instead.", true)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
+        member __.rentSync(action: 'TUIElement -> Async<'TResult>) =
+            raise (InvalidOperationException("Use rentAsync instead."))
+
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
+        member __.rentSync(action: 'TUIElement -> Task, [<Optional; DefaultParameterValue(false)>] canIgnore) =
+            raise (InvalidOperationException("Use rentAsync instead."))
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
+        member __.rentSync(action: 'TUIElement -> Task<'TResult>) =
+            raise (InvalidOperationException("Use rentAsync instead."))
+
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
+        member __.rentSync(action: 'TUIElement -> ValueTask, [<Optional; DefaultParameterValue(false)>] canIgnore) =
+            raise (InvalidOperationException("Use rentAsync instead."))
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
+        member __.rentSync(action: 'TUIElement -> ValueTask<'TResult>) =
+            raise (InvalidOperationException("Use rentAsync instead."))
+
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
         member __.executeSync(action: 'TUIElement -> Async<'TResult>) =
-            raise (InvalidOperationException("Use executeAsync instead."))
+            raise (InvalidOperationException("Use rentAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use executeAsync instead.", true)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
         member __.executeSync(action: 'TUIElement -> Task, [<Optional; DefaultParameterValue(false)>] canIgnore) =
-            raise (InvalidOperationException("Use executeAsync instead."))
+            raise (InvalidOperationException("Use rentAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use executeAsync instead.", true)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
         member __.executeSync(action: 'TUIElement -> Task<'TResult>) =
-            raise (InvalidOperationException("Use executeAsync instead."))
+            raise (InvalidOperationException("Use rentAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use executeAsync instead.", true)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
         member __.executeSync(action: 'TUIElement -> ValueTask, [<Optional; DefaultParameterValue(false)>] canIgnore) =
-            raise (InvalidOperationException("Use executeAsync instead."))
+            raise (InvalidOperationException("Use rentAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use executeAsync instead.", true)>]
+        [<Obsolete("Use rentAsync instead.", true)>]
         member __.executeSync(action: 'TUIElement -> ValueTask<'TResult>) =
-            raise (InvalidOperationException("Use executeAsync instead."))
+            raise (InvalidOperationException("Use rentAsync instead."))

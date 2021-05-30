@@ -73,6 +73,7 @@ type public PileFactory =
 module public PileExtension =
 
     type public Pile<'TUIElement when 'TUIElement :> UIElement> with
+
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
         /// </summary>
@@ -81,8 +82,8 @@ module public PileExtension =
         /// <param name="action">Predicts when rents control instance</param>
         /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async&lt;unit&gt; instance</returns>
-        member self.executeAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalExecuteAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+        member self.rentAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalRentAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
 
         /// <summary>
         /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
@@ -93,5 +94,30 @@ module public PileExtension =
         /// <param name="action">Predicts when rents control instance</param>
         /// <returns>Async result for action</returns>
         /// <remarks>This overload has to complete XAML data-binding.</remarks>
+        member self.rentAsync (action: 'TUIElement -> Async<'TResult>) =
+            self.InternalRentAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">Target control type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Predicts when rents control instance</param>
+        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+        /// <returns>Async&lt;unit&gt; instance</returns>
+        [<Obsolete("Use rentAsync instead.")>]
+        member self.executeAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
+            self.InternalRentAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
+
+        /// <summary>
+        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">Target control type</typeparam>
+        /// <typeparam name="'TResult">Action result type</typeparam>
+        /// <param name="pile">Pile instance</param>
+        /// <param name="action">Predicts when rents control instance</param>
+        /// <returns>Async result for action</returns>
+        /// <remarks>This overload has to complete XAML data-binding.</remarks>
+        [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> Async<'TResult>) =
-            self.InternalExecuteAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
+            self.InternalRentAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
