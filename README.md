@@ -396,7 +396,7 @@ this.LogPile = Pile.Create<TextBox>();
 // ...
 
 // Do rent by Pile when we have to manipulate the TextBox directly:
-await this.LogPile.ExecuteAsync(async textBox =>
+await this.LogPile.RentAsync(async textBox =>
 {
     // Fetch information from related model.
     var result = await ServerAccessor.GetResultTextAsync();

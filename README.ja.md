@@ -410,7 +410,7 @@ this.LogPile = Pile.Create<TextBox>();
 // ...
 
 // TextBoxを操作したくなったら、Pileを通じて参照をレンタルします:
-await this.LogPile.ExecuteAsync(async textBox =>
+await this.LogPile.RentAsync(async textBox =>
 {
     // モデルから情報を非同期で取得します
     var result = await ServerAccessor.GetResultTextAsync();
