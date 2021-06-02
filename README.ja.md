@@ -595,6 +595,10 @@ F#バージョンのパッケージを使う事で、以下のようなF#の流�
 使用するインスタンスは共有されます。C#/F#混在プロジェクトにおいても、保持するインスタンスは同一でありながら、
 C#/F#それぞれで好ましいAPIを使い分けることができます。
 
+F#でEpoxyを使う解説については、以前にconnpassで発表したスライドがあるので、参考にどうぞ:
+
+[F# Epoxy - Fun Fan F# (見えない場合はこちら)](https://speakerdeck.com/kekyo/f-number-epoxy)
+
 ### camel-caseの関数名
 
 FSharp.Epoxyのすべての関数は、camel-case化されています。例えば、`ViewModel`基底クラスの、`GetValue`/`SetValue`メソッドの代わりに、`getValue`/`setValue`関数を使います。

@@ -592,6 +592,10 @@ not you are editing at design time in a platform-independent way.
 By using the F# version of the package, you can write code that follows the F# style as follows.
 The instances used are shared, you can use the preferred API for both C# and F# while maintaining the same instances.
 
+For an explanation of using Epoxy in F#, please refer to the slides previously presented in a meetup event:
+
+[F# Epoxy - Fun Fan F# (If could not see)](https://speakerdeck.com/kekyo/f-number-epoxy-english-translated)
+
 ### Camel-case function names
 
 All functions in FSharp.Epoxy are camel-cased. For example, instead of the `GetValue`/`SetValue` methods in the `ViewModel` base class, use the `getValue`/`setValue` functions.
