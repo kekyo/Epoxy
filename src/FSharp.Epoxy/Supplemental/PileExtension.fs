@@ -78,7 +78,6 @@ module public PileExtension =
         /// <typeparam name="'TUIElement">UI element type</typeparam>
         /// <typeparam name="'TResult">Result type</typeparam>
         /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
         member self.rentAsync (action: 'TUIElement -> ValueTask<'TResult>) =
             self.InternalRentAsync<'TResult>(action |> asFunc1) |> valueTaskAsAsyncResult
@@ -89,7 +88,6 @@ module public PileExtension =
         /// <typeparam name="'TUIElement">UI element type</typeparam>
         /// <typeparam name="'TResult">Result type</typeparam>
         /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
         member self.rentAsync (action: 'TUIElement -> Task<'TResult>) =
             self.InternalRentAsync<'TResult>(action >> taskAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
@@ -142,7 +140,6 @@ module public PileExtension =
         /// <typeparam name="'TUIElement">UI element type</typeparam>
         /// <typeparam name="'TResult">Result type</typeparam>
         /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
         [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> ValueTask<'TResult>) =
@@ -154,7 +151,6 @@ module public PileExtension =
         /// <typeparam name="'TUIElement">UI element type</typeparam>
         /// <typeparam name="'TResult">Result type</typeparam>
         /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
         /// <returns>Async instance</returns>
         [<Obsolete("Use rentAsync instead.")>]
         member self.executeAsync (action: 'TUIElement -> Task<'TResult>) =
