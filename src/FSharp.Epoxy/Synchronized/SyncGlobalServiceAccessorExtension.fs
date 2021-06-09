@@ -42,7 +42,6 @@ module public SyncGlobalServiceAccessorExtension =
         /// Execute target interface type synchronously.
         /// </summary>
         /// <typeparam name="'TService">Target interface type</typeparam>
-        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
         /// <param name="action">Synchronous continuation delegate</param>
         /// <param name="ignoreNotPresent">Ignore if didn't presend target instance.</param>
         /// <remarks>Notice: They handle with synchronous handler.
@@ -55,7 +54,6 @@ module public SyncGlobalServiceAccessorExtension =
         /// </summary>
         /// <typeparam name="'TService">Target interface type</typeparam>
         /// <typeparam name="'TResult">Result type</typeparam>
-        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
         /// <param name="action">Synchronous continuation delegate</param>
         /// <returns>Result value</returns>
         /// <remarks>Notice: They handle with synchronous handler.

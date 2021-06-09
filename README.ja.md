@@ -37,10 +37,10 @@
 * 以下の環境をサポートしています:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
   * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/ja-jp/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper, [但し、このissueと同じ問題で実行時エラーが発生する可能性があります](https://github.com/microsoft/microsoft-ui-xaml/issues/4226))
-  * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
+  * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
 * F#は5.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
@@ -285,10 +285,12 @@ public string Title { get; set; }
 
 // プロパティが変更された場合に呼び出される。
 // シグネチャは強制されないので、以下の条件を守る必要がある:
-// * メソッド名は、"On<プロパティ名>ChangedAsync"
 // * 引数は、プロパティと同じ型 (引数名は任意)
 // * 戻り値はValueTaskでなければならない
-private ValueTask OnTitleChangedAsync(string value)
+// * PropertyChanged属性を適用する。引数にプロパティ名を指定する（メソッド名は自由）
+//   * PropertyChanged属性を使わない場合は、メソッド名を、"On<プロパティ名>ChangedAsync"とする
+[PropertyChanged(nameof(Title))]
+private ValueTask TitleChangedAsync(string value)
 {
   // 値が変更された場合の処理...
 }
@@ -302,6 +304,10 @@ private ValueTask OnTitleChangedAsync(string value)
 
 なお、`GetValue`には、デフォルト値の定義が、
 `SetValue`には、値変更時に追加操作を行うことが出来るオーバーロードが定義されています。
+
+プロジェクト内で全くViewModelインジェクタを使用しない場合は、
+ViewModelインジェクタを無効化する事で、自動的なコードを解析を停止させ、ビルドを高速化出来ます。
+csprojの`PropertyGroup`の`EpoxyBuildEnable`に`False`を指定して下さい。
 
 ---
 
@@ -406,7 +412,7 @@ this.LogPile = Pile.Create<TextBox>();
 // ...
 
 // TextBoxを操作したくなったら、Pileを通じて参照をレンタルします:
-await this.LogPile.ExecuteAsync(async textBox =>
+await this.LogPile.RentAsync(async textBox =>
 {
     // モデルから情報を非同期で取得します
     var result = await ServerAccessor.GetResultTextAsync();
@@ -693,10 +699,12 @@ member val Title = "Unknown"
 
 // プロパティが変更された場合に呼び出される。
 // シグネチャは強制されないので、以下の条件を守る必要がある:
-// * 関数名は、"on<プロパティ名>ChangedAsync"
 // * 引数は、プロパティと同じ型 (引数名は任意)
 // * 戻り値はAsync<unit>でなければならない
-member self.onTitleChangedAsync (value: string) = async {
+// * PropertyChanged属性を適用する。引数にプロパティ名を指定する（メソッド名は自由）
+//   * PropertyChanged属性を使わない場合は、メソッド名を、"on<プロパティ名>ChangedAsync"とする
+[<PropertyChanged("Title")>]
+member self.titleChangedAsync (value: string) = async {
     // 値が変更された場合の処理...
 }
 ```
@@ -732,6 +740,11 @@ Apache-v2
 
 ## History
 
+* 1.1.0:
+  * `PropertyChanged`属性を追加し、PropertyChanged発生時のハンドラ対象を属性で指定可能にしました。 [See #8](https://github.com/kekyo/Epoxy/issues/8)
+  * Anchor/Pileの`ExecuteAsync`を非推奨とし、代わりに別名の`RentAsync`を追加しました。 [See #9](https://github.com/kekyo/Epoxy/issues/9)
+  * プロジェクトに`EpoxyBuildEnable`を指定することで、ViewModelインジェクタを完全に停止させる事が出来るようにしました。 [See #6](https://github.com/kekyo/Epoxy/issues/6)
+  * 依存するパッケージを更新しました (Uno.UI: 3.7.6, 但しUWPホスト以外は未検証)
 * 1.0 正式リリース 🎉
   * ChildrenAnchor/ChildrenPile/ChildrenBinderは廃止しました。 [See #5](https://github.com/kekyo/Epoxy/issues/5)
 * 0.17.0:

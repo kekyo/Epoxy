@@ -54,7 +54,7 @@ namespace EpoxyHello.Wpf.ViewModels
                 this.IsEnabled = false;
 
                 // Temporary rent Grid children accessor
-                await this.IndicatorPile.ExecuteAsync(async indicator =>
+                await this.IndicatorPile.RentAsync(async indicator =>
                 {
                     // Show WaitingBlock control
                     var waitingBlock = new WaitingBlock();

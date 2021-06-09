@@ -250,7 +250,7 @@ namespace Epoxy
         /// <param name="canIgnore">Ignore if not present mooring Anchor</param>
         /// <returns>ValueTask</returns>
         /// <remarks>This method is used internal only.</remarks>
-        internal ValueTask<Unit> InternalExecuteAsync(Func<TUIElement, ValueTask<Unit>> action, bool canIgnore = false)
+        internal ValueTask<Unit> InternalRentAsync(Func<TUIElement, ValueTask<Unit>> action, bool canIgnore = false)
         {
             if (this.element.Target is TUIElement element)
             {
@@ -273,7 +273,7 @@ namespace Epoxy
         /// <param name="action">Continuation delegate</param>
         /// <returns>ValueTask&lt;TResult&gt;</returns>
         /// <remarks>This method is used internal only.</remarks>
-        internal ValueTask<TResult> InternalExecuteAsync<TResult>(Func<TUIElement, ValueTask<TResult>> action)
+        internal ValueTask<TResult> InternalRentAsync<TResult>(Func<TUIElement, ValueTask<TResult>> action)
         {
             if (this.element.Target is TUIElement element)
             {
@@ -292,8 +292,8 @@ namespace Epoxy
         /// <param name="canIgnore">Ignore if not present mooring Anchor</param>
         /// <remarks>This method is used internal only.</remarks>
         [DebuggerStepThrough]
-        internal void InternalExecuteSync(Action<TUIElement> action, bool canIgnore) =>
-            this.InternalExecuteAsync(element => { action(element); return default; }, canIgnore);
+        internal void InternalRentSync(Action<TUIElement> action, bool canIgnore) =>
+            this.InternalRentAsync(element => { action(element); return default; }, canIgnore);
 
         /// <summary>
         /// Synchronous execute with anchoring element.
@@ -302,9 +302,9 @@ namespace Epoxy
         /// <param name="action">Continuation delegate</param>
         /// <returns>TResult</returns>
         /// <remarks>This method is used internal only.</remarks>
-        internal TResult InternalExecuteSync<TResult>(Func<TUIElement, TResult> action)
+        internal TResult InternalRentSync<TResult>(Func<TUIElement, TResult> action)
         {
-            var result = this.InternalExecuteAsync(element =>
+            var result = this.InternalRentAsync(element =>
             {
                 try
                 {

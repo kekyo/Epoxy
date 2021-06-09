@@ -67,7 +67,7 @@ namespace Epoxy
         /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
         /// <returns>Value</returns>
         protected TValue GetValue<TValue>(
-            TValue defaultValue = default,
+            TValue defaultValue = default!,
             [CallerMemberName] string? propertyName = null) =>
             base.InternalGetValue<TValue>(defaultValue!, propertyName);
 

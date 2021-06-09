@@ -35,7 +35,7 @@ open Epoxy.Internal
 /// type IBluetooth =
 ///     interface
 ///     // Declares manipulation function.
-///     abstract enableAsync: string -> Async<unit>
+///     abstract enableAsync: string -&gt; Async&lt;unit&gt;
 /// 
 /// // Platform depended implementation class.
 /// type AndroidBluetoothFacade = 
@@ -50,7 +50,7 @@ open Epoxy.Internal
 /// GlobalService.register facade
 /// 
 /// // To use it on asynchronously.
-/// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
+/// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -&gt; async {
 ///     // 'bluetooth' argument is registered instance.
 ///     do! bluetooth.enableAsync "Primary"
 /// })
@@ -78,7 +78,7 @@ type public GlobalService =
     /// type IBluetooth =
     ///     interface
     ///     // Declares manipulation function.
-    ///     abstract enableAsync: string -> Async<unit>
+    ///     abstract enableAsync: string -&gt; Async&lt;unit&gt;
     /// 
     /// // Platform depended implementation class.
     /// type AndroidBluetoothFacade = 
@@ -113,7 +113,7 @@ type public GlobalService =
     /// <example>
     /// <code>
     /// // Use the interface.
-    /// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
+    /// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -&gt; async {
     ///     // 'bluetooth' argument is registered instance.
     ///     do! bluetooth.enableAsync "Primary"
     /// })
@@ -133,7 +133,7 @@ type public GlobalService =
     /// <example>
     /// <code>
     /// // Use the interface.
-    /// let! result = GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
+    /// let! result = GlobalService.executeAsync (fun (bluetooth: IBluetooth) -&gt; async {
     ///     // 'bluetooth' argument is registered instance.
     ///     do! bluetooth.enableAsync "Primary"
     ///     return 100
@@ -162,7 +162,7 @@ module public GlobalServiceAccessorExtension =
         /// <example>
         /// <code>
         /// // Use the interface.
-        /// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
+        /// do! GlobalService.executeAsync (fun (bluetooth: IBluetooth) -&gt; async {
         ///     // 'bluetooth' argument is registered instance.
         ///     do! bluetooth.enableAsync "Primary"
         /// })
@@ -182,7 +182,7 @@ module public GlobalServiceAccessorExtension =
         /// <example>
         /// <code>
         /// // Use the interface.
-        /// let! result = GlobalService.executeAsync (fun (bluetooth: IBluetooth) -> async {
+        /// let! result = GlobalService.executeAsync (fun (bluetooth: IBluetooth) -&gt; async {
         ///     // 'bluetooth' argument is registered instance.
         ///     do! bluetooth.enableAsync "Primary"
         ///     return 100

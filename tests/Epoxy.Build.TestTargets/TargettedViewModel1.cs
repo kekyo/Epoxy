@@ -93,5 +93,32 @@ namespace Epoxy
         [IgnoreInject]
         public string Prop10
         { get; set; }
+
+        public string? Prop11
+        { get; set; }
+
+        public string? Prop11Set;
+
+        [PropertyChanged(nameof(Prop11))]
+        private ValueTask __OnProp11ChangedAsync(string value)
+        {
+            this.Prop11Set = value;
+            return default;
+        }
+
+        public string? Prop12
+        { get; set; }
+
+        public string? Prop12Set;
+
+        [PropertyChanged(nameof(Prop12))]
+        private ValueTask __OnProp12ChangedAsync(string value)
+        {
+            this.Prop12Set = value;
+            return default;
+        }
+
+        private ValueTask OnProp12ChangedAsync(string value) =>
+            default;
     }
 }

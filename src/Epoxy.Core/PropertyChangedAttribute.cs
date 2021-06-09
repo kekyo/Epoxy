@@ -21,43 +21,43 @@
 
 using System;
 
-namespace Epoxy.Supplemental
+namespace Epoxy
 {
     /// <summary>
-    /// ViewModel detection methods.
+    /// The method is targetted for receiving property changed in ViewModel injection.
     /// </summary>
-    /// <remarks>Default value is `Attribute`</remarks>
-    [Flags]
-    public enum ViewModelDetections
-    {
-        /// <summary>
-        /// By attribute (ViewModelAttribute)
-        /// </summary>
-        Attribute = 1,
-
-        /// <summary>
-        /// By suffix (class named: `*ViewModel`)
-        /// </summary>
-        Suffix = 2
-    }
-
-    /// <summary>
-    /// Assembly-wide ViewModel injector direction attribute.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public sealed class ViewModelDetectionAttribute :
+    /// <remarks>See ViewModel injector guide: https://github.com/kekyo/Epoxy#viewmodel-injector-and-viewmodel-base-class</remarks>
+    /// <example>
+    /// <code>
+    /// // Enable ViewModel injector on this class
+    /// [ViewModel]
+    /// public sealed class ImageData
+    /// {
+    ///     // Will inject (auto-implemented) property:
+    ///     public string Title { get; set; }
+    ///     
+    ///     // Will receive property changed.
+    ///     [PropertyChanged(nameof(Title))]
+    ///     private ValueTask OnTitleChanged(string value)
+    ///     {
+    ///         // Your owned task...
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    [AttributeUsage(AttributeTargets.Method)]
+    public sealed class PropertyChangedAttribute :
         Attribute
     {
         /// <summary>
-        /// ViewModel detection method.
+        /// Target property name.
         /// </summary>
-        public readonly ViewModelDetections Detection;
+        public readonly string PropertyName;
 
         /// <summary>
         /// The constructor.
         /// </summary>
-        /// <param name="detection">ViewModel detection method.</param>
-        public ViewModelDetectionAttribute(ViewModelDetections detection) =>
-            this.Detection = detection;
+        public PropertyChangedAttribute(string propertyName) =>
+            this.PropertyName = propertyName;
     }
 }

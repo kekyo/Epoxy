@@ -26,10 +26,18 @@ type TargettedViewModel1() =
 
     [<DefaultValue>]
     val mutable Prop9Set: string
+    [<DefaultValue>]
+    val mutable Prop11Set: string
+    [<DefaultValue>]
+    val mutable Prop12Set: string
+
+    ////////////////////////////////////
 
     member __.Prop1 = "ABC1"
     member val Prop2 = "ABC2"
         with get, set
+
+    ////////////////////////////////////
     
     member val Prop9 = Unchecked.defaultof<string>
         with get, set
@@ -38,6 +46,32 @@ type TargettedViewModel1() =
         do self.Prop9Set <- value
     }
 
+    ////////////////////////////////////
+
     [<IgnoreInject>]
     member val Prop10 = "ABC10"
         with get, set
+
+    ////////////////////////////////////
+
+    member val Prop11 = Unchecked.defaultof<string>
+        with get, set
+
+    [<PropertyChanged("Prop11")>]
+    member self.__onProp11ChangedAsync value = async {
+        do self.Prop11Set <- value
+    }
+
+    ////////////////////////////////////
+
+    member val Prop12 = Unchecked.defaultof<string>
+        with get, set
+
+    [<PropertyChanged("Prop12")>]
+    member self.__onProp12ChangedAsync value = async {
+        do self.Prop12Set <- value
+    }
+
+    member _.onProp12ChangedAsync value = async {
+        return ()
+    }

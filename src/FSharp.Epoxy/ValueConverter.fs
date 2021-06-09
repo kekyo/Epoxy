@@ -36,17 +36,13 @@ type public ValueConverter<'TFrom, 'TTo>() =
     /// <summary>
     /// Converting value implment method.
     /// </summary>
-    /// <param name="from">From value</param>
-    /// <param name="result">To value</param>
-    /// <returns>True if converts successfully.</returns>
+    /// <returns>To value if converts successfully.</returns>
     abstract convert: 'TFrom -> 'TTo option
 
     /// <summary>
     /// Reverse direction converting value implment method.
     /// </summary>
-    /// <param name="to">To value</param>
-    /// <param name="result">From value</param>
-    /// <returns>True if reverse direction converts successfully.</returns>
+    /// <returns>From value if reverse direction converts successfully.</returns>
     /// <remarks>This method is optional. Default implementation will raise an exception.</remarks>
     abstract convertBack: 'TTo -> 'TFrom option
     default __.convertBack _ =
@@ -73,9 +69,9 @@ type public ValueConverter<'TFrom, 'TTo>() =
 /// <summary>
 /// The ValueConverter base class.
 /// </summary>
-/// <typeparam name="TFrom">Value conversion from this type.</typeparam>
-/// <typeparam name="TParameter">Value conversion with this type parameter.</typeparam>
-/// <typeparam name="TTo">Value conversion to this type.</typeparam>
+/// <typeparam name="'TFrom">Value conversion from this type.</typeparam>
+/// <typeparam name="'TParameter">Value conversion with this type parameter.</typeparam>
+/// <typeparam name="'TTo">Value conversion to this type.</typeparam>
 /// <remarks>You can easier implement for the XAML converter only override TryConvert method.</remarks>
 [<AbstractClass>]
 type public ValueConverter<'TFrom, 'TParameter, 'TTo>() =
@@ -84,19 +80,13 @@ type public ValueConverter<'TFrom, 'TParameter, 'TTo>() =
     /// <summary>
     /// Converting value implment method.
     /// </summary>
-    /// <param name="from">From value</param>
-    /// <param name="parameter">Parameter value</param>
-    /// <param name="result">To value</param>
-    /// <returns>True if converts successfully.</returns>
+    /// <returns>To value if converts successfully.</returns>
     abstract convert: 'TFrom -> 'TParameter -> 'TTo option
 
     /// <summary>
     /// Reverse direction converting value implment method.
     /// </summary>
-    /// <param name="to">To value</param>
-    /// <param name="parameter">Parameter value</param>
-    /// <param name="result">From value</param>
-    /// <returns>True if reverse direction converts successfully.</returns>
+    /// <returns>From value if reverse direction converts successfully.</returns>
     /// <remarks>This method is optional. Default implementation will raise an exception.</remarks>
     abstract convertBack: 'TTo -> 'TParameter -> 'TFrom option
     default __.convertBack _ _ =

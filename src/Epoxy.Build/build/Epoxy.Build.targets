@@ -21,6 +21,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     
   <PropertyGroup>
+    <EpoxyBuildEnable Condition="'$(EpoxyBuildEnable)' == ''">True</EpoxyBuildEnable>
     <EpoxyBuildTrace Condition="'$(EpoxyBuildTrace)' == ''">False</EpoxyBuildTrace>
   </PropertyGroup>
 
@@ -49,7 +50,8 @@
     </Task>
   </UsingTask>
     
-  <Target Name="EpoxyBuild" AfterTargets="AfterCompile">
+  <Target Name="EpoxyBuild" AfterTargets="AfterCompile"
+    Condition="'$(EpoxyBuildEnable)' == 'True'">
       
     <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
       <_EB_PlatformName Condition="('$(MicrosoftNETBuildTasksTFM)' == '') AND ('$(BundledNETCoreAppTargetFrameworkVersion)' == '')">netcoreapp2.0</_EB_PlatformName>
