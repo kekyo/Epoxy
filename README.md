@@ -37,10 +37,10 @@
 * Supported platforms:
   * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
   * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper), [But may cause executing error same as this issue.](https://github.com/microsoft/microsoft-ui-xaml/issues/4226)
-  * Uno: [Uno platform](https://platform.uno/) (uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
+  * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * F# is 5.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
@@ -266,7 +266,7 @@ In the previous implementation of Epoxy (<0.15), it was forced to inherit from t
 
 Also, if you apply the `IgnoreInject` attribute to a property, it can be excluded from the processing of `PropertyChanging` and `PropertyChanged`.
 
-By adding the following signature method, you can easily add the process when changing the property:
+By adding the following signature method, you can easily add the process when changed the property:
 
 ```csharp
 // Defined property
@@ -274,10 +274,12 @@ public string Title { get; set; }
 
 // Called when the property changes.
 // Signatures are not enforced, so the following conditions must be applied:
-// * The method name is "On<property name>ChangedAsync"
 // * The argument is same type as the property (argument name is arbitrary)
 // * Return value must be ValueTask type
-private ValueTask OnTitleChangedAsync(string value)
+// * Apply PropertyChangedAttribute. Specify the property name in the argument (The method name is free.)
+//   * If you do not use the PropertyChanged attribute, set the method name to "On<property name>ChangedAsync."
+[PropertyChanged(nameof(Title))]
+private ValueTask TitleChangedAsync(string value)
 {
     // What to do if the value changes ...
 }
@@ -694,10 +696,12 @@ member val Title = "Unknown"
 
 // Called when the property changes.
 // Signatures are not enforced, so the following conditions must be applied:
-// * The function name is "on<property name>ChangedAsync"
 // * The argument is same type as the property (argument name is arbitrary)
 // * Return value must be Async<unit> type
-member self.onTitleChangedAsync (value: string) = async {
+// * Apply PropertyChangedAttribute. Specify the property name in the argument (The method name is free.)
+//   * If you do not use the PropertyChanged attribute, set the method name to "on<property name>ChangedAsync."
+[<PropertyChanged("Title")>]
+member self.titleChangedAsync (value: string) = async {
     // What to do if the value changes ...
 }
 ```
@@ -731,6 +735,11 @@ Apache-v2
 
 ## History
 
+* 1.1.0:
+  * Added `PropertyChanged` attribute so that the handler target when PropertyChanged occurs can be specified by the attribute. [See #8](https://github.com/kekyo/Epoxy/issues/8)
+  * Obsoleted `ExecuteAsync` in Anchor/Pile and added the alias `RentAsync` instead. [See #9](https://github.com/kekyo/Epoxy/issues/9)
+  * By specifying `EpoxyBuildEnable` in the project, the ViewModel injector can be stopped completely. [See #6](https://github.com/kekyo/Epoxy/issues/6)
+  * Updated dependent packages (Uno.UI: 3.7.6, but unverified except for UWP hosts)
 * 1.0.0:
   * Reached 1.0 🎉
   * Omitted ChildrenAnchor/ChildrenPile/ChildrenBinder. [See #5](https://github.com/kekyo/Epoxy/issues/5)
