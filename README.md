@@ -739,6 +739,8 @@ Apache-v2
 
 ## History
 
+* 1.1.1:
+  * Fixed causes NU1201 when lacks tfm platform version suffix in WPF packages.
 * 1.1.0:
   * Added `PropertyChanged` attribute so that the handler target when PropertyChanged occurs can be specified by the attribute. [See #8](https://github.com/kekyo/Epoxy/issues/8)
   * Obsoleted `ExecuteAsync` in Anchor/Pile and added the alias `RentAsync` instead. [See #9](https://github.com/kekyo/Epoxy/issues/9)

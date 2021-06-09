@@ -740,6 +740,8 @@ Apache-v2
 
 ## History
 
+* 1.1.1:
+  * WPF NuGetパッケージ生成時に、NU1201が発生する問題を修正。
 * 1.1.0:
   * `PropertyChanged`属性を追加し、PropertyChanged発生時のハンドラ対象を属性で指定可能にしました。 [See #8](https://github.com/kekyo/Epoxy/issues/8)
   * Anchor/Pileの`ExecuteAsync`を非推奨とし、代わりに別名の`RentAsync`を追加しました。 [See #9](https://github.com/kekyo/Epoxy/issues/9)
