@@ -47,6 +47,7 @@ namespace Epoxy
         private readonly TypeDefinition viewModelDetectionAttributeType;
         private readonly TypeDefinition viewModelAttributeType;
         private readonly TypeDefinition ignoreInjectAttributeType;
+        private readonly TypeDefinition propertyChangedAttributeType;
         private readonly TypeDefinition iViewModelImplementerType;
         private readonly TypeDefinition internalPropertyBagType;
 
@@ -114,12 +115,12 @@ namespace Epoxy
                     }
                 ) : null;
 
-            message(
+            this.message(
                 LogLevels.Trace,
                 $"Epoxy.Core.dll is loaded: Path={epoxyCorePath}");
             if (fsharpEpoxyAssembly != null)
             {
-                message(
+                this.message(
                     LogLevels.Trace,
                     $"FSharp.Epoxy.dll is loaded: Path={fsharpEpoxyPath}");
             }
@@ -132,6 +133,8 @@ namespace Epoxy
                 "Epoxy.ViewModelAttribute")!;
             this.ignoreInjectAttributeType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.IgnoreInjectAttribute")!;
+            this.propertyChangedAttributeType = epoxyCoreAssembly.MainModule.GetType(
+                "Epoxy.PropertyChangedAttribute")!;
             this.iViewModelImplementerType = epoxyCoreAssembly.MainModule.GetType(
                 "Epoxy.Infrastructure.IViewModelImplementer")!;
             this.internalPropertyBagType = epoxyCoreAssembly.MainModule.GetType(
@@ -277,7 +280,7 @@ namespace Epoxy
             if (!targetType.Methods.
                 Any(m => (m.Name == "ToString") && m.IsPublic && m.IsVirtual && (m.Parameters.Count == 0)))
             {
-                message(
+                this.message(
                     LogLevels.Trace,
                     $"InjectPrettyPrint: Injected pretty printer: Type={targetType.FullName}");
 
@@ -296,7 +299,7 @@ namespace Epoxy
             }
             else
             {
-                message(
+                this.message(
                     LogLevels.Trace,
                     $"InjectPrettyPrint: Ignored injecting pretty printer: Type={targetType.FullName}");
             }
@@ -373,6 +376,7 @@ namespace Epoxy
 
             var propertyType = module.ImportReference(pd.PropertyType);
 
+            //[PropertyChanged([PropertyName])]
             //public ValueTask On[PropertyName]ChangedAsync(TValue value) { ... }
             //public Async<FSharpUnit> on[PropertyName]ChangedAsync(TValue value) { ... }
 
@@ -382,13 +386,41 @@ namespace Epoxy
             var onChangedAsyncReturnTypeName = isFSharpType ?
                 "Microsoft.FSharp.Control.FSharpAsync`1<Microsoft.FSharp.Core.Unit>" :
                 "System.Threading.Tasks.ValueTask";
-            var onChangedAsyncMethod = targetType.Methods.
-                FirstOrDefault(m =>
+
+            var onChangedAsyncMethodByName = targetType.Methods.
+                SingleOrDefault(m =>
                     !m.IsStatic &&
                     (m.Name == onChangedAsyncMethodName) &&
                     (m.ReturnType.FullName == onChangedAsyncReturnTypeName) &&
                     (m.Parameters.Count == 1) &&
                     (m.Parameters[0].ParameterType.FullName == propertyType.FullName));
+
+            bool isOnChangedTarget(MethodDefinition m) =>
+                m.HasCustomAttributes &&
+                m.CustomAttributes.Any(ca =>
+                    (ca.AttributeType.FullName == "Epoxy.PropertyChangedAttribute") &&
+                    (ca.ConstructorArguments.Count == 1) &&
+                     pd.Name.Equals(ca.ConstructorArguments[0].Value));
+
+            var onChangedAsyncMethodsByAttribute = targetType.Methods.
+                Where(m =>
+                    !m.IsStatic &&
+                    (m.ReturnType.FullName == onChangedAsyncReturnTypeName) &&
+                    isOnChangedTarget(m) &&
+                    (m.Parameters.Count == 1) &&
+                    (m.Parameters[0].ParameterType.FullName == propertyType.FullName)).
+                ToArray()!;
+
+            var onChangedAsyncMethod = (onChangedAsyncMethodsByAttribute.Length >= 1) ?
+                onChangedAsyncMethodsByAttribute[0] :
+                onChangedAsyncMethodByName;
+
+            if (onChangedAsyncMethodsByAttribute.Length >= 2)
+            {
+                this.message(
+                    LogLevels.Warning,
+                    $"InjectSetterProperty: Duplicated property changed handlers: Use={onChangedAsyncMethod!.FullName}");
+            }
 
             var setValueAsyncMethod = new GenericInstanceMethod(
                 module.ImportReference((onChangedAsyncMethod != null) ?
@@ -467,7 +499,7 @@ namespace Epoxy
                 foreach (var method in targetType.Methods.
                     Where(m => !m.IsStatic && !m.IsAbstract))
                 {
-                    message(
+                    this.message(
                         LogLevels.Trace,
                         $"RemoveBackingFields: Checking field usage: Method={method.FullName}");
 
@@ -484,7 +516,7 @@ namespace Epoxy
                         {
                             if (inst.OpCode == OpCodes.Ldfld)
                             {
-                                message(
+                                this.message(
                                     LogLevels.Trace,
                                     $"RemoveBackingFields: Found and replaced by getter: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
 
@@ -498,7 +530,7 @@ namespace Epoxy
                             //   The method will ignore if non-default value already assigned.
                             else if (isFSharpType && method.IsConstructor)
                             {
-                                message(
+                                this.message(
                                     LogLevels.Trace,
                                     $"RemoveBackingFields: Found and replaced by F# initializer: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
 
@@ -515,7 +547,7 @@ namespace Epoxy
                             }
                             else
                             {
-                                message(
+                                this.message(
                                     LogLevels.Trace,
                                     $"RemoveBackingFields: Found and replaced by setter: Field={fd.FullName}, OpCode={inst.OpCode}, Index={index}");
 
@@ -536,7 +568,7 @@ namespace Epoxy
             }
             else
             {
-                message(
+                this.message(
                     LogLevels.Trace,
                     $"RemoveBackingFields: Target field isn't found.");
             }
@@ -569,7 +601,7 @@ namespace Epoxy
                         this.InjectSetterProperty(
                             module, targetType, propertiesField, pd, setter, isFSharpType);
 
-                        message(
+                        this.message(
                             LogLevels.Trace,
                             $"InjectProperties: Injected property: Property={pd.FullName}");
 
@@ -579,14 +611,14 @@ namespace Epoxy
                     }
                     else
                     {
-                        message(
+                        this.message(
                             LogLevels.Trace,
                             $"InjectProperties: Ignored property [2]: Property={pd.FullName}");
                     }
                 }
                 else
                 {
-                    message(
+                    this.message(
                         LogLevels.Trace,
                         $"InjectProperties: Ignored property [1]: Property={pd.FullName}");
                 }
@@ -663,7 +695,7 @@ namespace Epoxy
                         }
                         else
                         {
-                            message(
+                            this.message(
                                 LogLevels.Trace,
                                 $"InjectProperties: Ignored a type: Assembly={targetAssemblyName}, Type={targetType.FullName}");
                         }
