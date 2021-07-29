@@ -35,6 +35,10 @@ using Microsoft.UI.Xaml;
 using Avalonia;
 #endif
 
+#if NOESIS
+using Noesis;
+#endif
+
 namespace Epoxy.Internal
 {
     internal static class DefaultValue<TValue>

@@ -1,6 +1,7 @@
 @echo off
 
-git clean -xfd
+rem Protect unused dirty fragments at building in UWP/WinUI/Uno
+rem git clean -xfd
 
 dotnet restore Epoxy.sln
 dotnet restore templates\Epoxy.Templates.csproj

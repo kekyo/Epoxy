@@ -51,6 +51,10 @@ using DependencyObject = Avalonia.IAvaloniaObject;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
+#if NOESIS
+using Noesis;
+#endif
+
 namespace Epoxy
 {
     /// <summary>

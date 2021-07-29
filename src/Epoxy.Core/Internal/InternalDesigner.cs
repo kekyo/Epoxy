@@ -76,6 +76,10 @@ namespace Epoxy.Internal
 #if AVALONIA
             get => Design.IsDesignMode;
 #endif
+#if NOESIS
+            // Noesis doesn't support on design time execution.
+            get => false;
+#endif
 #if XAMARIN_FORMS
             get => DesignMode.IsDesignModeEnabled;
 #endif

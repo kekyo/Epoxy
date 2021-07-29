@@ -47,6 +47,10 @@ using Xamarin.Forms;
 using Avalonia.Data.Converters;
 #endif
 
+#if NOESIS
+using Noesis;
+#endif
+
 using Epoxy.Internal;
 
 namespace Epoxy

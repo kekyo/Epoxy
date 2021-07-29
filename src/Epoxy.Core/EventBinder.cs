@@ -48,6 +48,10 @@ using Avalonia.Data;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
+#if NOESIS
+using Noesis;
+#endif
+
 using Epoxy.Internal;
 using Epoxy.Supplemental;
 using Epoxy.Advanced;
@@ -342,7 +346,7 @@ namespace Epoxy
     [Windows.UI.Xaml.Data.Bindable]
 #endif
     public sealed partial class Event :
-#if WINDOWS_WPF
+#if WINDOWS_WPF || NOESIS
         Freezable
 #endif
 #if WINDOWS_UWP || WINUI || UNO
