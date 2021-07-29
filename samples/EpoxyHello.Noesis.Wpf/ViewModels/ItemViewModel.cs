@@ -17,14 +17,32 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using System.Windows;
+#nullable enable
 
-namespace EpoxyHello.Wpf
+using Epoxy;
+
+using Noesis;
+
+namespace EpoxyHello.Noesis.ViewModels
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public sealed class ItemViewModel : ViewModel
     {
+        public string? Title
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
+        public ImageSource? Image
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
+        public int Score
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
     }
 }

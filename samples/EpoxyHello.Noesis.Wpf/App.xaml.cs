@@ -19,7 +19,7 @@
 
 using System.Windows;
 
-namespace EpoxyHello.Wpf
+namespace EpoxyHello.Noesis
 {
     /// <summary>
     /// Interaction logic for App.xaml
