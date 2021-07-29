@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>FSharp.Epoxy</AssemblyName>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyTitle>FSharp.Epoxy.Noesis</AssemblyTitle>
+      
+    <NuspecFile>FSharp.Epoxy.Noesis.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;NOESIS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;NOESIS</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Noesis\Epoxy.Core.Noesis.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="FSharp.Epoxy.Noesis.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Properties/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Internal/*.fs" />
+    <Compile Include="../FSharp.Epoxy/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Advanced/*.fs" />
+  </ItemGroup>
+
+</Project>

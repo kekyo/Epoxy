@@ -36,6 +36,10 @@ open Microsoft.UI.Xaml
 open System.Windows
 #endif
 
+#if NOESIS
+open Noesis
+#endif
+
 open Epoxy
 open Epoxy.Internal
 

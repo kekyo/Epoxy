@@ -41,6 +41,10 @@ open System.Windows
 open System.Runtime.InteropServices
 #endif
 
+#if NOESIS
+open Noesis
+#endif
+
 /// <summary>
 /// Pile functions for synchronous execution.
 /// </summary>

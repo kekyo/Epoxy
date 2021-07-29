@@ -39,6 +39,10 @@ open Microsoft.UI.Xaml
 open System.Windows
 #endif
 
+#if NOESIS
+open Noesis
+#endif
+
 /// <summary>
 /// The Pile factory.
 /// </summary>

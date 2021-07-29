@@ -49,6 +49,10 @@ open Avalonia
 open Avalonia.Threading
 #endif
 
+#if NOESIS
+open Noesis
+#endif
+
 /// <summary>
 /// Usable functions for F#.
 /// </summary>
@@ -139,4 +143,84 @@ module public FSharpHelper =
         /// <remarks>Recommends using UIThread.bind function instead.</remarks>
         member dispatcher.invokeAsync (action: unit -> Async<'TResult>) =
             dispatcher.InvokeAsync<'TResult>(action >> Async.StartImmediateAsTask) |> taskAsAsyncResult
+#endif
+#if NOESIS
+  type Dispatcher with
+
+      /// <summary>
+      /// Execute function under the Dispatcher.
+      /// </summary>
+      /// <param name="action">Function</param>
+      /// <returns>Async&lt;unit&gt; instance</returns>
+      /// <remarks>Recommends using UIThread.bind function instead.</remarks>
+      member dispatcher.invokeAsync (action: unit -> unit) =
+        Async.FromContinuations(fun (completed, caught, _) ->
+          dispatcher.BeginInvoke(fun () ->
+            try
+              let result = action()
+              completed result
+            with
+            | exn -> caught exn))
+
+      /// <summary>
+      /// Execute function under the Dispatcher.
+      /// </summary>
+      /// <typeparam name="'TResult">Result type</typeparam>
+      /// <param name="action">Function</param>
+      /// <returns>Async&lt;'TResult&gt; instance</returns>
+      /// <remarks>Recommends using UIThread.bind function instead.</remarks>
+      member dispatcher.invokeAsync (action: unit -> ValueTask<'TResult>) =
+        Async.FromContinuations(fun (completed, caught, _) ->
+          dispatcher.BeginInvoke(fun () ->
+            try
+              let vta = action().GetAwaiter()
+              if vta.IsCompleted then
+                completed (vta.GetResult())
+              else
+                vta.OnCompleted(fun _ ->
+                  try
+                    completed (vta.GetResult())
+                  with
+                  | exn -> caught exn)
+            with
+            | exn -> caught exn))
+
+      /// <summary>
+      /// Execute function under the Dispatcher.
+      /// </summary>
+      /// <typeparam name="'TResult">Result type</typeparam>
+      /// <param name="action">Function</param>
+      /// <returns>Async&lt;'TResult&gt; instance</returns>
+      /// <remarks>Recommends using UIThread.bind function instead.</remarks>
+      member dispatcher.invokeAsync (action: unit -> Task<'TResult>) =
+        Async.FromContinuations(fun (completed, caught, _) ->
+          dispatcher.BeginInvoke(fun () ->
+            try
+              let vta = action().GetAwaiter()
+              if vta.IsCompleted then
+                completed (vta.GetResult())
+              else
+                vta.OnCompleted(fun _ ->
+                  try
+                    completed (vta.GetResult())
+                  with
+                  | exn -> caught exn)
+            with
+            | exn -> caught exn))
+
+      /// <summary>
+      /// Execute function under the Dispatcher.
+      /// </summary>
+      /// <typeparam name="'TResult">Result type</typeparam>
+      /// <param name="action">Function</param>
+      /// <returns>Async&lt;'TResult&gt; instance</returns>
+      /// <remarks>Recommends using UIThread.bind function instead.</remarks>
+      member dispatcher.invokeAsync (action: unit -> Async<'TResult>) =
+        Async.FromContinuations(fun (completed, caught, canceled) ->
+          dispatcher.BeginInvoke(fun () ->
+            try
+              let asy = action()
+              Async.StartWithContinuations(asy, completed, caught, canceled)
+            with
+            | exn -> caught exn))
 #endif
