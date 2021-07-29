@@ -53,6 +53,10 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 #endif
 
+#if NOESIS
+using Noesis;
+#endif
+
 namespace Epoxy.Supplemental
 {
     /// <summary>
@@ -122,13 +126,13 @@ namespace Epoxy.Supplemental
             vh.GetValue<Thickness>();
         public static implicit operator Color(ValueHolder vh) =>
             vh.GetValue<Color>();
-#if WINDOWS_WPF || AVALONIA
+#if WINDOWS_WPF || AVALONIA || NOESIS
         public static implicit operator Vector(ValueHolder vh) =>
             vh.GetValue<Vector>();
         public static implicit operator Pen?(ValueHolder vh) =>
             vh.GetValue<Pen?>();
 #endif
-#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO || AVALONIA
+#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO || AVALONIA || NOESIS
         public static implicit operator Brush?(ValueHolder vh) =>
             vh.GetValue<Brush?>();
         public static implicit operator Rect(ValueHolder vh) =>
@@ -136,7 +140,7 @@ namespace Epoxy.Supplemental
         public static implicit operator Matrix(ValueHolder vh) =>
             vh.GetValue<Matrix>();
 #endif
-#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO
+#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO || NOESIS
         public static implicit operator Visibility(ValueHolder vh) =>
             vh.GetValue<Visibility>();
 #endif

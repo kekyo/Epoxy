@@ -42,6 +42,10 @@ using UIElement = Xamarin.Forms.VisualElement;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
+#if NOESIS
+using Noesis;
+#endif
+
 using Epoxy.Internal;
 
 namespace Epoxy.Supplemental

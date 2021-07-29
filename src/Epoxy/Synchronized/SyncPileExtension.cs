@@ -47,6 +47,10 @@ using UIElement = Xamarin.Forms.VisualElement;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
+#if NOESIS
+using Noesis;
+#endif
+
 namespace Epoxy.Synchronized
 {
     /// <summary>

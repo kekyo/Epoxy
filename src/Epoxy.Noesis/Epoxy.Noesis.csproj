@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+
+    <AssemblyTitle>Epoxy.Noesis</AssemblyTitle>
+      
+    <NuspecFile>Epoxy.Noesis.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;NOESIS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;NOESIS</DefineConstants>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="Noesis.GUI" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Noesis\Epoxy.Core.Noesis.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+  </ItemGroup>
+
+</Project>
