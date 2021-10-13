@@ -32,7 +32,7 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 using System.Windows.Media.Animation;
 #endif
@@ -46,10 +46,6 @@ using DependencyObject = Xamarin.Forms.BindableObject;
 using Avalonia;
 using Avalonia.Data;
 using DependencyObject = Avalonia.IAvaloniaObject;
-#endif
-
-#if OPENSILVER
-using System.Windows;
 #endif
 
 using Epoxy.Internal;
@@ -73,15 +69,12 @@ namespace Epoxy
     /// &lt;/Window&gt;
     /// </code>
     /// </example>
+#if AVALONIA
     public sealed class EventBinder
+#else
+    public static class EventBinder
+#endif
     {
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private EventBinder()
-        { }
-
 #if XAMARIN_FORMS
         private static readonly BindablePropertyKey EventsPropertyKey =
             BindableProperty.CreateAttachedReadOnly(
@@ -113,6 +106,13 @@ namespace Epoxy
         public static EventsCollection? GetEvents(DependencyObject d) =>
             (EventsCollection?)d.GetValue(EventsProperty);
 #elif AVALONIA
+        /// <summary>
+        /// The constructor.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private EventBinder()
+        { }
+
         /// <summary>
         /// Declared Events attached property.
         /// </summary>
@@ -171,7 +171,7 @@ namespace Epoxy
         /// </summary>
         private static readonly DependencyProperty EventsProperty =
             DependencyProperty.RegisterAttached(
-#if UNO
+#if UNO || OPENSILVER
                 "Events",
 #else
                 "ShadowEvents",
