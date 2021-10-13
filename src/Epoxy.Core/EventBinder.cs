@@ -48,6 +48,10 @@ using Avalonia.Data;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
+#if OPENSILVER
+using System.Windows;
+#endif
+
 using Epoxy.Internal;
 using Epoxy.Supplemental;
 using Epoxy.Advanced;
@@ -345,7 +349,7 @@ namespace Epoxy
 #if WINDOWS_WPF
         Freezable
 #endif
-#if WINDOWS_UWP || WINUI || UNO
+#if WINDOWS_UWP || WINUI || UNO || OPENSILVER
         DependencyObject
 #endif
 #if XAMARIN_FORMS

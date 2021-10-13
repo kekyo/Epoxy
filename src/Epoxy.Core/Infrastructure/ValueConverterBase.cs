@@ -34,9 +34,9 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 #endif
 
-#if WINDOWS_WPF
-using System.Windows.Data;
+#if WINDOWS_WPF || OPENSILVER
 using System.Windows;
+using System.Windows.Data;
 #endif
 
 #if XAMARIN_FORMS

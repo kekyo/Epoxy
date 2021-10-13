@@ -19,7 +19,7 @@
 
 #nullable enable
 
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 #endif
 
