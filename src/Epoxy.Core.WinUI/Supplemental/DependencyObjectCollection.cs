@@ -29,13 +29,13 @@ using Microsoft.UI.Xaml;
 
 namespace Epoxy.Supplemental
 {
-    public class PlainObjectCollection<TObject> :
+    public class DependencyObjectCollection<TObject> :
         DependencyObjectCollection, IEnumerable<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
         where TObject : DependencyObject
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        public PlainObjectCollection() =>
+        public DependencyObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -121,10 +121,10 @@ namespace Epoxy.Supplemental
             this.GetEnumerator();
     }
 
-    public class PlainObjectCollection<TSelf, TObject> :
-        PlainObjectCollection<TObject>
+    public class DependencyObjectCollection<TSelf, TObject> :
+        DependencyObjectCollection<TObject>
         where TObject : DependencyObject
-        where TSelf : PlainObjectCollection<TObject>, new()
+        where TSelf : DependencyObjectCollection<TObject>, new()
     {
     }
 }

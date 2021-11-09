@@ -19,21 +19,31 @@
 
 #nullable enable
 
-using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Windows;
+using System.ComponentModel;
+
+using Xamarin.Forms;
 
 namespace Epoxy.Supplemental
 {
-    public class PlainObjectCollection<TObject> :
-        DependencyObjectCollection<TObject>
-        where TObject : DependencyObject
+    public class DependencyObjectCollection<TObject> :
+        Element, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
+        where TObject : Element
     {
-        private readonly List<TObject> snapshot = new List<TObject>();
+        private readonly ObservableCollection<TObject> collection =
+            new ObservableCollection<TObject>();
+        private readonly List<TObject> snapshot =
+            new List<TObject>();
 
-        public PlainObjectCollection() =>
-            ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
+        public DependencyObjectCollection()
+        {
+            ((INotifyPropertyChanged)this.collection).PropertyChanged += (s, e) =>
+                this.OnPropertyChanged(e.PropertyName);
+            this.collection.CollectionChanged += this.OnCollectionChanged;
+        }
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
         {
@@ -43,6 +53,7 @@ namespace Epoxy.Supplemental
                     foreach (TObject? element1 in e.NewItems!)
                     {
                         this.snapshot.Insert(IndexOf(element1!), element1!);
+                        element1!.Parent = this;
                         this.OnAdded(element1!);
                     }
                     break;
@@ -55,12 +66,14 @@ namespace Epoxy.Supplemental
                         }
                         finally
                         {
+                            element2!.Parent = null;
                             this.snapshot.Remove(element2!);
                         }
                     }
                     foreach (TObject? element3 in e.NewItems!)
                     {
                         this.snapshot.Insert(IndexOf(element3!), element3!);
+                        element3!.Parent = null;
                         this.OnAdded(element3!);
                     }
                     break;
@@ -73,6 +86,7 @@ namespace Epoxy.Supplemental
                         }
                         finally
                         {
+                            element4!.Parent = null;
                             this.snapshot.Remove(element4!);
                         }
                     }
@@ -86,19 +100,22 @@ namespace Epoxy.Supplemental
                         }
                         finally
                         {
-                            this.snapshot.Remove(element5!);
+                            element5!.Parent = null;
                         }
                     }
                     this.snapshot.Clear();
                     foreach (var element6 in this)
                     {
                         this.snapshot.Insert(IndexOf(element6!), element6!);
+                        element6!.Parent = this;
                         this.OnAdded(element6!);
                     }
                     break;
             }
-        }
 
+            this.CollectionChanged?.Invoke(this, e);
+        }
+        
         protected virtual void OnAdded(TObject element)
         {
         }
@@ -106,12 +123,56 @@ namespace Epoxy.Supplemental
         protected virtual void OnRemoving(TObject element)
         {
         }
+
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
+
+        public int Count =>
+            this.collection.Count;
+
+        bool ICollection<TObject>.IsReadOnly =>
+            false;
+
+        public TObject this[int index]
+        {
+            get => this.collection[index];
+            set => this.collection[index] = value;
+        }
+
+        public int IndexOf(TObject item) =>
+            this.collection.IndexOf(item);
+
+        public void Insert(int index, TObject item) =>
+            this.collection.Insert(index, item);
+
+        public void RemoveAt(int index) =>
+            this.collection.RemoveAt(index);
+
+        public void Add(TObject item) =>
+            this.collection.Add(item);
+
+        public void Clear() =>
+            this.collection.Clear();
+
+        public bool Contains(TObject item) =>
+            this.collection.Contains(item);
+
+        public void CopyTo(TObject[] array, int arrayIndex) =>
+            this.collection.CopyTo(array, arrayIndex);
+
+        public bool Remove(TObject item) =>
+            this.collection.Remove(item);
+
+        public IEnumerator<TObject> GetEnumerator() =>
+            this.collection.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            this.collection.GetEnumerator();
     }
 
-    public class PlainObjectCollection<TSelf, TObject> :
-        PlainObjectCollection<TObject>
-        where TObject : DependencyObject
-        where TSelf : PlainObjectCollection<TObject>, new()
+    public class DependencyObjectCollection<TSelf, TObject> :
+        DependencyObjectCollection<TObject>
+        where TObject : Element
+        where TSelf : DependencyObjectCollection<TObject>, new()
     {
     }
 }

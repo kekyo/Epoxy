@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -30,13 +31,17 @@ using Windows.UI.Xaml;
 namespace Epoxy.Supplemental
 {
     // DANGER: The implementation is very fragile. You may die if refactor this.
-    public class PlainObjectCollection<TObject> :
+    public class DependencyObjectCollection<TObject> :
         DependencyObjectCollection, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
+#if WINDOWS_UWP
         where TObject : DependencyObject
+#else
+        where TObject : class, DependencyObject
+#endif
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        public PlainObjectCollection() =>
+        public DependencyObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -109,6 +114,7 @@ namespace Epoxy.Supplemental
         public event PropertyChangedEventHandler? PropertyChanged;
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
+#if WINDOWS_UWP
         public int Count =>
             ((IList<DependencyObject>)this).Count;
 
@@ -144,8 +150,37 @@ namespace Epoxy.Supplemental
 
         public bool Remove(TObject item) =>
             ((IList<DependencyObject>)this).Remove(item);
+#else
+        public new TObject this[int index]
+        {
+            get => (TObject)base[index];
+            set => base[index] = value;
+        }
 
-        public IEnumerator<TObject> GetEnumerator()
+        public int IndexOf(TObject item) =>
+            base.IndexOf(item);
+
+        public void Insert(int index, TObject item) =>
+            base.Insert(index, item);
+
+        public void Add(TObject item) =>
+            base.Add(item);
+
+        public bool Contains(TObject item) =>
+            base.Contains(item);
+
+        public void CopyTo(TObject[] array, int arrayIndex) =>
+            base.CopyTo(array, arrayIndex);
+
+        public bool Remove(TObject item) =>
+            base.Remove(item);
+#endif
+
+        public
+#if !WINDOWS_UWP
+            new
+#endif
+            IEnumerator<TObject> GetEnumerator()
         {
             var list = (IList<DependencyObject>)this;
             for (var index = 0; index < list.Count; index++)
@@ -158,10 +193,14 @@ namespace Epoxy.Supplemental
             this.GetEnumerator();
     }
 
-    public class PlainObjectCollection<TSelf, TObject> :
-        PlainObjectCollection<TObject>
+    public class DependencyObjectCollection<TSelf, TObject> :
+        DependencyObjectCollection<TObject>
+#if WINDOWS_UWP
         where TObject : DependencyObject
-        where TSelf : PlainObjectCollection<TObject>, new()
+#else
+        where TObject : class, DependencyObject
+#endif
+        where TSelf : DependencyObjectCollection<TObject>, new()
     {
     }
 }

@@ -217,7 +217,7 @@ namespace Epoxy
     /// 
     /// See EventBinder guide: https://github.com/kekyo/Epoxy#eventbinder</remarks>
     public sealed class EventsCollection :
-        PlainObjectCollection<EventsCollection, Event>
+        DependencyObjectCollection<EventsCollection, Event>
     {
         private DependencyObject? associatedObject;
 
