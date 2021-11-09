@@ -116,7 +116,7 @@ namespace Epoxy
         /// <summary>
         /// Declared Events attached property.
         /// </summary>
-        private static readonly AttachedProperty<EventsCollection?> EventsProperty =
+        public static readonly AttachedProperty<EventsCollection?> EventsProperty =
             AvaloniaProperty.RegisterAttached<EventBinder, AvaloniaObject, EventsCollection?>(
                 "Events",
                 default,
@@ -169,7 +169,7 @@ namespace Epoxy
         /// <summary>
         /// Declared Events attached property.
         /// </summary>
-        private static readonly DependencyProperty EventsProperty =
+        public static readonly DependencyProperty EventsProperty =
             DependencyProperty.RegisterAttached(
 #if UNO || OPENSILVER
                 "Events",
