@@ -326,7 +326,7 @@ csprojの`PropertyGroup`の`EpoxyBuildEnable`に`False`を指定して下さい�
 
     <epoxy:EventBinder.Events>
         <!-- Window.Loadedイベントを、ViewModelのReadyプロパティにバインディングする -->
-        <epoxy:Event Name="Loaded" Command="{Binding Ready}" />
+        <epoxy:Event EventName="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 </Window>
 ```

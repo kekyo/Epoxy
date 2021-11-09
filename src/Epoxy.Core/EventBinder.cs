@@ -255,15 +255,15 @@ namespace Epoxy
         /// <summary>
         /// Binds target CLR event name bindable property declaration.
         /// </summary>
-        public static readonly BindableProperty NameProperty =
+        public static readonly BindableProperty EventNameProperty =
             BindableProperty.Create(
-                "Name",
+                "EventName",
                 typeof(string),
                 typeof(Event),
                 null,
                 BindingMode.Default,
                 null,
-                (d, ov, nv) => ((Event)d).OnNamePropertyChanged(ov, nv));
+                (d, ov, nv) => ((Event)d).OnEventNamePropertyChanged(ov, nv));
 
         /// <summary>
         /// Binds ICommand expression bindable property declaration.
@@ -281,8 +281,8 @@ namespace Epoxy
         /// <summary>
         /// Binds target CLR event name bindable property declaration.
         /// </summary>
-        public static readonly AvaloniaProperty<string> NameProperty =
-            AvaloniaProperty.Register<Event, string>("Name");
+        public static readonly AvaloniaProperty<string> EventNameProperty =
+            AvaloniaProperty.Register<Event, string>("EventName");
 
         /// <summary>
         /// Binds ICommand expression bindable property declaration.
@@ -295,19 +295,19 @@ namespace Epoxy
         /// </summary>
         static Event()
         {
-            NameProperty.Changed.Subscribe(e => ((Event)e.Sender).OnNamePropertyChanged(e.OldValue, e.NewValue));
+            EventNameProperty.Changed.Subscribe(e => ((Event)e.Sender).OnEventNamePropertyChanged(e.OldValue, e.NewValue));
             CommandProperty.Changed.Subscribe(e => ((Event)e.Sender).OnCommandPropertyChanged(e.NewValue));
         }
 #else
         /// <summary>
         /// Binds target CLR event name bindable property declaration.
         /// </summary>
-        public static readonly DependencyProperty NameProperty =
+        public static readonly DependencyProperty EventNameProperty =
             DependencyProperty.Register(
-                "Name",
+                "EventName",
                 typeof(string),
                 typeof(Event),
-                new PropertyMetadata(null, (d, e) => ((Event)d).OnNamePropertyChanged(e.OldValue, e.NewValue)));
+                new PropertyMetadata(null, (d, e) => ((Event)d).OnEventNamePropertyChanged(e.OldValue, e.NewValue)));
 
         /// <summary>
         /// Binds ICommand expression bindable property declaration.
@@ -330,10 +330,10 @@ namespace Epoxy
         /// <summary>
         /// Binds target CLR event name.
         /// </summary>
-        public string? Name
+        public string? EventName
         {
-            get => (string?)this.GetValue(NameProperty);
-            set => this.SetValue(NameProperty, value);
+            get => (string?)this.GetValue(EventNameProperty);
+            set => this.SetValue(EventNameProperty, value);
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace Epoxy
             }
         }
 
-        private void OnNamePropertyChanged(object? oldName, object? newName)
+        private void OnEventNamePropertyChanged(object? oldName, object? newName)
         {
             this.RemoveHandler(this.AssociatedObject, oldName);
             this.AddHandler(this.AssociatedObject, newName, this.Command);
@@ -386,8 +386,8 @@ namespace Epoxy
 
         private void OnCommandPropertyChanged(object? newCommand)
         {
-            this.RemoveHandler(this.AssociatedObject, this.Name);
-            this.AddHandler(this.AssociatedObject, this.Name, newCommand);
+            this.RemoveHandler(this.AssociatedObject, this.EventName);
+            this.AddHandler(this.AssociatedObject, this.EventName, newCommand);
         }
 
         /// <summary>
@@ -395,8 +395,8 @@ namespace Epoxy
         /// </summary>
         protected override void OnAttached()
         {
-            this.RemoveHandler(this.AssociatedObject, this.Name);
-            this.AddHandler(this.AssociatedObject, this.Name, this.Command);
+            this.RemoveHandler(this.AssociatedObject, this.EventName);
+            this.AddHandler(this.AssociatedObject, this.EventName, this.Command);
         }
 
         /// <summary>
@@ -404,7 +404,7 @@ namespace Epoxy
         /// </summary>
         protected override void OnDetaching()
         {
-            this.RemoveHandler(this.AssociatedObject, this.Name);
+            this.RemoveHandler(this.AssociatedObject, this.EventName);
         }
     }
 }

@@ -33,12 +33,12 @@
     </Page.DataContext>
 
     <epoxy:EventBinder.Events>
-        <epoxy:Event Name="Opened" Command="{Binding Ready}" />
+        <epoxy:Event EventName="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 
     <DockPanel>
         <Button DockPanel.Dock="Top"
-                Height="30" Foreground="White" Background="Red"
+                Height="30" Foreground="Black" Background="Red"
                 HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>

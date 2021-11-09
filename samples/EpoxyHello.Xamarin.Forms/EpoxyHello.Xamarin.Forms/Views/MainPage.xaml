@@ -31,7 +31,7 @@
     </ContentPage.BindingContext>
 
     <epoxy:EventBinder.Events>
-        <epoxy:Event Name="Appearing" Command="{Binding Ready}" />
+        <epoxy:Event EventName="Appearing" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 
     <StackLayout>

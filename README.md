@@ -315,7 +315,7 @@ For example, you can bind the `Window.Loaded` event of WPF as follows:
 
     <epoxy:EventBinder.Events>
         <!-- Binding the Window.Loaded event to the ViewModel's Ready property -->
-        <epoxy:Event Name="Loaded" Command="{Binding Ready}" />
+        <epoxy:Event EventName="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 </Window>
 ```
