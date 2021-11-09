@@ -43,7 +43,7 @@
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
         <Grid>
-            <ListBox Items="{Binding Items}"
+            <ListBox ItemsSource="{Binding Items}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ListBox.ItemTemplate>
