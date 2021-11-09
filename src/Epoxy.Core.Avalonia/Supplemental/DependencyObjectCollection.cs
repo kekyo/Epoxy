@@ -126,7 +126,7 @@ namespace Epoxy.Supplemental
         private readonly List<TObject> snapshot =
             new List<TObject>();
 
-        public DependencyObjectCollection() =>
+        internal DependencyObjectCollection() =>
             this.collection.CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)

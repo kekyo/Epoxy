@@ -26,13 +26,13 @@ using System.Windows;
 
 namespace Epoxy.Supplemental
 {
-    public class DependencyObjectCollection<TObject> :
+    public abstract class DependencyObjectCollection<TObject> :
         System.Windows.DependencyObjectCollection<TObject>
         where TObject : DependencyObject
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        public DependencyObjectCollection() =>
+        internal DependencyObjectCollection() =>
             ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)

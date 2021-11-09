@@ -216,115 +216,18 @@ namespace Epoxy
     /// <remarks>It will be implicitly used on the XAML code.
     /// 
     /// See EventBinder guide: https://github.com/kekyo/Epoxy#eventbinder</remarks>
+#if WINDOWS_UWP || UNO
+    [Windows.UI.Xaml.Data.Bindable]
+#endif
     public sealed class EventsCollection :
-        DependencyObjectCollection<EventsCollection, Event>
+        AttachableCollection<EventsCollection, Event>
     {
-        private DependencyObject? associatedObject;
-
         /// <summary>
         /// The constructor.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public EventsCollection()
         { }
-
-        /// <summary>
-        /// Get bound parent element instance.
-        /// </summary>
-        private DependencyObject? AssociatedObject
-        {
-            get
-            {
-                ReadPreamble();
-                return this.associatedObject;
-            }
-        }
-
-        /// <summary>
-        /// An event will be added.
-        /// </summary>
-        /// <param name="evt">Event instance</param>
-        protected override void OnAdded(Event evt)
-        {
-            if (this.AssociatedObject != null)
-            {
-                evt.Attach(this.AssociatedObject);
-            }
-        }
-
-        /// <summary>
-        /// An event will be removing.
-        /// </summary>
-        /// <param name="evt">Event instance</param>
-        protected override void OnRemoving(Event evt)
-        {
-            if (evt.AssociatedObject != null)
-            {
-                evt.Detach();
-            }
-        }
-
-        /// <summary>
-        /// Attach a parent element.
-        /// </summary>
-        /// <param name="d">Parent element instance</param>
-        internal void Attach(DependencyObject d)
-        {
-#if XAMARIN_FORMS
-            this.Parent = d as Element;
-#endif
-
-            if (d != this.AssociatedObject)
-            {
-                if (this.AssociatedObject != null)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                if (!InternalDesigner.IsDesignTime)
-                {
-                    WritePreamble();
-                    this.associatedObject = d;
-                    WritePostscript();
-
-                    foreach (var evt in this)
-                    {
-                        evt.Attach(this.AssociatedObject);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Detach already attached parent element.
-        /// </summary>
-        internal void Detach()
-        {
-            foreach (var evt in this)
-            {
-                evt.Detach();
-            }
-
-            WritePreamble();
-            this.associatedObject = null;
-            WritePostscript();
-
-#if XAMARIN_FORMS
-            this.Parent = null;
-#endif
-        }
-
-#if !WINDOWS_WPF
-        [Conditional("WINDOWS_WPF")]
-        private void ReadPreamble()
-        { }
-        [Conditional("WINDOWS_WPF")]
-        private void WritePreamble()
-        { }
-        [Conditional("WINDOWS_WPF")]
-        private void WritePostscript()
-        { }
-#endif
     }
 
     /// <summary>
@@ -345,19 +248,8 @@ namespace Epoxy
 #if WINDOWS_UWP || UNO
     [Windows.UI.Xaml.Data.Bindable]
 #endif
-    public sealed partial class Event :
-#if WINDOWS_WPF
-        Freezable
-#endif
-#if WINDOWS_UWP || WINUI || UNO || OPENSILVER
-        DependencyObject
-#endif
-#if XAMARIN_FORMS
-        Element
-#endif
-#if AVALONIA
-        PlainObject
-#endif
+    public sealed class Event :
+        AttachableObject<Event>
     {
 #if XAMARIN_FORMS
         /// <summary>
@@ -435,19 +327,6 @@ namespace Epoxy
         public Event()
         { }
 
-#if WINDOWS_WPF
-        /// <summary>
-        /// Create this class instance.
-        /// </summary>
-        /// <returns>Event instance</returns>
-        /// <remarks>It will be used internal only.</remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override Freezable CreateInstanceCore() =>
-            new Event();
-#endif
-
-        internal DependencyObject? AssociatedObject { get; private set; }
-
         /// <summary>
         /// Binds target CLR event name.
         /// </summary>
@@ -514,23 +393,18 @@ namespace Epoxy
         /// <summary>
         /// Attach a parent element.
         /// </summary>
-        /// <param name="associatedObject">Parent element instance</param>
-        internal void Attach(DependencyObject? associatedObject)
+        protected override void OnAttached()
         {
             this.RemoveHandler(this.AssociatedObject, this.Name);
-            this.AddHandler(associatedObject, this.Name, this.Command);
-
-            this.AssociatedObject = associatedObject;
+            this.AddHandler(this.AssociatedObject, this.Name, this.Command);
         }
 
         /// <summary>
         /// Detach already attached parent element.
         /// </summary>
-        internal void Detach()
+        protected override void OnDetaching()
         {
             this.RemoveHandler(this.AssociatedObject, this.Name);
-
-            this.AssociatedObject = null;
         }
     }
 }

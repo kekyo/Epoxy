@@ -29,7 +29,7 @@ using Xamarin.Forms;
 
 namespace Epoxy.Supplemental
 {
-    public class DependencyObjectCollection<TObject> :
+    public abstract class DependencyObjectCollection<TObject> :
         Element, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
         where TObject : Element
     {
@@ -38,7 +38,7 @@ namespace Epoxy.Supplemental
         private readonly List<TObject> snapshot =
             new List<TObject>();
 
-        public DependencyObjectCollection()
+        internal DependencyObjectCollection()
         {
             ((INotifyPropertyChanged)this.collection).PropertyChanged += (s, e) =>
                 this.OnPropertyChanged(e.PropertyName);

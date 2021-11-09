@@ -30,7 +30,7 @@ using Windows.UI.Xaml;
 namespace Epoxy.Supplemental
 {
     // DANGER: The implementation is very fragile. You may die if refactor this.
-    public class DependencyObjectCollection<TObject> :
+    public abstract class DependencyObjectCollection<TObject> :
         DependencyObjectCollection, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
 #if WINDOWS_UWP
         where TObject : DependencyObject
@@ -40,7 +40,7 @@ namespace Epoxy.Supplemental
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        public DependencyObjectCollection() =>
+        internal DependencyObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)

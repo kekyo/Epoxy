@@ -29,13 +29,13 @@ using Microsoft.UI.Xaml;
 
 namespace Epoxy.Supplemental
 {
-    public class DependencyObjectCollection<TObject> :
+    public abstract class DependencyObjectCollection<TObject> :
         DependencyObjectCollection, IEnumerable<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
         where TObject : DependencyObject
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        public DependencyObjectCollection() =>
+        internal DependencyObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
