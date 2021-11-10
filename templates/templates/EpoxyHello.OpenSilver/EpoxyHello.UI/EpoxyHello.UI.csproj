@@ -9,6 +9,7 @@
     <DefineSilverlight>true</DefineSilverlight>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Epoxy.OpenSilver" Version="*" />
     <PackageReference Include="OpenSilver" Version="1.0.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>

@@ -19,7 +19,7 @@
 
 using System.Windows;
 
-using EpoxyHello.OpenSilver.Views;
+using EpoxyHello.Views;
 
 namespace EpoxyHello
 {

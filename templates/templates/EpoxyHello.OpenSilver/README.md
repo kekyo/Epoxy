@@ -1,4 +1,4 @@
-# Epoxy Avalonia template
+# Epoxy OpenSilver template
 
 ## Resources
 
