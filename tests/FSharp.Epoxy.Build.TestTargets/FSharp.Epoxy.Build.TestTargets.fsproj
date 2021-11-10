@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="5.0.0" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />
   </ItemGroup>
 
@@ -19,6 +20,10 @@
     <ItemGroup>
         <Compile Include="NonTargettedViewModel.fs" />
         <Compile Include="TargettedViewModel1.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="System.ValueTuple" Version="4.5.0" />
     </ItemGroup>
 
 </Project>
