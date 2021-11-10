@@ -266,6 +266,20 @@ namespace Epoxy
                 (d, ov, nv) => ((Event)d).OnEventNamePropertyChanged(ov, nv));
 
         /// <summary>
+        /// Binds target CLR event name bindable property declaration.
+        /// </summary>
+        [Obsolete("Use EventName instead.")]
+        public static readonly BindableProperty NameProperty =
+            BindableProperty.Create(
+                "Name",
+                typeof(string),
+                typeof(Event),
+                null,
+                BindingMode.Default,
+                null,
+                (d, ov, nv) => ((Event)d).OnEventNamePropertyChanged(ov, nv));
+
+        /// <summary>
         /// Binds ICommand expression bindable property declaration.
         /// </summary>
         public static readonly BindableProperty CommandProperty =
@@ -283,6 +297,13 @@ namespace Epoxy
         /// </summary>
         public static readonly AvaloniaProperty<string> EventNameProperty =
             AvaloniaProperty.Register<Event, string>("EventName");
+
+        /// <summary>
+        /// Binds target CLR event name bindable property declaration.
+        /// </summary>
+        [Obsolete("Use EventName instead.")]
+        public static readonly AvaloniaProperty<string> NameProperty =
+            AvaloniaProperty.Register<Event, string>("Name");
 
         /// <summary>
         /// Binds ICommand expression bindable property declaration.
@@ -308,6 +329,19 @@ namespace Epoxy
                 typeof(string),
                 typeof(Event),
                 new PropertyMetadata(null, (d, e) => ((Event)d).OnEventNamePropertyChanged(e.OldValue, e.NewValue)));
+
+#if !OPENSILVER
+        /// <summary>
+        /// Binds target CLR event name bindable property declaration.
+        /// </summary>
+        [Obsolete("Use EventName instead.")]
+        public static readonly DependencyProperty NameProperty =
+            DependencyProperty.Register(
+                "Name",
+                typeof(string),
+                typeof(Event),
+                new PropertyMetadata(null, (d, e) => ((Event)d).OnEventNamePropertyChanged(e.OldValue, e.NewValue)));
+#endif
 
         /// <summary>
         /// Binds ICommand expression bindable property declaration.
@@ -335,6 +369,18 @@ namespace Epoxy
             get => (string?)this.GetValue(EventNameProperty);
             set => this.SetValue(EventNameProperty, value);
         }
+
+#if !OPENSILVER
+        /// <summary>
+        /// Binds target CLR event name.
+        /// </summary>
+        [Obsolete("Use EventName instead.")]
+        public string? Name
+        {
+            get => (string?)this.GetValue(EventNameProperty);
+            set => this.SetValue(EventNameProperty, value);
+        }
+#endif
 
         /// <summary>
         /// Binds ICommand expression.
