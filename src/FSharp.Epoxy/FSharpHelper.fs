@@ -34,7 +34,7 @@ open Windows.UI.Xaml
 open Microsoft.UI.Xaml
 #endif
 
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
 open System.Windows
 open System.Windows.Threading
 
@@ -58,15 +58,16 @@ module public FSharpHelper =
 
 #if WINDOWS_WPF
     type Dispatcher with
-
+    
         /// <summary>
         /// Execute function under the Dispatcher.
         /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
         /// <param name="action">Function</param>
-        /// <returns>Async&lt;unit&gt; instance</returns>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
         /// <remarks>Recommends using UIThread.bind function instead.</remarks>
-        member dispatcher.invokeAsync (action: unit -> unit) =
-            dispatcher.InvokeAsync<unit>(action |> asFunc0).Task |> taskAsAsyncResult
+        member dispatcher.invokeAsync (action: unit -> 'TResult) =
+            dispatcher.InvokeAsync<'TResult>(action |> asFunc0).Task |> taskAsAsyncResult
 
         /// <summary>
         /// Execute function under the Dispatcher.
@@ -98,17 +99,51 @@ module public FSharpHelper =
         member dispatcher.invokeAsync (action: unit -> Async<'TResult>) =
             dispatcher.Invoke(action) |> asyncAsAsyncResult
 #endif
-#if AVALONIA
+#if OPENSILVER
     type Dispatcher with
+    
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
+        member dispatcher.invokeAsync (action: unit -> 'TResult) =
+            invokeAsync dispatcher action |> taskAsAsyncResult
 
         /// <summary>
         /// Execute function under the Dispatcher.
         /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
         /// <param name="action">Function</param>
-        /// <returns>Async&lt;unit&gt; instance</returns>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
         /// <remarks>Recommends using UIThread.bind function instead.</remarks>
-        member dispatcher.invokeAsync (action: unit -> unit) =
-            dispatcher.InvokeAsync<unit>(action) |> taskAsAsyncResult
+        member dispatcher.invokeAsync (action: unit -> ValueTask<'TResult>) =
+            invokeAsync dispatcher action |> unwrapTaskAsValueTask
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
+        member dispatcher.invokeAsync (action: unit -> Task<'TResult>) =
+            invokeAsync dispatcher action |> unwrapTaskAsTask
+
+        /// <summary>
+        /// Execute function under the Dispatcher.
+        /// </summary>
+        /// <typeparam name="'TResult">Result type</typeparam>
+        /// <param name="action">Function</param>
+        /// <returns>Async&lt;'TResult&gt; instance</returns>
+        /// <remarks>Recommends using UIThread.bind function instead.</remarks>
+        member dispatcher.invokeAsync (action: unit -> Async<'TResult>) =
+            invokeAsync dispatcher action |> unwrapTaskAsAsyncResult
+#endif
+#if AVALONIA
+    type Dispatcher with
 
         /// <summary>
         /// Execute function under the Dispatcher.

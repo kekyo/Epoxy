@@ -58,7 +58,27 @@ module internal InternalFSharpHelper =
     let inline valueTaskUnitAsAsyncResult (t: ValueTask<Unit>) = InternalHelpers.MapAsValueTask(t, fun _ -> ())
     let inline asyncAsAsyncResult (a: Async<'TResult>) = Async.StartImmediateAsTask(a) |> InternalHelpers.AsValueTask
 
-    let inline unwrap (a: ValueTask<ValueTask<'TResult>>) =
+    let inline unwrap (a: Async<Async<'TResult>>) =
+        async {
+            let! r = a
+            return! r
+        } |> Async.StartImmediateAsTask |> InternalHelpers.AsValueTask
+    let inline unwrapTaskAsAsyncResult (a: Task<Async<'TResult>>) =
+        async {
+            let! r = a |> Async.AwaitTask
+            return! r
+        } |> Async.StartImmediateAsTask |> InternalHelpers.AsValueTask
+    let inline unwrapTaskAsTask (a: Task<Task<'TResult>>) =
+        async {
+            let! r = a |> Async.AwaitTask
+            return! r |> Async.AwaitTask
+        } |> Async.StartImmediateAsTask |> InternalHelpers.AsValueTask
+    let inline unwrapTaskAsValueTask (a: Task<ValueTask<'TResult>>) =
+        async {
+            let! r = a |> Async.AwaitTask
+            return! r.AsTask() |> Async.AwaitTask
+        } |> Async.StartImmediateAsTask |> InternalHelpers.AsValueTask
+    let inline unwrapValueTaskAsValueTask (a: ValueTask<ValueTask<'TResult>>) =
         async {
             let! r = a.AsTask() |> Async.AwaitTask
             return! r.AsTask() |> Async.AwaitTask
@@ -70,9 +90,41 @@ module internal InternalFSharpHelper =
     let inline valueTaskUnitAsAsyncResult (t: ValueTask<Unit>) = InternalHelpers.MapAsTask(t, fun _ -> ()) |> Async.AwaitTask
     let inline asyncAsAsyncResult (a: Async<'TResult>) = a
 
-    let inline unwrap (a: ValueTask<ValueTask<'TResult>>) =
+    let inline unwrap (a: Async<Async<'TResult>>) =
+        async {
+            let! r = a
+            return! r
+        }
+    let inline unwrapTaskAsAsyncResult (a: Task<Async<'TResult>>) =
+        async {
+            let! r = a |> Async.AwaitTask
+            return! r
+        }
+    let inline unwrapTaskAsTask (a: Task<Task<'TResult>>) =
+        async {
+            let! r = a |> Async.AwaitTask
+            return! r |> Async.AwaitTask
+        }
+    let inline unwrapTaskAsValueTask (a: Task<ValueTask<'TResult>>) =
+        async {
+            let! r = a |> Async.AwaitTask
+            return! r.AsTask() |> Async.AwaitTask
+        }
+    let inline unwrapValueTaskAsValueTask (a: ValueTask<ValueTask<'TResult>>) =
         async {
             let! r = a.AsTask() |> Async.AwaitTask
             return! r.AsTask() |> Async.AwaitTask
         }
+#endif
+
+#if OPENSILVER
+    let inline invokeAsync (dispatcher: System.Windows.Threading.Dispatcher) (action: unit -> 'TResult) =
+        let tcs = new TaskCompletionSource<'TResult>();
+        dispatcher.BeginInvoke(fun () ->
+            try
+                tcs.TrySetResult(action()) |> ignore
+            with
+            | ex -> tcs.TrySetException(ex) |> ignore
+        ) |> ignore
+        tcs.Task
 #endif

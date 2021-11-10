@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Epoxy.OpenSilver</id>
+    <id>FSharp.Epoxy.Wpf</id>
     <version>$PackageVersion$</version>
     <authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,21 +12,24 @@
     <description>An independent flexible XAML MVVM library for .NET</description>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <copyright>Copyright (c) 2019-2021 Kouji Matsui</copyright>
-    <tags>mvvm viewmodel easy simple combinable async awaitable command opensilver</tags>
+    <tags>mvvm viewmodel easy simple combinable async awaitable command fsharp opensilver</tags>
     <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.OpenSilver" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="OpenSilver" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\$Configuration$\**\Epoxy.dll" target="lib" />
-    <file src="bin\$Configuration$\**\Epoxy.pdb" target="lib" />
-    <file src="bin\$Configuration$\**\Epoxy.xml" target="lib" />
+    <file src="bin\$Configuration$\**\FSharp.Epoxy.dll" target="lib" />
+    <file src="bin\$Configuration$\**\FSharp.Epoxy.pdb" target="lib" />
+    <file src="bin\$Configuration$\**\FSharp.Epoxy.xml" target="lib" />
+    <file src="build\*.*" target="build" />
+    <file src="buildMultiTargeting\*.*" target="buildMultiTargeting" />
     <file src="..\..\Images\Epoxy.100.png" target="/" />
   </files>
 </package>
