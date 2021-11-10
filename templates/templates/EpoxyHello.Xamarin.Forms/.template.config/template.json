@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Kouji Matsui (@kozy_kekyo, @kekyo2)",
-  "classifications": [ "Epoxy", "Xamarin Forms" ],
+  "classifications": [ "Epoxy", "Xamarin Forms", "XAML", "Mobile" ],
   "identity": "Epoxy.Template.Xamarin.Forms",
   "groupIdentity": "Epoxy.Template.Xamarin.Forms",
   "name": "Epoxy.Xamarin.Forms MVVM template",
