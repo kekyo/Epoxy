@@ -19,7 +19,7 @@
 
 #nullable enable
 
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
@@ -48,13 +48,13 @@ namespace Epoxy.Internal
 {
     internal static class InternalDesigner
     {
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
         private static readonly ThreadLocal<bool?> designMode = new ThreadLocal<bool?>();
 #endif
 
         public static bool IsDesignTime
         {
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
             get
             {
                 switch (designMode.Value)

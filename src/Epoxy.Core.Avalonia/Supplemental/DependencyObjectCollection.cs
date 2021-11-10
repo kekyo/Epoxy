@@ -37,8 +37,8 @@ namespace Epoxy.Supplemental
     public abstract class PlainObject :
         AvaloniaObject, ILogical, ISetLogicalParent
     {
-        private static readonly PlainObjectCollection<PlainObject> empty =
-            new PlainObjectCollection<PlainObject>();
+        private static readonly DependencyObjectCollection<PlainObject> empty =
+            new DependencyObjectCollection<PlainObject>();
 
         protected PlainObject()
         { }
@@ -117,7 +117,7 @@ namespace Epoxy.Supplemental
         }
     }
 
-    public class PlainObjectCollection<TObject> :
+    public class DependencyObjectCollection<TObject> :
         PlainObject, IAvaloniaList<TObject>
         where TObject : ILogical, ISetLogicalParent
     {
@@ -126,7 +126,7 @@ namespace Epoxy.Supplemental
         private readonly List<TObject> snapshot =
             new List<TObject>();
 
-        public PlainObjectCollection() =>
+        internal DependencyObjectCollection() =>
             this.collection.CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
@@ -301,10 +301,10 @@ namespace Epoxy.Supplemental
             this.collection.RemoveRange(index, count);
     }
 
-    public class PlainObjectCollection<TSelf, TObject> :
-        PlainObjectCollection<TObject>
+    public class DependencyObjectCollection<TSelf, TObject> :
+        DependencyObjectCollection<TObject>
         where TObject : ILogical, ISetLogicalParent
-        where TSelf : PlainObjectCollection<TObject>, new()
+        where TSelf : DependencyObjectCollection<TObject>, new()
     {
     }
 }

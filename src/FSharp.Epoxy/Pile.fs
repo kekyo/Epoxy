@@ -35,7 +35,7 @@ open Windows.UI.Xaml
 open Microsoft.UI.Xaml
 #endif
 
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
 open System.Windows
 #endif
 

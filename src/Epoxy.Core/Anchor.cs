@@ -35,7 +35,7 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 #endif
 

@@ -23,7 +23,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -31,7 +30,7 @@ using Windows.UI.Xaml;
 namespace Epoxy.Supplemental
 {
     // DANGER: The implementation is very fragile. You may die if refactor this.
-    public class PlainObjectCollection<TObject> :
+    public abstract class DependencyObjectCollection<TObject> :
         DependencyObjectCollection, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
 #if WINDOWS_UWP
         where TObject : DependencyObject
@@ -41,7 +40,7 @@ namespace Epoxy.Supplemental
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        public PlainObjectCollection() =>
+        internal DependencyObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -193,14 +192,14 @@ namespace Epoxy.Supplemental
             this.GetEnumerator();
     }
 
-    public class PlainObjectCollection<TSelf, TObject> :
-        PlainObjectCollection<TObject>
+    public class DependencyObjectCollection<TSelf, TObject> :
+        DependencyObjectCollection<TObject>
 #if WINDOWS_UWP
         where TObject : DependencyObject
 #else
         where TObject : class, DependencyObject
 #endif
-        where TSelf : PlainObjectCollection<TObject>, new()
+        where TSelf : DependencyObjectCollection<TObject>, new()
     {
     }
 }

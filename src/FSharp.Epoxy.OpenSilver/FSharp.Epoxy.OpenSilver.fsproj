@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <AssemblyName>FSharp.Epoxy</AssemblyName>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <DefineSilverlight>true</DefineSilverlight>
+    <AssemblyTitle>FSharp.Epoxy.OpenSilver</AssemblyTitle>
+      
+    <NuspecFile>FSharp.Epoxy.OpenSilver.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;OPENSILVER</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;OPENSILVER</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="5.0.0" />
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="build\*.*" />
+    <None Include="buildMultiTargeting\*.*" />
+    <None Include="FSharp.Epoxy.OpenSilver.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Properties/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Internal/*.fs" />
+    <Compile Include="../FSharp.Epoxy/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Advanced/*.fs" />
+  </ItemGroup>
+
+</Project>
