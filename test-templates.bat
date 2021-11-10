@@ -66,6 +66,20 @@ dotnet build
 cd ..
 
 rem ===========================================================
+echo "Testing epoxy-opensilver"
+
+mkdir epoxy_opensilver
+cd epoxy_opensilver
+dotnet new epoxy-opensilver
+
+copy /y ..\..\test-templates-nuget.config nuget.config
+
+dotnet restore
+dotnet build
+
+cd ..
+
+rem ===========================================================
 echo "Testing epoxy-xamarin-forms"
 
 mkdir epoxy_xamarin_forms

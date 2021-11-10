@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kouji Matsui (@kozy_kekyo, @kekyo2)",
+  "classifications": [ "Epoxy", "OpenSilver" ],
+  "identity": "Epoxy.Template.OpenSilver",
+  "groupIdentity": "Epoxy.Template.OpenSilver",
+  "name": "Epoxy.OpenSilver MVVM template",
+  "shortName": "epoxy-opensilver",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "EpoxyHello"
+}
