@@ -75,7 +75,10 @@ dotnet new epoxy-opensilver
 copy /y ..\..\test-templates-nuget.config nuget.config
 
 dotnet restore
-dotnet build
+
+rem OpenSilver will cause 'error MSB4062: "DotNetForHtml5.Compiler.ServiceReferenceFixer"' with dotnet build.
+rem dotnet build
+msbuild -t:build
 
 cd ..
 
