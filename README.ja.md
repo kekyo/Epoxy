@@ -94,12 +94,12 @@ dotnet build
 |`epoxy-opensilver`|C#|OpenSilverのサンプルコード|
 |`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
 |`epoxy-uwp`|C#|UWPのサンプルコード|
-|`epoxy-winui`|C#|WinUIのサンプルコード|
 
 * デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
-* OpenSilverのサンプルコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。
-* 現在、WinUIはpreview版制限のために、正しく動作しない可能性があります。
-* Uno platformのテンプレートはまだ用意していません。
+* OpenSilverのサンプルコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。
+  * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
+  * WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。
+* 上記以外のサンプルコードは、リポジトリ内の `samples` ディレクトリを参照して下さい。
 * MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
 ### サンプルコードの解説
@@ -749,7 +749,8 @@ Apache-v2
 * 1.2.0:
   * .NET 6.0に対応。
   * OpenSilverに対応。
-  * 現時点の最新パッケージ群に対応（UWP/WinUI/Unoを除く）
+  * 現時点の最新パッケージ群に対応（UWP/WinUI/Unoを除く）。
+  * WinUIのサンプルテンプレートを削除（必要であれば `samples` ディレクトリを参照して下さい）。
 * 1.1.1:
   * WPF NuGetパッケージ生成時に、NU1201が発生する問題を修正。
 * 1.1.0:

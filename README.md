@@ -86,12 +86,12 @@ dotnet build
 |`epoxy-opensilver`|C#|Sample code for OpenSilver|
 |`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
 |`epoxy-uwp`|C#|Sample code for UWP|
-|`epoxy-winui`|C#|Sample code for WinUI|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
-* OpenSilver sample code is contained only .NET Framework based simulator project. You have to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
-* Currently, WinUI may not work properly due to preview version limitation.
-* We do not have a template for Uno platform yet.
+* OpenSilver sample code is contained only .NET Framework based simulator project.
+  * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
+  * You need to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
+* For sample code other than the above, refer to the `samples` directory in the repository.
 * You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
 ### Detail for sample code
@@ -749,6 +749,7 @@ Apache-v2
   * Supported .NET 6.0.
   * Supported OpenSilver.
   * Renewed latest packages except UWP, WinUI and Uno.
+  * Removed WinUI sample template (You can refer `samples` directory if you need it).
 * 1.1.1:
   * Fixed causes NU1201 when lacks tfm platform version suffix in WPF packages.
 * 1.1.0:
