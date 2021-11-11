@@ -1,8 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net48;netcoreapp3.1;net5.0-windows7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <!-- <TargetFrameworks>net48;netcoreapp3.1;net5.0-windows7.0;net6.0</TargetFrameworks> -->
     <UseWPF>true</UseWPF>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -12,7 +13,7 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.2.0" />
+    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="FSharp.Epoxy.Wpf" Version="*" />
   </ItemGroup>
