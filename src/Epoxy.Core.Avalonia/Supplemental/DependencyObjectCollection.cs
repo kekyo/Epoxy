@@ -51,7 +51,7 @@ namespace Epoxy.Supplemental
 
         public ILogical? LogicalParent { get; private set; }
 
-        public void SetParent(ILogical parent)
+        public void SetParent(ILogical? parent)
         {
             if (this.LogicalParent != null)
             {
