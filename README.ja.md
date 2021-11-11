@@ -96,6 +96,8 @@ dotnet build
 |`epoxy-uwp`|C#|UWPのサンプルコード|
 
 * デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
+* Xamarin Forms, UWPは、古い形式のMSBuildプロジェクトを使用しています。
+  * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
 * OpenSilverのサンプルコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
   * WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。

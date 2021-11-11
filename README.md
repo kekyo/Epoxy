@@ -88,6 +88,8 @@ dotnet build
 |`epoxy-uwp`|C#|Sample code for UWP|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
+* Xamarin Forms and UWP are required old style MSBuild project.
+  * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
 * OpenSilver sample code is contained only .NET Framework based simulator project.
   * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
   * You need to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.

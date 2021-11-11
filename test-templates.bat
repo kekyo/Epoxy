@@ -91,8 +91,11 @@ dotnet new epoxy-xamarin-forms
 
 copy /y ..\..\test-templates-nuget.config nuget.config
 
-dotnet restore
-rem msbuild -t:build
+rem dotnet restore   // MSBuild script is old style...
+msbuild -t:restore
+
+rem dotnet build    // MSBuild script is old style...
+msbuild -t:build
 
 cd ..
 
@@ -105,8 +108,11 @@ dotnet new epoxy-uwp
 
 copy /y ..\..\test-templates-nuget.config nuget.config
 
-dotnet restore
-rem msbuild -t:build
+rem dotnet restore   // MSBuild script is old style...
+msbuild -t:restore
+
+rem dotnet build   // MSBuild script is old style...
+msbuild -t:build
 
 cd ..
 

@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nuget.config = nuget.config
 		README.ja.md = README.ja.md
 		README.md = README.md
+		test-templates-nuget.config = test-templates-nuget.config
+		test-templates.bat = test-templates.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Uwp", "src\Epoxy.Uwp\Epoxy.Uwp.csproj", "{CAE7B7FE-9B7B-4E6C-A9F4-0D3F30E58E0C}"
