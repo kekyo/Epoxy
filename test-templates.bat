@@ -107,18 +107,4 @@ rem msbuild -t:build
 
 cd ..
 
-rem ===========================================================
-echo "Testing epoxy-winui"
-
-mkdir epoxy_winui
-cd epoxy_winui
-dotnet new epoxy-winui
-
-copy /y ..\..\test-templates-nuget.config nuget.config
-
-dotnet restore
-msbuild -t:build
-
-cd ..
-
 cd ..
