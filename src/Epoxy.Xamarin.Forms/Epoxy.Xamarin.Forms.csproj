@@ -4,6 +4,9 @@
     <AssemblyName>Epoxy</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyTitle>Epoxy.Xamarin.Forms</AssemblyTitle>
+
+    <!-- Xamarin Forms could have only portable pdb -->
+    <DebugType>portable</DebugType>
       
     <NuspecFile>Epoxy.Xamarin.Forms.nuspec</NuspecFile>
     <NoPackageAnalysis>true</NoPackageAnalysis>

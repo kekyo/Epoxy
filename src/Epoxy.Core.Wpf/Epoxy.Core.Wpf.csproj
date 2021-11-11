@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <TargetFrameworks>net45;net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows7.0</TargetFrameworks>
+    <TargetFrameworks>net45;net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows7.0;net6.0-windows7.0</TargetFrameworks>
     <UseWpf>true</UseWpf>
     <AssemblyTitle>Epoxy.Core.Wpf</AssemblyTitle>
     <PackageId>Epoxy.Core.Wpf</PackageId>

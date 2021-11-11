@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
+    <TargetFrameworks>net5.0-windows10.0.18362.0</TargetFrameworks>
     <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
     <AssemblyTitle>Epoxy.Core.WinUI</AssemblyTitle>
     <PackageId>Epoxy.Core.WinUI</PackageId>

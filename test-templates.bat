@@ -66,6 +66,23 @@ dotnet build
 cd ..
 
 rem ===========================================================
+echo "Testing epoxy-opensilver"
+
+mkdir epoxy_opensilver
+cd epoxy_opensilver
+dotnet new epoxy-opensilver
+
+copy /y ..\..\test-templates-nuget.config nuget.config
+
+dotnet restore
+
+rem OpenSilver will cause 'error MSB4062: "DotNetForHtml5.Compiler.ServiceReferenceFixer"' with dotnet build.
+rem dotnet build
+msbuild -t:build
+
+cd ..
+
+rem ===========================================================
 echo "Testing epoxy-xamarin-forms"
 
 mkdir epoxy_xamarin_forms
@@ -74,8 +91,11 @@ dotnet new epoxy-xamarin-forms
 
 copy /y ..\..\test-templates-nuget.config nuget.config
 
-dotnet restore
-rem msbuild -t:build
+rem dotnet restore   // MSBuild script is old style...
+msbuild -t:restore
+
+rem dotnet build    // MSBuild script is old style...
+msbuild -t:build
 
 cd ..
 
@@ -88,21 +108,10 @@ dotnet new epoxy-uwp
 
 copy /y ..\..\test-templates-nuget.config nuget.config
 
-dotnet restore
-rem msbuild -t:build
+rem dotnet restore   // MSBuild script is old style...
+msbuild -t:restore
 
-cd ..
-
-rem ===========================================================
-echo "Testing epoxy-winui"
-
-mkdir epoxy_winui
-cd epoxy_winui
-dotnet new epoxy-winui
-
-copy /y ..\..\test-templates-nuget.config nuget.config
-
-dotnet restore
+rem dotnet build   // MSBuild script is old style...
 msbuild -t:build
 
 cd ..

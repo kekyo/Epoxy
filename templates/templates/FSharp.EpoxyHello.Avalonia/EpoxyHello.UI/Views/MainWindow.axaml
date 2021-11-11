@@ -24,7 +24,7 @@
     </Window.DataContext>
 
     <epoxy:EventBinder.Events>
-        <epoxy:Event Name="Opened" Command="{Binding Ready}" />
+        <epoxy:Event EventName="Opened" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 
     <DockPanel>

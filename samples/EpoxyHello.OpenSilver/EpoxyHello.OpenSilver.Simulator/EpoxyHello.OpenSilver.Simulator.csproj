@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <DefineSilverlight>true</DefineSilverlight>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenSilver.Simulator" Version="1.0.0" />
+   </ItemGroup>
+  <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj" />
+      <ProjectReference Include="..\..\..\src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj" />
+      <ProjectReference Include="..\EpoxyHello.OpenSilver\EpoxyHello.OpenSilver.csproj" />
+  </ItemGroup>
+</Project>

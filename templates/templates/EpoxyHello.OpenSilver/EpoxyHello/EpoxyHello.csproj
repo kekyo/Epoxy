@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenSilver.Simulator" Version="1.0.0" />
+   </ItemGroup>
+  <ItemGroup>
+      <ProjectReference Include="..\EpoxyHello.UI\EpoxyHello.UI.csproj" />
+  </ItemGroup>
+</Project>

@@ -29,7 +29,7 @@ using Windows.UI.Core;
 using Microsoft.System;
 #endif
 
-#if WINDOWS_WPF
+#if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 #endif
 
