@@ -36,16 +36,16 @@
 * Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
   * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
-  * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
+  * WPF: .NET 6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.10 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2196)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
   * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper), [But may cause executing error same as this issue.](https://github.com/microsoft/microsoft-ui-xaml/issues/4226)
   * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
-* F# is 5.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
+* F# is 6.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
 * Smallest footprint and easy understandable.
   * No dependency on non-platform standard frameworks or libraries.
 * Supported simplest and minimalism Model-View-ViewModel design.
@@ -62,7 +62,7 @@ This sample displays a list of the latest posts and images from the Reddit forum
 
 ### How to get and build the sample code
 
-The .NET CLI template is supported. You can easily try the sample code in a clean state with the following command:
+The .NET 6.0 SDK CLI template is supported. You can easily try the sample code in a clean state with the following command:
 
 ```bash
 # Install the template package (Only at the first time or version update)
@@ -74,6 +74,8 @@ dotnet new epoxy-wpf
 # Build
 dotnet build
 ```
+
+* Caution: You have to install .NET 6.0 SDK before above steps. Will fail building if installed another version.
 
 ### List of currently supported templates
 
@@ -87,6 +89,7 @@ dotnet build
 |`epoxy-winui`|C#|Sample code for WinUI|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
+* OpenSilver sample code is contained only .NET Framework based simulator project. You have to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
 * Currently, WinUI may not work properly due to preview version limitation.
 * We do not have a template for Uno platform yet.
 * You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
@@ -742,6 +745,10 @@ Apache-v2
 
 ## History
 
+* 1.2.0:
+  * Supported .NET 6.0.
+  * Supported OpenSilver.
+  * Renewed latest packages except UWP, WinUI and Uno.
 * 1.1.1:
   * Fixed causes NU1201 when lacks tfm platform version suffix in WPF packages.
 * 1.1.0:

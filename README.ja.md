@@ -36,16 +36,16 @@
 * Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、独立した柔軟性のあるライブラリです。
   * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
-  * WPF: .NET 5/.NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
+  * WPF: .NET 6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.10 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (4.8.0.1821)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2196)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
   * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/ja-jp/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper, [但し、このissueと同じ問題で実行時エラーが発生する可能性があります](https://github.com/microsoft/microsoft-ui-xaml/issues/4226))
   * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
-* F#は5.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
+* F#は6.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
 * 小さなライブラリで、理解しやすいAPIです。
   * プラットフォーム標準以外のフレームワークやライブラリに依存していません。
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
@@ -70,7 +70,7 @@
 
 ### サンプルコードの入手とビルド方法
 
-.NET CLIテンプレートに対応しています。以下のようなコマンドで、簡単にサンプルコードをクリーンな状態で試すことができます:
+.NET 6.0 SDKのCLIテンプレートに対応しています。以下のようなコマンドで、簡単にサンプルコードをクリーンな状態で試すことができます:
 
 ```bash
 # テンプレートパッケージをインストール（初回又はバージョンアップ時のみ）
@@ -82,6 +82,8 @@ dotnet new epoxy-wpf
 # ビルド
 dotnet build
 ```
+
+* 注意: .NET 6.0 SDKをあらかじめインストールして下さい。他のバージョンのみの環境ではビルドに失敗します。
 
 ### 現在サポートしているテンプレート一覧
 
@@ -95,6 +97,7 @@ dotnet build
 |`epoxy-winui`|C#|WinUIのサンプルコード|
 
 * デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
+* OpenSilverのサンプルコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。
 * 現在、WinUIはpreview版制限のために、正しく動作しない可能性があります。
 * Uno platformのテンプレートはまだ用意していません。
 * MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
@@ -743,6 +746,10 @@ Apache-v2
 
 ## History
 
+* 1.2.0:
+  * .NET 6.0に対応。
+  * OpenSilverに対応。
+  * 現時点の最新パッケージ群に対応（UWP/WinUI/Unoを除く）
 * 1.1.1:
   * WPF NuGetパッケージ生成時に、NU1201が発生する問題を修正。
 * 1.1.0:
