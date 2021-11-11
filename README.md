@@ -75,7 +75,7 @@ dotnet new epoxy-wpf
 dotnet build
 ```
 
-* Caution: You have to install .NET 6.0 SDK before above steps. Will fail building if installed another version.
+* Caution: You have to install .NET 6.0 SDK before above steps. Will fail building if installed only another version.
 
 ### List of currently supported templates
 
