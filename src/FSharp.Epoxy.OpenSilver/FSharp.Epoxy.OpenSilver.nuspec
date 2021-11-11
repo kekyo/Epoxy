@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>FSharp.Epoxy.Wpf</id>
+    <id>FSharp.Epoxy.OpenSilver</id>
     <version>$PackageVersion$</version>
     <authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
