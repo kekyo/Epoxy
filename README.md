@@ -96,6 +96,14 @@ dotnet build
 * For sample code other than the above, refer to the `samples` directory in the repository.
 * You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
+### Choose by Visual Studio wizard dialog
+
+When you install templates with above step, Visual Studio project creation wizard will show up Epoxy's templates in the dialog:
+
+![Template selection dialog](Images/vswizard_en.png)
+
+----
+
 ### Detail for sample code
 
 Full asynchronous fetching and updating into ListBox when you click a button.
@@ -752,6 +760,7 @@ Apache-v2
   * Supported OpenSilver.
   * Renewed latest packages except UWP, WinUI and Uno.
   * Removed WinUI sample template (You can refer `samples` directory if you need it).
+  * Supported Visual Studio project wizard.
 * 1.1.1:
   * Fixed causes NU1201 when lacks tfm platform version suffix in WPF packages.
 * 1.1.0:

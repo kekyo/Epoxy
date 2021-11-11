@@ -104,6 +104,14 @@ dotnet build
 * 上記以外のサンプルコードは、リポジトリ内の `samples` ディレクトリを参照して下さい。
 * MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
 
+### Visual Studioのウィザードから選択
+
+上記テンプレートのインストールを行っておけば、Visual Studioの新規プロジェクト生成でも選択する事が出来ます。
+
+![Template selection dialog](Images/vswizard_ja.png)
+
+----
+
 ### サンプルコードの解説
 
 起動後にボタンをクリックすると、完全に非同期でダウンロードしながら、リストに結果を追加していきます。
@@ -753,6 +761,7 @@ Apache-v2
   * OpenSilverに対応。
   * 現時点の最新パッケージ群に対応（UWP/WinUI/Unoを除く）。
   * WinUIのサンプルテンプレートを削除（必要であれば `samples` ディレクトリを参照して下さい）。
+  * Visual Studioのプロジェクトウィザードに対応。
 * 1.1.1:
   * WPF NuGetパッケージ生成時に、NU1201が発生する問題を修正。
 * 1.1.0:
