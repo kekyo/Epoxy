@@ -2,8 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net48</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
+    <DefineSilverlight>true</DefineSilverlight>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenSilver.Simulator" Version="1.0.0" />

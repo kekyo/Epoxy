@@ -2,10 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

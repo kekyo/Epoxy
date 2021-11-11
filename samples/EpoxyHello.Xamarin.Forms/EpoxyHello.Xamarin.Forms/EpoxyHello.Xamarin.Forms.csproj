@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <!-- Xamarin Forms could have only portable pdb -->
     <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

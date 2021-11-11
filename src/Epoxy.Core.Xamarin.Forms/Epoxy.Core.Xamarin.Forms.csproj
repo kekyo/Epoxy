@@ -3,6 +3,10 @@
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <!-- Xamarin Forms could have only portable pdb -->
+    <DebugType>portable</DebugType>
+
     <AssemblyTitle>Epoxy.Core.Xamarin.Forms</AssemblyTitle>
     <PackageId>Epoxy.Core.Xamarin.Forms</PackageId>
     <PackageTags>$(PackageTags);xamarin</PackageTags>

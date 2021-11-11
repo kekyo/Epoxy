@@ -1,0 +1,12 @@
+<Project>
+
+  <Import Project="../Directory.Build.props" />
+
+  <!-- https://github.com/xamarin/xamarin-macios/issues/8601#issuecomment-699128097 -->
+  <PropertyGroup>
+    <BuildDependsOn>$([MSBuild]::Unescape($(BuildDependsOn.Replace('_SayHello;', '').Replace('_VerifyBuildSignature;', '').Replace('_VerifyXcodeVersion;', '').Replace('AfterConnect;', '').Replace('BeforeDisconnect;', '').Replace('_SayGoodbye;', ''))))</BuildDependsOn>
+    <IsMacEnabled>false</IsMacEnabled>
+  </PropertyGroup>
+  <Target Name="_SayHello"></Target>
+    
+</Project>
