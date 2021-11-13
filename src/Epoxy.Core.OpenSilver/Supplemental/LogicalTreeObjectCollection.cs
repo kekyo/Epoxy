@@ -26,13 +26,13 @@ using System.Windows;
 
 namespace Epoxy.Supplemental
 {
-    public abstract class DependencyObjectCollection<TObject> :
-        FreezableCollection<TObject>
-        where TObject : Freezable
+    public abstract class LogicalTreeObjectCollection<TObject> :
+        DependencyObjectCollection<TObject>
+        where TObject : DependencyObject
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        internal DependencyObjectCollection() =>
+        internal LogicalTreeObjectCollection() =>
             ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
@@ -106,17 +106,12 @@ namespace Epoxy.Supplemental
         protected virtual void OnRemoving(TObject element)
         {
         }
-
-        protected override Freezable? CreateInstanceCore() =>
-            (Freezable)Activator.CreateInstance(this.GetType())!;
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
-        where TObject : Freezable
-        where TSelf : DependencyObjectCollection<TObject>, new()
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
+        where TObject : DependencyObject
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
-        protected sealed override Freezable? CreateInstanceCore() =>
-            new TSelf();
     }
 }

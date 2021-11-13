@@ -22,17 +22,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
 
 namespace Epoxy.Supplemental
 {
-    public abstract class DependencyObjectCollection<TObject> :
-        System.Windows.DependencyObjectCollection<TObject>
-        where TObject : DependencyObject
+    public abstract class LogicalTreeObjectCollection<TObject> :
+        FreezableCollection<TObject>
+        where TObject : Freezable
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        internal DependencyObjectCollection() =>
+        internal LogicalTreeObjectCollection() =>
             ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
@@ -108,10 +109,12 @@ namespace Epoxy.Supplemental
         }
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
-        where TObject : DependencyObject
-        where TSelf : DependencyObjectCollection<TObject>, new()
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
+        where TObject : Freezable
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
+        protected sealed override Freezable? CreateInstanceCore() =>
+            new TSelf();
     }
 }

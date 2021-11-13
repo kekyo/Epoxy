@@ -25,22 +25,17 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 
 using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Epoxy.Supplemental
 {
-    // DANGER: The implementation is very fragile. You may die if refactor this.
-    public abstract class DependencyObjectCollection<TObject> :
-        DependencyObjectCollection, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
-#if WINDOWS_UWP
+    public abstract class LogicalTreeObjectCollection<TObject> :
+        DependencyObjectCollection, IEnumerable<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
         where TObject : DependencyObject
-#else
-        where TObject : class, DependencyObject
-#endif
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        internal DependencyObjectCollection() =>
+        internal LogicalTreeObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -49,10 +44,10 @@ namespace Epoxy.Supplemental
             {
                 case CollectionChange.ItemInserted:
                     var newElement1 = this[(int)e.Index];
-                    this.snapshot.Insert((int)e.Index, newElement1);
+                    this.snapshot.Insert((int)e.Index, (TObject)newElement1);
                     try
                     {
-                        this.OnAdded(newElement1);
+                        this.OnAdded((TObject)newElement1);
                     }
                     finally
                     {
@@ -71,10 +66,10 @@ namespace Epoxy.Supplemental
                     }
                     finally
                     {
-                        this.snapshot[(int)e.Index] = newElement2;
+                        this.snapshot[(int)e.Index] = (TObject)newElement2;
                         try
                         {
-                            this.OnAdded(newElement2);
+                            this.OnAdded((TObject)newElement2);
                         }
                         finally
                         {
@@ -113,73 +108,7 @@ namespace Epoxy.Supplemental
         public event PropertyChangedEventHandler? PropertyChanged;
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
-#if WINDOWS_UWP
-        public int Count =>
-            ((IList<DependencyObject>)this).Count;
-
-        bool ICollection<TObject>.IsReadOnly =>
-            ((IList<DependencyObject>)this).IsReadOnly;
-
-        public TObject this[int index]
-        {
-            get => (TObject)((IList<DependencyObject>)this)[index];
-            set => ((IList<DependencyObject>)this)[index] = value;
-        }
-
-        public int IndexOf(TObject item) =>
-            ((IList<DependencyObject>)this).IndexOf(item);
-
-        public void Insert(int index, TObject item) =>
-            ((IList<DependencyObject>)this).Insert(index, item);
-
-        public void RemoveAt(int index) =>
-            ((IList<DependencyObject>)this).RemoveAt(index);
-
-        public void Add(TObject item) =>
-            ((IList<DependencyObject>)this).Add(item);
-
-        public void Clear() =>
-            ((IList<DependencyObject>)this).Clear();
-
-        public bool Contains(TObject item) =>
-            ((IList<DependencyObject>)this).Contains(item);
-
-        public void CopyTo(TObject[] array, int arrayIndex) =>
-            ((IList<DependencyObject>)this).CopyTo(array, arrayIndex);
-
-        public bool Remove(TObject item) =>
-            ((IList<DependencyObject>)this).Remove(item);
-#else
-        public new TObject this[int index]
-        {
-            get => (TObject)base[index];
-            set => base[index] = value;
-        }
-
-        public int IndexOf(TObject item) =>
-            base.IndexOf(item);
-
-        public void Insert(int index, TObject item) =>
-            base.Insert(index, item);
-
-        public void Add(TObject item) =>
-            base.Add(item);
-
-        public bool Contains(TObject item) =>
-            base.Contains(item);
-
-        public void CopyTo(TObject[] array, int arrayIndex) =>
-            base.CopyTo(array, arrayIndex);
-
-        public bool Remove(TObject item) =>
-            base.Remove(item);
-#endif
-
-        public
-#if !WINDOWS_UWP
-            new
-#endif
-            IEnumerator<TObject> GetEnumerator()
+        public new IEnumerator<TObject> GetEnumerator()
         {
             var list = (IList<DependencyObject>)this;
             for (var index = 0; index < list.Count; index++)
@@ -192,14 +121,10 @@ namespace Epoxy.Supplemental
             this.GetEnumerator();
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
-#if WINDOWS_UWP
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
         where TObject : DependencyObject
-#else
-        where TObject : class, DependencyObject
-#endif
-        where TSelf : DependencyObjectCollection<TObject>, new()
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
     }
 }

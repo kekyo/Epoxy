@@ -49,7 +49,6 @@ using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
 using Epoxy.Internal;
-using Epoxy.Supplemental;
 using Epoxy.Advanced;
 
 namespace Epoxy
@@ -249,7 +248,7 @@ namespace Epoxy
     [Windows.UI.Xaml.Data.Bindable]
 #endif
     public sealed class Event :
-        AttachableObject<Event>
+        AttachedObject<Event>
     {
 #if XAMARIN_FORMS
         /// <summary>

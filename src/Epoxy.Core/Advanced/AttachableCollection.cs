@@ -19,7 +19,6 @@
 
 #nullable enable
 
-using Epoxy.Internal;
 using System;
 using System.Diagnostics;
 
@@ -47,20 +46,24 @@ using Avalonia.LogicalTree;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
-namespace Epoxy.Supplemental
+using Epoxy.Internal;
+using Epoxy.Supplemental;
+
+namespace Epoxy.Advanced
 {
-    public class AttachableCollection<TObject> :
-        DependencyObjectCollection<TObject>, IAttachableObject
+    public class AttachableCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TSelf, TObject>, IAttachedObject
+        where TSelf : LogicalTreeObjectCollection<TObject>, IAttachedObject, new()
 #if AVALONIA
-        where TObject : ILogical, ISetLogicalParent, IAttachableObject
+        where TObject : ILogical, ISetLogicalParent, IAttachedObject
 #elif UNO && !WINDOWS_UWP
-        where TObject : class, DependencyObject, IAttachableObject
+        where TObject : class, DependencyObject, IAttachedObject
 #elif WINDOWS_WPF
-        where TObject : Freezable, IAttachableObject
+        where TObject : Freezable, IAttachedObject
 #elif XAMARIN_FORMS
-        where TObject : Element, IAttachableObject
+        where TObject : Element, IAttachedObject
 #else
-        where TObject : DependencyObject, IAttachableObject
+        where TObject : DependencyObject, IAttachedObject
 #endif
     {
         private DependencyObject? associatedObject;
@@ -150,25 +153,5 @@ namespace Epoxy.Supplemental
         private void WritePostscript()
         { }
 #endif
-    }
-
-    public class AttachableCollection<TSelf, TObject> :
-        AttachableCollection<TObject>, IAttachableObject
-        where TSelf : AttachableCollection<TObject>
-#if AVALONIA
-        where TObject : ILogical, ISetLogicalParent, IAttachableObject
-#elif UNO && !WINDOWS_UWP
-        where TObject : class, DependencyObject, IAttachableObject
-#elif WINDOWS_WPF
-        where TObject : Freezable, IAttachableObject
-#elif XAMARIN_FORMS
-        where TObject : Element, IAttachableObject
-#else
-        where TObject : DependencyObject, IAttachableObject
-#endif
-    {
-        protected AttachableCollection()
-        {
-        }
     }
 }

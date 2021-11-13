@@ -29,7 +29,7 @@ using Xamarin.Forms;
 
 namespace Epoxy.Supplemental
 {
-    public abstract class DependencyObjectCollection<TObject> :
+    public abstract class LogicalTreeObjectCollection<TObject> :
         Element, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
         where TObject : Element
     {
@@ -38,7 +38,7 @@ namespace Epoxy.Supplemental
         private readonly List<TObject> snapshot =
             new List<TObject>();
 
-        internal DependencyObjectCollection()
+        internal LogicalTreeObjectCollection()
         {
             ((INotifyPropertyChanged)this.collection).PropertyChanged += (s, e) =>
                 this.OnPropertyChanged(e.PropertyName);
@@ -169,10 +169,10 @@ namespace Epoxy.Supplemental
             this.collection.GetEnumerator();
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
         where TObject : Element
-        where TSelf : DependencyObjectCollection<TObject>, new()
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
     }
 }

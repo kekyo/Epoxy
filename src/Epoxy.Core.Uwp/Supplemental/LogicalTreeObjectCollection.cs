@@ -30,13 +30,13 @@ using Windows.UI.Xaml;
 namespace Epoxy.Supplemental
 {
     // DANGER: The implementation is very fragile. You may die if refactor this.
-    public abstract class DependencyObjectCollection<TObject> :
+    public abstract class LogicalTreeObjectCollection<TObject> :
         DependencyObjectCollection, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
         where TObject : DependencyObject
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        internal DependencyObjectCollection() =>
+        internal LogicalTreeObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -158,10 +158,10 @@ namespace Epoxy.Supplemental
             this.GetEnumerator();
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
         where TObject : DependencyObject
-        where TSelf : DependencyObjectCollection<TObject>, new()
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
     }
 }
