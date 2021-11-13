@@ -110,34 +110,5 @@ namespace Epoxy
             this Pile<TUIElement> pile, Func<TUIElement, ValueTask<TResult>> action)
             where TUIElement : UIElement =>
             pile.InternalRentAsync<TResult>(action);
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">Target control type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <returns>ValueTask instance</returns>
-        [Obsolete("Use RentAsync instead.")]
-        public static ValueTask ExecuteAsync<TUIElement>(
-            this Pile<TUIElement> pile, Func<TUIElement, ValueTask> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync(e => action(e).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">Target control type</typeparam>
-        /// <typeparam name="TResult">Action result type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Predicts when rents control instance</param>
-        /// <returns>Result for action</returns>
-        /// <remarks>This overload has to complete XAML data-binding.</remarks>
-        [Obsolete("Use RentAsync instead.")]
-        public static ValueTask<TResult> ExecuteAsync<TUIElement, TResult>(
-            this Pile<TUIElement> pile, Func<TUIElement, ValueTask<TResult>> action)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync<TResult>(action);
     }
 }

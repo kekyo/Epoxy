@@ -78,25 +78,5 @@ namespace Epoxy
 #endif
             ) =>
             this.ConvertBack(value, targetType, parameter);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert, Func<TTo, TFrom> convertBack) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
     }
 }

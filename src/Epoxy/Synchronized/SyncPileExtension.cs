@@ -89,41 +89,10 @@ namespace Epoxy.Synchronized
             where TUIElement : UIElement =>
             pile.InternalRentSync(action);
 
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        [Obsolete("Use RentSync instead.")]
-        public static void ExecuteSync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Action<TUIElement> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.InternalRentSync(action, canIgnore);
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <typeparam name="TResult">Result type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <returns>Result value</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        [Obsolete("Use RentSync instead.")]
-        public static TResult ExecuteSync<TUIElement, TResult>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, TResult> action)
-            where TUIElement : UIElement =>
-            pile.InternalRentSync(action);
-
         #region Dodge mistake choicing asynchronously overloads
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use RentAsync instead.", true)]
-        public static void ExecuteSync<TUIElement>(
+        public static void RentSync<TUIElement>(
             this Pile<TUIElement> pile,
             Func<TUIElement, ValueTask> action, bool canIgnore = false)
             where TUIElement : UIElement =>
@@ -131,7 +100,7 @@ namespace Epoxy.Synchronized
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use RentAsync instead.", true)]
-        public static TResult ExecuteSync<TUIElement, TResult>(
+        public static TResult RentSync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
             Func<TUIElement, ValueTask<TResult>> action)
             where TUIElement : UIElement =>

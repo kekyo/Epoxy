@@ -88,32 +88,6 @@ namespace Epoxy
 
         public static readonly CommandFactoryInstance Factory =
             new CommandFactoryInstance();
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create(
-            Func<ValueTask> executeAsync) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create(
-            Func<ValueTask> executeAsync,
-            Func<bool> canExecute) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create<TParameter>(
-            Func<TParameter, ValueTask> executeAsync) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create<TParameter>(
-            Func<TParameter, ValueTask> executeAsync,
-            Func<TParameter, bool> canExecute) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
     }
 
     public sealed class CommandFactoryInstance

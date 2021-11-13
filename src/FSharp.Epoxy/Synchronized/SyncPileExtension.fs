@@ -76,29 +76,6 @@ module public SyncPileExtension =
         member pile.rentSync(action: 'TUIElement -> 'TResult) =
             pile.InternalRentSync(action |> asFunc1)
 
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="'TUIElement">UI element type</typeparam>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        [<Obsolete("Use rentSync instead.")>]
-        member pile.executeSync(action: 'TUIElement -> unit, [<Optional; DefaultParameterValue(false)>] canIgnore) =
-            pile.InternalRentSync(action |> asAction1, canIgnore)
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="'TUIElement">UI element type</typeparam>
-        /// <typeparam name="'TResult">Result type</typeparam>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <returns>Result value</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        [<Obsolete("Use rentSync instead.")>]
-        member pile.executeSync(action: 'TUIElement -> 'TResult) =
-            pile.InternalRentSync(action |> asFunc1)
-
         // Dodge mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use rentAsync instead.", true)>]

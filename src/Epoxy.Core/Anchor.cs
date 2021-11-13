@@ -174,17 +174,6 @@ namespace Epoxy
         /// </summary>
         /// <param name="element">Target anchoring element</param>
         internal abstract void Release(UIElement element);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
-        public static Pile<UIElement> Create() =>
-            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
-        public static Pile<TUIElement> Create<TUIElement>()
-            where TUIElement : UIElement =>
-            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
     }
 
     /// <summary>

@@ -80,35 +80,5 @@ namespace Epoxy.Supplemental
             Func<TUIElement, Task<TResult>> action)
             where TUIElement : UIElement =>
             pile.InternalRentAsync(element => InternalHelpers.AsValueTask(action(element)));
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <returns>ValueTask</returns>
-        [Obsolete("Use RentAsync instead.")]
-        public static ValueTask ExecuteAsync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync(element => action(element).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <typeparam name="TResult">Result type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <returns>Result value</returns>
-        [Obsolete("Use RentAsync instead.")]
-        public static ValueTask<TResult> ExecuteAsync<TUIElement, TResult>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task<TResult>> action)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync(element => InternalHelpers.AsValueTask(action(element)));
     }
 }
