@@ -27,18 +27,18 @@
 
     <Product>Epoxy</Product>
     <Trademark>Epoxy</Trademark>
-    <Copyright>Copyright (c) 2019-2021 Kouji Matsui</Copyright>
+    <Copyright>Copyright (c) Kouji Matsui</Copyright>
     <Description>An independent flexible XAML MVVM library for .NET</Description>
 
-    <Company>Kouji Matsui (@kozy_kekyo, @kekyo2)</Company>
-    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</Authors>
+    <Company>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</Company>
+    <Authors>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kekyo/Epoxy.git</PackageProjectUrl>
     <PackageIcon>Epoxy.100.png</PackageIcon>
     <PackageTags>mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
-    <NoWarn>$(NoWarn);NU1605;NU1701</NoWarn>
+    <NoWarn>$(NoWarn);NU1605;NU1701;CA1416</NoWarn>
   </PropertyGroup>
 
 </Project>

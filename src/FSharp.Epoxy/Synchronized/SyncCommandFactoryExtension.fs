@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,86 +78,86 @@ module public SyncCommandFactoryExtension =
 
         // Dodge mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> ValueTask) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> ValueTask, canExecute: unit -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> ValueTask) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> ValueTask, canExecute: 'TParameter -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> ValueTask<unit>) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> ValueTask<unit>, canExecute: unit -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> ValueTask<unit>) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> ValueTask<unit>, canExecute: 'TParameter -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> Task) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> Task, canExecute: unit -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> Task) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> Task, canExecute: 'TParameter -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> Task<unit>) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> Task<unit>, canExecute: unit -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> Task<unit>) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> Task<unit>, canExecute: 'TParameter -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> Async<unit>) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> Async<unit>, canExecute: unit -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> Async<unit>) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        [<Obsolete("Use setValueAsync instead.", true)>]
+        [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: 'TParameter -> Async<unit>, canExecute: 'TParameter -> bool) =
-            raise(InvalidOperationException("Use setValueAsync instead."))
+            raise(InvalidOperationException("Use createAsync instead."))

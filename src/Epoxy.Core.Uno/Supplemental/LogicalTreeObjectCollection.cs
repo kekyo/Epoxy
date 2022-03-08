@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ using Windows.UI.Xaml;
 namespace Epoxy.Supplemental
 {
     // DANGER: The implementation is very fragile. You may die if refactor this.
-    public abstract class DependencyObjectCollection<TObject> :
+    public abstract class LogicalTreeObjectCollection<TObject> :
         DependencyObjectCollection, IList<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
 #if WINDOWS_UWP
         where TObject : DependencyObject
@@ -40,7 +40,7 @@ namespace Epoxy.Supplemental
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        internal DependencyObjectCollection() =>
+        internal LogicalTreeObjectCollection() =>
             base.VectorChanged += this.OnVectorChanged;
 
         private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
@@ -192,14 +192,14 @@ namespace Epoxy.Supplemental
             this.GetEnumerator();
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
 #if WINDOWS_UWP
         where TObject : DependencyObject
 #else
         where TObject : class, DependencyObject
 #endif
-        where TSelf : DependencyObjectCollection<TObject>, new()
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
     }
 }

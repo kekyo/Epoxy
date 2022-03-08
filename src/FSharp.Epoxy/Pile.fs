@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -93,27 +93,4 @@ module public PileExtension =
         /// <returns>Async result for action</returns>
         /// <remarks>This overload has to complete XAML data-binding.</remarks>
         member self.rentAsync (action: 'TUIElement -> Async<'TResult>) =
-            self.InternalRentAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="'TUIElement">Target control type</typeparam>
-        /// <param name="action">Predicts when rents control instance</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <returns>Async&lt;unit&gt; instance</returns>
-        [<Obsolete("Use rentAsync instead.")>]
-        member self.executeAsync (action: 'TUIElement -> Async<unit>, [<Optional; DefaultParameterValue(false)>] canIgnore: bool) =
-            self.InternalRentAsync(action >> asyncUnitAsValueTaskUnit |> asFunc1, canIgnore) |> valueTaskUnitAsAsyncResult
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="'TUIElement">Target control type</typeparam>
-        /// <typeparam name="'TResult">Action result type</typeparam>
-        /// <param name="action">Predicts when rents control instance</param>
-        /// <returns>Async result for action</returns>
-        /// <remarks>This overload has to complete XAML data-binding.</remarks>
-        [<Obsolete("Use rentAsync instead.")>]
-        member self.executeAsync (action: 'TUIElement -> Async<'TResult>) =
             self.InternalRentAsync<'TResult>(action >> asyncAsValueTask |> asFunc1) |> valueTaskAsAsyncResult

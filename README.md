@@ -37,9 +37,9 @@
   * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
   * WPF: .NET 6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.10 or higher)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.13 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2196)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2337)
   * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
   * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper), [But may cause executing error same as this issue.](https://github.com/microsoft/microsoft-ui-xaml/issues/4226)
   * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
@@ -755,6 +755,9 @@ Apache-v2
 
 ## History
 
+* 1.3.0:
+  * Updated latest package versions both Avalonia and Xamarin Forms.
+  * Fixed implicitly requirements for installation .NET Core 2.0 environment.
 * 1.2.0:
   * Supported .NET 6.0.
   * Supported OpenSilver.

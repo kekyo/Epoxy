@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,106 +19,18 @@
 
 #nullable enable
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 
-using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 
-using Epoxy.Internal;
-
 namespace Epoxy.Supplemental
 {
-    public abstract class PlainObject :
-        AvaloniaObject, ILogical, ISetLogicalParent
-    {
-        private static readonly DependencyObjectCollection<PlainObject> empty =
-            new DependencyObjectCollection<PlainObject>();
-
-        protected PlainObject()
-        { }
-
-        public event EventHandler<LogicalTreeAttachmentEventArgs>? AttachedToLogicalTree;
-        public event EventHandler<LogicalTreeAttachmentEventArgs>? DetachedFromLogicalTree;
-
-        public bool IsAttachedToLogicalTree =>
-            this.LogicalParent != null;
-
-        public ILogical? LogicalParent { get; private set; }
-
-        public void SetParent(ILogical? parent)
-        {
-            if (this.LogicalParent != null)
-            {
-                if (this.LogicalParent.Traverse(c => c.LogicalParent).
-                    OfType<ILogicalRoot>().
-                    FirstOrDefault() is { } root)
-                {
-                    var e = new LogicalTreeAttachmentEventArgs(
-                        root,
-                        this,
-                        this.LogicalParent);
-                    this.LogicalParent = null;
-                    this.OnNotifyDetachedFromLogicalTree(e);
-                }
-                else
-                {
-                    this.LogicalParent = null;
-                }
-            }
-            if (parent != null)
-            {
-                if (parent.Traverse(c => c.LogicalParent).
-                    OfType<ILogicalRoot>().
-                    FirstOrDefault() is { } root)
-                {
-                    var e = new LogicalTreeAttachmentEventArgs(
-                        root,
-                        this,
-                        parent);
-                    this.LogicalParent = parent;
-                    this.OnNotifyAttachedToLogicalTree(e);
-                }
-                else
-                {
-                    this.LogicalParent = parent;
-                }
-            }
-        }
-
-        IAvaloniaReadOnlyList<ILogical> ILogical.LogicalChildren =>
-            this.GetLogicalChildren();
-
-        void ILogical.NotifyAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.OnNotifyAttachedToLogicalTree(e);
-
-        void ILogical.NotifyDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.OnNotifyDetachedFromLogicalTree(e);
-
-        void ILogical.NotifyResourcesChanged(ResourcesChangedEventArgs e) =>
-            this.OnNotifyResourcesChanged(e);
-
-        protected virtual IAvaloniaReadOnlyList<ILogical> GetLogicalChildren() =>
-            empty;
-
-        protected virtual void OnNotifyAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.AttachedToLogicalTree?.Invoke(this, e);
-
-        protected virtual void OnNotifyDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.DetachedFromLogicalTree?.Invoke(this, e);
-
-        protected virtual void OnNotifyResourcesChanged(ResourcesChangedEventArgs e)
-        {
-        }
-    }
-
-    public class DependencyObjectCollection<TObject> :
-        PlainObject, IAvaloniaList<TObject>
+    public class LogicalTreeObjectCollection<TObject> :
+        LogicalTreeObject, IAvaloniaList<TObject>
         where TObject : ILogical, ISetLogicalParent
     {
         private readonly AvaloniaList<TObject> collection =
@@ -126,7 +38,7 @@ namespace Epoxy.Supplemental
         private readonly List<TObject> snapshot =
             new List<TObject>();
 
-        internal DependencyObjectCollection() =>
+        internal LogicalTreeObjectCollection() =>
             this.collection.CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
@@ -301,10 +213,10 @@ namespace Epoxy.Supplemental
             this.collection.RemoveRange(index, count);
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
         where TObject : ILogical, ISetLogicalParent
-        where TSelf : DependencyObjectCollection<TObject>, new()
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
     }
 }

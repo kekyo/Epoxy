@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,11 +45,11 @@ using DependencyObject = Xamarin.Forms.BindableObject;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
-using Epoxy.Internal;
+using Epoxy.Supplemental;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Advanced
 {
-    public interface IAttachableObject
+    public interface IAttachedObject
     {
         DependencyObject? AssociatedObject { get; }
 
@@ -58,18 +58,18 @@ namespace Epoxy.Supplemental
         void Detach();
     }
 
-    public abstract partial class AttachableObject :    // HACK: partial is required on Uno platform because it makes inserting for DO implementation on the building time.
+    public abstract partial class AttachedObject :    // HACK: partial is required on Uno platform because it makes inserting for DO implementation on the building time.
 #if WINDOWS_WPF
-        Freezable, IAttachableObject
+        Freezable, IAttachedObject
 #endif
 #if WINDOWS_UWP || WINUI || UNO || OPENSILVER
-        DependencyObject, IAttachableObject
+        DependencyObject, IAttachedObject
 #endif
 #if XAMARIN_FORMS
-        Element, IAttachableObject
+        Element, IAttachedObject
 #endif
 #if AVALONIA
-        PlainObject, IAttachableObject
+        LogicalTreeObject, IAttachedObject
 #endif
     {
         private DependencyObject? associatedObject;
@@ -77,7 +77,7 @@ namespace Epoxy.Supplemental
         /// <summary>
         /// The constructor.
         /// </summary>
-        protected AttachableObject()
+        protected AttachedObject()
         { }
 
         public DependencyObject? AssociatedObject =>
@@ -111,25 +111,25 @@ namespace Epoxy.Supplemental
         }
     }
 
-    public class AttachableObject<TSelf> :
-        AttachableObject
+    public class AttachedObject<TSelf> :
+        AttachedObject
 #if WINDOWS_WPF
-        where TSelf : Freezable, IAttachableObject, new()
+        where TSelf : Freezable, IAttachedObject, new()
 #endif
 #if WINDOWS_UWP || WINUI || UNO || OPENSILVER
-        where TSelf : DependencyObject, IAttachableObject, new()
+        where TSelf : DependencyObject, IAttachedObject, new()
 #endif
 #if XAMARIN_FORMS
-        where TSelf : Element, IAttachableObject, new()
+        where TSelf : Element, IAttachedObject, new()
 #endif
 #if AVALONIA
-        where TSelf : PlainObject, IAttachableObject, new()
+        where TSelf : AttachedObject, new()
 #endif
     {
         /// <summary>
         /// The constructor.
         /// </summary>
-        public AttachableObject()
+        public AttachedObject()
         { }
 
 #if WINDOWS_WPF

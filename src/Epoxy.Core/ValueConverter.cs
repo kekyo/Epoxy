@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,25 +78,5 @@ namespace Epoxy
 #endif
             ) =>
             this.ConvertBack(value, targetType, parameter);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom>(Func<TFrom, TTo> convert, Func<TTo, TFrom> convertBack) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.", true)]
-        public static ValueConverter Create<TTo, TFrom, TParameter>(Func<TFrom, TParameter, TTo> convert, Func<TTo, TParameter, TFrom> convertBack) =>
-            throw new InvalidOperationException("ValueConverter.Create is obsoleted. Use ValueConverterFactory.Create instead.");
     }
 }

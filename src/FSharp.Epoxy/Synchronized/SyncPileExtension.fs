@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -74,29 +74,6 @@ module public SyncPileExtension =
         /// <returns>Result value</returns>
         /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
         member pile.rentSync(action: 'TUIElement -> 'TResult) =
-            pile.InternalRentSync(action |> asFunc1)
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="'TUIElement">UI element type</typeparam>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        [<Obsolete("Use rentSync instead.")>]
-        member pile.executeSync(action: 'TUIElement -> unit, [<Optional; DefaultParameterValue(false)>] canIgnore) =
-            pile.InternalRentSync(action |> asAction1, canIgnore)
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="'TUIElement">UI element type</typeparam>
-        /// <typeparam name="'TResult">Result type</typeparam>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <returns>Result value</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        [<Obsolete("Use rentSync instead.")>]
-        member pile.executeSync(action: 'TUIElement -> 'TResult) =
             pile.InternalRentSync(action |> asFunc1)
 
         // Dodge mistake choicing asynchronously overloads

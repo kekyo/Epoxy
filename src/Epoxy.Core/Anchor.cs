@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -174,17 +174,6 @@ namespace Epoxy
         /// </summary>
         /// <param name="element">Target anchoring element</param>
         internal abstract void Release(UIElement element);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
-        public static Pile<UIElement> Create() =>
-            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Pile.Create is obsoleted. Use PileFactory.Create instead.", true)]
-        public static Pile<TUIElement> Create<TUIElement>()
-            where TUIElement : UIElement =>
-            throw new InvalidOperationException("Pile.Create is obsoleted. Use PileFactory.Create instead.");
     }
 
     /// <summary>

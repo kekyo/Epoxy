@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,36 +76,6 @@ namespace Epoxy.Supplemental
         /// <param name="action">Asynchronous continuation delegate</param>
         /// <returns>Result value</returns>
         public static ValueTask<TResult> RentAsync<TUIElement, TResult>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task<TResult>> action)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync(element => InternalHelpers.AsValueTask(action(element)));
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <returns>ValueTask</returns>
-        [Obsolete("Use RentAsync instead.")]
-        public static ValueTask ExecuteAsync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync(element => action(element).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
-
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <typeparam name="TResult">Result type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <returns>Result value</returns>
-        [Obsolete("Use RentAsync instead.")]
-        public static ValueTask<TResult> ExecuteAsync<TUIElement, TResult>(
             this Pile<TUIElement> pile,
             Func<TUIElement, Task<TResult>> action)
             where TUIElement : UIElement =>

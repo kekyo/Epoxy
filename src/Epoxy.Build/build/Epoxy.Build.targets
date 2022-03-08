@@ -2,7 +2,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +20,40 @@
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     
+  <!-- ============================================================================= -->
+  <!-- Properties definition -->
+
+  <!-- ======================== -->
+  <!-- Common -->
+    
   <PropertyGroup>
     <EpoxyBuildEnable Condition="'$(EpoxyBuildEnable)' == ''">True</EpoxyBuildEnable>
     <EpoxyBuildTrace Condition="'$(EpoxyBuildTrace)' == ''">False</EpoxyBuildTrace>
   </PropertyGroup>
+
+  <!-- ======================== -->
+  <!-- Common (internal) -->
+
+  <PropertyGroup Condition="('$(MSBuildRuntimeType)' == 'Core') AND ('$(MicrosoftNETBuildTasksTFM)' != '')">
+    <_EB_PlatformName>$(MicrosoftNETBuildTasksTFM)</_EB_PlatformName>
+  </PropertyGroup>
+  <PropertyGroup Condition="('$(MSBuildRuntimeType)' == 'Core') AND ('$(MicrosoftNETBuildTasksTFM)' == '') AND ('$(BundledNETCoreAppTargetFrameworkVersion)' != '')">
+    <_EB_PlatformName Condition="$(BundledNETCoreAppTargetFrameworkVersion) &gt;= 5.0">net$(BundledNETCoreAppTargetFrameworkVersion)</_EB_PlatformName>
+    <_EB_PlatformName Condition="$(BundledNETCoreAppTargetFrameworkVersion) &lt; 5.0">netcoreapp$(BundledNETCoreAppTargetFrameworkVersion)</_EB_PlatformName>
+  </PropertyGroup>
+  <PropertyGroup Condition="('$(MSBuildRuntimeType)' == 'Core') AND ('$(MicrosoftNETBuildTasksTFM)' == '') AND ('$(BundledNETCoreAppTargetFrameworkVersion)' == '')">
+    <_EB_PlatformName>netcoreapp2.0</_EB_PlatformName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildRuntimeType)' != 'Core'">
+    <_EB_PlatformName>net461</_EB_PlatformName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <_EB_ToolingDir>$([System.IO.Path]::Combine('$(_EB_ScriptBaseDir)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingDir>
+  </PropertyGroup>
+
+  <!-- ======================== -->
+  <!-- Custom task -->
 
   <UsingTask
     TaskName="GetCombinedReferencesBasePath"
@@ -50,21 +80,14 @@
     </Task>
   </UsingTask>
     
+  <!-- ======================== -->
+  <!-- Build target -->
+
   <Target Name="EpoxyBuild" AfterTargets="AfterCompile"
     Condition="'$(EpoxyBuildEnable)' == 'True'">
       
-    <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
-      <_EB_PlatformName Condition="('$(MicrosoftNETBuildTasksTFM)' == '') AND ('$(BundledNETCoreAppTargetFrameworkVersion)' == '')">netcoreapp2.0</_EB_PlatformName>
-      <_EB_PlatformName Condition="'$(MicrosoftNETBuildTasksTFM)' == ''">netcoreapp$(BundledNETCoreAppTargetFrameworkVersion)</_EB_PlatformName>
-      <_EB_PlatformName Condition="'$(MicrosoftNETBuildTasksTFM)' != ''">$(MicrosoftNETBuildTasksTFM)</_EB_PlatformName>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(MSBuildRuntimeType)' != 'Core'">
-      <_EB_PlatformName>net461</_EB_PlatformName>
-    </PropertyGroup>
-
     <PropertyGroup>
       <EpoxyBuildToolingRuntimeName Condition="'$(EpoxyBuildToolingRuntimeName)' == ''">$(_EB_RuntimeName)</EpoxyBuildToolingRuntimeName>
-      <_EB_ToolingDir>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingDir>
       <EpoxyBuildToolingDir Condition="'$(EpoxyBuildToolingDir)' == ''">$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
       <EpoxyBuildToolingPath Condition="'$(EpoxyBuildToolingPath)' == ''">$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_EB_ExecutableName)'))</EpoxyBuildToolingPath>
     </PropertyGroup>

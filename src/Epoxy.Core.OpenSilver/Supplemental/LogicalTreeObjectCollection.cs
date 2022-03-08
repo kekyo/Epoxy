@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ using System.Windows;
 
 namespace Epoxy.Supplemental
 {
-    public abstract class DependencyObjectCollection<TObject> :
-        System.Windows.DependencyObjectCollection<TObject>
+    public abstract class LogicalTreeObjectCollection<TObject> :
+        DependencyObjectCollection<TObject>
         where TObject : DependencyObject
     {
         private readonly List<TObject> snapshot = new List<TObject>();
 
-        internal DependencyObjectCollection() =>
+        internal LogicalTreeObjectCollection() =>
             ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
 
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
@@ -108,10 +108,10 @@ namespace Epoxy.Supplemental
         }
     }
 
-    public class DependencyObjectCollection<TSelf, TObject> :
-        DependencyObjectCollection<TObject>
+    public class LogicalTreeObjectCollection<TSelf, TObject> :
+        LogicalTreeObjectCollection<TObject>
         where TObject : DependencyObject
-        where TSelf : DependencyObjectCollection<TObject>, new()
+        where TSelf : LogicalTreeObjectCollection<TObject>, new()
     {
     }
 }

@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) 2019-2021 Kouji Matsui (@kozy_kekyo, @kekyo2)
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -88,32 +88,6 @@ namespace Epoxy
 
         public static readonly CommandFactoryInstance Factory =
             new CommandFactoryInstance();
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create(
-            Func<ValueTask> executeAsync) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create(
-            Func<ValueTask> executeAsync,
-            Func<bool> canExecute) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create<TParameter>(
-            Func<TParameter, ValueTask> executeAsync) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Command.Create is obsoleted. Use CommandFactory.Create instead.", true)]
-        public static Command Create<TParameter>(
-            Func<TParameter, ValueTask> executeAsync,
-            Func<TParameter, bool> canExecute) =>
-            throw new InvalidOperationException("Command.Create is obsoleted. Use CommandFactory.Create instead.");
     }
 
     public sealed class CommandFactoryInstance
