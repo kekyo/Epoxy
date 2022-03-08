@@ -3,7 +3,7 @@
   <metadata>
     <id>FSharp.Epoxy.Wpf</id>
     <version>$PackageVersion$</version>
-    <authors>Kouji Matsui (@kozy_kekyo, @kekyo2)</authors>
+    <authors>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">Apache-2.0</license>
     <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
@@ -11,7 +11,7 @@
     <projectUrl>https://github.com/kekyo/Epoxy.git</projectUrl>
     <description>An independent flexible XAML MVVM library for .NET</description>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
-    <copyright>Copyright (c) 2019-2021 Kouji Matsui</copyright>
+    <copyright>Copyright (c) Kouji Matsui</copyright>
     <tags>mvvm viewmodel easy simple combinable async awaitable command fsharp wpf</tags>
     <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
     <dependencies>
