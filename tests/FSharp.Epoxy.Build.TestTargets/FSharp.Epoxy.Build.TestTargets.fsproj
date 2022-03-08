@@ -11,19 +11,16 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="6.0.0" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj" />
   </ItemGroup>
 
-    <ItemGroup>
-        <Compile Include="NonTargettedViewModel.fs" />
-        <Compile Include="TargettedViewModel1.fs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Update="System.ValueTuple" Version="4.5.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Include="NonTargettedViewModel.fs" />
+    <Compile Include="TargettedViewModel1.fs" />
+  </ItemGroup>
 
 </Project>
