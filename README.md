@@ -755,6 +755,9 @@ Apache-v2
 
 ## History
 
+* 1.3.0:
+  * Updated latest package versions both Avalonia and Xamarin Forms.
+  * Fixed implicitly requirements for installation .NET Core 2.0 environment.
 * 1.2.0:
   * Supported .NET 6.0.
   * Supported OpenSilver.
