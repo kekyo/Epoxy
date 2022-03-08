@@ -32,5 +32,9 @@
     <_EB_RuntimeName>mono </_EB_RuntimeName>
     <_EB_ExecutableName>eb.exe</_EB_ExecutableName>
   </PropertyGroup>
+    
+  <PropertyGroup>
+    <_EB_ScriptBaseDir>$(MSBuildThisFileDirectory)</_EB_ScriptBaseDir>
+  </PropertyGroup>
 
 </Project>
