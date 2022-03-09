@@ -423,7 +423,7 @@ MVVMアーキテクチャのレアケースにおいて、コントロールを�
 ```csharp
 // PileをViewModelに配置します。
 // (操作したいTextBoxのXAMLにAnchorを配置して、バインディングします)
-this.LogPile = Pile.Create<TextBox>();
+this.LogPile = PileFactory.Create<TextBox>();
 
 // ...
 

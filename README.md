@@ -409,7 +409,7 @@ The `Pile` pull in the `UIElement`'s anchor, and we can rent temporary `UIElemen
 
 ```csharp
 // Declared a Pile into the ViewModel.
-this.LogPile = Pile.Create<TextBox>();
+this.LogPile = PileFactory.Create<TextBox>();
 
 // ...
 
