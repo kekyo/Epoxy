@@ -75,7 +75,7 @@ namespace Epoxy
         { }
 
 #if XAMARIN_FORMS
-        private static readonly BindableProperty PileProperty =
+        public static readonly BindableProperty PileProperty =
             BindableProperty.CreateAttached(
                 "Pile",
                 typeof(Pile),
@@ -95,7 +95,7 @@ namespace Epoxy
                     }
                 });
 #elif AVALONIA
-        private static readonly AvaloniaProperty<Pile?> PileProperty =
+        public static readonly AvaloniaProperty<Pile?> PileProperty =
             AvaloniaProperty.RegisterAttached<Anchor, UIElement, Pile?>("Pile");
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Epoxy
                 }
             });
 #else
-        private static readonly DependencyProperty PileProperty =
+        public static readonly DependencyProperty PileProperty =
             DependencyProperty.RegisterAttached(
                 "Pile",
                 typeof(Pile),
