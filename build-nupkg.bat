@@ -1,6 +1,7 @@
 @echo off
 
-git clean -xfd
+rem git clean -xfd
+mkdir artifacts
 
 dotnet restore Epoxy.sln
 dotnet restore templates\Epoxy.Templates.csproj
