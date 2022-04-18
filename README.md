@@ -504,6 +504,11 @@ await UIThread.Bind();
 
 // We can handle any UI elements in the UI thread (include binding operation.)
 this.Log = $"Read={read}";
+
+// Explicitly switch to worker thread.
+await UIThread.Unbind();
+
+// (Continued on worker thread)
 ```
 
 #### Note on running in a UWP environment
@@ -757,6 +762,7 @@ Apache-v2
 ## History
 
 * 1.5.0:
+  * Added `UIThread.Unbind()`.
   * Fixed broken and updated latest package versions WinUI 3 (`Microsoft.WindowsAppSDK` 1.0.0).
 * 1.4.0:
   * Updated latest package versions Xamarin Forms.

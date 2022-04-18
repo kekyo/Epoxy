@@ -19,6 +19,7 @@
 
 #nullable enable
 
+using System;
 using System.Threading;
 
 #if WINDOWS_UWP || WINUI || UNO
@@ -134,6 +135,18 @@ namespace Epoxy.Internal
             }
 #endif
             return false;
+        }
+
+        public static void ContinueOnWorkerThread(Action continuation)
+        {
+            if (UnsafeIsBound())
+            {
+                ThreadPool.QueueUserWorkItem(_ => continuation(), null);
+            }
+            else
+            {
+                continuation();
+            }
         }
     }
 }

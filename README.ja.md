@@ -514,6 +514,11 @@ await UIThread.Bind();
 
 // バインディングされたTextBlockに反映する
 this.Log = $"Read={read}";
+
+// 明示的にワーカースレッドに切り替える
+await UIThread.Unbind();
+
+// (ワーカースレッドで継続)
 ```
 
 #### UWP環境で実行する場合の注意
@@ -757,6 +762,7 @@ Apache-v2
 ## History
 
 * 1.5.0:
+  * Added `UIThread.Unbind()`.
   * WinUI 3の正式版を使用するように修正。 (`Microsoft.WindowsAppSDK` 1.0.0)
 * 1.4.0:
   * Xamarin Formsを最新版に更新。
