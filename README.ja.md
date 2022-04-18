@@ -766,6 +766,7 @@ Apache-v2
   * `UIThread.Unbind()` を追加。
   * WinUI 3の正式版を使用するように修正。 (`Microsoft.WindowsAppSDK` 1.0.0)
   * WinUI 3のテンプレートを追加。
+  * テンプレートプロジェクトで`ViewModel`属性を使用していないものを修正しました。
 * 1.4.0:
   * Xamarin Formsを最新版に更新。
   * Xamarin FormsでAnchor.Pileが見つからない問題を修正。

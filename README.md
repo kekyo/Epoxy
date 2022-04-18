@@ -766,6 +766,7 @@ Apache-v2
   * Added `UIThread.Unbind()`.
   * Fixed broken and updated latest package versions WinUI 3 (`Microsoft.WindowsAppSDK` 1.0.0).
   * Added project template for WinUI 3.
+  * Updated project templates with `ViewModel` attribute when it isn't used.
 * 1.4.0:
   * Updated latest package versions Xamarin Forms.
   * Fixed unable to find Anchor.Pile property on Xamarin.Forms.
