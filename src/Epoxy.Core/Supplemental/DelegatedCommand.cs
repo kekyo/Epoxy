@@ -49,19 +49,11 @@ namespace Epoxy.Supplemental
             this.canExecute = canExecute;
         }
 
-        protected override bool OnCanExecute(object? parameter)
-        {
-            if (parameter != null)
-            {
-                throw new ArgumentException(
-                    $"DelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
-            }
-
-            return canExecute.Invoke();
-        }
+        protected override bool OnCanExecute(object? parameter) =>
+            this.canExecute.Invoke();
 
         private protected override ValueTask<Unit> OnExecuteAsync(object? parameter) =>
-            executeAsync();
+            this.executeAsync();
     }
 
     public sealed class DelegatedCommand<TParameter> : Command
@@ -96,10 +88,10 @@ namespace Epoxy.Supplemental
                     $"DelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
             }
 
-            return canExecute.Invoke((TParameter)parameter!);
+            return this.canExecute.Invoke((TParameter)parameter!);
         }
 
         private protected override ValueTask<Unit> OnExecuteAsync(object? parameter) =>
-            executeAsync((TParameter)parameter!);
+            this.executeAsync((TParameter)parameter!);
     }
 }

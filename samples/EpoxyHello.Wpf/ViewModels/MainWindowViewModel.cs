@@ -42,7 +42,7 @@ namespace EpoxyHello.Wpf.ViewModels
             this.IndicatorPile = PileFactory.Create<Panel>();
 
             // A handler for window loaded
-            this.Ready = Command.Factory.CreateSync<RoutedEventArgs>(e =>
+            this.Ready = Command.Factory.CreateSync(() =>
             {
                 this.IsEnabled = true;
             });

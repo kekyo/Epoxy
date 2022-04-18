@@ -194,8 +194,8 @@ public sealed class MainWindowViewModel
 {
     // ステップ 2: XAMLから参照したいプロパティを自動実装プロパティで定義します。
     //    Epoxyは、 C# 8.0 で追加された、null許容参照型定義に対応しています。
-    public Command? Fetch { get; private set; }
-    public ObservableCollection<ImageSource>? Items { get; private set; }
+    public Command? Fetch { get; }
+    public ObservableCollection<ImageSource>? Items { get; }
 
     // ViewModelのコンストラクタ
     public MainWindowViewModel()
@@ -372,9 +372,7 @@ this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 ```
 
 `CommandFactory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
-現在のところ、チェックを厳しくしているため、この型は必ず指定する必要があります。
-但し、引数を使用しない場合や、重要でないと分かっている場合は、
-上の例のように、一律`EventArgs`としておくことが可能です。
+イベントの引数が必要でない場合は、非ジェネリックメソッドを使う事も出来ます。
 
 補足1: WPF,UWPやXamarin Formsでは、`Behavior`や`Trigger`で同じことを実現できますが、
 WPFやUWPの場合は追加のパッケージが必要になることと、汎用的に設計されているため、やや複雑です。
@@ -766,6 +764,7 @@ Apache-v2
   * `UIThread.Unbind()` を追加。
   * WinUI 3の正式版を使用するように修正。 (`Microsoft.WindowsAppSDK` 1.0.0)
   * WinUI 3のテンプレートを追加。
+  * `EventBinder`にバインドするコマンドの引数が、オプション扱いとなりました。必要ない場合は、非ジェネリックの`CommandFactory.Create(() => ...)`が使えます。
   * テンプレートプロジェクトで`ViewModel`属性を使用していないものを修正しました。
 * 1.4.0:
   * Xamarin Formsを最新版に更新。

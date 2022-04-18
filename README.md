@@ -187,8 +187,8 @@ public sealed class MainWindowViewModel
     // Step 2: Define the property you want to reference from XAML
     //    in the auto-implemented property.
     //    Epoxy can handle with C# 8.0's nullable reference types.
-    public Command? Fetch { get; private set; }
-    public ObservableCollection<ImageSource>? Items { get; private set; }
+    public Command? Fetch { get; }
+    public ObservableCollection<ImageSource>? Items { get; }
 
     public MainWindowViewModel()
     {
@@ -362,9 +362,7 @@ this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 ```
 
 The generic argument of `CommandFactory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
-Currently, this type must be specified because of strict checking.
-However, if you do not use the argument, or if you know it is not important,
-you can use `EventArgs` uniformly, as in the example above.
+Non-generic methods can also be used when event arguments are not required.
 
 TIP 1: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
 However, WPF and UWP require additional packages and are designed to be generic,
@@ -766,6 +764,7 @@ Apache-v2
   * Added `UIThread.Unbind()`.
   * Fixed broken and updated latest package versions WinUI 3 (`Microsoft.WindowsAppSDK` 1.0.0).
   * Added project template for WinUI 3.
+  * Arguments for commands to be bound to `EventBinder` are now treated as optional. If not needed, the non-generic `CommandFactory.Create(() => ...)` can be used.
   * Updated project templates with `ViewModel` attribute when it isn't used.
 * 1.4.0:
   * Updated latest package versions Xamarin Forms.
