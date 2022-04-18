@@ -33,7 +33,7 @@ namespace EpoxyHello.ViewModels
             this.Items = new ObservableCollection<ItemViewModel>();
 
             // A handler for window loaded
-            this.Ready = Command.Factory.CreateSync<RoutedEventArgs>(e =>
+            this.Ready = Command.Factory.CreateSync(() =>
             {
                 this.IsEnabled = true;
             });
