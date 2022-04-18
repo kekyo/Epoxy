@@ -21,7 +21,7 @@ using Epoxy;
 using Windows.UI;
 using Microsoft.UI.Xaml.Media;
 
-namespace EpoxyHello.WinUI.Desktop.Views.Converters
+namespace EpoxyHello.Views.Converters
 {
     public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
     {
