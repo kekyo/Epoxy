@@ -26,7 +26,7 @@ using Windows.UI.Core;
 #endif
 
 #if WINUI
-using Microsoft.System;
+using Microsoft.UI.Dispatching;
 #endif
 
 #if WINDOWS_WPF || OPENSILVER

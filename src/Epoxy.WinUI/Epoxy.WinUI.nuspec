@@ -15,10 +15,16 @@
     <tags>mvvm viewmodel easy simple combinable async awaitable command winui</tags>
     <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
     <dependencies>
-      <group targetFramework="net5.0-windows10.0.18362">
+      <group targetFramework="net5.0-windows10.0.17763">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.WinUI" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="Microsoft.WinUI" version="3.0.0-preview4.210210.4" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.WindowsAppSDK" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net6.0-windows10.0.17763">
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
+        <dependency id="Epoxy.Core.WinUI" version="$PackageVersion$" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.WindowsAppSDK" version="1.0.0" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
     </dependencies>
