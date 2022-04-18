@@ -48,19 +48,11 @@ namespace Epoxy.Synchronized
             this.canExecute = canExecute;
         }
 
-        protected override bool OnCanExecute(object? parameter)
-        {
-            if (parameter != null)
-            {
-                throw new ArgumentException(
-                    $"SyncDelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
-            }
-
-            return (parameter == null) && canExecute.Invoke();
-        }
+        protected override bool OnCanExecute(object? parameter) =>
+            this.canExecute.Invoke();
 
         private protected override void OnExecute(object? parameter) =>
-            execute();
+            this.execute();
     }
 
     public sealed class SyncDelegatedCommand<TParameter> : Command
@@ -95,10 +87,10 @@ namespace Epoxy.Synchronized
                     $"SyncDelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
             }
 
-            return parameter is TParameter p && canExecute.Invoke(p);
+            return this.canExecute.Invoke((TParameter)parameter!);
         }
 
         private protected override void OnExecute(object? parameter) =>
-            execute((TParameter)parameter!);
+            this.execute((TParameter)parameter!);
     }
 }

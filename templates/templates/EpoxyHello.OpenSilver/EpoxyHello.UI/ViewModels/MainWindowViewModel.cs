@@ -33,14 +33,15 @@ using EpoxyHello.Models;
 
 namespace EpoxyHello.ViewModels
 {
-    public sealed class MainWindowViewModel : ViewModel
+    [ViewModel]
+    public sealed class MainWindowViewModel
     {
         public MainWindowViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
 
             // A handler for window opened
-            this.Ready = Command.Factory.CreateSync<EventArgs>(e =>
+            this.Ready = Command.Factory.CreateSync(() =>
             {
                 this.IsEnabled = true;
             });
@@ -81,28 +82,12 @@ namespace EpoxyHello.ViewModels
             });
         }
 
-        public Command? Ready
-        {
-            get => this.GetValue();
-            set => this.SetValue(value);
-        }
+        public Command? Ready { get; private set; }
 
-        public bool IsEnabled
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
+        public bool IsEnabled { get; private set; }
 
-        public ObservableCollection<ItemViewModel>? Items
-        {
-            get => this.GetValue<ObservableCollection<ItemViewModel>?>();
-            private set => this.SetValue(value);
-        }
+        public ObservableCollection<ItemViewModel>? Items { get; private set; }
 
-        public Command? Fetch
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
+        public Command? Fetch { get; private set; }
     }
 }

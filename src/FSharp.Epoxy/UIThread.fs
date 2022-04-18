@@ -63,3 +63,23 @@ type public UIThread =
     static member bind() : Async<unit> =
         Async.FromContinuations(fun (resolve, _, _) ->
             InternalUIThread.ContinueOnUIThread(new Action(resolve)))
+
+    /// <summary>
+    /// Unbinds current UI thread context to the worker thread context manually.
+    /// </summary>
+    /// <returns>Async object for the worker thread continuation.</returns>
+    /// <example>
+    /// <code>
+    /// async {
+    ///   // (On the UI thread context here)
+    /// 
+    ///   // Switch to worker thread context uses async-await.
+    ///   do! UIThread.unbind()
+    /// 
+    ///   // (On the worker thread context here)
+    /// }
+    /// </code>
+    /// </example>
+    static member unbind() : Async<unit> =
+        Async.FromContinuations(fun (resolve, _, _) ->
+            InternalUIThread.ContinueOnWorkerThread(new Action(resolve)))

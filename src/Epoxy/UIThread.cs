@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
@@ -62,5 +62,22 @@ namespace Epoxy
         /// </example>
         public static UIThreadAwaitable Bind() =>
             new UIThreadAwaitable();
+
+        /// <summary>
+        /// Unbinds current UI task to the worker thread context manually.
+        /// </summary>
+        /// <returns>Awaitable worker thread object.</returns>
+        /// <example>
+        /// <code>
+        /// // (On the UI thread context here)
+        /// 
+        /// // Switch to worker thread context uses async-await.
+        /// await UIThread.Unbind();
+        /// 
+        /// // (On the worker thread context here)
+        /// </code>
+        /// </example>
+        public static UIThreadUnbindAwaitable Unbind() =>
+            new UIThreadUnbindAwaitable();
     }
 }

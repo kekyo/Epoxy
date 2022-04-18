@@ -19,6 +19,7 @@
 
 #nullable enable
 
+using System;
 using System.Threading;
 
 #if WINDOWS_UWP || WINUI || UNO
@@ -26,7 +27,7 @@ using Windows.UI.Core;
 #endif
 
 #if WINUI
-using Microsoft.System;
+using Microsoft.UI.Dispatching;
 #endif
 
 #if WINDOWS_WPF || OPENSILVER
@@ -134,6 +135,18 @@ namespace Epoxy.Internal
             }
 #endif
             return false;
+        }
+
+        public static void ContinueOnWorkerThread(Action continuation)
+        {
+            if (UnsafeIsBound())
+            {
+                ThreadPool.QueueUserWorkItem(_ => continuation(), null);
+            }
+            else
+            {
+                continuation();
+            }
         }
     }
 }

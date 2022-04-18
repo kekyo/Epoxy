@@ -1,6 +1,6 @@
 @echo off
 
-rem git clean -xfd
+git clean -xfd
 mkdir artifacts
 
 dotnet restore Epoxy.sln

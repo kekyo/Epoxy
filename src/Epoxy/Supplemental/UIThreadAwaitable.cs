@@ -50,4 +50,28 @@ namespace Epoxy.Supplemental
         public void GetResult() =>
             Debug.Assert(this.IsCompleted);
     }
+
+    public struct UIThreadUnbindAwaitable
+    {
+        public UIThreadUnbindAwaiter GetAwaiter() =>
+            new UIThreadUnbindAwaiter();
+    }
+
+    public sealed class UIThreadUnbindAwaiter : INotifyCompletion
+    {
+        internal UIThreadUnbindAwaiter()
+        { }
+
+        public bool IsCompleted { get; private set; }
+
+        public void OnCompleted(Action continuation) =>
+            InternalUIThread.ContinueOnWorkerThread(() =>
+            {
+                this.IsCompleted = true;
+                continuation();
+            });
+
+        public void GetResult() =>
+            Debug.Assert(this.IsCompleted);
+    }
 }

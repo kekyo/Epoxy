@@ -41,7 +41,7 @@ namespace EpoxyHello.OpenSilver.ViewModels
             this.Items = new ObservableCollection<ItemViewModel>();
 
             // A handler for window opened
-            this.Ready = Command.Factory.CreateSync<EventArgs>(e =>
+            this.Ready = Command.Factory.CreateSync(e =>
             {
                 this.IsEnabled = true;
             });

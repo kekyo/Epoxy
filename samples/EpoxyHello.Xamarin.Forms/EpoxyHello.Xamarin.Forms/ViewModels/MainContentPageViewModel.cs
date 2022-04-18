@@ -40,7 +40,7 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
             this.Items = new ObservableCollection<ItemViewModel>();
 
             // A handler for page appearing
-            this.Ready = Command.Factory.CreateSync<EventArgs>(e =>
+            this.Ready = Command.Factory.CreateSync(() =>
             {
                 this.IsEnabled = true;
             });

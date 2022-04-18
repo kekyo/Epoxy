@@ -40,7 +40,7 @@ namespace EpoxyHello.Avalonia.ViewModels
             this.Items = new ObservableCollection<ItemViewModel>();
 
             // A handler for window opened
-            this.Ready = Command.Factory.CreateSync<EventArgs>(e =>
+            this.Ready = Command.Factory.CreateSync(() =>
             {
                 this.IsEnabled = true;
             });

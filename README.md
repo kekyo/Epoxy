@@ -15,7 +15,7 @@
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|[![MyGet Epoxy.OpenSilver](https://img.shields.io/myget/epoxy/v/Epoxy.OpenSilver.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|[![MyGet Epoxy.Xamarin.Forms](https://img.shields.io/myget/epoxy/v/Epoxy.Xamarin.Forms.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Xamarin.Forms)|Xamarin Forms version|
 |Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|[![MyGet Epoxy.Uwp](https://img.shields.io/myget/epoxy/v/Epoxy.Uwp.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Uwp)|Universal Windows version|
-|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|[![MyGet Epoxy.WinUI](https://img.shields.io/myget/epoxy/v/Epoxy.WinUI.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.WinUI)|WinUI 3 version (Broken?)|
+|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|[![MyGet Epoxy.WinUI](https://img.shields.io/myget/epoxy/v/Epoxy.WinUI.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.WinUI)|WinUI 3 version|
 |Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|[![MyGet Epoxy.Uno](https://img.shields.io/myget/epoxy/v/Epoxy.Uno.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Uno)|Uno platform version (**BUGGY**)|
 
 ## NuGet for F# specialized
@@ -39,9 +39,9 @@
   * WPF: .NET 6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.13 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2401)
-  * Universal Windows: Universal Windows 10 (Fall creators update 10.0.16299 or higher)
-  * WinUI: [WinUI 3 preview 4](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) (windows3.0.0-preview4.210210.4, 10.0.17134.0 or upper), [But may cause executing error same as this issue.](https://github.com/microsoft/microsoft-ui-xaml/issues/4226)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2401 or higher)
+  * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
+  * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17134.0 or higher)
   * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
@@ -75,7 +75,8 @@ dotnet new epoxy-wpf
 dotnet build
 ```
 
-* Caution: You have to install .NET 6.0 SDK before above steps. Will fail building if installed only another version.
+* Caution: .NET 6.0 SDK must be installed beforehand because the template assumes .NET 6.0.
+  For other versions only (e.g. .NET 5.0 SDK), the build will fail if you do not modify `TargetFramework` property.
 
 ### List of currently supported templates
 
@@ -86,6 +87,7 @@ dotnet build
 |`epoxy-opensilver`|C#|Sample code for OpenSilver|
 |`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
 |`epoxy-uwp`|C#|Sample code for UWP|
+|`epoxy-winui`|C#|Sample code for WinUI 3|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
 * Xamarin Forms and UWP are required old style MSBuild project.
@@ -185,8 +187,8 @@ public sealed class MainWindowViewModel
     // Step 2: Define the property you want to reference from XAML
     //    in the auto-implemented property.
     //    Epoxy can handle with C# 8.0's nullable reference types.
-    public Command? Fetch { get; private set; }
-    public ObservableCollection<ImageSource>? Items { get; private set; }
+    public Command? Fetch { get; }
+    public ObservableCollection<ImageSource>? Items { get; }
 
     public MainWindowViewModel()
     {
@@ -360,9 +362,7 @@ this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 ```
 
 The generic argument of `CommandFactory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
-Currently, this type must be specified because of strict checking.
-However, if you do not use the argument, or if you know it is not important,
-you can use `EventArgs` uniformly, as in the example above.
+Non-generic methods can also be used when event arguments are not required.
 
 TIP 1: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
 However, WPF and UWP require additional packages and are designed to be generic,
@@ -503,6 +503,11 @@ await UIThread.Bind();
 
 // We can handle any UI elements in the UI thread (include binding operation.)
 this.Log = $"Read={read}";
+
+// Explicitly switch to worker thread.
+await UIThread.Unbind();
+
+// (Continued on worker thread)
 ```
 
 #### Note on running in a UWP environment
@@ -755,6 +760,12 @@ Apache-v2
 
 ## History
 
+* 1.5.0:
+  * Added `UIThread.Unbind()`.
+  * Fixed broken and updated latest package versions WinUI 3 (`Microsoft.WindowsAppSDK` 1.0.0).
+  * Added project template for WinUI 3.
+  * Arguments for commands to be bound to `EventBinder` are now treated as optional. If not needed, the non-generic `CommandFactory.Create(() => ...)` can be used.
+  * Updated project templates with `ViewModel` attribute when it isn't used.
 * 1.4.0:
   * Updated latest package versions Xamarin Forms.
   * Fixed unable to find Anchor.Pile property on Xamarin.Forms.
