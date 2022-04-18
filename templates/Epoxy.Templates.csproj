@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Compile Remove="**\*" />
-    <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**;**\*.user" />
+    <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**;**\*.user;**\.vs\*" />
     <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 

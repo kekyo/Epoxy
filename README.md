@@ -87,6 +87,7 @@ dotnet build
 |`epoxy-opensilver`|C#|Sample code for OpenSilver|
 |`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
 |`epoxy-uwp`|C#|Sample code for UWP|
+|`epoxy-winui`|C#|Sample code for WinUI 3|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
 * Xamarin Forms and UWP are required old style MSBuild project.
@@ -764,6 +765,7 @@ Apache-v2
 * 1.5.0:
   * Added `UIThread.Unbind()`.
   * Fixed broken and updated latest package versions WinUI 3 (`Microsoft.WindowsAppSDK` 1.0.0).
+  * Added project template for WinUI 3.
 * 1.4.0:
   * Updated latest package versions Xamarin Forms.
   * Fixed unable to find Anchor.Pile property on Xamarin.Forms.

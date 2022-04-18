@@ -94,9 +94,10 @@ dotnet build
 |`epoxy-opensilver`|C#|OpenSilverのサンプルコード|
 |`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
 |`epoxy-uwp`|C#|UWPのサンプルコード|
+|`epoxy-winui`|C#|WinUI 3のサンプルコード|
 
 * デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
-* Xamarin Forms, UWPは、古い形式のMSBuildプロジェクトを使用しています。
+* Xamarin Forms, UWP, WinUI 3は、古い形式のMSBuildプロジェクトを使用しています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
 * OpenSilverのサンプルコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
@@ -762,8 +763,9 @@ Apache-v2
 ## History
 
 * 1.5.0:
-  * Added `UIThread.Unbind()`.
+  * `UIThread.Unbind()` を追加。
   * WinUI 3の正式版を使用するように修正。 (`Microsoft.WindowsAppSDK` 1.0.0)
+  * WinUI 3のテンプレートを追加。
 * 1.4.0:
   * Xamarin Formsを最新版に更新。
   * Xamarin FormsでAnchor.Pileが見つからない問題を修正。
