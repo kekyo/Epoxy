@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>FSharp.Epoxy</AssemblyName>
+    <TargetFrameworks>net5.0-windows10.0.17763.0;net6.0-windows10.0.17763.0</TargetFrameworks>
+    <AssemblyTitle>FSharp.Epoxy.WinUI</AssemblyTitle>
+      
+    <NuspecFile>FSharp.Epoxy.WinUI.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINUI</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;NETFX_CORE;WINUI</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="6.0.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.WinUI\Epoxy.Core.WinUI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="build\*.*" />
+    <None Include="buildMultiTargeting\*.*" />
+    <None Include="FSharp.Epoxy.WinUI.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Properties/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Internal/*.fs" />
+    <Compile Include="../FSharp.Epoxy/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Advanced/*.fs" />
+  </ItemGroup>
+
+  <!-- HACK: There aren't contained XAML source code, but it's required. -->
+  <Target Name="XamlPreCompile" />
+    
+</Project>
