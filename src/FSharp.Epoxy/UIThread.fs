@@ -22,7 +22,6 @@ namespace Epoxy
 open Epoxy.Internal
 
 open System
-open System.ComponentModel
 open System.Diagnostics
 
 [<DebuggerStepThrough>]
@@ -32,17 +31,10 @@ type public UIThread =
     /// <summary>
     /// Detects current thread context on the UI thread.
     /// </summary>
-    static member isBound =
-        InternalUIThread.IsBound
-
-    /// <summary>
-    /// Detects current thread context on the UI thread.
-    /// </summary>
-    /// <remarks>This function is used internal only.
-    /// You may have to use isBound property instead.</remarks>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member unsafeIsBound() =
-        InternalUIThread.UnsafeIsBound()
+    static member isBound() : Async<bool> =
+        InternalUIThread.IsBoundAsync().AsTask() |> Async.AwaitTask
+        
+    ////////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Binds current async workflow to the UI thread context manually.
@@ -61,8 +53,35 @@ type public UIThread =
     /// </code>
     /// </example>
     static member bind() : Async<unit> =
+        Async.FromContinuations(fun (resolve, reject, _) ->
+            InternalUIThread.ContinueOnUIThread(
+                new Action<bool>(fun isBound ->
+                    if isBound then
+                        resolve()
+                    else
+                        reject (InvalidOperationException "Epoxy: Could not bind to UI thread. UI thread is not found."))))
+
+    /// <summary>
+    /// Binds current async workflow to the UI thread context manually.
+    /// </summary>
+    /// <returns>Async object for the UI thread continuation.</returns>
+    /// <example>
+    /// <code>
+    /// async {
+    ///   // (On the arbitrary thread context here)
+    /// 
+    ///   // Switch to UI thread context uses async-await.
+    ///   let! isBound = UIThread.tryBind()
+    ///   if not isBound then
+    ///     // Failed to bind (UI thread is not found, maybe reason is UI shutdown)
+    ///   else
+    ///     // (On the UI thread context here)
+    /// }
+    /// </code>
+    /// </example>
+    static member tryBind() : Async<bool> =
         Async.FromContinuations(fun (resolve, _, _) ->
-            InternalUIThread.ContinueOnUIThread(new Action(resolve)))
+            InternalUIThread.ContinueOnUIThread(new Action<bool>(resolve)))
 
     /// <summary>
     /// Unbinds current UI thread context to the worker thread context manually.
@@ -83,3 +102,34 @@ type public UIThread =
     static member unbind() : Async<unit> =
         Async.FromContinuations(fun (resolve, _, _) ->
             InternalUIThread.ContinueOnWorkerThread(new Action(resolve)))
+            
+    ////////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Execute on the UI thread context.
+    /// </summary>
+    /// <param name="action">Action on UI thread context</param>
+    static member invokeAsync (action:unit -> Async<'T>) = async {
+        do! UIThread.bind()
+        return! action()
+    }
+
+    /// <summary>
+    /// Execute on the UI thread context.
+    /// </summary>
+    /// <param name="accessor">UIThread accessor</param>
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>True if executed.</returns>
+    static member tryInvokeAsync (action:unit -> Async<'T>) = async {
+        let! isBound = UIThread.tryBind()
+        if isBound then
+            let! r = action()
+            return (true, r)
+        else
+            return (false, Unchecked.defaultof<'T>)
+    }
+            
+    ////////////////////////////////////////////////////////////////////////
+
+    static member accessor : UIThreadAccessorInstance =
+        UIThreadAccessorInstance.Instace

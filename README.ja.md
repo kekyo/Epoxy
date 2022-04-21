@@ -122,7 +122,7 @@ dotnet build
 ![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
 
 
----
+----
 
 ## MVVMアプリケーションの実装を、最小限の手間で始める
 
@@ -259,7 +259,7 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 非同期操作でタスクコンテキストを分離 `task.ConfigureAwait(false)` することで、
 パフォーマンスを向上させることが出来ます。
 
----
+----
 
 ## 機能一覧
 
@@ -267,7 +267,7 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 （例えば、`ViewModel`を継承していないと使えない、と言うような事はありません）。
 
 |機能名|概要|
-|:---|:---|
+|:----|:----|
 |ViewModelインジェクタ|ViewModelに必要なPropertyChangedイベントなどを、ビルド時に自動的に実装出来る機能です。対象のクラスに属性を適用するだけで、煩雑なコードの実装を省略出来ます。|
 |ViewModel基底クラス|ViewModelに必要なPropertyChangedイベントなどを、オーソドックスな基底クラスとして提供します。ViewModelインジェクタが適さないシナリオで、使用することが出来ます。|
 |CommandFactory|任意の非同期デリゲートを、ICommandとして利用できるようにします。非同期処理を安全にICommandとして実装出来ます。|
@@ -284,7 +284,7 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 * 誤用の可能性のあるオーバーロードは存在しないか、又は`Epoxy.Synchronized`名前空間内にのみ、配置されています。
 * `Task`を使用するオーバーロードは、`Epoxy.Supplemental`名前空間に分離されています。これは、誤って`ValueTask`の代わりに`Task`を使用してしまう可能性を減らすためです。
 
----
+----
 
 ### ViewModelインジェクタとViewModel基底クラス
 
@@ -326,7 +326,7 @@ private ValueTask TitleChangedAsync(string value)
 ViewModelインジェクタを無効化する事で、自動的なコードを解析を停止させ、ビルドを高速化出来ます。
 csprojの`PropertyGroup`の`EpoxyBuildEnable`に`False`を指定して下さい。
 
----
+----
 
 ### EventBinder
 
@@ -394,7 +394,7 @@ UWPの実行環境はセキュリティチェックが厳しいため、
 * [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
 * [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
----
+----
 
 ### Anchor/Pile
 
@@ -439,7 +439,7 @@ await this.LogPile.RentAsync(async textBox =>
 * [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 * [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
 
----
+----
 
 ### ValueConverter
 
@@ -490,7 +490,7 @@ XAMLコンバーター内で非同期処理を行わないようにしましょ�
 
 * [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
----
+----
 
 ### UIThread
 
@@ -518,7 +518,15 @@ this.Log = $"Read={read}";
 await UIThread.Unbind();
 
 // (ワーカースレッドで継続)
+
+// 一時的な操作をUIスレッドで行う
+await UIThread.InvokeAsync(async () =>
+    this.FetchedText = await httpStream.ReadStringAsync(...));
 ```
+
+他にも、`UIThread.TryBind()`を使用すると、UIスレッドへの切り替えが成功したかどうかを確認する事が出来ます。
+これは、ホストとなるUIフレームワーク(WPFなど)が終了する間際に、UIスレッドへのアクセスが成功したかどうかを確認して、
+継続処理を行う事が出来ます。
 
 #### UWP環境で実行する場合の注意
 
@@ -528,7 +536,7 @@ await UIThread.Unbind();
 UWPは、ビューを保持するウインドウ毎に異なるUIスレッドが割り当てられていて、
 インスタンスを構築中に使用すると、ビューを判別できない事から、正しく判定できないためです。
 
----
+----
 
 ### GlobalService (高度なトピック)
 
@@ -599,7 +607,7 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 本来必要のない場所で`GlobalService`を使わないようにして下さい。
 少しでも区別できるように、`GlobalService`は`Epoxy.Advanced`名前空間に配置されています（using宣言が必要です）。
 
----
+----
 
 ### Designer (高度なトピック)
 
@@ -613,7 +621,7 @@ IDE(Visual StudioやRiderなど)が、コントロールのビジュアル編集
 
 `IsDesignTime`プロパティを参照する事で、デザイン時編集を行っているかどうかを、プラットフォームに依存しない方法で取得できます。
 
----
+----
 
 ## F#バージョンについて
 
@@ -752,7 +760,7 @@ F#でWPFを扱う場合、XAMLをC#のpartial classに変換されるとビル�
 </Window>
 ```
 
----
+----
 
 ## License
 
@@ -760,6 +768,8 @@ Apache-v2
 
 ## History
 
+* 1.6.0:
+  * `UIThread.TryBind()`, `UIThread.InvokeAsync()`, `UIThread.TryInvokeAsync()` を追加。
 * 1.5.0:
   * `UIThread.Unbind()` を追加。
   * WinUI 3の正式版を使用するように修正。 (`Microsoft.WindowsAppSDK` 1.0.0)

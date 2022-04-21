@@ -22,7 +22,7 @@
 using Epoxy.Internal;
 
 using System;
-using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -67,7 +67,7 @@ namespace Epoxy
                 //   (And will reraise delaying UnobservedException on finalizer thread.)
                 //   This captures logical task context and reraise on UI thread pumps immediately.
                 var edi = ExceptionDispatchInfo.Capture(ex);
-                InternalUIThread.ContinueOnUIThread(() => edi.Throw());
+                InternalUIThread.ContinueOnUIThread(_ => edi.Throw());
             }
         }
 
@@ -87,13 +87,17 @@ namespace Epoxy
             this.OnExecute(parameter);
 
         public static readonly CommandFactoryInstance Factory =
-            new CommandFactoryInstance();
+            CommandFactoryInstance.Instance;
     }
 
+    [DebuggerStepThrough]
     public sealed class CommandFactoryInstance
     {
-        internal CommandFactoryInstance()
+        private CommandFactoryInstance()
         {
         }
+
+        internal static readonly CommandFactoryInstance Instance = 
+            new CommandFactoryInstance();
     }
 }

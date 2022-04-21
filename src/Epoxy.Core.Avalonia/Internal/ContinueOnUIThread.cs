@@ -27,21 +27,22 @@ namespace Epoxy.Internal
 {
     partial class InternalUIThread
     {
-        public static void ContinueOnUIThread(Action continuation)
+        public static void ContinueOnUIThread(Action<bool> continuation)
         {
-            var dispatcher = Dispatcher.UIThread;
-            if (dispatcher == null)
+            if (Dispatcher.UIThread is { } dispatcher)
             {
-                throw new InvalidOperationException("UI thread not found.");
-            }
-
-            if (dispatcher.CheckAccess())
-            {
-                continuation();
+                if (dispatcher.CheckAccess())
+                {
+                    continuation(true);
+                }
+                else
+                {
+                    dispatcher.Post(() => continuation(true));
+                }
             }
             else
             {
-                dispatcher.Post(continuation);
+                continuation(false);
             }
         }
     }

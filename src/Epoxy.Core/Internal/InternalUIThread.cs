@@ -21,9 +21,11 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 #if WINDOWS_UWP || WINUI || UNO
 using Windows.UI.Core;
+using Windows.ApplicationModel.Core;
 #endif
 
 #if WINUI
@@ -32,6 +34,11 @@ using Microsoft.UI.Dispatching;
 
 #if WINDOWS_WPF || OPENSILVER
 using System.Windows;
+using System.Windows.Threading;
+#endif
+
+#if OPENSILVER
+using DotNetForHtml5.Core;
 #endif
 
 #if XAMARIN_FORMS
@@ -48,82 +55,106 @@ namespace Epoxy.Internal
     {
         private static readonly ThreadLocal<bool?> ids = new ThreadLocal<bool?>();
 
-        public static bool IsBound
+        private static bool InternalIsBound()
         {
-            get
-            {
-                switch (ids.Value)
-                {
-                    case true:
-                        return true;
-                    case false:
-                        return false;
-                    default:
 #if WINDOWS_WPF
-                        if (object.ReferenceEquals(
-                            Application.Current?.Dispatcher?.Thread,
-                            Thread.CurrentThread))
-                        {
-                            ids.Value = true;
-                            return true;
-                        }
+            if (Application.Current?.Dispatcher?.CheckAccess() ?? false)
+            {
+                return true;
+            }
 #endif
 #if AVALONIA
-                        if (Dispatcher.UIThread?.CheckAccess() ?? false)
-                        {
-                            ids.Value = true;
-                            return true;
-                        }
+            if (Dispatcher.UIThread?.CheckAccess() ?? false)
+            {
+                return true;
+            }
 #endif
 #if WINDOWS_UWP || WINUI || UNO
-                        if (CoreWindow.GetForCurrentThread() is { } cw1 &&
-                            (cw1.Dispatcher?.HasThreadAccess ?? false))
-                        {
-                            ids.Value = true;
-                            return true;
-                        }
+            if (CoreWindow.GetForCurrentThread()?.Dispatcher?.HasThreadAccess ?? false)
+            {
+                return true;
+            }
+            else if (CoreApplication.MainView?.CoreWindow?.Dispatcher?.HasThreadAccess ?? false)
+            {
+                return true;
+            }
 #endif
 #if WINUI
-                        if (DispatcherQueue.GetForCurrentThread() is { } queue &&
-                            queue.HasThreadAccess)
-                        {
-                            ids.Value = true;
-                            return true;
-                        }
+            if (DispatcherQueue.GetForCurrentThread()?.HasThreadAccess ?? false)
+            {
+                return true;
+            }
 #endif
 #if XAMARIN_FORMS
-                        if (Application.Current?.Dispatcher?.IsInvokeRequired ?? false)
-                        {
-                            ids.Value = true;
-                            return true;
-                        }
+            if (Application.Current?.Dispatcher?.IsInvokeRequired ?? false)
+            {
+                return true;
+            }
 #endif
-                        try
-                        {
-                            if (SynchronizationContext.Current is { } context)
-                            {
-                                var id = -1;
-                                context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
-                                var f = id == Thread.CurrentThread.ManagedThreadId;
-                                ids.Value = f;
-                                return f;
-                            }
-                        }
-                        catch
-                        {
-                            // On UWP, will cause NotSupportedException.
-                        }
-                        ids.Value = false;
-                        return false;
+            try
+            {
+                // Check equality of UI thread.
+                if (SynchronizationContext.Current is { } context)
+                {
+                    var id = -1;
+                    context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
+                    return id == Thread.CurrentThread.ManagedThreadId;
                 }
+            }
+            catch
+            {
+                // On UWP, will cause NotSupportedException.
+            }
+
+            return false;
+        }
+
+        public static ValueTask<bool> IsBoundAsync()
+        {
+            switch (ids.Value)
+            {
+                case true:
+                    return new ValueTask<bool>(true);
+                case false:
+                    return new ValueTask<bool>(false);
+                default:
+#if OPENSILVER
+                    if (Application.Current?.RootVisual?.Dispatcher is { } dispatcher)
+                    {
+                        var id = Thread.CurrentThread.ManagedThreadId;
+                        var tcs = new TaskCompletionSource<bool>();
+                        dispatcher.BeginInvoke(new Action(() =>
+                            tcs.TrySetResult(id == Thread.CurrentThread.ManagedThreadId)));
+                        return new ValueTask<bool>(tcs.Task);
+                    }
+#endif
+                    var f = InternalIsBound();
+                    ids.Value = f;
+                    return new ValueTask<bool>(f);
             }
         }
 
         public static bool UnsafeIsBound()
         {
-            if (IsBound)
+            switch (ids.Value)
             {
-                return true;
+                case true:
+                    return true;
+                case false:
+                    break;
+                default:
+#if OPENSILVER
+                    // Could not check in OpenSilver.
+                    return true;
+#else
+                    var f = InternalIsBound();
+                    ids.Value = f;
+                    if (f)
+                    {
+                        return true;
+                    }
+                    break;
+#endif
             }
 #if XAMARIN_FORMS
             // Workaround XF on UWP:

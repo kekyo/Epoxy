@@ -24,51 +24,79 @@ using System;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 
+#if WINUI
+using Microsoft.UI.Dispatching;
+#endif
+
 namespace Epoxy.Internal
 {
     partial class InternalUIThread
     {
-        public static void ContinueOnUIThread(Action continuation)
+        private static CoreDispatcher? TryGetDispatcher()
         {
             if (CoreWindow.GetForCurrentThread()?.Dispatcher is { } d1)
             {
+                return d1;
+            }
+            else if (CoreApplication.MainView?.CoreWindow?.Dispatcher is { } d2)
+            {
+                return d2;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static void ContinueOnUIThread(Action<bool> continuation)
+        {
+            if (TryGetDispatcher() is { } dispatcher)
+            {
                 // Maybe anytime is true
-                if (d1.HasThreadAccess)
+                if (dispatcher.HasThreadAccess)
                 {
-                    continuation();
+                    continuation(true);
                 }
                 else
                 {
-                    var _ = d1.RunAsync(
-                        CoreDispatcherPriority.Normal,
-                        () => continuation());
-                }
-                return;
-            }
-
-            try
-            {
-                if (CoreApplication.MainView?.CoreWindow?.Dispatcher is { } d2)
-                {
-                    if (d2.HasThreadAccess)
+                    try
                     {
-                        continuation();
-                    }
-                    else
-                    {
-                        var _ = d2.RunAsync(
+                        var _ = dispatcher.RunAsync(
                             CoreDispatcherPriority.Normal,
-                            () => continuation());
+                            () => continuation(true));
                     }
-                    return;
+                    catch
+                    {
+                        continuation(false);
+                    }
                 }
             }
-            catch (InvalidOperationException ex)
+#if WINUI
+            else if (DispatcherQueue.GetForCurrentThread() is { } dispatcherQueue)
             {
-                throw new InvalidOperationException("UI thread not found.", ex);
+                if (dispatcherQueue.HasThreadAccess)
+                {
+                    continuation(true);
+                }
+                else
+                {
+                    try
+                    {
+                        var _ = dispatcherQueue.TryEnqueue(
+                            DispatcherQueuePriority.Normal,
+                            () => continuation(true));
+                    }
+                    catch
+                    {
+                        continuation(false);
+                    }
+                }
             }
-
-            throw new InvalidOperationException("UI thread not found.");
+#endif
+            else
+            {
+                continuation(false);
+            }
         }
     }
 }

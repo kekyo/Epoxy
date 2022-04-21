@@ -28,33 +28,31 @@ namespace Epoxy.Internal
 {
     partial class InternalUIThread
     {
-        public static void ContinueOnUIThread(Action continuation)
+        public static void ContinueOnUIThread(Action<bool> continuation)
         {
-            var dispatcher = Application.Current?.Dispatcher;
-            if (dispatcher == null)
+            if (Application.Current?.Dispatcher is { } dispatcher)
             {
-                if (SynchronizationContext.Current is { } context)
+                if (dispatcher.CheckAccess())
                 {
-                    context.Post(_ => continuation(), null);
-                    return;
+                    continuation(true);
                 }
                 else
                 {
-                    throw new InvalidOperationException("UI thread not found.");
+                    try
+                    {
+                        var _ = dispatcher.BeginInvoke(
+                            DispatcherPriority.Normal,
+                            new Action(() => continuation(true)));
+                    }
+                    catch
+                    {
+                        continuation(false);
+                    }
                 }
-            }
-
-            if (object.ReferenceEquals(
-                dispatcher.Thread,
-                Thread.CurrentThread))
-            {
-                continuation();
             }
             else
             {
-                var _ = dispatcher.BeginInvoke(
-                    DispatcherPriority.Normal,
-                    continuation);
+                continuation(false);
             }
         }
     }
