@@ -33,6 +33,8 @@ type public UIThread =
     /// </summary>
     static member isBound() : Async<bool> =
         InternalUIThread.IsBoundAsync().AsTask() |> Async.AwaitTask
+        
+    ////////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Binds current async workflow to the UI thread context manually.
@@ -100,3 +102,34 @@ type public UIThread =
     static member unbind() : Async<unit> =
         Async.FromContinuations(fun (resolve, _, _) ->
             InternalUIThread.ContinueOnWorkerThread(new Action(resolve)))
+            
+    ////////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Execute on the UI thread context.
+    /// </summary>
+    /// <param name="action">Action on UI thread context</param>
+    static member invokeAsync (action:unit -> Async<'T>) = async {
+        do! UIThread.bind()
+        return! action()
+    }
+
+    /// <summary>
+    /// Execute on the UI thread context.
+    /// </summary>
+    /// <param name="accessor">UIThread accessor</param>
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>True if executed.</returns>
+    static member tryInvokeAsync (action:unit -> Async<'T>) = async {
+        let! isBound = UIThread.tryBind()
+        if isBound then
+            let! r = action()
+            return (true, r)
+        else
+            return (false, Unchecked.defaultof<'T>)
+    }
+            
+    ////////////////////////////////////////////////////////////////////////
+
+    static member accessor : UIThreadAccessorInstance =
+        UIThreadAccessorInstance.Instace

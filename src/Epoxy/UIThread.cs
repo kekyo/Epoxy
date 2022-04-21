@@ -23,13 +23,35 @@ using Epoxy.Internal;
 using Epoxy.Supplemental;
 
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Epoxy
 {
+    [DebuggerStepThrough]
+    public readonly struct TryInvokeAsyncResult<T>
+    {
+        public readonly bool IsBound;
+        public readonly T Result;
+
+        public TryInvokeAsyncResult(bool isBound, T result)
+        {
+            this.IsBound = isBound;
+            this.Result = result;
+        }
+
+        public void Deconstruct(out bool isBound, out T result)
+        {
+            isBound = this.IsBound;
+            result = this.Result;
+        }
+    }
+
     /// <summary>
     /// UI thread commonly manipulator.
     /// </summary>
+    [DebuggerStepThrough]
     public static class UIThread
     {
         /// <summary>
@@ -99,5 +121,69 @@ namespace Epoxy
         /// </example>
         public static UIThreadUnbindAwaitable Unbind() =>
             new UIThreadUnbindAwaitable();
+
+        ////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Execute on the UI thread context.
+        /// </summary>
+        /// <typeparam name="T">Return type</typeparam>
+        /// <param name="action">Action on UI thread context</param>
+        /// <returns>Result</returns>
+        public static async ValueTask<T> InvokeAsync<T>(Func<ValueTask<T>> action)
+        {
+            await Bind();
+            return await action().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Execute on the UI thread context.
+        /// </summary>
+        /// <param name="action">Action on UI thread context</param>
+        public static async ValueTask InvokeAsync(Func<ValueTask> action)
+        {
+            await Bind();
+            await action().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Execute on the UI thread context.
+        /// </summary>
+        /// <param name="action">Action on UI thread context</param>
+        /// <returns>True if executed.</returns>
+        public static async ValueTask<bool> TryInvokeAsync(Func<ValueTask> action)
+        {
+            if (await TryBind())
+            {
+                await action().ConfigureAwait(false);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Execute on the UI thread context.
+        /// </summary>
+        /// <param name="action">Action on UI thread context</param>
+        /// <returns>True if executed.</returns>
+        public static async ValueTask<TryInvokeAsyncResult<T>> TryInvokeAsync<T>(Func<ValueTask<T>> action)
+        {
+            if (await TryBind())
+            {
+                return new TryInvokeAsyncResult<T>(true, await action().ConfigureAwait(false));
+            }
+            else
+            {
+                return new TryInvokeAsyncResult<T>(false, default!);
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+
+        public static readonly UIThreadAccessorInstance Accessor =
+            UIThreadAccessorInstance.Instace;
     }
 }

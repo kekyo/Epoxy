@@ -27,12 +27,14 @@ using System.Runtime.CompilerServices;
 
 namespace Epoxy.Supplemental
 {
+    [DebuggerStepThrough]
     public struct UIThreadAwaitable
     {
         public UIThreadAwaiter GetAwaiter() =>
             new UIThreadAwaiter();
     }
 
+    [DebuggerStepThrough]
     public sealed class UIThreadAwaiter : INotifyCompletion
     {
         private bool isBound;
@@ -61,12 +63,14 @@ namespace Epoxy.Supplemental
         }
     }
 
+    [DebuggerStepThrough]
     public struct UIThreadTryBindAwaitable
     {
         public UIThreadTryBindAwaiter GetAwaiter() =>
             new UIThreadTryBindAwaiter();
     }
 
+    [DebuggerStepThrough]
     public sealed class UIThreadTryBindAwaiter : INotifyCompletion
     {
         private bool isBound;
@@ -91,12 +95,14 @@ namespace Epoxy.Supplemental
         }
     }
 
+    [DebuggerStepThrough]
     public struct UIThreadUnbindAwaitable
     {
         public UIThreadUnbindAwaiter GetAwaiter() =>
             new UIThreadUnbindAwaiter();
     }
 
+    [DebuggerStepThrough]
     public sealed class UIThreadUnbindAwaiter : INotifyCompletion
     {
         internal UIThreadUnbindAwaiter()

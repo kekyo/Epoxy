@@ -20,6 +20,7 @@
 #nullable enable
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using Epoxy.Internal;
@@ -29,6 +30,7 @@ namespace Epoxy.Supplemental
     /// <summary>
     /// Command factory methods for Task based asynchronous handler.
     /// </summary>
+    [DebuggerStepThrough]
     public static class CommandFactoryExtension
     {
         /// <summary>
