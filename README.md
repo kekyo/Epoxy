@@ -248,7 +248,7 @@ public static async ValueTask<byte[]> FetchImageAsync(Uri url)
 Since the Model implementation does not directly manipulate the user interface fragments,
 it can isolate task contexts with `task.ConfigureAwait(false)` annotation to improve performance.
 
----
+----
 
 ## Features
 
@@ -256,7 +256,7 @@ Since each function is independent, it can be used in any combination.
 (For example, it is NOT necessary to inherit from `ViewModel` to use it.)
 
 |Function|Summary|
-|:---|:---|
+|:----|:----|
 |ViewModel Injector|This function allows you to automatically implement the PropertyChanged event and other events required for ViewModel at build time. Simply apply the attributes to the target class, and you can skip the complicated code implementation.|
 |ViewModel base class|The ViewModel Injector provides an orthodox base class for the ViewModel's PropertyChanged events, etc. It can be used in scenarios where the ViewModel Injector is not suitable.|
 |CommandFactory|Enables arbitrary asynchronous delegates to be used as ICommand. You can safely implement asynchronous processing as an ICommand. |
@@ -274,7 +274,7 @@ Although it is not described in detail in the following sections, Epoxy is desig
 Synchronized namespace.
 * Overloads that use `Task` are separated into the `Epoxy.Supplemental` namespace. This is to reduce the possibility of accidentally using `Task` instead of `ValueTask`.
 
----
+----
 
 ### ViewModel injector and ViewModel base class
 
@@ -316,7 +316,7 @@ If you don't use the ViewModel injector at entire in your project,
 you can disable it to stop parsing code automatically and speed up the build.
 Specify `False` for` EpoxyBuildEnable` of `PropertyGroup` of csproj.
 
----
+----
 
 ### EventBinder
 
@@ -385,7 +385,7 @@ This is because the UWP runtime environment has strict security checks, and ther
 * [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
 * [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
----
+----
 
 ### Anchor/Pile
 
@@ -426,7 +426,7 @@ await this.LogPile.RentAsync(async textBox =>
 * [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 * [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
 
----
+----
 
 ### ValueConverter
 
@@ -479,7 +479,7 @@ Try not to do asynchronous processing in the XAML converter!
 
 * [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
----
+----
 
 ### UIThread
 
@@ -508,7 +508,15 @@ this.Log = $"Read={read}";
 await UIThread.Unbind();
 
 // (Continued on worker thread)
+
+// Temporary operations are performed on UI thread.
+await UIThread.InvokeAsync(async () =>
+    this.FetchedText = await httpStream.ReadStringAsync(...));
 ```
+
+Another use of `UIThread.TryBind()` is to check if the switch to the UI thread was successful.
+This is useful when the host UI framework (e.g., WPF) is aborting in progress,
+then use `UIThread.TryBind()` to verify continue processing can be performed.
 
 #### Note on running in a UWP environment
 
@@ -521,7 +529,7 @@ UWP has a different UI thread assigned to each window that holds a view,
 and if you use it while constructing an instance,
 it will not be able to determine the view correctly.
 
----
+----
 
 ### GlobalService (Advanced topic)
 
@@ -596,7 +604,7 @@ NOTE: As the name "Global" implies, `GlobalService` behaves like a kind of globa
 Try not to use `GlobalService` in places where it is not really needed.
 `Epoxy.Advanced` namespace (using declarations are required) to make it a bit more distinguishable.
 
----
+----
 
 ### Designer (advanced topic)
 
@@ -612,7 +620,7 @@ your design edits rather than doing the real control behavior.
 By referring to `IsDesignTime` property, you can get whether or
 not you are editing at design time in a platform-independent way.
 
----
+----
 
 ## About the F# version
 
@@ -752,7 +760,7 @@ One limitation of this feature is that XAML is always stored in the resource as 
 </Window>
 ```
 
----
+----
 
 ## License
 
@@ -760,6 +768,8 @@ Apache-v2
 
 ## History
 
+* 1.6.0:
+  * Added `UIThread.TryBind()`, `UIThread.InvokeAsync()` and `UIThread.TryInvokeAsync()`.
 * 1.5.0:
   * Added `UIThread.Unbind()`.
   * Fixed broken and updated latest package versions WinUI 3 (`Microsoft.WindowsAppSDK` 1.0.0).
