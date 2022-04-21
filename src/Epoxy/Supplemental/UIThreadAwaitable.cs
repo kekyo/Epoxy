@@ -27,36 +27,82 @@ using System.Runtime.CompilerServices;
 
 namespace Epoxy.Supplemental
 {
+    [DebuggerStepThrough]
     public struct UIThreadAwaitable
     {
         public UIThreadAwaiter GetAwaiter() =>
             new UIThreadAwaiter();
     }
 
+    [DebuggerStepThrough]
     public sealed class UIThreadAwaiter : INotifyCompletion
     {
+        private bool isBound;
+
         internal UIThreadAwaiter()
         { }
 
         public bool IsCompleted { get; private set; }
 
         public void OnCompleted(Action continuation) =>
-            InternalUIThread.ContinueOnUIThread(() =>
+            InternalUIThread.ContinueOnUIThread(isBound =>
             {
+                this.isBound = isBound;
                 this.IsCompleted = true;
                 continuation();
             });
 
-        public void GetResult() =>
+        public void GetResult()
+        {
             Debug.Assert(this.IsCompleted);
+            if (!this.isBound)
+            {
+                throw new InvalidOperationException(
+                    "Epoxy: Could not bind to UI thread. UI thread is not found.");
+            }
+        }
     }
 
+    [DebuggerStepThrough]
+    public struct UIThreadTryBindAwaitable
+    {
+        public UIThreadTryBindAwaiter GetAwaiter() =>
+            new UIThreadTryBindAwaiter();
+    }
+
+    [DebuggerStepThrough]
+    public sealed class UIThreadTryBindAwaiter : INotifyCompletion
+    {
+        private bool isBound;
+
+        internal UIThreadTryBindAwaiter()
+        { }
+
+        public bool IsCompleted { get; private set; }
+
+        public void OnCompleted(Action continuation) =>
+            InternalUIThread.ContinueOnUIThread(isBound =>
+            {
+                this.isBound = isBound;
+                this.IsCompleted = true;
+                continuation();
+            });
+
+        public bool GetResult()
+        {
+            Debug.Assert(this.IsCompleted);
+            return this.isBound;
+        }
+    }
+
+    [DebuggerStepThrough]
     public struct UIThreadUnbindAwaitable
     {
         public UIThreadUnbindAwaiter GetAwaiter() =>
             new UIThreadUnbindAwaiter();
     }
 
+    [DebuggerStepThrough]
     public sealed class UIThreadUnbindAwaiter : INotifyCompletion
     {
         internal UIThreadUnbindAwaiter()

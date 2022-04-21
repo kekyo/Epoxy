@@ -27,24 +27,29 @@ namespace Epoxy.Internal
 {
     partial class InternalUIThread
     {
-        public static void ContinueOnUIThread(Action continuation)
+        public static void ContinueOnUIThread(Action<bool> continuation)
         {
-            var dispatcher = Application.Current?.Dispatcher;
-            if (dispatcher == null)
+            if (Application.Current?.Dispatcher is { } dispatcher)
             {
-                // NOTE: Could't use SynchronizationContext.
-                //   Because multi-platform targetter is capable for separated threading UI message pumps (ex: UWP).
-
-                throw new InvalidOperationException("UI thread not found.");
-            }
-
-            if (!dispatcher.IsInvokeRequired)
-            {
-                continuation();
+                if (!dispatcher.IsInvokeRequired)
+                {
+                    continuation(true);
+                }
+                else
+                {
+                    try
+                    {
+                        dispatcher.BeginInvokeOnMainThread(() => continuation(true));
+                    }
+                    catch
+                    {
+                        continuation(false);
+                    }
+                }
             }
             else
             {
-                Device.BeginInvokeOnMainThread(continuation);
+                continuation(false);
             }
         }
     }

@@ -22,6 +22,7 @@
   <PropertyGroup>
     <BuildDependsOn>$([MSBuild]::Unescape($(BuildDependsOn.Replace('_SayHello;', '').Replace('_VerifyBuildSignature;', '').Replace('_VerifyXcodeVersion;', '').Replace('AfterConnect;', '').Replace('BeforeDisconnect;', '').Replace('_SayGoodbye;', ''))))</BuildDependsOn>
     <IsMacEnabled>false</IsMacEnabled>
+    <IsRemoteBuild>false</IsRemoteBuild>
   </PropertyGroup>
   <Target Name="_SayHello"></Target>
     

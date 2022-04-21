@@ -19,30 +19,18 @@
 
 #nullable enable
 
-using System;
-using System.Windows;
+using System.Diagnostics;
 
-namespace Epoxy.Internal
+namespace Epoxy
 {
-    partial class InternalUIThread
+    [DebuggerStepThrough]
+    public sealed class UIThreadAccessorInstance
     {
-        public static void ContinueOnUIThread(Action<bool> continuation)
+        private UIThreadAccessorInstance()
         {
-            if (Application.Current?.RootVisual?.Dispatcher is { } dispatcher)
-            {
-                try
-                {
-                    var _ = dispatcher.BeginInvoke(new Action(() => continuation(true)));
-                }
-                catch
-                {
-                    continuation(false);
-                }
-            }
-            else
-            {
-                continuation(false);
-            }
         }
+
+        internal static readonly UIThreadAccessorInstance Instace =
+            new UIThreadAccessorInstance();
     }
 }
