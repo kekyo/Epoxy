@@ -35,20 +35,60 @@ namespace Epoxy.Supplemental
 
     public sealed class UIThreadAwaiter : INotifyCompletion
     {
+        private bool isBound;
+
         internal UIThreadAwaiter()
         { }
 
         public bool IsCompleted { get; private set; }
 
         public void OnCompleted(Action continuation) =>
-            InternalUIThread.ContinueOnUIThread(() =>
+            InternalUIThread.ContinueOnUIThread(isBound =>
             {
+                this.isBound = isBound;
                 this.IsCompleted = true;
                 continuation();
             });
 
-        public void GetResult() =>
+        public void GetResult()
+        {
             Debug.Assert(this.IsCompleted);
+            if (!this.isBound)
+            {
+                throw new InvalidOperationException(
+                    "Epoxy: Could not bind to UI thread. UI thread is not found.");
+            }
+        }
+    }
+
+    public struct UIThreadTryBindAwaitable
+    {
+        public UIThreadTryBindAwaiter GetAwaiter() =>
+            new UIThreadTryBindAwaiter();
+    }
+
+    public sealed class UIThreadTryBindAwaiter : INotifyCompletion
+    {
+        private bool isBound;
+
+        internal UIThreadTryBindAwaiter()
+        { }
+
+        public bool IsCompleted { get; private set; }
+
+        public void OnCompleted(Action continuation) =>
+            InternalUIThread.ContinueOnUIThread(isBound =>
+            {
+                this.isBound = isBound;
+                this.IsCompleted = true;
+                continuation();
+            });
+
+        public bool GetResult()
+        {
+            Debug.Assert(this.IsCompleted);
+            return this.isBound;
+        }
     }
 
     public struct UIThreadUnbindAwaitable

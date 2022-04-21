@@ -67,7 +67,7 @@ namespace Epoxy
                 //   (And will reraise delaying UnobservedException on finalizer thread.)
                 //   This captures logical task context and reraise on UI thread pumps immediately.
                 var edi = ExceptionDispatchInfo.Capture(ex);
-                InternalUIThread.ContinueOnUIThread(() => edi.Throw());
+                InternalUIThread.ContinueOnUIThread(_ => edi.Throw());
             }
         }
 

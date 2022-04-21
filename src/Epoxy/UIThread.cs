@@ -19,10 +19,11 @@
 
 #nullable enable
 
-using Epoxy.Supplemental;
 using Epoxy.Internal;
+using Epoxy.Supplemental;
 
-using System.ComponentModel;
+using System;
+using System.Threading.Tasks;
 
 namespace Epoxy
 {
@@ -34,17 +35,15 @@ namespace Epoxy
         /// <summary>
         /// Detects current thread context on the UI thread.
         /// </summary>
-        public static bool IsBound =>
-            InternalUIThread.IsBound;
+        public static ValueTask<bool> IsBoundAsync() =>
+            InternalUIThread.IsBoundAsync();
 
         /// <summary>
         /// Detects current thread context on the UI thread.
         /// </summary>
-        /// <remarks>This method is used internal only.
-        /// You may have to use IsBound property instead.</remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool UnsafeIsBound() =>
-            InternalUIThread.UnsafeIsBound();
+        [Obsolete("IsBound property is deprecated. Use IsBoundAsync() method instead.", true)]
+        public static bool IsBound =>
+            throw new NotImplementedException();
 
         /// <summary>
         /// Binds current task to the UI thread context manually.
@@ -62,6 +61,27 @@ namespace Epoxy
         /// </example>
         public static UIThreadAwaitable Bind() =>
             new UIThreadAwaitable();
+
+        /// <summary>
+        /// Try to bind current task to the UI thread context manually.
+        /// </summary>
+        /// <returns>True if bound UI thread</returns>
+        /// <example>
+        /// <code>
+        /// // (On the arbitrary thread context here)
+        /// 
+        /// // Switch to UI thread context uses async-await.
+        /// if (!(await UIThread.TryBind()))
+        /// {
+        ///     // Failed to bind (UI thread is not found, maybe reason is UI shutdown)
+        ///     return;
+        /// }
+        /// 
+        /// // (On the UI thread context here)
+        /// </code>
+        /// </example>
+        public static UIThreadTryBindAwaitable TryBind() =>
+            new UIThreadTryBindAwaitable();
 
         /// <summary>
         /// Unbinds current UI task to the worker thread context manually.

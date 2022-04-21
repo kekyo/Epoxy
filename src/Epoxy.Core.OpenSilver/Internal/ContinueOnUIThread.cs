@@ -20,21 +20,28 @@
 #nullable enable
 
 using System;
-using System.Threading;
+using System.Windows;
 
 namespace Epoxy.Internal
 {
     partial class InternalUIThread
     {
-        public static void ContinueOnUIThread(Action continuation)
+        public static void ContinueOnUIThread(Action<bool> continuation)
         {
-            if (SynchronizationContext.Current is { } context)
+            if (Application.Current?.RootVisual?.Dispatcher is { } dispatcher)
             {
-                context.Post(_ => continuation(), null);
+                try
+                {
+                    var _ = dispatcher.BeginInvoke(new Action(() => continuation(true)));
+                }
+                catch
+                {
+                    continuation(false);
+                }
             }
             else
             {
-                continuation();
+                continuation(false);
             }
         }
     }
