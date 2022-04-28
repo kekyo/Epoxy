@@ -66,15 +66,24 @@
     <Task>
       <Using Namespace="System"/>
       <Using Namespace="System.IO"/>
-      <Using Namespace="System.Linq"/>
+      <!-- HACK: Will cause compilation error by using `System.Collection.Generic` and/or `System.Linq` on MacOS
+           (Maybe related both mono environment and unreferenced core assembly on `RoslynCodeTaskFactory`) -->
+      <Using Namespace="System.Collections"/>
       <Using Namespace="Microsoft.Build.Framework"/>
       <Code Type="Fragment" Language="cs">
 <![CDATA[
-        CombinedReferencesBasePath = string.Join(";", References.
-            Where(item => !string.IsNullOrWhiteSpace(item.ItemSpec)).
-            GroupBy(item => Path.GetDirectoryName(Path.GetFullPath(item.ItemSpec))).
-            Select(g => g.Key).
-            Distinct());
+        var candidates = new Hashtable();
+        foreach (var item in References)
+        {
+            if (!string.IsNullOrEmpty(item.ItemSpec))
+            {
+                var path = Path.GetDirectoryName(Path.GetFullPath(item.ItemSpec));
+                candidates[path] = path;
+            }
+        }
+        var pathList = new object[candidates.Keys.Count];
+        candidates.Keys.CopyTo(pathList, 0);
+        CombinedReferencesBasePath = string.Join(";", pathList);
 ]]>
       </Code>
     </Task>
