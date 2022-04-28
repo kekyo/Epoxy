@@ -500,7 +500,7 @@ Epoxyでは[UIThreadクラス](https://github.com/kekyo/Epoxy/blob/main/Epoxy/UI
 
 ```csharp
 // 現在のスレッドがUIスレッドかどうか
-Debug.Assert(UIThread.IsBound);
+Debug.Assert(await UIThread.IsBoundAsync());
 
 // ワーカースレッドで継続させる
 var read = await httpStream.ReadAsync(...).ConfigureAwait(false);

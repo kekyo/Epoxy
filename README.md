@@ -42,7 +42,7 @@
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2401 or higher)
   * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17134.0 or higher)
-  * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not a stable, so we can only confirm it on UWP hosts**
+  * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Uno is not stable, so we can only confirm it on UWP hosts**
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * F# is 6.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
@@ -490,7 +490,7 @@ We can easier combine both UI manipulation and asynchronous operations.
 
 ```csharp
 // Can check what current thread
-Debug.Assert(UIThread.IsBound);
+Debug.Assert(await UIThread.IsBoundAsync());
 
 // Invoke asynchronous operation and will detach current thread context.
 var read = await httpStream.ReadAsync(...).ConfigureAwait(false);
