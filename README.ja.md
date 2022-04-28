@@ -768,6 +768,8 @@ Apache-v2
 
 ## History
 
+* 1.7.0:
+  * MacOS上でEpoxyを含んだプロジェクトをビルドする際に、カスタムタスクでエラーが発生する問題を修正。
 * 1.6.0:
   * `UIThread.TryBind()`, `UIThread.InvokeAsync()`, `UIThread.TryInvokeAsync()` を追加。
 * 1.5.0:

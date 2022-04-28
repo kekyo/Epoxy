@@ -768,6 +768,8 @@ Apache-v2
 
 ## History
 
+* 1.7.0:
+  * Fixed an error in a custom task when building a project containing Epoxy on MacOS.
 * 1.6.0:
   * Added `UIThread.TryBind()`, `UIThread.InvokeAsync()` and `UIThread.TryInvokeAsync()`.
 * 1.5.0:
