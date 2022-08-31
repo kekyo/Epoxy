@@ -43,6 +43,10 @@ using System.Windows;
 using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
+#if MAUI
+using UIElement = Microsoft.Maui.Controls.VisualElement;
+#endif
+
 #if AVALONIA
 using UIElement = Avalonia.Controls.IControl;
 #endif

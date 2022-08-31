@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Maui</AssemblyTitle>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+      
+    <NuspecFile>Epoxy.Maui.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;MAUI</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;MAUI</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Maui\Epoxy.Core.Maui.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+  </ItemGroup>
+
+</Project>

@@ -43,6 +43,12 @@ using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+using UIElement = Microsoft.Maui.Controls.VisualElement;
+#endif
+
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
