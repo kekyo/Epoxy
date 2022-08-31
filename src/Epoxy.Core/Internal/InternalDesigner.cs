@@ -35,6 +35,10 @@ using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
 #endif
 
+#if XAMARIN_FORMS
+using Xamarin.Forms;
+#endif
+
 #if MAUI
 using Microsoft.Maui.Controls;
 #endif
@@ -42,10 +46,6 @@ using Microsoft.Maui.Controls;
 #if AVALONIA
 using Avalonia;
 using Avalonia.Controls;
-#endif
-
-#if XAMARIN_FORMS
-using Xamarin.Forms;
 #endif
 
 namespace Epoxy.Internal

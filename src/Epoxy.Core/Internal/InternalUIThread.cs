@@ -45,6 +45,10 @@ using DotNetForHtml5.Core;
 using Xamarin.Forms;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
+
 #if AVALONIA
 using Avalonia.Threading;
 #endif
@@ -87,6 +91,12 @@ namespace Epoxy.Internal
 #endif
 #if XAMARIN_FORMS
             if (Application.Current?.Dispatcher?.IsInvokeRequired ?? false)
+            {
+                return true;
+            }
+#endif
+#if MAUI
+            if (Application.Current?.Dispatcher?.IsDispatchRequired ?? false)
             {
                 return true;
             }

@@ -19,13 +19,14 @@
 
 #nullable enable
 
+using Microsoft.Maui.Controls;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 [assembly: ComVisible(false)]
 
 [assembly: InternalsVisibleTo("Epoxy")]
 [assembly: InternalsVisibleTo("FSharp.Epoxy")]
 
-[assembly: SupportedOSPlatform("windows10.0.17134.0")] 
+[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
+[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]

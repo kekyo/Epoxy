@@ -31,13 +31,20 @@ namespace Epoxy.Internal
         {
             if (Application.Current?.Dispatcher is { } dispatcher)
             {
-                try
+                if (!dispatcher.IsDispatchRequired)
                 {
-                    dispatcher.Dispatch(() => continuation(true));
+                    continuation(true);
                 }
-                catch
+                else
                 {
-                    continuation(false);
+                    try
+                    {
+                        dispatcher.Dispatch(() => continuation(true));
+                    }
+                    catch
+                    {
+                        continuation(false);
+                    }
                 }
             }
             else
