@@ -32,11 +32,6 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
-#if MAUI
-using Microsoft.Maui.Controls;
-using DependencyObject = Microsoft.Maui.Controls.BindableObject;
-#endif
-
 #if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -45,6 +40,11 @@ using System.Windows.Media.Animation;
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
+#endif
+
+#if MAUI
+using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 #endif
 
 #if AVALONIA

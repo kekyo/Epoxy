@@ -29,10 +29,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 #endif
 
-#if MAUI
-using Microsoft.Maui.Controls;
-#endif
-
 #if WINUI
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
@@ -45,6 +41,10 @@ using System.Windows.Data;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
+
+#if MAUI
+using Microsoft.Maui.Controls;
 #endif
 
 #if AVALONIA

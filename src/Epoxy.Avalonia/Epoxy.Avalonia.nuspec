@@ -39,6 +39,12 @@
         <dependency id="Avalonia" version="0.10.13" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
+      <group targetFramework=".NETCoreApp2.2">
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
+        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
+        <dependency id="Avalonia" version="0.10.13" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
       <group targetFramework=".NETCoreApp3.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
