@@ -62,58 +62,68 @@ namespace Epoxy.Internal
         private static bool InternalIsBound()
         {
 #if WINDOWS_WPF
-            if (Application.Current?.Dispatcher?.CheckAccess() ?? false)
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher?.CheckAccess() ?? false)
             {
                 return true;
             }
 #endif
 #if AVALONIA
-            if (Dispatcher.UIThread?.CheckAccess() ?? false)
+            var dispatcher = Dispatcher.UIThread;
+            if (dispatcher?.CheckAccess() ?? false)
             {
                 return true;
             }
 #endif
 #if WINDOWS_UWP || WINUI || UNO
-            if (CoreWindow.GetForCurrentThread()?.Dispatcher?.HasThreadAccess ?? false)
+            var dispatcher = CoreWindow.GetForCurrentThread()?.Dispatcher;
+            if (dispatcher == null)
             {
-                return true;
+                dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
             }
-            else if (CoreApplication.MainView?.CoreWindow?.Dispatcher?.HasThreadAccess ?? false)
+            if (dispatcher?.HasThreadAccess ?? false)
             {
                 return true;
             }
 #endif
 #if WINUI
-            if (DispatcherQueue.GetForCurrentThread()?.HasThreadAccess ?? false)
+            var dispatcher2 = DispatcherQueue.GetForCurrentThread();
+            if (dispatcher2?.HasThreadAccess ?? false)
             {
                 return true;
             }
 #endif
 #if XAMARIN_FORMS
-            if (Application.Current?.Dispatcher?.IsInvokeRequired ?? false)
+            var dispatcher = Application.Current?.Dispatcher;
+            if (!(dispatcher?.IsInvokeRequired ?? true))
             {
                 return true;
             }
 #endif
 #if MAUI
-            if (Application.Current?.Dispatcher?.IsDispatchRequired ?? false)
+            var dispatcher = Application.Current?.Dispatcher;
+            if (!(dispatcher?.IsDispatchRequired ?? true))
             {
                 return true;
             }
 #endif
-            try
+
+            if (dispatcher == null)
             {
-                // Check equality of UI thread.
-                if (SynchronizationContext.Current is { } context)
+                try
                 {
-                    var id = -1;
-                    context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
-                    return id == Thread.CurrentThread.ManagedThreadId;
+                    // Check equality of UI thread.
+                    if (SynchronizationContext.Current is { } context)
+                    {
+                        var id = -1;
+                        context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
+                        return id == Thread.CurrentThread.ManagedThreadId;
+                    }
                 }
-            }
-            catch
-            {
-                // On UWP, will cause NotSupportedException.
+                catch
+                {
+                    // On UWP, will cause NotSupportedException.
+                }
             }
 
             return false;
