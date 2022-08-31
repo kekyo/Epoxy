@@ -20,9 +20,8 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
-    <Compile Include="../Epoxy.Core.Xamarin.Forms/Supplemental/LogicalTreeObjectCollection.cs">
-      <Link>Supplemental/LogicalTreeObjectCollection.cs</Link>
-    </Compile>
+    <Compile Include="../Epoxy.Core.Xamarin.Forms/**/*.cs"
+             Exclude="../Epoxy.Core.Xamarin.Forms/bin/**/*;../Epoxy.Core.Xamarin.Forms/obj/**/*" LinkBase="" />
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
   </ItemGroup>
 

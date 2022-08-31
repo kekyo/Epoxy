@@ -20,7 +20,14 @@
 #nullable enable
 
 using System.Runtime.CompilerServices;
+
+#if XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
+
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
 
 [assembly: InternalsVisibleTo("Epoxy")]
 [assembly: InternalsVisibleTo("FSharp.Epoxy")]
