@@ -32,6 +32,11 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+#endif
+
 #if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -74,7 +79,7 @@ namespace Epoxy
     public static class EventBinder
 #endif
     {
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         private static readonly BindablePropertyKey EventsPropertyKey =
             BindableProperty.CreateAttachedReadOnly(
                 "Events",
@@ -250,7 +255,7 @@ namespace Epoxy
     public sealed class Event :
         AttachedObject<Event>
     {
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         /// <summary>
         /// Binds target CLR event name bindable property declaration.
         /// </summary>
@@ -390,19 +395,19 @@ namespace Epoxy
             set => this.SetValue(CommandProperty, value);
         }
 
-        private Delegate? Handler { get; set; }
+        private Delegate? HandlerDelegate { get; set; }
 
         private void RemoveHandler(object? associatedObject, object? name)
         {
             if (associatedObject is DependencyObject ao &&
                 name is string n &&
-                this.Handler is { } oh)
+                this.HandlerDelegate is { } oh)
             {
                 var type = ao.GetType();
                 if (EventMetadata.GetOrAddEventInfo(type, n) is { } ei)
                 {
                     EventMetadata.RemoveEvent(ei, ao, oh);
-                    this.Handler = null;
+                    this.HandlerDelegate = null;
                 }
             }
         }
@@ -418,7 +423,7 @@ namespace Epoxy
                 {
                     var nh = EventMetadata.CreateHandler(ei, c);
                     EventMetadata.AddEvent(ei, ao, nh);
-                    this.Handler = nh;
+                    this.HandlerDelegate = nh;
                 }
             }
         }

@@ -35,6 +35,12 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+using UIElement = Microsoft.Maui.Controls.VisualElement;
+#endif
+
 #if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 #endif
@@ -74,7 +80,7 @@ namespace Epoxy
         private Anchor()
         { }
 
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         public static readonly BindableProperty PileProperty =
             BindableProperty.CreateAttached(
                 "Pile",

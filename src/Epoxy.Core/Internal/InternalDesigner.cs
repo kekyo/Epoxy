@@ -35,6 +35,10 @@ using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
+
 #if AVALONIA
 using Avalonia;
 using Avalonia.Controls;
@@ -76,7 +80,7 @@ namespace Epoxy.Internal
 #if AVALONIA
             get => Design.IsDesignMode;
 #endif
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
             get => DesignMode.IsDesignModeEnabled;
 #endif
         }

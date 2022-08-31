@@ -29,6 +29,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
+
 #if WINUI
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;

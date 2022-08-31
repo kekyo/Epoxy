@@ -146,6 +146,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.OpenSilver.Simul
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Epoxy.OpenSilver", "src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj", "{34906041-E1A5-4D03-85C7-FBED189E0554}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Core.Maui", "src\Epoxy.Core.Maui\Epoxy.Core.Maui.csproj", "{932FD294-6A85-4FDE-98CA-86065DC81201}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -2838,6 +2840,62 @@ Global
 		{34906041-E1A5-4D03-85C7-FBED189E0554}.Release|x64.Build.0 = Release|Any CPU
 		{34906041-E1A5-4D03-85C7-FBED189E0554}.Release|x86.ActiveCfg = Release|Any CPU
 		{34906041-E1A5-4D03-85C7-FBED189E0554}.Release|x86.Build.0 = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|ARM.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|ARM.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|ARM64.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|ARM64.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|x64.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|x64.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|x86.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Ad-Hoc|x86.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|ARM.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|ARM.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|ARM64.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|ARM64.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|x64.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|x64.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|x86.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.AppStore|x86.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|ARM.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|x64.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Debug|x86.Build.0 = Debug|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|ARM.ActiveCfg = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|ARM.Build.0 = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|ARM64.Build.0 = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|iPhone.Build.0 = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|x64.ActiveCfg = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|x64.Build.0 = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|x86.ActiveCfg = Release|Any CPU
+		{932FD294-6A85-4FDE-98CA-86065DC81201}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2882,16 +2940,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE3348C3-8B90-461F-A5CC-2FB370C605DD}
-	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{27acd969-fd2f-4cd5-adcf-e0eae9e89a56}*SharedItemsImports = 5
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{2ed6ad97-569a-4b28-930e-f2ef43263b86}*SharedItemsImports = 5
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{6279c845-92f8-4333-ab99-3d213163593c}*SharedItemsImports = 13
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{6a610b7f-4852-467a-a993-4d9e264a1294}*SharedItemsImports = 4
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{9bee136f-e11a-47e7-8b00-d89546e70976}*SharedItemsImports = 4
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{9e3278af-ebb3-4c3d-a240-a17b4b3244aa}*SharedItemsImports = 4
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{bdd3606c-d125-4d9b-bd73-a1274927d984}*SharedItemsImports = 4
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{c2a88541-fd50-42e1-8e68-d3b969b8583a}*SharedItemsImports = 5
-		samples\EpoxyHello.Uno\EpoxyHello.Uno.Shared\EpoxyHello.Uno.Shared.projitems*{dbc731e2-a551-448c-9cbd-28b913c05d2b}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

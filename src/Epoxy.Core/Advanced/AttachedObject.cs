@@ -31,6 +31,11 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+#endif
+
 #if WINDOWS_WPF || OPENSILVER
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -65,7 +70,7 @@ namespace Epoxy.Advanced
 #if WINDOWS_UWP || WINUI || UNO || OPENSILVER
         DependencyObject, IAttachedObject
 #endif
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         Element, IAttachedObject
 #endif
 #if AVALONIA
@@ -119,7 +124,7 @@ namespace Epoxy.Advanced
 #if WINDOWS_UWP || WINUI || UNO || OPENSILVER
         where TSelf : DependencyObject, IAttachedObject, new()
 #endif
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         where TSelf : Element, IAttachedObject, new()
 #endif
 #if AVALONIA
