@@ -8,7 +8,6 @@
     <PackageTags>$(PackageTags);maui</PackageTags>
     <NoWarn>$(NoWarn);NU5104</NoWarn>
     <UseMaui>true</UseMaui>
-    <SingleProject>true</SingleProject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Epoxy.Xamarin.Forms</id>
+    <id>Epoxy.Maui</id>
     <version>$PackageVersion$</version>
     <authors>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,12 +12,12 @@
     <description>An independent flexible XAML MVVM library for .NET</description>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <copyright>Copyright (c) Kouji Matsui</copyright>
-    <tags>mvvm viewmodel easy simple combinable async awaitable command xamarin</tags>
+    <tags>mvvm viewmodel easy simple combinable async awaitable command maui</tags>
     <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
     <dependencies>
-      <group targetFramework=".NETStandard2.0">
+      <group targetFramework="net6.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Xamarin.Forms" version="$PackageVersion$" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Maui" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
     </dependencies>
