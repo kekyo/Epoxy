@@ -8,6 +8,7 @@ permissions:
 jobs:
   build:
     runs-on: [self-hosted, windows, x64]
+    #runs-on: windows-latest
     steps:
 
     #-----------------------------------------------------------------------
