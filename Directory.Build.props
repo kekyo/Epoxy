@@ -38,7 +38,7 @@
     <PackageTags>mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
-    <NoWarn>$(NoWarn);NU1605;NU1701;NU1803;CA1416</NoWarn>
+    <NoWarn>$(NoWarn);NU1605;NU1701;NU1803;NU1503;CA1416</NoWarn>
   </PropertyGroup>
 
 </Project>
