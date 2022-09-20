@@ -79,7 +79,13 @@ namespace Epoxy.Internal
             var dispatcher = CoreWindow.GetForCurrentThread()?.Dispatcher;
             if (dispatcher == null)
             {
-                dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
+                try
+                {
+                    dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
+                }
+                catch
+                {
+                }
             }
             if (dispatcher?.HasThreadAccess ?? false)
             {
