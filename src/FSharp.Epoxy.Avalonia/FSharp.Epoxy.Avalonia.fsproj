@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     <PackageReference Update="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
   </ItemGroup>
     
   <ItemGroup>
