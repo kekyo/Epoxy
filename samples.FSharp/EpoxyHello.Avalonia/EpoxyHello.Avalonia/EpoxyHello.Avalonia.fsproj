@@ -5,14 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="Avalonia" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Avalonia" Version="0.10.17" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.17" />
     <PackageReference Include="FSharp.Control.FusionTasks" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj" />
     <ProjectReference Include="..\..\..\src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj" />
     <ProjectReference Include="..\..\..\samples\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
@@ -24,7 +23,5 @@
     <Compile Include="Views\MainWindow.axaml.fs" />
     <Compile Include="App.axaml.fs" />
   </ItemGroup>
-
-  <ItemGroup />
 
 </Project>
