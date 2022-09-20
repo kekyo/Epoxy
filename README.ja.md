@@ -37,9 +37,9 @@
   * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
   * WPF: .NET 6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.13 or higher)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.18 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2401 or higher)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2515 or higher)
   * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17763.0 or higher)
   * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
