@@ -8,28 +8,28 @@
 
 ## NuGetパッケージ (C#)
 
-|Package|main|devel|Description|
-|:--|:--|:--|:--|
-|Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|[![MyGet Epoxy.Wpf](https://img.shields.io/myget/epoxy/v/Epoxy.Wpf.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Wpf)|WPFバージョン|
-|Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|[![MyGet Epoxy.Avalonia](https://img.shields.io/myget/epoxy/v/Epoxy.Avalonia.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Avalonia)|Avaloniaバージョン|
-|Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|[![MyGet Epoxy.OpenSilver](https://img.shields.io/myget/epoxy/v/Epoxy.OpenSilver.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.OpenSilver)|OpenSilver version|
-|Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|[![MyGet Epoxy.Xamarin.Forms](https://img.shields.io/myget/epoxy/v/Epoxy.Xamarin.Forms.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Xamarin.Forms)|Xamarin Formsバージョン|
-|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|[![MyGet Epoxy.Uwp](https://img.shields.io/myget/epoxy/v/Epoxy.Uwp.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Uwp)|Universal Windowsバージョン|
-|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|[![MyGet Epoxy.WinUI](https://img.shields.io/myget/epoxy/v/Epoxy.WinUI.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.WinUI)|WinUI 3バージョン|
-|Epoxy.Uno|[![NuGet Epoxy.Uno](https://img.shields.io/nuget/v/Epoxy.Uno.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uno)|[![MyGet Epoxy.Uno](https://img.shields.io/myget/epoxy/v/Epoxy.Uno.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Uno)|Uno platformバージョン (**BUGGY**)|
+|Package|main|Description|
+|:--|:--|:--|
+|Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
+|Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
+|Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
+|Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
+|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
+|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
+|Epoxy.Maui|[![NuGet Epoxy.Maui](https://img.shields.io/nuget/v/Epoxy.Maui.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Maui)|.NET MAUI|
 
 ## NuGetパッケージ F#専用
 
-|Package|main|devel|Description|
-|:--|:--|:--|:--|
-|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|[![MyGet FSharp.Epoxy.Wpf](https://img.shields.io/myget/epoxy/v/FSharp.Epoxy.Wpf.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/FSharp.Epoxy.Wpf)|WPFバージョン|
-|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|[![MyGet FSharp.Epoxy.Avalonia](https://img.shields.io/myget/epoxy/v/FSharp.Epoxy.Avalonia.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/FSharp.Epoxy.Avalonia)|Avaloniaバージョン|
+|Package|main|Description|
+|:--|:--|:--|
+|FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
 
 ## dotnet CLIテンプレート
 
-|Package|main|devel|Description|
-|:--|:--|:--|:--|
-|Epoxy.Templates|[![NuGet Epoxy.Templates](https://img.shields.io/nuget/v/Epoxy.Templates.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Templates)|[![MyGet Epoxy.Templates](https://img.shields.io/myget/epoxy/v/Epoxy.Templates.svg?style=flat&label=myget)](https://www.myget.org/feed/epoxy/package/nuget/Epoxy.Templates)|dotnet CLIテンプレート|
+|Package|main|Description|
+|:--|:--|:--|
+|Epoxy.Templates|[![NuGet Epoxy.Templates](https://img.shields.io/nuget/v/Epoxy.Templates.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Templates)|dotnet CLI template package|
 
 ## これは何?
 
@@ -42,7 +42,7 @@
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2515 or higher)
   * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17763.0 or higher)
-  * Uno: [Uno platform](https://platform.uno/) (Uno.UI 3.7.6 or higher: uap10.0.17763, netstandard2.0[wpf, wasm, tizen], xamarinios10, xamarinmac20 and monoandroid10.0) / **Unoは安定していないため、検証したのはUWPホストのみです**
+  * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
 * F#は6.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
@@ -768,6 +768,11 @@ Apache-v2
 
 ## History
 
+* 1.8.0:
+  * .NET MAUIをサポートしました。
+  * Unoのパッケージが壊れてCI構築に失敗するようになったので削除しました。
+    (このバージョンではUnoプロジェクトを保存していますが、次のバージョンで完全に削除する予定です。必要であればissueを追加します)。
+  * 関連するパッケージのアップグレードを行いました。
 * 1.7.0:
   * MacOS上でEpoxyを含んだプロジェクトをビルドする際に、カスタムタスクでエラーが発生する問題を修正。
 * 1.6.0:
