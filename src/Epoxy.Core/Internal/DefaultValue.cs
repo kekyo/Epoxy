@@ -73,7 +73,7 @@ namespace Epoxy.Internal
         public static bool IsDefault<TValue>(object? value) =>
             DefaultValue<TValue>.IsDefault(value);
 
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         public static readonly object? XamlProperty =
             null;
 #elif AVALONIA

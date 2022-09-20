@@ -21,7 +21,13 @@
 
 using System;
 
+#if XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
+
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
 
 namespace Epoxy.Internal
 {
@@ -31,7 +37,11 @@ namespace Epoxy.Internal
         {
             if (Application.Current?.Dispatcher is { } dispatcher)
             {
+#if MAUI
+                if (!dispatcher.IsDispatchRequired)
+#else
                 if (!dispatcher.IsInvokeRequired)
+#endif
                 {
                     continuation(true);
                 }
@@ -39,7 +49,11 @@ namespace Epoxy.Internal
                 {
                     try
                     {
+#if MAUI
+                        dispatcher.Dispatch(() => continuation(true));
+#else
                         dispatcher.BeginInvokeOnMainThread(() => continuation(true));
+#endif
                     }
                     catch
                     {

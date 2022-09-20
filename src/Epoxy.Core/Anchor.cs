@@ -45,6 +45,12 @@ using DependencyObject = Xamarin.Forms.BindableObject;
 using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+using UIElement = Microsoft.Maui.Controls.VisualElement;
+#endif
+
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
@@ -74,7 +80,7 @@ namespace Epoxy
         private Anchor()
         { }
 
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         public static readonly BindableProperty PileProperty =
             BindableProperty.CreateAttached(
                 "Pile",

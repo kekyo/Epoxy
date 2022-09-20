@@ -47,6 +47,12 @@ using System.Windows.Media;
 using Xamarin.Forms;
 #endif
 
+#if MAUI
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
+#endif
+
 #if AVALONIA
 using Avalonia;
 using Avalonia.Media;
@@ -140,7 +146,7 @@ namespace Epoxy.Supplemental
         public static implicit operator Visibility(ValueHolder vh) =>
             vh.GetValue<Visibility>();
 #endif
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
         public static implicit operator FontAttributes(ValueHolder vh) =>
             vh.GetValue<FontAttributes>();
 #endif
