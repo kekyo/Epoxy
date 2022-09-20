@@ -100,6 +100,13 @@ namespace Epoxy.Internal
                 return true;
             }
 #endif
+#if OPENSILVER
+            var dispatcher = Application.Current?.RootVisual?.Dispatcher;
+            if (dispatcher?.CheckAccess() ?? false)
+            {
+                return true;
+            }
+#endif
 #if MAUI
             var dispatcher = Application.Current?.Dispatcher;
             if (!(dispatcher?.IsDispatchRequired ?? true))
@@ -108,7 +115,11 @@ namespace Epoxy.Internal
             }
 #endif
 
+#if WINUI
+            if (dispatcher == null && dispatcher2 == null)
+#else
             if (dispatcher == null)
+#endif
             {
                 try
                 {
@@ -122,7 +133,7 @@ namespace Epoxy.Internal
                 }
                 catch
                 {
-                    // On UWP, will cause NotSupportedException.
+                    // On UWP and MAUI, will cause NotSupportedException.
                 }
             }
 
