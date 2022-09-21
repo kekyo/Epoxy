@@ -95,6 +95,7 @@ dotnet build
 |`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
 |`epoxy-uwp`|C#|UWPのサンプルコード|
 |`epoxy-winui`|C#|WinUI 3のサンプルコード|
+|`epoxy-maui`|C#|.NET MAUIのサンプルコード|
 
 * デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
 * Xamarin Forms, UWP, WinUI 3は、古い形式のMSBuildプロジェクトを使用しています。
@@ -103,7 +104,7 @@ dotnet build
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
   * WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。
 * 上記以外のサンプルコードは、リポジトリ内の `samples` ディレクトリを参照して下さい。
-* MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
+* MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
 
 ### Visual Studioのウィザードから選択
 
@@ -771,7 +772,7 @@ Apache-v2
 * 1.8.0:
   * .NET MAUIをサポートしました。
   * Unoのパッケージが壊れてCI構築に失敗するようになったので削除しました。
-    (このバージョンではUnoプロジェクトを保存していますが、次のバージョンで完全に削除する予定です。必要であればissueを追加します)。
+    (このバージョンではUnoプロジェクトを保存していますが、次のバージョンで完全に削除する予定です。必要であれば検討しますので、issueを追加して下さい)。
   * 関連するパッケージのアップグレードを行いました。
 * 1.7.0:
   * MacOS上でEpoxyを含んだプロジェクトをビルドする際に、カスタムタスクでエラーが発生する問題を修正。

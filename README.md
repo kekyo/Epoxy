@@ -88,6 +88,7 @@ dotnet build
 |`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
 |`epoxy-uwp`|C#|Sample code for UWP|
 |`epoxy-winui`|C#|Sample code for WinUI 3|
+|`epoxy-maui`|C#|Sample code for .NET MAUI|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
 * Xamarin Forms and UWP are required old style MSBuild project.
@@ -96,7 +97,7 @@ dotnet build
   * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
   * You need to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
 * For sample code other than the above, refer to the `samples` directory in the repository.
-* You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source https://www.myget.org/F/epoxy/api/v3/index.json`
+* You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
 
 ### Choose by Visual Studio wizard dialog
 
