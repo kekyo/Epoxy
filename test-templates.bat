@@ -116,4 +116,18 @@ msbuild -t:build
 
 cd ..
 
+rem ===========================================================
+echo "Testing epoxy-maui"
+
+mkdir epoxy_maui
+cd epoxy_maui
+dotnet new epoxy-maui
+
+copy /y ..\..\test-templates-nuget.config nuget.config
+
+dotnet restore
+dotnet build
+
+cd ..
+
 cd ..

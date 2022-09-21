@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)",
+  "classifications": [ "Epoxy", "MAUI", "XAML", "Desktop", "Mobile" ],
+  "identity": "Epoxy.Template.Maui",
+  "groupIdentity": "Epoxy.Template.Maui",
+  "name": "Epoxy.Maui MVVM template",
+  "shortName": "epoxy-maui",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "EpoxyHello"
+}
