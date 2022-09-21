@@ -1,8 +1,17 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy template source code.
+// Write your own copyright and note.
+// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+//
+////////////////////////////////////////////////////////////////////////////
+-->
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:EpoxyHello.Maui"
-             x:Class="EpoxyHello.Maui.App">
+             xmlns:local="clr-namespace:EpoxyHello"
+             x:Class="EpoxyHello.App">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

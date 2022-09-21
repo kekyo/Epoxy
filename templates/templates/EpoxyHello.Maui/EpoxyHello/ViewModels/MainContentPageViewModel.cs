@@ -1,19 +1,8 @@
 ﻿////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//	http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Epoxy template source code.
+// Write your own copyright and note.
+// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -31,9 +20,10 @@ using Command = Epoxy.Command;
 
 using EpoxyHello.Models;
 
-namespace EpoxyHello.Maui.ViewModels
+namespace EpoxyHello.ViewModels
 {
-    public sealed class MainContentPageViewModel : ViewModel
+    [ViewModel]
+    public sealed class MainContentPageViewModel
     {
         public MainContentPageViewModel()
         {
@@ -83,28 +73,12 @@ namespace EpoxyHello.Maui.ViewModels
             });
         }
 
-        public Command? Ready
-        {
-            get => this.GetValue();
-            set => this.SetValue(value);
-        }
+        public Command? Ready { get; private set; }
 
-        public bool IsEnabled
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
+        public bool IsEnabled { get; private set; }
 
-        public ObservableCollection<ItemViewModel>? Items
-        {
-            get => this.GetValue<ObservableCollection<ItemViewModel>?>();
-            private set => this.SetValue(value);
-        }
+        public ObservableCollection<ItemViewModel>? Items { get; private set; }
 
-        public Command? Fetch
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
+        public Command? Fetch { get; private set; }
     }
 }

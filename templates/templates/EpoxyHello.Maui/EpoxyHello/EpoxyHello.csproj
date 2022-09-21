@@ -7,12 +7,13 @@
     <OutputType>Exe</OutputType>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
+    <RootNamespace>EpoxyHello</RootNamespace>
 
     <!-- Display name -->
-    <ApplicationTitle>epoxy_maui.Maui</ApplicationTitle>
+    <ApplicationTitle>EpoxyHello.Maui</ApplicationTitle>
 
     <!-- App Identifier -->
-    <ApplicationId>com.epoxy_maui.maui</ApplicationId>
+    <ApplicationId>com.EpoxyHello.Maui</ApplicationId>
     <ApplicationIdGuid>6CD45001-1A8C-47F6-929D-2C46395DACB3</ApplicationIdGuid>
 
     <!-- Versions -->
@@ -34,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\epoxy_maui.Core\epoxy_maui.Core.csproj" />
+    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

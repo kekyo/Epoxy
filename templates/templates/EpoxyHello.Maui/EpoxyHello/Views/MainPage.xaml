@@ -1,20 +1,9 @@
 ﻿<!--
 ////////////////////////////////////////////////////////////////////////////
 //
-// Epoxy - An independent flexible XAML MVVM library for .NET
-// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//	http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Epoxy template source code.
+// Write your own copyright and note.
+// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
 //
 ////////////////////////////////////////////////////////////////////////////
 -->
@@ -22,9 +11,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:epoxy="https://github.com/kekyo/Epoxy"
-    xmlns:viewmodels="clr-namespace:EpoxyHello.Maui.ViewModels"
-    xmlns:converters="clr-namespace:EpoxyHello.Maui.Views.Converters"
-    x:Class="EpoxyHello.Maui.Views.MainPage">
+    xmlns:viewmodels="clr-namespace:EpoxyHello.ViewModels"
+    xmlns:converters="clr-namespace:EpoxyHello.Views.Converters"
+    x:Class="EpoxyHello.Views.MainPage">
 
     <ContentPage.BindingContext>
         <viewmodels:MainContentPageViewModel />
