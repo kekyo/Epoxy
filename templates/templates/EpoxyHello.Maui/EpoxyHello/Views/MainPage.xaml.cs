@@ -8,7 +8,7 @@
 
 using Microsoft.Maui.Controls;
 
-namespace EpoxyHello.Maui.Views
+namespace EpoxyHello.Views
 {
     public partial class MainPage : ContentPage
     {
