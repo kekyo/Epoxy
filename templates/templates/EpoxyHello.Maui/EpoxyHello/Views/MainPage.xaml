@@ -1,0 +1,59 @@
+﻿<!--
+////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy template source code.
+// Write your own copyright and note.
+// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
+//
+////////////////////////////////////////////////////////////////////////////
+-->
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:epoxy="https://github.com/kekyo/Epoxy"
+    xmlns:viewmodels="clr-namespace:EpoxyHello.ViewModels"
+    xmlns:converters="clr-namespace:EpoxyHello.Views.Converters"
+    x:Class="EpoxyHello.Views.MainPage">
+
+    <ContentPage.BindingContext>
+        <viewmodels:MainContentPageViewModel />
+    </ContentPage.BindingContext>
+
+    <epoxy:EventBinder.Events>
+        <epoxy:Event EventName="Appearing" Command="{Binding Ready}" />
+    </epoxy:EventBinder.Events>
+
+    <StackLayout>
+        <Button BackgroundColor="#F32121" Padding="24"
+                TextColor="White" TextTransform="None" FontSize="18"
+                Text="Asynchronous fetch r/aww from Reddit!"
+                IsEnabled="{Binding IsEnabled}"
+                Command="{Binding Fetch}" />
+        <ListView ItemsSource="{Binding Items}"
+                  HasUnevenRows="true">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout
+                            HorizontalOptions="FillAndExpand"
+                            Orientation="Vertical"
+                            Margin="5">
+                            <StackLayout.Resources>
+                                <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
+                            </StackLayout.Resources>
+
+                            <Label Text="{Binding Title}"
+                                   TextColor="White"
+                                   Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
+                            <Image Margin="5,0,5,0"
+                                   Source="{Binding Image}"
+                                   HorizontalOptions="EndAndExpand" VerticalOptions="Center"
+                                   Aspect="AspectFit" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
+</ContentPage>

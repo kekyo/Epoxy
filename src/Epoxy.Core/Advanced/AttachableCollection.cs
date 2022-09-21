@@ -40,6 +40,11 @@ using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+#endif
+
 #if AVALONIA
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -60,7 +65,7 @@ namespace Epoxy.Advanced
         where TObject : class, DependencyObject, IAttachedObject
 #elif WINDOWS_WPF
         where TObject : Freezable, IAttachedObject
-#elif XAMARIN_FORMS
+#elif XAMARIN_FORMS || MAUI
         where TObject : Element, IAttachedObject
 #else
         where TObject : DependencyObject, IAttachedObject
@@ -101,7 +106,7 @@ namespace Epoxy.Advanced
 
         public void Attach(DependencyObject dependencyObject)
         {
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
             this.Parent = dependencyObject as Element;
 #endif
             if (this.associatedObject != null)
@@ -137,7 +142,7 @@ namespace Epoxy.Advanced
             this.associatedObject = null;
             this.WritePostscript();
 
-#if XAMARIN_FORMS
+#if XAMARIN_FORMS || MAUI
             this.Parent = null;
 #endif
         }

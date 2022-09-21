@@ -43,6 +43,10 @@ using System.Windows.Data;
 using Xamarin.Forms;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
+
 #if AVALONIA
 using Avalonia.Data.Converters;
 #endif

@@ -45,6 +45,10 @@ using DotNetForHtml5.Core;
 using Xamarin.Forms;
 #endif
 
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
+
 #if AVALONIA
 using Avalonia.Threading;
 #endif
@@ -58,52 +62,85 @@ namespace Epoxy.Internal
         private static bool InternalIsBound()
         {
 #if WINDOWS_WPF
-            if (Application.Current?.Dispatcher?.CheckAccess() ?? false)
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher?.CheckAccess() ?? false)
             {
                 return true;
             }
 #endif
 #if AVALONIA
-            if (Dispatcher.UIThread?.CheckAccess() ?? false)
+            var dispatcher = Dispatcher.UIThread;
+            if (dispatcher?.CheckAccess() ?? false)
             {
                 return true;
             }
 #endif
 #if WINDOWS_UWP || WINUI || UNO
-            if (CoreWindow.GetForCurrentThread()?.Dispatcher?.HasThreadAccess ?? false)
+            var dispatcher = CoreWindow.GetForCurrentThread()?.Dispatcher;
+            if (dispatcher == null)
             {
-                return true;
+                try
+                {
+                    dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
+                }
+                catch
+                {
+                }
             }
-            else if (CoreApplication.MainView?.CoreWindow?.Dispatcher?.HasThreadAccess ?? false)
+            if (dispatcher?.HasThreadAccess ?? false)
             {
                 return true;
             }
 #endif
 #if WINUI
-            if (DispatcherQueue.GetForCurrentThread()?.HasThreadAccess ?? false)
+            var dispatcher2 = DispatcherQueue.GetForCurrentThread();
+            if (dispatcher2?.HasThreadAccess ?? false)
             {
                 return true;
             }
 #endif
 #if XAMARIN_FORMS
-            if (Application.Current?.Dispatcher?.IsInvokeRequired ?? false)
+            var dispatcher = Application.Current?.Dispatcher;
+            if (!(dispatcher?.IsInvokeRequired ?? true))
             {
                 return true;
             }
 #endif
-            try
+#if OPENSILVER
+            var dispatcher = Application.Current?.RootVisual?.Dispatcher;
+            if (dispatcher?.CheckAccess() ?? false)
             {
-                // Check equality of UI thread.
-                if (SynchronizationContext.Current is { } context)
-                {
-                    var id = -1;
-                    context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
-                    return id == Thread.CurrentThread.ManagedThreadId;
-                }
+                return true;
             }
-            catch
+#endif
+#if MAUI
+            var dispatcher = Application.Current?.Dispatcher;
+            if (!(dispatcher?.IsDispatchRequired ?? true))
             {
-                // On UWP, will cause NotSupportedException.
+                return true;
+            }
+#endif
+
+#if WINUI
+            if (dispatcher == null && dispatcher2 == null)
+#else
+            if (dispatcher == null)
+#endif
+            {
+                try
+                {
+                    // Check equality of UI thread.
+                    if (SynchronizationContext.Current is { } context)
+                    {
+                        var id = -1;
+                        context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
+                        return id == Thread.CurrentThread.ManagedThreadId;
+                    }
+                }
+                catch
+                {
+                    // On UWP and MAUI, will cause NotSupportedException.
+                }
             }
 
             return false;

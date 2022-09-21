@@ -6,8 +6,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
-
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;

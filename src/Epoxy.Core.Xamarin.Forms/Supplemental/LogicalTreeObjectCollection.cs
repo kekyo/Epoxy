@@ -25,7 +25,13 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
+#if XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
+
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
 
 namespace Epoxy.Supplemental
 {

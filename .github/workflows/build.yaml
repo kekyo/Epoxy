@@ -1,0 +1,153 @@
+name: .NET
+
+on: [push]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: [self-hosted, windows, x64]
+    #runs-on: windows-latest
+    steps:
+
+    #-----------------------------------------------------------------------
+    # Checkout
+
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    #   lfs: true
+    #- name: Checkout LFS objects
+    #  run: git lfs checkout
+
+    - name: Extract branch name
+      id: extract_branch_name
+    #  if: startsWith( github.ref, 'refs/tags/' )
+      run: |
+        $branch_name=$(git name-rev --name-only --exclude=tags/* HEAD)
+        echo "Detected current branch: ${branch_name}"
+        echo "::set-output name=branch_name::${branch_name}"
+
+    #-----------------------------------------------------------------------
+    # Setup environments
+
+    - name: Setup .NET 2.2
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.*
+    - name: Setup .NET 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.*
+    - name: Setup .NET 5
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.*
+    - name: Setup .NET 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.*
+
+    - name: Setup .NET 6 Maui workloads
+      run: |
+        dotnet workload install maui 
+        dotnet workload repair
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
+
+    - name: Setup NuGet package reference
+      run: |
+        dotnet nuget add source ${{secrets.GH_LOCAL_NUGET_URL}} -n ref1 -u ${{secrets.GH_LOCAL_NUGET_USER}} -p ${{secrets.GH_LOCAL_NUGET_PASSWORD}} --store-password-in-clear-text --configfile nuget.config
+#        dotnet nuget add source ${{secrets.GH_NUGET_URL}} -n ref2 -u ${{secrets.GH_NUGET_USER}} -p ${{secrets.GH_NUGET_PASSWORD}} --store-password-in-clear-text --configfile nuget.config
+
+    #-----------------------------------------------------------------------
+    # Build
+
+    - name: NuGet restore
+      run: msbuild -p:Configuration=Release -maxCpuCount -t:restore Epoxy.sln
+
+    - name: Build
+      run: msbuild -p:Configuration=Release -maxCpuCount Epoxy.sln
+
+    - name: Build NuGet packages
+      run: |
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Xamarin.Forms\Epoxy.Core.Xamarin.Forms.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Uwp\Epoxy.Core.Uwp.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.WinUI\Epoxy.Core.WinUI.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Build\Epoxy.Build.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Wpf\Epoxy.Wpf.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Avalonia\Epoxy.Avalonia.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Uwp\Epoxy.Uwp.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.WinUI\Epoxy.WinUI.csproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
+        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts templates\Epoxy.Templates.csproj
+    #    msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Uno\Epoxy.Core.Uno.csproj
+    #    msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Uno\Epoxy.Uno.csproj
+
+    #-----------------------------------------------------------------------
+    # Test
+
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal -p:CITest=True Epoxy.sln
+      timeout-minutes: 10
+
+    #-----------------------------------------------------------------------
+    # Deploy packages (develop)
+
+    - name: Deploy NuGet package (develop/ref1)
+      if: startsWith( github.ref, 'refs/tags/' )
+      run: |
+        dotnet nuget push artifacts\Epoxy.Core.Wpf.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Core.Xamarin.Forms.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Core.Avalonia.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Core.OpenSilver.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Core.Uwp.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Core.WinUI.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Build.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Wpf.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Xamarin.Forms.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Avalonia.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.OpenSilver.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Uwp.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.WinUI.*.nupkg --source ref1
+        dotnet nuget push artifacts\FSharp.Epoxy.Wpf.*.nupkg --source ref1
+        dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref1
+        dotnet nuget push artifacts\FSharp.Epoxy.OpenSilver.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Templates.*.nupkg --source ref1
+    #    dotnet nuget push artifacts\Epoxy.Core.Uno.*.nupkg --source ref1
+    #    dotnet nuget push artifacts\Epoxy.Uno.*.nupkg --source ref1
+
+    #-----------------------------------------------------------------------
+    # Deploy packages (main)
+
+    #- name: Deploy NuGet package (main/ref2)
+    #  if: (startsWith( github.ref, 'refs/tags/' )) && (endsWith(steps.extract_branch_name.outputs.branch_name, 'main'))
+    #  run: |
+    #    dotnet nuget push artifacts\Epoxy.Core.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.Uwp.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.WinUI.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Build.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Uwp.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.WinUI.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\FSharp.Epoxy.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\FSharp.Epoxy.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Templates.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.Uno.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Uno.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}

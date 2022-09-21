@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="6.0.0" />
+    <PackageReference Update="FSharp.Core" Version="6.0.0" />
     <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
@@ -35,12 +35,12 @@
 
   <ItemGroup>
     <Compile Include="Properties/*.fs" />
-    <Compile Include="../FSharp.Epoxy/Properties/*.fs" />
-    <Compile Include="../FSharp.Epoxy/Internal/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Properties/*.fs" LinkBase="Properties" />
+    <Compile Include="../FSharp.Epoxy/Internal/*.fs" LinkBase="Internal" />
     <Compile Include="../FSharp.Epoxy/*.fs" />
-    <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" />
-    <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" />
-    <Compile Include="../FSharp.Epoxy/Advanced/*.fs" />
+    <Compile Include="../FSharp.Epoxy/Supplemental/*.fs" LinkBase="Supplemental" />
+    <Compile Include="../FSharp.Epoxy/Synchronized/*.fs" LinkBase="Synchronized" />
+    <Compile Include="../FSharp.Epoxy/Advanced/*.fs" LinkBase="Advanced" />
   </ItemGroup>
 
 </Project>
