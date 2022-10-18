@@ -29,88 +29,87 @@ using Avalonia.LogicalTree;
 
 using Epoxy.Internal;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+public abstract class LogicalTreeObject :
+    AvaloniaObject, ILogical, ISetLogicalParent
 {
-    public abstract class LogicalTreeObject :
-        AvaloniaObject, ILogical, ISetLogicalParent
+    private static readonly LogicalTreeObjectCollection<LogicalTreeObject> empty =
+        new LogicalTreeObjectCollection<LogicalTreeObject>();
+
+    protected LogicalTreeObject()
+    { }
+
+    public event EventHandler<LogicalTreeAttachmentEventArgs>? AttachedToLogicalTree;
+    public event EventHandler<LogicalTreeAttachmentEventArgs>? DetachedFromLogicalTree;
+
+    public bool IsAttachedToLogicalTree =>
+        this.LogicalParent != null;
+
+    public ILogical? LogicalParent { get; private set; }
+
+    public void SetParent(ILogical? parent)
     {
-        private static readonly LogicalTreeObjectCollection<LogicalTreeObject> empty =
-            new LogicalTreeObjectCollection<LogicalTreeObject>();
-
-        protected LogicalTreeObject()
-        { }
-
-        public event EventHandler<LogicalTreeAttachmentEventArgs>? AttachedToLogicalTree;
-        public event EventHandler<LogicalTreeAttachmentEventArgs>? DetachedFromLogicalTree;
-
-        public bool IsAttachedToLogicalTree =>
-            this.LogicalParent != null;
-
-        public ILogical? LogicalParent { get; private set; }
-
-        public void SetParent(ILogical? parent)
+        if (this.LogicalParent != null)
         {
-            if (this.LogicalParent != null)
+            if (this.LogicalParent.Traverse(c => c.LogicalParent).
+                OfType<ILogicalRoot>().
+                FirstOrDefault() is { } root)
             {
-                if (this.LogicalParent.Traverse(c => c.LogicalParent).
-                    OfType<ILogicalRoot>().
-                    FirstOrDefault() is { } root)
-                {
-                    var e = new LogicalTreeAttachmentEventArgs(
-                        root,
-                        this,
-                        this.LogicalParent);
-                    this.LogicalParent = null;
-                    this.OnNotifyDetachedFromLogicalTree(e);
-                }
-                else
-                {
-                    this.LogicalParent = null;
-                }
+                var e = new LogicalTreeAttachmentEventArgs(
+                    root,
+                    this,
+                    this.LogicalParent);
+                this.LogicalParent = null;
+                this.OnNotifyDetachedFromLogicalTree(e);
             }
-            if (parent != null)
+            else
             {
-                if (parent.Traverse(c => c.LogicalParent).
-                    OfType<ILogicalRoot>().
-                    FirstOrDefault() is { } root)
-                {
-                    var e = new LogicalTreeAttachmentEventArgs(
-                        root,
-                        this,
-                        parent);
-                    this.LogicalParent = parent;
-                    this.OnNotifyAttachedToLogicalTree(e);
-                }
-                else
-                {
-                    this.LogicalParent = parent;
-                }
+                this.LogicalParent = null;
             }
         }
-
-        IAvaloniaReadOnlyList<ILogical> ILogical.LogicalChildren =>
-            this.GetLogicalChildren();
-
-        void ILogical.NotifyAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.OnNotifyAttachedToLogicalTree(e);
-
-        void ILogical.NotifyDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.OnNotifyDetachedFromLogicalTree(e);
-
-        void ILogical.NotifyResourcesChanged(ResourcesChangedEventArgs e) =>
-            this.OnNotifyResourcesChanged(e);
-
-        protected virtual IAvaloniaReadOnlyList<ILogical> GetLogicalChildren() =>
-            empty;
-
-        protected virtual void OnNotifyAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.AttachedToLogicalTree?.Invoke(this, e);
-
-        protected virtual void OnNotifyDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) =>
-            this.DetachedFromLogicalTree?.Invoke(this, e);
-
-        protected virtual void OnNotifyResourcesChanged(ResourcesChangedEventArgs e)
+        if (parent != null)
         {
+            if (parent.Traverse(c => c.LogicalParent).
+                OfType<ILogicalRoot>().
+                FirstOrDefault() is { } root)
+            {
+                var e = new LogicalTreeAttachmentEventArgs(
+                    root,
+                    this,
+                    parent);
+                this.LogicalParent = parent;
+                this.OnNotifyAttachedToLogicalTree(e);
+            }
+            else
+            {
+                this.LogicalParent = parent;
+            }
         }
+    }
+
+    IAvaloniaReadOnlyList<ILogical> ILogical.LogicalChildren =>
+        this.GetLogicalChildren();
+
+    void ILogical.NotifyAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) =>
+        this.OnNotifyAttachedToLogicalTree(e);
+
+    void ILogical.NotifyDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) =>
+        this.OnNotifyDetachedFromLogicalTree(e);
+
+    void ILogical.NotifyResourcesChanged(ResourcesChangedEventArgs e) =>
+        this.OnNotifyResourcesChanged(e);
+
+    protected virtual IAvaloniaReadOnlyList<ILogical> GetLogicalChildren() =>
+        empty;
+
+    protected virtual void OnNotifyAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) =>
+        this.AttachedToLogicalTree?.Invoke(this, e);
+
+    protected virtual void OnNotifyDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) =>
+        this.DetachedFromLogicalTree?.Invoke(this, e);
+
+    protected virtual void OnNotifyResourcesChanged(ResourcesChangedEventArgs e)
+    {
     }
 }

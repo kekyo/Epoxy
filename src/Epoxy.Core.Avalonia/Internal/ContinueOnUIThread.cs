@@ -23,27 +23,26 @@ using System;
 
 using Avalonia.Threading;
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+partial class InternalUIThread
 {
-    partial class InternalUIThread
+    public static void ContinueOnUIThread(Action<bool> continuation)
     {
-        public static void ContinueOnUIThread(Action<bool> continuation)
+        if (Dispatcher.UIThread is { } dispatcher)
         {
-            if (Dispatcher.UIThread is { } dispatcher)
+            if (dispatcher.CheckAccess())
             {
-                if (dispatcher.CheckAccess())
-                {
-                    continuation(true);
-                }
-                else
-                {
-                    dispatcher.Post(() => continuation(true));
-                }
+                continuation(true);
             }
             else
             {
-                continuation(false);
+                dispatcher.Post(() => continuation(true));
             }
+        }
+        else
+        {
+            continuation(false);
         }
     }
 }

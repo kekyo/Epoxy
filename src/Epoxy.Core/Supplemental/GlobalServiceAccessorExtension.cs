@@ -25,19 +25,18 @@ using System.Threading.Tasks;
 using Epoxy.Advanced;
 using Epoxy.Internal;
 
-namespace Epoxy.Supplemental
-{
-    public static class GlobalServiceAccessorExtension
-    {
-        public static ValueTask ExecuteAsync<TService>(
-            this GlobalServiceAccessor accessor,
-            Func<TService, Task> action,
-            bool ignoreNotPresent = false) =>
-            InternalGlobalService.ExecuteAsync<TService>(service => action(service).AsValueTaskVoid(), ignoreNotPresent);
+namespace Epoxy.Supplemental;
 
-        public static ValueTask<TResult> ExecuteAsync<TService, TResult>(
-            this GlobalServiceAccessor accessor,
-            Func<TService, Task<TResult>> action) =>
-            InternalGlobalService.ExecuteAsync<TService, TResult>(service =>(action(service).AsValueTask()));
-    }
+public static class GlobalServiceAccessorExtension
+{
+    public static ValueTask ExecuteAsync<TService>(
+        this GlobalServiceAccessor accessor,
+        Func<TService, Task> action,
+        bool ignoreNotPresent = false) =>
+        InternalGlobalService.ExecuteAsync<TService>(service => action(service).AsValueTaskVoid(), ignoreNotPresent);
+
+    public static ValueTask<TResult> ExecuteAsync<TService, TResult>(
+        this GlobalServiceAccessor accessor,
+        Func<TService, Task<TResult>> action) =>
+        InternalGlobalService.ExecuteAsync<TService, TResult>(service =>(action(service).AsValueTask()));
 }

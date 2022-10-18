@@ -29,42 +29,41 @@ using Xamarin.Forms;
 using Microsoft.Maui.Controls;
 #endif
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+partial class InternalUIThread
 {
-    partial class InternalUIThread
+    public static void ContinueOnUIThread(Action<bool> continuation)
     {
-        public static void ContinueOnUIThread(Action<bool> continuation)
+        if (Application.Current?.Dispatcher is { } dispatcher)
         {
-            if (Application.Current?.Dispatcher is { } dispatcher)
+#if MAUI
+            if (!dispatcher.IsDispatchRequired)
+#else
+            if (!dispatcher.IsInvokeRequired)
+#endif
             {
-#if MAUI
-                if (!dispatcher.IsDispatchRequired)
-#else
-                if (!dispatcher.IsInvokeRequired)
-#endif
-                {
-                    continuation(true);
-                }
-                else
-                {
-                    try
-                    {
-#if MAUI
-                        dispatcher.Dispatch(() => continuation(true));
-#else
-                        dispatcher.BeginInvokeOnMainThread(() => continuation(true));
-#endif
-                    }
-                    catch
-                    {
-                        continuation(false);
-                    }
-                }
+                continuation(true);
             }
             else
             {
-                continuation(false);
+                try
+                {
+#if MAUI
+                    dispatcher.Dispatch(() => continuation(true));
+#else
+                    dispatcher.BeginInvokeOnMainThread(() => continuation(true));
+#endif
+                }
+                catch
+                {
+                    continuation(false);
+                }
             }
+        }
+        else
+        {
+            continuation(false);
         }
     }
 }

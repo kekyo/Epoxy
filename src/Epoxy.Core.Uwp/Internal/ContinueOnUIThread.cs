@@ -28,75 +28,74 @@ using Windows.UI.Core;
 using Microsoft.UI.Dispatching;
 #endif
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+partial class InternalUIThread
 {
-    partial class InternalUIThread
+    private static CoreDispatcher? TryGetDispatcher()
     {
-        private static CoreDispatcher? TryGetDispatcher()
+        if (CoreWindow.GetForCurrentThread()?.Dispatcher is { } d1)
         {
-            if (CoreWindow.GetForCurrentThread()?.Dispatcher is { } d1)
+            return d1;
+        }
+        else if (CoreApplication.MainView?.CoreWindow?.Dispatcher is { } d2)
+        {
+            return d2;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static void ContinueOnUIThread(Action<bool> continuation)
+    {
+        if (TryGetDispatcher() is { } dispatcher)
+        {
+            // Maybe anytime is true
+            if (dispatcher.HasThreadAccess)
             {
-                return d1;
-            }
-            else if (CoreApplication.MainView?.CoreWindow?.Dispatcher is { } d2)
-            {
-                return d2;
+                continuation(true);
             }
             else
             {
-                return null;
+                try
+                {
+                    var _ = dispatcher.RunAsync(
+                        CoreDispatcherPriority.Normal,
+                        () => continuation(true));
+                }
+                catch
+                {
+                    continuation(false);
+                }
             }
         }
-
-        public static void ContinueOnUIThread(Action<bool> continuation)
-        {
-            if (TryGetDispatcher() is { } dispatcher)
-            {
-                // Maybe anytime is true
-                if (dispatcher.HasThreadAccess)
-                {
-                    continuation(true);
-                }
-                else
-                {
-                    try
-                    {
-                        var _ = dispatcher.RunAsync(
-                            CoreDispatcherPriority.Normal,
-                            () => continuation(true));
-                    }
-                    catch
-                    {
-                        continuation(false);
-                    }
-                }
-            }
 #if WINUI
-            else if (DispatcherQueue.GetForCurrentThread() is { } dispatcherQueue)
+        else if (DispatcherQueue.GetForCurrentThread() is { } dispatcherQueue)
+        {
+            if (dispatcherQueue.HasThreadAccess)
             {
-                if (dispatcherQueue.HasThreadAccess)
-                {
-                    continuation(true);
-                }
-                else
-                {
-                    try
-                    {
-                        var _ = dispatcherQueue.TryEnqueue(
-                            DispatcherQueuePriority.Normal,
-                            () => continuation(true));
-                    }
-                    catch
-                    {
-                        continuation(false);
-                    }
-                }
+                continuation(true);
             }
-#endif
             else
             {
-                continuation(false);
+                try
+                {
+                    var _ = dispatcherQueue.TryEnqueue(
+                        DispatcherQueuePriority.Normal,
+                        () => continuation(true));
+                }
+                catch
+                {
+                    continuation(false);
+                }
             }
+        }
+#endif
+        else
+        {
+            continuation(false);
         }
     }
 }

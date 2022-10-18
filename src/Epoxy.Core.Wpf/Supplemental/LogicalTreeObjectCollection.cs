@@ -25,96 +25,95 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+public abstract class LogicalTreeObjectCollection<TObject> :
+    FreezableCollection<TObject>
+    where TObject : Freezable
 {
-    public abstract class LogicalTreeObjectCollection<TObject> :
-        FreezableCollection<TObject>
-        where TObject : Freezable
+    private readonly List<TObject> snapshot = new List<TObject>();
+
+    internal LogicalTreeObjectCollection() =>
+        ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
+
+    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
     {
-        private readonly List<TObject> snapshot = new List<TObject>();
-
-        internal LogicalTreeObjectCollection() =>
-            ((INotifyCollectionChanged)this).CollectionChanged += this.OnCollectionChanged;
-
-        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
+        switch (e!.Action)
         {
-            switch (e!.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (TObject? element1 in e.NewItems!)
+            case NotifyCollectionChangedAction.Add:
+                foreach (TObject? element1 in e.NewItems!)
+                {
+                    this.snapshot.Insert(IndexOf(element1!), element1!);
+                    this.OnAdded(element1!);
+                }
+                break;
+            case NotifyCollectionChangedAction.Replace:
+                foreach (TObject? element2 in e.OldItems!)
+                {
+                    try
                     {
-                        this.snapshot.Insert(IndexOf(element1!), element1!);
-                        this.OnAdded(element1!);
+                        this.OnRemoving(element2!);
                     }
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    foreach (TObject? element2 in e.OldItems!)
+                    finally
                     {
-                        try
-                        {
-                            this.OnRemoving(element2!);
-                        }
-                        finally
-                        {
-                            this.snapshot.Remove(element2!);
-                        }
+                        this.snapshot.Remove(element2!);
                     }
-                    foreach (TObject? element3 in e.NewItems!)
+                }
+                foreach (TObject? element3 in e.NewItems!)
+                {
+                    this.snapshot.Insert(IndexOf(element3!), element3!);
+                    this.OnAdded(element3!);
+                }
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                foreach (TObject? element4 in e.OldItems!)
+                {
+                    try
                     {
-                        this.snapshot.Insert(IndexOf(element3!), element3!);
-                        this.OnAdded(element3!);
+                        this.OnRemoving(element4!);
                     }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (TObject? element4 in e.OldItems!)
+                    finally
                     {
-                        try
-                        {
-                            this.OnRemoving(element4!);
-                        }
-                        finally
-                        {
-                            this.snapshot.Remove(element4!);
-                        }
+                        this.snapshot.Remove(element4!);
                     }
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    foreach (var element5 in this.snapshot)
+                }
+                break;
+            case NotifyCollectionChangedAction.Reset:
+                foreach (var element5 in this.snapshot)
+                {
+                    try
                     {
-                        try
-                        {
-                            this.OnRemoving(element5!);
-                        }
-                        finally
-                        {
-                            this.snapshot.Remove(element5!);
-                        }
+                        this.OnRemoving(element5!);
                     }
-                    this.snapshot.Clear();
-                    foreach (var element6 in this)
+                    finally
                     {
-                        this.snapshot.Insert(IndexOf(element6!), element6!);
-                        this.OnAdded(element6!);
+                        this.snapshot.Remove(element5!);
                     }
-                    break;
-            }
-        }
-
-        protected virtual void OnAdded(TObject element)
-        {
-        }
-
-        protected virtual void OnRemoving(TObject element)
-        {
+                }
+                this.snapshot.Clear();
+                foreach (var element6 in this)
+                {
+                    this.snapshot.Insert(IndexOf(element6!), element6!);
+                    this.OnAdded(element6!);
+                }
+                break;
         }
     }
 
-    public class LogicalTreeObjectCollection<TSelf, TObject> :
-        LogicalTreeObjectCollection<TObject>
-        where TObject : Freezable
-        where TSelf : LogicalTreeObjectCollection<TObject>, new()
+    protected virtual void OnAdded(TObject element)
     {
-        protected sealed override Freezable? CreateInstanceCore() =>
-            new TSelf();
     }
+
+    protected virtual void OnRemoving(TObject element)
+    {
+    }
+}
+
+public class LogicalTreeObjectCollection<TSelf, TObject> :
+    LogicalTreeObjectCollection<TObject>
+    where TObject : Freezable
+    where TSelf : LogicalTreeObjectCollection<TObject>, new()
+{
+    protected sealed override Freezable? CreateInstanceCore() =>
+        new TSelf();
 }
