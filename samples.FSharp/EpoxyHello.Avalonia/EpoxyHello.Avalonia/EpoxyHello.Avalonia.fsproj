@@ -8,7 +8,7 @@
     <PackageReference Update="FSharp.Core" Version="6.0.6" />
     <PackageReference Include="Avalonia" Version="0.10.17" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.17" />
-    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.5.0" />
+    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
