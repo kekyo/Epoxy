@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <AssemblyTitle>Epoxy.Core.Maui</AssemblyTitle>
     <PackageId>Epoxy.Core.Maui</PackageId>
     <PackageTags>$(PackageTags);maui</PackageTags>

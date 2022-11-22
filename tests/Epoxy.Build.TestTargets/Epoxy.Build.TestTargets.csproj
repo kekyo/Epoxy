@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Build.TestTargets</AssemblyName>
-    <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1;netcoreapp2.2;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1;netcoreapp2.2;netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
     <AssemblyTitle>Epoxy.Build.TestTargets</AssemblyTitle>
       
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
