@@ -36,10 +36,10 @@
 * Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
   * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
-  * WPF: .NET 6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.17 or higher)
+  * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2515 or higher)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
   * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17134.0 or higher)
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
@@ -62,7 +62,7 @@ This sample displays a list of the latest posts and images from the Reddit forum
 
 ### How to get and build the sample code
 
-The .NET 6.0 SDK CLI template is supported. You can easily try the sample code in a clean state with the following command:
+The .NET 6 SDK CLI template is supported. You can easily try the sample code in a clean state with the following command:
 
 ```bash
 # Install the template package (Only at the first time or version update)
@@ -75,8 +75,8 @@ dotnet new epoxy-wpf
 dotnet build
 ```
 
-* Caution: .NET 6.0 SDK must be installed beforehand because the template assumes .NET 6.0.
-  For other versions only (e.g. .NET 5.0 SDK), the build will fail if you do not modify `TargetFramework` property.
+* Caution: .NET 6 SDK must be installed beforehand because the template assumes .NET 6.
+  For other versions only (e.g. .NET 7/5 SDK), the build will fail if you do not modify `TargetFramework` property.
 
 ### List of currently supported templates
 
@@ -769,6 +769,16 @@ Apache-v2
 
 ## History
 
+* 1.9.0:
+  * Added support for .NET 7 SDK.
+  * To make package dependencies more flexible, the following supported versions have been downgraded respectively.
+    However, we have tested only the latest versions.
+    * Avalonia: 0.10.0
+    * Xamarin Forms: 5.0.0.1874
+  * Changed each package of sample templates to use the latest version.
+    * Currently, the sample templates target the .NET 6 SDK.
+      NET 7 SDK, you need to adjust the value of `TargetFramework` manually. (e.g., `net7.0`)
+      We will also change the default version of the sample templates once we have confirmed the stability of the .NET 7 SDK and associated packages.
 * 1.8.0:
   * Supported .NET MAUI.
   * Removed Uno packages, because longer broken and causes CI building failure.

@@ -36,10 +36,10 @@
 * Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、独立した柔軟性のあるライブラリです。
   * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
-  * WPF: .NET 6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.17 or higher)
+  * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.2515 or higher)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms)  5.0.0.1874 or higher)
   * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17763.0 or higher)
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
@@ -70,7 +70,7 @@
 
 ### サンプルコードの入手とビルド方法
 
-.NET 6.0 SDKのCLIテンプレートに対応しています。以下のようなコマンドで、簡単にサンプルコードをクリーンな状態で試すことができます:
+.NET 6 SDKのCLIテンプレートに対応しています。以下のようなコマンドで、簡単にサンプルコードをクリーンな状態で試すことができます:
 
 ```bash
 # テンプレートパッケージをインストール（初回又はバージョンアップ時のみ）
@@ -83,7 +83,8 @@ dotnet new epoxy-wpf
 dotnet build
 ```
 
-* 注意: テンプレートは .NET 6.0 を想定しているため、.NET 6.0 SDKをあらかじめインストールして下さい。他のバージョンのみの環境（例えば.NET 5.0 SDK）では、`TargetFramework`を修正しないと、ビルドに失敗します。
+* 注意: テンプレートは .NET 6 を想定しているため、.NET 6 SDKをあらかじめインストールして下さい。
+  他のバージョンのみの環境（例えば.NET 7/5 SDK）では、`TargetFramework`を修正しないと、ビルドに失敗します。
 
 ### 現在サポートしているテンプレート一覧
 
@@ -769,6 +770,15 @@ Apache-v2
 
 ## History
 
+* 1.9.0:
+  * .NET 7 SDKに対応しました。
+  * パッケージ依存関係をより柔軟にするため、以下のサポートバージョンをそれぞれダウングレードしました。但し動作確認は最新バージョンのみで行っています。
+    * Avalonia: 0.10.0
+    * Xamarin Forms: 5.0.0.1874
+  * サンプルテンプレートの各パッケージを最新版を使用するように変更しました。
+    * 現在の所、サンプルテンプレートのターゲットは、 .NET 6 SDKです。
+      .NET 7 SDKを使用する場合は、`TargetFramework`の値を手動で調整する必要があります。（例えば`net7.0`のようにする）
+      .NET 7 SDKと関連するパッケージの安定性が確認できた時点で、サンプルテンプレートのデフォルトバージョンも変更する予定です。
 * 1.8.0:
   * .NET MAUIをサポートしました。
   * Unoのパッケージが壊れてCI構築に失敗するようになったので削除しました。
