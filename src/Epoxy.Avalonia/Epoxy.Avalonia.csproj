@@ -17,10 +17,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DefineConstants>TRACE;AVALONIA</DefineConstants>
   </PropertyGroup>
-    
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj" />
