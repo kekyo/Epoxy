@@ -72,7 +72,6 @@ jobs:
     - name: NuGet restore
       run: |
         msbuild -p:Configuration=Release -maxCpuCount -t:restore Epoxy.sln
-        dotnet restore -p:Configuration=Release Epoxy.sln
 
     - name: Build
       run: msbuild -p:Configuration=Release -maxCpuCount Epoxy.sln
