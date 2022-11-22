@@ -20,6 +20,10 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup Condition="('$(TargetFramework)' == 'net45') OR ('$(TargetFramework)' == 'net461') OR ('$(TargetFramework)' == 'net48')">
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
