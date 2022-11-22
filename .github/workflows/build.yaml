@@ -48,8 +48,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.*
+    - name: Setup .NET 7
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.0.*
 
-    - name: Setup .NET 6 Maui workloads
+    - name: Setup .NET Maui workloads
       run: |
         dotnet workload install maui 
         dotnet workload repair
@@ -66,7 +70,8 @@ jobs:
     # Build
 
     - name: NuGet restore
-      run: msbuild -p:Configuration=Release -maxCpuCount -t:restore Epoxy.sln
+      run: |
+        msbuild -p:Configuration=Release -maxCpuCount -t:restore Epoxy.sln
 
     - name: Build
       run: msbuild -p:Configuration=Release -maxCpuCount Epoxy.sln

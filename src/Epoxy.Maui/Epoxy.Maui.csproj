@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy</AssemblyName>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <AssemblyTitle>Epoxy.Maui</AssemblyTitle>
     <UseMaui>true</UseMaui>
       

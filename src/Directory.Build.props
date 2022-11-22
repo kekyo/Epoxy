@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.13.1" PrivateAssets="All" />
+    <PackageReference Include="RelaxVersioner" Version="2.14.0" PrivateAssets="All" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
 
