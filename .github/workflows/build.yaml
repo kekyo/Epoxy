@@ -53,10 +53,11 @@ jobs:
       with:
         dotnet-version: 7.0.*
 
-    - name: Setup .NET 6 Maui workloads
+    - name: Setup .NET Maui workloads
       run: |
         dotnet workload install maui 
         dotnet workload repair
+        dotnet workload restore Epoxy.sln
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
