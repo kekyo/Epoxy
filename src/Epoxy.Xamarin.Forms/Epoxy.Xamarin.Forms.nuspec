@@ -18,7 +18,6 @@
       <group targetFramework=".NETStandard2.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Xamarin.Forms" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

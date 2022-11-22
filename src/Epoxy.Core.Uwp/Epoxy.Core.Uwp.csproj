@@ -21,6 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="../Epoxy.Core/**/*.cs" />
     <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
     <EmbeddedResource Include="Properties\Epoxy.Core.Uwp.rd.xml" />

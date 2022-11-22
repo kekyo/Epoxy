@@ -19,54 +19,38 @@
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
-        <dependency id="System.ValueTuple" version="4.5.0" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETFramework4.8">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp3.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp3.1">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net5.0-windows7.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net6.0-windows7.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
         <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net7.0-windows7.0">
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
+        <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
+        <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
-    <frameworkReferences>
-      <group targetFramework=".NETCoreApp3.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
-      </group>
-      <group targetFramework=".NETCoreApp3.1">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
-      </group>
-      <group targetFramework="net5.0-windows7.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
-      </group>
-      <group targetFramework="net6.0-windows7.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
-      </group>
-    </frameworkReferences>
   </metadata>
   <files>
     <file src="bin\$Configuration$\**\FSharp.Epoxy.dll" target="lib" />

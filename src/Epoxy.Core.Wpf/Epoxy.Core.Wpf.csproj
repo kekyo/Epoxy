@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <TargetFrameworks>net45;net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows7.0;net6.0-windows7.0</TargetFrameworks>
+    <TargetFrameworks>net45;net461;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows7.0;net6.0-windows7.0;net7.0-windows7.0</TargetFrameworks>
     <UseWpf>true</UseWpf>
     <AssemblyTitle>Epoxy.Core.Wpf</AssemblyTitle>
     <PackageId>Epoxy.Core.Wpf</PackageId>
@@ -18,6 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition="('$(TargetFramework)' == 'net45') OR ('$(TargetFramework)' == 'net461') OR ('$(TargetFramework)' == 'net48')">
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
