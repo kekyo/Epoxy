@@ -41,4 +41,8 @@
     <NoWarn>$(NoWarn);NU1605;NU1701;NU1803;NU1503;CA1416</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
+  </ItemGroup>
+
 </Project>
