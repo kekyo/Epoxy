@@ -4,18 +4,9 @@
 
   <PropertyGroup>
     <RootNamespace>Epoxy</RootNamespace>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1570;CS1591</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="2.14.0" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-  </ItemGroup>
 
   <!-- https://github.com/xamarin/xamarin-macios/issues/8601#issuecomment-699128097 -->
   <PropertyGroup>
