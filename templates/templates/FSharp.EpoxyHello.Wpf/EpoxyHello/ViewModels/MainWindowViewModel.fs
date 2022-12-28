@@ -28,7 +28,7 @@ type public MainWindowViewModel() as self =
             self.IsEnabled <- true)
 
         // A handler for fetch button
-        self.Fetch <- CommandFactory.create(fun () -> async {
+        self.Fetch <- Command.Factory.create(fun () -> async {
             do self.IsEnabled <- false
             try
                 // Uses Reddit API

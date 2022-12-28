@@ -34,7 +34,7 @@ namespace EpoxyHello.ViewModels
             });
 
             // A handler for fetch button
-            this.Fetch = CommandFactory.Create(async () =>
+            this.Fetch = Command.Factory.Create(async () =>
             {
                 this.IsEnabled = false;
 
