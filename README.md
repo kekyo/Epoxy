@@ -769,6 +769,11 @@ Apache-v2
 
 ## History
 
+* 1.10.0:
+  * `CommandFactory` and `PileFactory` have been obsoleted.
+    Use `Command.Factory` and `Pile.Factory` instead.
+    * The F# language allows extensions to static members,
+      but they are adapted to be referenced from the `Factory` property as in C#.
 * 1.9.0:
   * Added support for .NET 7 SDK.
   * To make package dependencies more flexible, the following supported versions have been downgraded respectively.
