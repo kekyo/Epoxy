@@ -198,7 +198,7 @@ public sealed class MainWindowViewModel
 
         // Step 4: A handler for fetch button.
         //   Ofcourse, we can use async/await safely in lambda expressions!
-        this.Fetch = CommandFactory.Create(async () =>
+        this.Fetch = Command.Factory.Create(async () =>
         {
             var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
@@ -260,7 +260,7 @@ Since each function is independent, it can be used in any combination.
 |:----|:----|
 |ViewModel Injector|This function allows you to automatically implement the PropertyChanged event and other events required for ViewModel at build time. Simply apply the attributes to the target class, and you can skip the complicated code implementation.|
 |ViewModel base class|The ViewModel Injector provides an orthodox base class for the ViewModel's PropertyChanged events, etc. It can be used in scenarios where the ViewModel Injector is not suitable.|
-|CommandFactory|Enables arbitrary asynchronous delegates to be used as ICommand. You can safely implement asynchronous processing as an ICommand. |
+|Command factory|Enables arbitrary asynchronous delegates to be used as ICommand. You can safely implement asynchronous processing as an ICommand. |
 |EventBinder|An attached property that allows you to bind CLR events of any XAML control as ICommand.|
 |Anchor/Pile|Enables any XAML control to be temporarily and safely referenced from the ViewModel,eliminating all code binding and improving implementation visibility when using MVVM. The technique known as the Messenger pattern can also be integrated into the ViewModel with Anchor/Pile.|
 |ValueConverter|Provides a base class for the XAML value converter. It provides a base class for XAML value converters, and can be implemented with type constraints in place.|
@@ -352,7 +352,7 @@ public Command? Ready
 // ...
 
 // Describe what to do when the Loaded event occurs.
-this.Ready = CommandFactory.Create<EventArgs>(async _ =>
+this.Ready = Command.Factory.Create<EventArgs>(async _ =>
 {
     // ex: Asynchronous acquisition of information to be displayed in the list from Model.
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -362,7 +362,7 @@ this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 });
 ```
 
-The generic argument of `CommandFactory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
+The generic argument of `Command.Factory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
 Non-generic methods can also be used when event arguments are not required.
 
 TIP 1: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
@@ -410,7 +410,7 @@ The `Pile` pull in the `UIElement`'s anchor, and we can rent temporary `UIElemen
 
 ```csharp
 // Declared a Pile into the ViewModel.
-this.LogPile = PileFactory.Create<TextBox>();
+this.LogPile = Pile.Factory.Create<TextBox>();
 
 // ...
 
@@ -678,7 +678,7 @@ Basically, all asynchronous operations are designed to be described smoothly wit
 // Since the default function definitions are all defined to
 // accept F#'s `Async` type, so we can use asynchronous workflows
 // with `async { ... }`.
-self.Fetch <- CommandFactory.create(fun () -> async {
+self.Fetch <- Command.Factory.create(fun () -> async {
     let! reddits = Reddit.fetchNewPostsAsync "r/aww"
     // ...
 })
@@ -705,7 +705,7 @@ type ItemViewModel() as self =
         // but it is legal when using the ViewModel injector.
         self.Title <- "CCC"
         // You can use this behavior to assign a Command within the `do` block.
-        self.Click <- CommandFactory.create(fun () -> async {
+        self.Click <- Command.Factory.create(fun () -> async {
             // ...
         })
 

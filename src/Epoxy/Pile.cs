@@ -58,18 +58,45 @@ using UIElement = Avalonia.Controls.IControl;
 namespace Epoxy
 {
     /// <summary>
+    /// PileFactory class is obsoleted. Use Pile.Factory instead.
+    /// </summary>
+    [Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")]
+    [DebuggerStepThrough]
+    public static class PileFactory
+    {
+        /// <summary>
+        /// PileFactory class is obsoleted. Use Pile.Factory instead.
+        /// </summary>
+        /// <returns>Pile instance</returns>
+        [Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")]
+        public static Pile<UIElement> Create() =>
+            new Pile<UIElement>();
+
+        /// <summary>
+        /// PileFactory class is obsoleted. Use Pile.Factory instead.
+        /// </summary>
+        /// <typeparam name="TUIElement">Target control type</typeparam>
+        /// <returns>Pile instance</returns>
+        [Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")]
+        public static Pile<TUIElement> Create<TUIElement>()
+            where TUIElement : UIElement =>
+            new Pile<TUIElement>();
+    }
+
+    /// <summary>
     /// The Pile factory.
     /// </summary>
     /// <remarks>You can manipulate XAML controls directly inside ViewModels
     /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
     [DebuggerStepThrough]
-    public static class PileFactory
+    public static class PileFactoryExtension
     {
         /// <summary>
         /// Create an anonymous control typed Pile.
         /// </summary>
         /// <returns>Pile instance</returns>
-        public static Pile<UIElement> Create() =>
+        public static Pile<UIElement> Create(
+            this PileFactoryInstance factory) =>
             new Pile<UIElement>();
 
         /// <summary>
@@ -77,7 +104,8 @@ namespace Epoxy
         /// </summary>
         /// <typeparam name="TUIElement">Target control type</typeparam>
         /// <returns>Pile instance</returns>
-        public static Pile<TUIElement> Create<TUIElement>()
+        public static Pile<TUIElement> Create<TUIElement>(
+            this PileFactoryInstance factory)
             where TUIElement : UIElement =>
             new Pile<TUIElement>();
     }

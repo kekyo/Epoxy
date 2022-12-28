@@ -39,7 +39,7 @@ namespace EpoxyHello.Wpf.ViewModels
         public MainWindowViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
-            this.IndicatorPile = PileFactory.Create<Panel>();
+            this.IndicatorPile = Pile.Factory.Create<Panel>();
 
             // A handler for window loaded
             this.Ready = Command.Factory.CreateSync(() =>
@@ -48,7 +48,7 @@ namespace EpoxyHello.Wpf.ViewModels
             });
 
             // A handler for fetch button
-            this.Fetch = CommandFactory.Create(async () =>
+            this.Fetch = Command.Factory.Create(async () =>
             {
                 // Disable button
                 this.IsEnabled = false;

@@ -40,28 +40,55 @@ open System.Windows
 #endif
 
 /// <summary>
-/// The Pile factory.
+/// PileFactory class is obsoleted. Use Pile.Factory instead.
 /// </summary>
-/// <remarks>You can manipulate XAML controls directly inside ViewModels
-/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+[<Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")>]
 [<DebuggerStepThrough>]
 [<AbstractClass; Sealed>]
 type public PileFactory =
 
     /// <summary>
-    /// Create an anonymous control typed Pile.
+    /// PileFactory class is obsoleted. Use Pile.Factory instead.
     /// </summary>
     /// <returns>Pile instance</returns>
+    [<Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")>]
     static member create() =
         new Pile<UIElement>()
 
     /// <summary>
-    /// Create a Pile.
+    /// PileFactory class is obsoleted. Use Pile.Factory instead.
     /// </summary>
     /// <typeparam name="'TUIElement">Target control type</typeparam>
     /// <returns>Pile instance</returns>
+    [<Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")>]
     static member create<'TUIElement when 'TUIElement :> UIElement>() =
         new Pile<'TUIElement>()
+
+/// <summary>
+/// The Pile factory.
+/// </summary>
+/// <remarks>You can manipulate XAML controls directly inside ViewModels
+/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+[<DebuggerStepThrough>]
+[<AutoOpen>]
+module public PileFactoryExtension =
+
+    type public PileFactoryInstance with
+
+        /// <summary>
+        /// Create an anonymous control typed Pile.
+        /// </summary>
+        /// <returns>Pile instance</returns>
+        member _.create() =
+            new Pile<UIElement>()
+
+        /// <summary>
+        /// Create a Pile.
+        /// </summary>
+        /// <typeparam name="'TUIElement">Target control type</typeparam>
+        /// <returns>Pile instance</returns>
+        member _.create<'TUIElement when 'TUIElement :> UIElement>() =
+            new Pile<'TUIElement>()
 
 /// <summary>
 /// Pile manipulator class.

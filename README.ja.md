@@ -209,7 +209,7 @@ public sealed class MainWindowViewModel
         // ステップ 4: XAMLで定義したボタンがクリックされた時に、このラムダ式が呼び出されます。
         //   この式はもちろん async-await を使用した非同期処理で書くことが出来て、
         //   未処理の例外も正しく処理されます。
-        this.Fetch = CommandFactory.Create(async () =>
+        this.Fetch = Command.Factory.Create(async () =>
         {
             var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
@@ -272,7 +272,7 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 |:----|:----|
 |ViewModelインジェクタ|ViewModelに必要なPropertyChangedイベントなどを、ビルド時に自動的に実装出来る機能です。対象のクラスに属性を適用するだけで、煩雑なコードの実装を省略出来ます。|
 |ViewModel基底クラス|ViewModelに必要なPropertyChangedイベントなどを、オーソドックスな基底クラスとして提供します。ViewModelインジェクタが適さないシナリオで、使用することが出来ます。|
-|CommandFactory|任意の非同期デリゲートを、ICommandとして利用できるようにします。非同期処理を安全にICommandとして実装出来ます。|
+|Command factory|任意の非同期デリゲートを、ICommandとして利用できるようにします。非同期処理を安全にICommandとして実装出来ます。|
 |EventBinder|任意のXAMLコントロールのCLRイベントを、ICommandとしてバインディング可能にする添付プロパティです。Commandプロパティが提供されていない任意のイベントを、安全にバインディング出来ます。|
 |Anchor/Pile|任意のXAMLコントロールを、一時的かつ安全にViewModelから参照出来るようにします。Anchor/Pileを使用すると、全てのコードビハインドを排除出来るため、MVVMを使用する場合の実装の見通しが良くなります。Messengerパターンとして知られたテクニックも、Anchor/PileでViewModelに集約することが出来ます。|
 |ValueConverter|XAMLの値コンバーターの基底クラスを提供します。事前に型判定が行われ、型制約がある状態で実装することが出来ます。|
@@ -363,7 +363,7 @@ public Command? Ready
 // ...
 
 // Loadedイベントが発生した場合の処理を記述
-this.Ready = CommandFactory.Create<EventArgs>(async _ =>
+this.Ready = Command.Factory.Create<EventArgs>(async _ =>
 {
     // リストに表示する情報をModelから非同期で取得
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -373,7 +373,7 @@ this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 });
 ```
 
-`CommandFactory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
+`Command.Factory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
 イベントの引数が必要でない場合は、非ジェネリックメソッドを使う事も出来ます。
 
 補足1: WPF,UWPやXamarin Formsでは、`Behavior`や`Trigger`で同じことを実現できますが、
@@ -424,7 +424,7 @@ MVVMアーキテクチャのレアケースにおいて、コントロールを�
 ```csharp
 // PileをViewModelに配置します。
 // (操作したいTextBoxのXAMLにAnchorを配置して、バインディングします)
-this.LogPile = PileFactory.Create<TextBox>();
+this.LogPile = Pile.Factory.Create<TextBox>();
 
 // ...
 
@@ -678,7 +678,7 @@ type public ScoreToBrushConverter() =
 ```fsharp
 // デフォルトの関数定義は、全てF#の`Async`型を受け取るように定義されているため、
 // 以下のように非同期ワークフロー `async { ... }` で書くことが出来る。
-self.Fetch <- CommandFactory.create(fun () -> async {
+self.Fetch <- Command.Factory.create(fun () -> async {
     let! reddits = Reddit.fetchNewPostsAsync "r/aww"
     // ...
 })
@@ -704,7 +704,7 @@ type ItemViewModel() as self =
         // 通常、この式は例外を起こすが、ViewModelインジェクタを使用した場合は合法となる。
         self.Title <- "CCC"
         // この挙動を使用して、doブロック内でCommandを割り当てることが出来る。
-        self.Click <- CommandFactory.create(fun () -> async {
+        self.Click <- Command.Factory.create(fun () -> async {
             // ...
         })
 
