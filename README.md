@@ -785,6 +785,7 @@ Apache-v2
     Use `Command.Factory` and `Pile.Factory` instead.
     * The F# language allows extensions to static members,
       but they are adapted to be referenced from the `Factory` property as in C#.
+  * Package binaries contain breaking changes. Please rebuild after upgrading.
 * 1.9.0:
   * Added support for .NET 7 SDK.
   * To make package dependencies more flexible, the following supported versions have been downgraded respectively.
