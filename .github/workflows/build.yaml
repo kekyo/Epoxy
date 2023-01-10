@@ -105,7 +105,8 @@ jobs:
     # Test
 
     - name: Test
-      run: dotnet test --no-restore --verbosity normal -p:CITest=True tests\Epoxy.Build.Tests\Epoxy.Build.Tests.csproj
+      run: |
+        dotnet test --verbosity normal -p:Configuration=Release -p:CITest=True tests\Epoxy.Build.Tests\Epoxy.Build.Tests.csproj
       timeout-minutes: 10
 
     #-----------------------------------------------------------------------
