@@ -61,17 +61,18 @@ namespace Epoxy.Advanced
     /// });
     /// </code>
     /// </example>
-    public static class GlobalService
+    public static class GlobalServiceAccessorExtension
     {
         /// <summary>
         /// Get GlobalService accessor instance.
         /// </summary>
         public static readonly GlobalServiceAccessor Accessor =
-            new GlobalServiceAccessor();
+            InternalGlobalService.Accessor;
 
         /// <summary>
         /// Register an instance into GlobalService.
         /// </summary>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
         /// <param name="instance">Target instance</param>
         /// <param name="validation">Registering validation method</param>
         /// <example>
@@ -100,58 +101,67 @@ namespace Epoxy.Advanced
         /// </code>
         /// </example>
         public static void Register(
+            this GlobalServiceAccessor accessor,
             object instance, RegisteringValidations validation = RegisteringValidations.Strict) =>
             InternalGlobalService.Register(instance, validation);
 
         /// <summary>
+        /// Register an instance by explicit interface type into GlobalService.
+        /// </summary>
+        /// <typeparam name="TService">Explicit interface type</typeparam>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
+        /// <param name="instance">Target instance</param>
+        /// <param name="validation">Registering validation method</param>
+        /// <example>
+        /// <code>
+        /// // RegisterExplicit does NOT need the attribute `GlobalService`.
+        /// // [GlobalService]
+        /// public interface IBluetooth
+        /// {
+        ///     // Declares manipulation method.
+        ///     ValueTask EnableAsync(string parameter);
+        /// }
+        /// 
+        /// // Platform depended implementation class.
+        /// public sealed class AndroidBluetoothFacade
+        /// {
+        ///     // Manipulation method.
+        ///     public async ValueTask EnableAsync(string parameter)
+        ///     {
+        ///         // Your own platform depended implementations...
+        ///     }
+        /// }
+        /// 
+        /// // Register instance with explicit interface type.
+        /// var facade = new AndroidBluetoothFacade();
+        /// GlobalService.RegisterExplicit<IBlueTooth>(facade);
+        /// </code>
+        /// </example>
+        public static void RegisterExplicit<TService>(
+            this GlobalServiceAccessor accessor,
+            TService instance, RegisteringValidations validation = RegisteringValidations.Strict)
+            where TService : class =>
+            InternalGlobalService.RegisterExplicit(instance, validation);
+
+        /// <summary>
         /// Unregister instance from GlobalService.
         /// </summary>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
         /// <param name="instance">Target instance</param>
-        public static void Unregister(object instance) =>
+        public static void Unregister(
+            this GlobalServiceAccessor accessor,
+            object instance) =>
             InternalGlobalService.Unregister(instance);
 
         /// <summary>
-        /// Execute target interface type asynchronously.
+        /// Unregister explicit interface type from GlobalService.
         /// </summary>
-        /// <typeparam name="TService">Target interface type</typeparam>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="ignoreNotPresent">Ignore if didn't presend target instance.</param>
-        /// <returns>ValueTask</returns>
-        /// <example>
-        /// <code>
-        /// // Use the interface.
-        /// await GlobalService.ExecuteAsync&lt;IBluetooth&gt;(async bluetooth =>
-        /// {
-        ///     // 'bluetooth' argument is registered instance.
-        ///     await bluetooth.EnableAsync("Primary");
-        /// });
-        /// </code>
-        /// </example>
-        public static ValueTask ExecuteAsync<TService>(
-            Func<TService, ValueTask> action, bool ignoreNotPresent = false) =>
-            InternalGlobalService.ExecuteAsync<TService>(action, ignoreNotPresent);
-
-        /// <summary>
-        /// Execute target interface type asynchronously.
-        /// </summary>
-        /// <typeparam name="TService">Target interface type</typeparam>
-        /// <typeparam name="TResult">Result type</typeparam>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <returns>ValueTask</returns>
-        /// <example>
-        /// <code>
-        /// // Use the interface.
-        /// var result = await GlobalService.ExecuteAsync&lt;IBluetooth, int&gt;(async bluetooth =>
-        /// {
-        ///     // 'bluetooth' argument is registered instance.
-        ///     await bluetooth.EnableAsync("Primary");
-        ///     return 100;
-        /// });
-        /// </code>
-        /// </example>
-        public static ValueTask<TResult> ExecuteAsync<TService, TResult>(
-            Func<TService, ValueTask<TResult>> action) =>
-            InternalGlobalService.ExecuteAsync<TService, TResult>(action);
+        /// <typeparam name="TService">Explicit interface type</typeparam>
+        /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
+        public static void UnregisterExplicit<TService>(
+            this GlobalServiceAccessor accessor)
+            where TService : class =>
+            InternalGlobalService.UnregisterExplicit<TService>();
 
         /// <summary>
         /// Execute target interface type asynchronously.

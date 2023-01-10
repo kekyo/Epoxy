@@ -572,7 +572,7 @@ public sealed class AndroidBluetoothAccessor : IBluetoothAccessor
 public Application()
 {
     // Register a class instance that performs Android-dependent processing.
-    GlobalService.Register(new AndroidBluetoothAccessor());
+    GlobalService.Accessor.Register(new AndroidBluetoothAccessor());
 }
 ```
 
@@ -582,7 +582,7 @@ Now you can use separate implementations through interfaces in a common project:
 // Commonly Sample.Xamarin.Forms project.
 
 // I want to use Bluetooth:
-await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
+await GlobalService.Accessor.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 {
     // Start discovering Bluetooth.
     await accessor.BeginDiscoverAsync();
@@ -591,6 +591,15 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 });
 
 ```
+
+You can use `RegisterExplicit<TService>()` instead of `Register()`,
+to manage interfaces to which the `GlobalService` attribute has not been applied.
+(This is not a `GlobalService` specific problem,
+but a general problem that occurs when holding singleton instances in any DI container.)
+
+This is useful when you want to use an existing (unchangeable) interface type.
+
+#### Supplemental
 
 Existing libraries for dependency injection and dependency isolation
 (e.g. `DependencyService` class, Unity, MEF, etc.) have the following problems:
@@ -770,6 +779,8 @@ Apache-v2
 ## History
 
 * 1.10.0:
+  * Added `RegisterExplicit<TService>()` and `UnregisterExplicit<TService>()` to GlobalService.
+    These allow management even if the `GlobalService` attribute is not applied to the target interface.
   * `CommandFactory` and `PileFactory` have been obsoleted.
     Use `Command.Factory` and `Pile.Factory` instead.
     * The F# language allows extensions to static members,

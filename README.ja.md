@@ -578,7 +578,7 @@ public sealed class AndroidBluetoothAccessor : IBluetoothAccessor
 public Application()
 {
     // Android依存の処理を行うクラスを登録する
-    GlobalService.Register(new AndroidBluetoothAccessor());
+    GlobalService.Accessor.Register(new AndroidBluetoothAccessor());
 }
 ```
 
@@ -588,15 +588,20 @@ public Application()
 // 共通プロジェクトの、Sample.Xamarin.Formsプロジェクトで使う
 
 // Bluetoothを使いたくなった:
-await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
+await GlobalService.Accessor.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 {
     // Bluetoothの探索を開始する
     await accessor.BeginDiscoverAsync();
 
     // ...
 });
-
 ```
+
+`Register()`の代わりに、`RegisterExplicit<TService>()`を使用すると、
+`GlobalService`属性が適用されていないインターフェイスでも、管理する事が出来ます。
+例えば、既存の（変更できない）インターフェイス型を使用したい場合に有用です。
+
+#### 補足
 
 既存の依存注入や依存分離を行うライブラリ(例:`DependencyService`クラスやUnity、MEFなど)には、以下のような問題があります:
 
@@ -607,6 +612,8 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 
 注意: "Global"の名の通り、`GlobalService`は、一種のグローバル変数のように振る舞います。
 本来必要のない場所で`GlobalService`を使わないようにして下さい。
+（これは `GlobalService` 固有の問題ではなく、任意のDIコンテナでシングルトンインスタンスを保持した場合に起きる、一般的な問題です。）
+
 少しでも区別できるように、`GlobalService`は`Epoxy.Advanced`名前空間に配置されています（using宣言が必要です）。
 
 ----
@@ -771,6 +778,8 @@ Apache-v2
 ## History
 
 * 1.10.0:
+  * GlobalServiceに、`RegisterExplicit<TService>()`と`UnregisterExplicit<TService>()`を追加しました。
+    これらは、対象のインターフェイスに`GlobalService`属性が適用されていなくても、管理を可能にします。
   * `CommandFactory`と`PileFactory`をobsoleteにしました。代わりに`Command.Factory` `Pile.Factory`を使用して下さい。
     * F#言語では、スタティックメンバに対する拡張が可能ですが、C#と同様に`Factory`プロパティから参照するように合わせてあります。
 * 1.9.0:

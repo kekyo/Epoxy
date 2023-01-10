@@ -79,6 +79,28 @@ namespace Epoxy.Internal
             }
         }
 
+        public static void RegisterExplicit<TService>(TService instance, RegisteringValidations validation)
+            where TService : class
+        {
+            var targetType = typeof(TService);
+            if (!targetType.IsInterface)
+            {
+                throw new ArgumentException(
+                    $"GlobalService: The type is not an interface: Type={targetType.FullName}");
+            }
+
+            if (validation == RegisteringValidations.Strict)
+            {
+                if (GetInstance(targetType) is { })
+                {
+                    throw new InvalidOperationException(
+                        $"GlobalService: Service already assigned: Type={targetType.FullName}");
+                }
+            }
+
+            SetInstance(targetType, instance, validation == RegisteringValidations.UnsafePartial);
+        }
+
         public static void Unregister(object instance)
         {
             var targetType = instance.GetType();
@@ -89,6 +111,19 @@ namespace Epoxy.Internal
             {
                 SetInstance(it, null, false);
             }
+        }
+
+        public static void UnregisterExplicit<TService>()
+            where TService : class
+        {
+            var targetType = typeof(TService);
+            if (!targetType.IsInterface)
+            {
+                throw new ArgumentException(
+                    $"GlobalService: The type is not an interface: Type={targetType.FullName}");
+            }
+
+            SetInstance(targetType, null, false);
         }
 
         public static readonly GlobalServiceAccessor Accessor =

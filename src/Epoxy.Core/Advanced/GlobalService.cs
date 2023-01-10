@@ -19,7 +19,9 @@
 
 #nullable enable
 
+using Epoxy.Internal;
 using System;
+using System.Threading.Tasks;
 
 namespace Epoxy.Advanced
 {
@@ -69,5 +71,46 @@ namespace Epoxy.Advanced
         internal GlobalServiceAccessor()
         {
         }
+    }
+
+    /// <summary>
+    /// GlobalService is a simple and lightweight dependency injection infrastructure.
+    /// </summary>
+    public static class GlobalService
+    {
+        /// <summary>
+        /// Get GlobalService accessor instance.
+        /// </summary>
+        public static readonly GlobalServiceAccessor Accessor =
+            InternalGlobalService.Accessor;
+
+        #region Obsoleted
+        /// <summary>
+        /// Static Register() method is obsoleted, will remove in future release. Use Accessor.Register() instead.
+        /// </summary>
+        [Obsolete("Static Register() method is obsoleted, will remove in future release. Use Accessor.Register() instead.")]
+        public static void Register(
+            object instance, RegisteringValidations validation = RegisteringValidations.Strict) =>
+            InternalGlobalService.Register(instance, validation);
+
+        /// <summary>
+        /// Static Unregister() method is obsoleted, will remove in future release. Use Accessor.Unregister() instead.
+        /// </summary>
+        [Obsolete("Static Unregister() method is obsoleted, will remove in future release. Use Accessor.Unregister() instead.")]
+        public static void Unregister(object instance) =>
+            InternalGlobalService.Unregister(instance);
+
+        /// <summary>
+        /// Static ExecuteAsync() method is obsoleted, will remove future release. Use Accessor.ExecuteAsync() instead.
+        /// </summary>
+        [Obsolete("Static ExecuteAsync() method is obsoleted, will remove future release. Use Accessor.ExecuteAsync() instead.")]
+        public static ValueTask ExecuteAsync<TService>(
+            Func<TService, ValueTask> action, bool ignoreNotPresent = false) =>
+            InternalGlobalService.ExecuteAsync<TService>(action, ignoreNotPresent);
+        [Obsolete("Static ExecuteAsync() method is obsoleted, will remove future release. Use Accessor.ExecuteAsync() instead.")]
+        public static ValueTask<TResult> ExecuteAsync<TService, TResult>(
+            Func<TService, ValueTask<TResult>> action) =>
+            InternalGlobalService.ExecuteAsync<TService, TResult>(action);
+        #endregion
     }
 }

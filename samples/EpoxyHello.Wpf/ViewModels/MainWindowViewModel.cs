@@ -31,6 +31,7 @@ using System.Windows.Media.Imaging;
 
 using EpoxyHello.Models;
 using EpoxyHello.Wpf.Controls;
+using Epoxy.Advanced;
 
 namespace EpoxyHello.Wpf.ViewModels
 {
