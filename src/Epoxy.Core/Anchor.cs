@@ -57,103 +57,102 @@ using DependencyObject = Avalonia.IAvaloniaObject;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
-namespace Epoxy
+namespace Epoxy;
+
+/// <summary>
+/// The Anchor is used with Pile, there will bind loosely and can rent control temporarily.
+/// </summary>
+/// <remarks>See Anchor/Pile guide: https://github.com/kekyo/Epoxy#anchorpile</remarks>
+/// <example>
+/// <code>
+/// &lt;Window xmlns:epoxy="https://github.com/kekyo/Epoxy"&gt;
+///    &lt;!-- ... --&gt;
+///    &lt;!-- Placed Anchor onto the TextBox and bound property --&gt;
+///    &lt;TextBox epoxy:Anchor.Pile="{Binding LogPile}" /&gt;
+/// &lt;/Window&gt;
+/// </code>
+/// </example>
+public sealed class Anchor
 {
     /// <summary>
-    /// The Anchor is used with Pile, there will bind loosely and can rent control temporarily.
+    /// The constructor.
     /// </summary>
-    /// <remarks>See Anchor/Pile guide: https://github.com/kekyo/Epoxy#anchorpile</remarks>
-    /// <example>
-    /// <code>
-    /// &lt;Window xmlns:epoxy="https://github.com/kekyo/Epoxy"&gt;
-    ///    &lt;!-- ... --&gt;
-    ///    &lt;!-- Placed Anchor onto the TextBox and bound property --&gt;
-    ///    &lt;TextBox epoxy:Anchor.Pile="{Binding LogPile}" /&gt;
-    /// &lt;/Window&gt;
-    /// </code>
-    /// </example>
-    public sealed class Anchor
-    {
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        private Anchor()
-        { }
+    private Anchor()
+    { }
 
 #if XAMARIN_FORMS || MAUI
-        public static readonly BindableProperty PileProperty =
-            BindableProperty.CreateAttached(
-                "Pile",
-                typeof(Pile),
-                typeof(Anchor),
-                null,
-                BindingMode.OneWay,
-                null,
-                (b, o, n) =>
-                {
-                    if (o is Pile op)
-                    {
-                        op.Release((UIElement)b);
-                    }
-                    if (n is Pile np)
-                    {
-                        np.Moore((UIElement)b);
-                    }
-                });
-#elif AVALONIA
-        public static readonly AvaloniaProperty<Pile?> PileProperty =
-            AvaloniaProperty.RegisterAttached<Anchor, UIElement, Pile?>("Pile");
-
-        /// <summary>
-        /// The type initializer.
-        /// </summary>
-        static Anchor() =>
-            PileProperty.Changed.Subscribe(e =>
+    public static readonly BindableProperty PileProperty =
+        BindableProperty.CreateAttached(
+            "Pile",
+            typeof(Pile),
+            typeof(Anchor),
+            null,
+            BindingMode.OneWay,
+            null,
+            (b, o, n) =>
             {
-                if (e.OldValue.GetValueOrDefault() is { } op)
+                if (o is Pile op)
                 {
-                    op.Release((UIElement)e.Sender);
+                    op.Release((UIElement)b);
                 }
-                if (e.NewValue.GetValueOrDefault() is { } np)
+                if (n is Pile np)
                 {
-                    np.Moore((UIElement)e.Sender);
+                    np.Moore((UIElement)b);
                 }
             });
+#elif AVALONIA
+    public static readonly AvaloniaProperty<Pile?> PileProperty =
+        AvaloniaProperty.RegisterAttached<Anchor, UIElement, Pile?>("Pile");
+
+    /// <summary>
+    /// The type initializer.
+    /// </summary>
+    static Anchor() =>
+        PileProperty.Changed.Subscribe(e =>
+        {
+            if (e.OldValue.GetValueOrDefault() is { } op)
+            {
+                op.Release((UIElement)e.Sender);
+            }
+            if (e.NewValue.GetValueOrDefault() is { } np)
+            {
+                np.Moore((UIElement)e.Sender);
+            }
+        });
 #else
-        public static readonly DependencyProperty PileProperty =
-            DependencyProperty.RegisterAttached(
-                "Pile",
-                typeof(Pile),
-                typeof(Anchor),
-                new PropertyMetadata(null, (d, e) =>
+    public static readonly DependencyProperty PileProperty =
+        DependencyProperty.RegisterAttached(
+            "Pile",
+            typeof(Pile),
+            typeof(Anchor),
+            new PropertyMetadata(null, (d, e) =>
+            {
+                if (e.OldValue is Pile op)
                 {
-                    if (e.OldValue is Pile op)
-                    {
-                        op.Release((UIElement)d);
-                    }
-                    if (e.NewValue is Pile np)
-                    {
-                        np.Moore((UIElement)d);
-                    }
-                }));
+                    op.Release((UIElement)d);
+                }
+                if (e.NewValue is Pile np)
+                {
+                    np.Moore((UIElement)d);
+                }
+            }));
 #endif
 
-        /// <summary>
-        /// Get Pile from this Anchor.
-        /// </summary>
-        public static Pile? GetPile(DependencyObject d) =>
-            (Pile?)d.GetValue(PileProperty);
+    /// <summary>
+    /// Get Pile from this Anchor.
+    /// </summary>
+    public static Pile? GetPile(DependencyObject d) =>
+        (Pile?)d.GetValue(PileProperty);
 
-        /// <summary>
-        /// Set Pile from this Anchor.
-        /// </summary>
-        public static void SetPile(DependencyObject d, Pile? pile) =>
-            d.SetValue(PileProperty, pile);
+    /// <summary>
+    /// Set Pile from this Anchor.
+    /// </summary>
+    public static void SetPile(DependencyObject d, Pile? pile) =>
+        d.SetValue(PileProperty, pile);
 
-        /// <summary>
-        /// Clear Pile from this Anchor.
-        /// </summary>
-        public static void ClearPile(DependencyObject d) =>
-            d.ClearValue(PileProperty);
-    }
+    /// <summary>
+    /// Clear Pile from this Anchor.
+    /// </summary>
+    public static void ClearPile(DependencyObject d) =>
+        d.ClearValue(PileProperty);
 }

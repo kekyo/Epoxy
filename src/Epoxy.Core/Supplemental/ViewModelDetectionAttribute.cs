@@ -21,43 +21,42 @@
 
 using System;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+/// <summary>
+/// ViewModel detection methods.
+/// </summary>
+/// <remarks>Default value is `Attribute`</remarks>
+[Flags]
+public enum ViewModelDetections
 {
     /// <summary>
-    /// ViewModel detection methods.
+    /// By attribute (ViewModelAttribute)
     /// </summary>
-    /// <remarks>Default value is `Attribute`</remarks>
-    [Flags]
-    public enum ViewModelDetections
-    {
-        /// <summary>
-        /// By attribute (ViewModelAttribute)
-        /// </summary>
-        Attribute = 1,
-
-        /// <summary>
-        /// By suffix (class named: `*ViewModel`)
-        /// </summary>
-        Suffix = 2
-    }
+    Attribute = 1,
 
     /// <summary>
-    /// Assembly-wide ViewModel injector direction attribute.
+    /// By suffix (class named: `*ViewModel`)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public sealed class ViewModelDetectionAttribute :
-        Attribute
-    {
-        /// <summary>
-        /// ViewModel detection method.
-        /// </summary>
-        public readonly ViewModelDetections Detection;
+    Suffix = 2
+}
 
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        /// <param name="detection">ViewModel detection method.</param>
-        public ViewModelDetectionAttribute(ViewModelDetections detection) =>
-            this.Detection = detection;
-    }
+/// <summary>
+/// Assembly-wide ViewModel injector direction attribute.
+/// </summary>
+[AttributeUsage(AttributeTargets.Assembly)]
+public sealed class ViewModelDetectionAttribute :
+    Attribute
+{
+    /// <summary>
+    /// ViewModel detection method.
+    /// </summary>
+    public readonly ViewModelDetections Detection;
+
+    /// <summary>
+    /// The constructor.
+    /// </summary>
+    /// <param name="detection">ViewModel detection method.</param>
+    public ViewModelDetectionAttribute(ViewModelDetections detection) =>
+        this.Detection = detection;
 }

@@ -21,17 +21,16 @@
 
 using Epoxy.Internal;
 
-namespace Epoxy.Advanced
+namespace Epoxy.Advanced;
+
+/// <summary>
+/// Design time utility class.
+/// </summary>
+public static class Designer
 {
     /// <summary>
-    /// Design time utility class.
+    /// Get current design time execution mode.
     /// </summary>
-    public static class Designer
-    {
-        /// <summary>
-        /// Get current design time execution mode.
-        /// </summary>
-        public static bool IsDesignTime =>
-            InternalDesigner.IsDesignTime;
-    }
+    public static bool IsDesignTime =>
+        InternalDesigner.IsDesignTime;
 }

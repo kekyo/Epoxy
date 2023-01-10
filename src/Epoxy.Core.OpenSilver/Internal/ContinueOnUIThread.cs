@@ -22,27 +22,26 @@
 using System;
 using System.Windows;
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+partial class InternalUIThread
 {
-    partial class InternalUIThread
+    public static void ContinueOnUIThread(Action<bool> continuation)
     {
-        public static void ContinueOnUIThread(Action<bool> continuation)
+        if (Application.Current?.RootVisual?.Dispatcher is { } dispatcher)
         {
-            if (Application.Current?.RootVisual?.Dispatcher is { } dispatcher)
+            try
             {
-                try
-                {
-                    var _ = dispatcher.BeginInvoke(new Action(() => continuation(true)));
-                }
-                catch
-                {
-                    continuation(false);
-                }
+                var _ = dispatcher.BeginInvoke(new Action(() => continuation(true)));
             }
-            else
+            catch
             {
                 continuation(false);
             }
+        }
+        else
+        {
+            continuation(false);
         }
     }
 }

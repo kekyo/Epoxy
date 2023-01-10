@@ -24,82 +24,81 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Epoxy.Synchronized
+namespace Epoxy.Synchronized;
+
+/// <summary>
+/// UI thread commonly manipulator.
+/// </summary>
+[DebuggerStepThrough]
+public static class SyncUIThreadAccessorExtension
 {
     /// <summary>
-    /// UI thread commonly manipulator.
+    /// Execute synchronously delegate on the UI thread context.
     /// </summary>
-    [DebuggerStepThrough]
-    public static class SyncUIThreadAccessorExtension
+    /// <param name="accessor">UIThread accessor</param>
+    /// <param name="action">Action on UI thread context</param>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public static async ValueTask InvokeSyncOnAsync(
+        this UIThreadAccessorInstance accessor, Action action)
     {
-        /// <summary>
-        /// Execute synchronously delegate on the UI thread context.
-        /// </summary>
-        /// <param name="accessor">UIThread accessor</param>
-        /// <param name="action">Action on UI thread context</param>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static async ValueTask InvokeSyncOnAsync(
-            this UIThreadAccessorInstance accessor, Action action)
+        await UIThread.Bind();
+        action();
+    }
+
+    /// <summary>
+    /// Execute synchronously delegate on the UI thread context.
+    /// </summary>
+    /// <typeparam name="T">Return type</typeparam>
+    /// <param name="accessor">UIThread accessor</param>
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>Result</returns>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public static async ValueTask<T> InvokeSyncOnAsync<T>(
+        this UIThreadAccessorInstance accessor, Func<T> action)
+    {
+        await UIThread.Bind();
+        return action();
+    }
+
+    /// <summary>
+    /// Execute synchronously delegate on the UI thread context.
+    /// </summary>
+    /// <param name="accessor">UIThread accessor</param>
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>True if executed.</returns>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public static async ValueTask<bool> TryInvokeSyncOnAsync(
+        this UIThreadAccessorInstance accessor, Action action)
+    {
+        if (await UIThread.TryBind())
         {
-            await UIThread.Bind();
             action();
+            return true;
         }
-
-        /// <summary>
-        /// Execute synchronously delegate on the UI thread context.
-        /// </summary>
-        /// <typeparam name="T">Return type</typeparam>
-        /// <param name="accessor">UIThread accessor</param>
-        /// <param name="action">Action on UI thread context</param>
-        /// <returns>Result</returns>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static async ValueTask<T> InvokeSyncOnAsync<T>(
-            this UIThreadAccessorInstance accessor, Func<T> action)
+        else
         {
-            await UIThread.Bind();
-            return action();
+            return false;
         }
+    }
 
-        /// <summary>
-        /// Execute synchronously delegate on the UI thread context.
-        /// </summary>
-        /// <param name="accessor">UIThread accessor</param>
-        /// <param name="action">Action on UI thread context</param>
-        /// <returns>True if executed.</returns>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static async ValueTask<bool> TryInvokeSyncOnAsync(
-            this UIThreadAccessorInstance accessor, Action action)
+    /// <summary>
+    /// Execute synchronously delegate on the UI thread context.
+    /// </summary>
+    /// <typeparam name="T">Return type</typeparam>
+    /// <param name="accessor">UIThread accessor</param>
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>True if executed.</returns>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public static async ValueTask<TryInvokeAsyncResult<T>> TryInvokeSyncOnAsync<T>(
+        this UIThreadAccessorInstance accessor, Func<T> action)
+    {
+        if (await UIThread.TryBind())
         {
-            if (await UIThread.TryBind())
-            {
-                action();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return new TryInvokeAsyncResult<T>(true, action());
         }
-
-        /// <summary>
-        /// Execute synchronously delegate on the UI thread context.
-        /// </summary>
-        /// <typeparam name="T">Return type</typeparam>
-        /// <param name="accessor">UIThread accessor</param>
-        /// <param name="action">Action on UI thread context</param>
-        /// <returns>True if executed.</returns>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static async ValueTask<TryInvokeAsyncResult<T>> TryInvokeSyncOnAsync<T>(
-            this UIThreadAccessorInstance accessor, Func<T> action)
+        else
         {
-            if (await UIThread.TryBind())
-            {
-                return new TryInvokeAsyncResult<T>(true, action());
-            }
-            else
-            {
-                return new TryInvokeAsyncResult<T>(false, default!);
-            }
+            return new TryInvokeAsyncResult<T>(false, default!);
         }
     }
 }

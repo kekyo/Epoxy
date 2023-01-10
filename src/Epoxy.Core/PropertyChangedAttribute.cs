@@ -21,43 +21,42 @@
 
 using System;
 
-namespace Epoxy
+namespace Epoxy;
+
+/// <summary>
+/// The method is targetted for receiving property changed in ViewModel injection.
+/// </summary>
+/// <remarks>See ViewModel injector guide: https://github.com/kekyo/Epoxy#viewmodel-injector-and-viewmodel-base-class</remarks>
+/// <example>
+/// <code>
+/// // Enable ViewModel injector on this class
+/// [ViewModel]
+/// public sealed class ImageData
+/// {
+///     // Will inject (auto-implemented) property:
+///     public string Title { get; set; }
+///     
+///     // Will receive property changed.
+///     [PropertyChanged(nameof(Title))]
+///     private ValueTask OnTitleChanged(string value)
+///     {
+///         // Your owned task...
+///     }
+/// }
+/// </code>
+/// </example>
+[AttributeUsage(AttributeTargets.Method)]
+public sealed class PropertyChangedAttribute :
+    Attribute
 {
     /// <summary>
-    /// The method is targetted for receiving property changed in ViewModel injection.
+    /// Target property name.
     /// </summary>
-    /// <remarks>See ViewModel injector guide: https://github.com/kekyo/Epoxy#viewmodel-injector-and-viewmodel-base-class</remarks>
-    /// <example>
-    /// <code>
-    /// // Enable ViewModel injector on this class
-    /// [ViewModel]
-    /// public sealed class ImageData
-    /// {
-    ///     // Will inject (auto-implemented) property:
-    ///     public string Title { get; set; }
-    ///     
-    ///     // Will receive property changed.
-    ///     [PropertyChanged(nameof(Title))]
-    ///     private ValueTask OnTitleChanged(string value)
-    ///     {
-    ///         // Your owned task...
-    ///     }
-    /// }
-    /// </code>
-    /// </example>
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class PropertyChangedAttribute :
-        Attribute
-    {
-        /// <summary>
-        /// Target property name.
-        /// </summary>
-        public readonly string PropertyName;
+    public readonly string PropertyName;
 
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        public PropertyChangedAttribute(string propertyName) =>
-            this.PropertyName = propertyName;
-    }
+    /// <summary>
+    /// The constructor.
+    /// </summary>
+    public PropertyChangedAttribute(string propertyName) =>
+        this.PropertyName = propertyName;
 }

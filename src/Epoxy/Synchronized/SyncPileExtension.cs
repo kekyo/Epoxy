@@ -51,64 +51,63 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
-namespace Epoxy.Synchronized
+namespace Epoxy.Synchronized;
+
+/// <summary>
+/// Pile methods for synchronous execution.
+/// </summary>
+/// <remarks>You can manipulate XAML controls directly inside ViewModels
+/// when places and binds both an Anchor (in XAML) and a Pile.
+/// 
+/// Notice: They handle with synchronous handler.
+/// You can use asynchronous version instead.</remarks>
+[DebuggerStepThrough]
+public static class SyncPileExtension
 {
     /// <summary>
-    /// Pile methods for synchronous execution.
+    /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
     /// </summary>
-    /// <remarks>You can manipulate XAML controls directly inside ViewModels
-    /// when places and binds both an Anchor (in XAML) and a Pile.
-    /// 
-    /// Notice: They handle with synchronous handler.
-    /// You can use asynchronous version instead.</remarks>
-    [DebuggerStepThrough]
-    public static class SyncPileExtension
-    {
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        public static void RentSync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Action<TUIElement> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.InternalRentSync(action, canIgnore);
+    /// <typeparam name="TUIElement">UI element type</typeparam>
+    /// <param name="pile">Pile instance</param>
+    /// <param name="action">Synchronous continuation delegate</param>
+    /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+    /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+    public static void RentSync<TUIElement>(
+        this Pile<TUIElement> pile,
+        Action<TUIElement> action, bool canIgnore = false)
+        where TUIElement : UIElement =>
+        pile.InternalRentSync(action, canIgnore);
 
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <typeparam name="TResult">Result type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Synchronous continuation delegate</param>
-        /// <returns>Result value</returns>
-        /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
-        public static TResult RentSync<TUIElement, TResult>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, TResult> action)
-            where TUIElement : UIElement =>
-            pile.InternalRentSync(action);
+    /// <summary>
+    /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+    /// </summary>
+    /// <typeparam name="TUIElement">UI element type</typeparam>
+    /// <typeparam name="TResult">Result type</typeparam>
+    /// <param name="pile">Pile instance</param>
+    /// <param name="action">Synchronous continuation delegate</param>
+    /// <returns>Result value</returns>
+    /// <remarks>Notice: It handles with synchronous handler. You can use asynchronous version instead.</remarks>
+    public static TResult RentSync<TUIElement, TResult>(
+        this Pile<TUIElement> pile,
+        Func<TUIElement, TResult> action)
+        where TUIElement : UIElement =>
+        pile.InternalRentSync(action);
 
-        #region Dodge mistake choicing asynchronously overloads
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use RentAsync instead.", true)]
-        public static void RentSync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, ValueTask> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            throw new InvalidOperationException("Use RentAsync instead.");
+    #region Dodge mistake choicing asynchronously overloads
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("Use RentAsync instead.", true)]
+    public static void RentSync<TUIElement>(
+        this Pile<TUIElement> pile,
+        Func<TUIElement, ValueTask> action, bool canIgnore = false)
+        where TUIElement : UIElement =>
+        throw new InvalidOperationException("Use RentAsync instead.");
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use RentAsync instead.", true)]
-        public static TResult RentSync<TUIElement, TResult>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, ValueTask<TResult>> action)
-            where TUIElement : UIElement =>
-            throw new InvalidOperationException("Use RentAsync instead.");
-        #endregion
-    }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("Use RentAsync instead.", true)]
+    public static TResult RentSync<TUIElement, TResult>(
+        this Pile<TUIElement> pile,
+        Func<TUIElement, ValueTask<TResult>> action)
+        where TUIElement : UIElement =>
+        throw new InvalidOperationException("Use RentAsync instead.");
+    #endregion
 }

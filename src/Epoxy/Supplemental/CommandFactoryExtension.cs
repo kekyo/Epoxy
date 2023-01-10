@@ -25,62 +25,61 @@ using System.Threading.Tasks;
 
 using Epoxy.Internal;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+/// <summary>
+/// Command factory methods for Task based asynchronous handler.
+/// </summary>
+[DebuggerStepThrough]
+public static class CommandFactoryExtension
 {
     /// <summary>
-    /// Command factory methods for Task based asynchronous handler.
+    /// Generate a Command instance with Task based asynchronous handler.
     /// </summary>
-    [DebuggerStepThrough]
-    public static class CommandFactoryExtension
-    {
-        /// <summary>
-        /// Generate a Command instance with Task based asynchronous handler.
-        /// </summary>
-        /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
-        /// <param name="executeAsync">Asynchronous handler</param>
-        /// <returns>A Command instance</returns>
-        public static Command Create(
-            this CommandFactoryInstance factory,
-            Func<Task> executeAsync) =>
-            new DelegatedCommand(() => executeAsync().AsValueTaskUnit());
+    /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <returns>A Command instance</returns>
+    public static Command Create(
+        this CommandFactoryInstance factory,
+        Func<Task> executeAsync) =>
+        new DelegatedCommand(() => executeAsync().AsValueTaskUnit());
 
-        /// <summary>
-        /// Generate a Command instance with Task based asynchronous handler.
-        /// </summary>
-        /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
-        /// <param name="executeAsync">Asynchronous handler</param>
-        /// <param name="canExecute">Responder for be able to execute</param>
-        /// <returns>A Command instance</returns>
-        public static Command Create(
-            this CommandFactoryInstance factory,
-            Func<Task> executeAsync,
-            Func<bool> canExecute) =>
-            new DelegatedCommand(() => executeAsync().AsValueTaskUnit(), canExecute);
+    /// <summary>
+    /// Generate a Command instance with Task based asynchronous handler.
+    /// </summary>
+    /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <param name="canExecute">Responder for be able to execute</param>
+    /// <returns>A Command instance</returns>
+    public static Command Create(
+        this CommandFactoryInstance factory,
+        Func<Task> executeAsync,
+        Func<bool> canExecute) =>
+        new DelegatedCommand(() => executeAsync().AsValueTaskUnit(), canExecute);
 
-        /// <summary>
-        /// Generate a Command instance with Task based asynchronous handler.
-        /// </summary>
-        /// <typeparam name="TParameter">Handler parameter type</typeparam>
-        /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
-        /// <param name="executeAsync">Asynchronous handler</param>
-        /// <returns>A Command instance</returns>
-        public static Command Create<TParameter>(
-            this CommandFactoryInstance factory,
-            Func<TParameter, Task> executeAsync) =>
-            new DelegatedCommand<TParameter>(parameter => executeAsync(parameter).AsValueTaskUnit());
+    /// <summary>
+    /// Generate a Command instance with Task based asynchronous handler.
+    /// </summary>
+    /// <typeparam name="TParameter">Handler parameter type</typeparam>
+    /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <returns>A Command instance</returns>
+    public static Command Create<TParameter>(
+        this CommandFactoryInstance factory,
+        Func<TParameter, Task> executeAsync) =>
+        new DelegatedCommand<TParameter>(parameter => executeAsync(parameter).AsValueTaskUnit());
 
-        /// <summary>
-        /// Generate a Command instance with Task based asynchronous handler.
-        /// </summary>
-        /// <typeparam name="TParameter">Handler parameter type</typeparam>
-        /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
-        /// <param name="executeAsync">Asynchronous handler</param>
-        /// <param name="canExecute">Responder for be able to execute</param>
-        /// <returns>A Command instance</returns>
-        public static Command Create<TParameter>(
-            this CommandFactoryInstance factory,
-            Func<TParameter, Task> executeAsync,
-            Func<TParameter, bool> canExecute) =>
-            new DelegatedCommand<TParameter>(parameter => executeAsync(parameter).AsValueTaskUnit(), canExecute);
-    }
+    /// <summary>
+    /// Generate a Command instance with Task based asynchronous handler.
+    /// </summary>
+    /// <typeparam name="TParameter">Handler parameter type</typeparam>
+    /// <param name="factory">Factory instance (will use only fixup by compiler)</param>
+    /// <param name="executeAsync">Asynchronous handler</param>
+    /// <param name="canExecute">Responder for be able to execute</param>
+    /// <returns>A Command instance</returns>
+    public static Command Create<TParameter>(
+        this CommandFactoryInstance factory,
+        Func<TParameter, Task> executeAsync,
+        Func<TParameter, bool> canExecute) =>
+        new DelegatedCommand<TParameter>(parameter => executeAsync(parameter).AsValueTaskUnit(), canExecute);
 }

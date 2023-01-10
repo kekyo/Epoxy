@@ -22,33 +22,32 @@
 using Epoxy.Internal;
 using System.Diagnostics;
 
-namespace Epoxy.Infrastructure
+namespace Epoxy.Infrastructure;
+
+/// <summary>
+/// The Model base class.
+/// </summary>
+[DebuggerDisplay("{PrettyPrint}")]
+public abstract class ModelBase
 {
+    [DebuggerStepThrough]
+    private protected ModelBase()
+    { }
+
     /// <summary>
-    /// The Model base class.
+    /// Pretty printer for this class.
     /// </summary>
-    [DebuggerDisplay("{PrettyPrint}")]
-    public abstract class ModelBase
+    public string PrettyPrint
     {
         [DebuggerStepThrough]
-        private protected ModelBase()
-        { }
-
-        /// <summary>
-        /// Pretty printer for this class.
-        /// </summary>
-        public string PrettyPrint
-        {
-            [DebuggerStepThrough]
-            get => InternalModelHelper.PrettyPrint(this, true);
-        }
-
-        /// <summary>
-        /// Get pretty printing string.
-        /// </summary>
-        /// <returns>Pretty printing string</returns>
-        [DebuggerStepThrough]
-        public override string ToString() =>
-            $"{this.GetPrettyTypeName()}: {this.PrettyPrint}";
+        get => InternalModelHelper.PrettyPrint(this, true);
     }
+
+    /// <summary>
+    /// Get pretty printing string.
+    /// </summary>
+    /// <returns>Pretty printing string</returns>
+    [DebuggerStepThrough]
+    public override string ToString() =>
+        $"{this.GetPrettyTypeName()}: {this.PrettyPrint}";
 }

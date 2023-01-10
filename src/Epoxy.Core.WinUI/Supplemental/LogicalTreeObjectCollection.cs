@@ -27,104 +27,103 @@ using System.ComponentModel;
 using Windows.Foundation.Collections;
 using Microsoft.UI.Xaml;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+public abstract class LogicalTreeObjectCollection<TObject> :
+    DependencyObjectCollection, IEnumerable<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
+    where TObject : DependencyObject
 {
-    public abstract class LogicalTreeObjectCollection<TObject> :
-        DependencyObjectCollection, IEnumerable<TObject>, INotifyPropertyChanged, INotifyCollectionChanged
-        where TObject : DependencyObject
+    private readonly List<TObject> snapshot = new List<TObject>();
+
+    internal LogicalTreeObjectCollection() =>
+        base.VectorChanged += this.OnVectorChanged;
+
+    private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
     {
-        private readonly List<TObject> snapshot = new List<TObject>();
-
-        internal LogicalTreeObjectCollection() =>
-            base.VectorChanged += this.OnVectorChanged;
-
-        private void OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs e)
+        switch (e.CollectionChange)
         {
-            switch (e.CollectionChange)
-            {
-                case CollectionChange.ItemInserted:
-                    var newElement1 = this[(int)e.Index];
-                    this.snapshot.Insert((int)e.Index, (TObject)newElement1);
+            case CollectionChange.ItemInserted:
+                var newElement1 = this[(int)e.Index];
+                this.snapshot.Insert((int)e.Index, (TObject)newElement1);
+                try
+                {
+                    this.OnAdded((TObject)newElement1);
+                }
+                finally
+                {
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+                    this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
+                        NotifyCollectionChangedAction.Add, newElement1, (int)e.Index));
+                }
+                break;
+            case CollectionChange.ItemChanged:
+                var oldElement2 = this.snapshot[(int)e.Index];
+                var newElement2 = this[(int)e.Index];
+                try
+                {
+                    this.OnRemoving(oldElement2);
+                }
+                finally
+                {
+                    this.snapshot[(int)e.Index] = (TObject)newElement2;
                     try
                     {
-                        this.OnAdded((TObject)newElement1);
+                        this.OnAdded((TObject)newElement2);
                     }
                     finally
                     {
-                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
                         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
                         this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
-                            NotifyCollectionChangedAction.Add, newElement1, (int)e.Index));
+                            NotifyCollectionChangedAction.Replace, newElement2, (int)e.Index));
                     }
-                    break;
-                case CollectionChange.ItemChanged:
-                    var oldElement2 = this.snapshot[(int)e.Index];
-                    var newElement2 = this[(int)e.Index];
-                    try
-                    {
-                        this.OnRemoving(oldElement2);
-                    }
-                    finally
-                    {
-                        this.snapshot[(int)e.Index] = (TObject)newElement2;
-                        try
-                        {
-                            this.OnAdded((TObject)newElement2);
-                        }
-                        finally
-                        {
-                            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
-                            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
-                                NotifyCollectionChangedAction.Replace, newElement2, (int)e.Index));
-                        }
-                    }
-                    break;
-                case CollectionChange.ItemRemoved:
-                    var oldElement3 = this.snapshot[(int)e.Index];
-                    try
-                    {
-                        this.OnRemoving(oldElement3);
-                    }
-                    finally
-                    {
-                        this.snapshot.RemoveAt((int)e.Index);
-                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
-                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
-                        this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
-                            NotifyCollectionChangedAction.Remove, oldElement3, (int)e.Index));
-                    }
-                    break;
-            }
+                }
+                break;
+            case CollectionChange.ItemRemoved:
+                var oldElement3 = this.snapshot[(int)e.Index];
+                try
+                {
+                    this.OnRemoving(oldElement3);
+                }
+                finally
+                {
+                    this.snapshot.RemoveAt((int)e.Index);
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+                    this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
+                        NotifyCollectionChangedAction.Remove, oldElement3, (int)e.Index));
+                }
+                break;
         }
-
-        protected virtual void OnAdded(TObject element)
-        {
-        }
-
-        protected virtual void OnRemoving(TObject element)
-        {
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
-
-        public new IEnumerator<TObject> GetEnumerator()
-        {
-            var list = (IList<DependencyObject>)this;
-            for (var index = 0; index < list.Count; index++)
-            {
-                yield return (TObject)list[index];
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() =>
-            this.GetEnumerator();
     }
 
-    public class LogicalTreeObjectCollection<TSelf, TObject> :
-        LogicalTreeObjectCollection<TObject>
-        where TObject : DependencyObject
-        where TSelf : LogicalTreeObjectCollection<TObject>, new()
+    protected virtual void OnAdded(TObject element)
     {
     }
+
+    protected virtual void OnRemoving(TObject element)
+    {
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public event NotifyCollectionChangedEventHandler? CollectionChanged;
+
+    public new IEnumerator<TObject> GetEnumerator()
+    {
+        var list = (IList<DependencyObject>)this;
+        for (var index = 0; index < list.Count; index++)
+        {
+            yield return (TObject)list[index];
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() =>
+        this.GetEnumerator();
+}
+
+public class LogicalTreeObjectCollection<TSelf, TObject> :
+    LogicalTreeObjectCollection<TObject>
+    where TObject : DependencyObject
+    where TSelf : LogicalTreeObjectCollection<TObject>, new()
+{
 }

@@ -21,35 +21,34 @@
 
 using System;
 
-namespace Epoxy
+namespace Epoxy;
+
+/// <summary>
+/// Will ignore ViewModel injection, marking on this property.
+/// </summary>
+/// <remarks>See ViewModel injector guide: https://github.com/kekyo/Epoxy#viewmodel-injector-and-viewmodel-base-class</remarks>
+/// <example>
+/// <code>
+/// // Enable ViewModel injector on this class
+/// [ViewModel]
+/// public sealed class ImageData
+/// {
+///     // Will inject (auto-implemented) property:
+///     public string Title { get; set; }
+///     
+///     // Will not inject this property:
+///     [IgnoreInject]
+///     private int Score { get; set; }
+/// }
+/// </code>
+/// </example>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class IgnoreInjectAttribute :
+    Attribute
 {
     /// <summary>
-    /// Will ignore ViewModel injection, marking on this property.
+    /// The constructor.
     /// </summary>
-    /// <remarks>See ViewModel injector guide: https://github.com/kekyo/Epoxy#viewmodel-injector-and-viewmodel-base-class</remarks>
-    /// <example>
-    /// <code>
-    /// // Enable ViewModel injector on this class
-    /// [ViewModel]
-    /// public sealed class ImageData
-    /// {
-    ///     // Will inject (auto-implemented) property:
-    ///     public string Title { get; set; }
-    ///     
-    ///     // Will not inject this property:
-    ///     [IgnoreInject]
-    ///     private int Score { get; set; }
-    /// }
-    /// </code>
-    /// </example>
-    [AttributeUsage(AttributeTargets.Property)]
-    public sealed class IgnoreInjectAttribute :
-        Attribute
-    {
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        public IgnoreInjectAttribute()
-        { }
-    }
+    public IgnoreInjectAttribute()
+    { }
 }

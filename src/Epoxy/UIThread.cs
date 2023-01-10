@@ -27,163 +27,162 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Epoxy
+namespace Epoxy;
+
+[DebuggerStepThrough]
+public readonly struct TryInvokeAsyncResult<T>
 {
-    [DebuggerStepThrough]
-    public readonly struct TryInvokeAsyncResult<T>
+    public readonly bool IsBound;
+    public readonly T Result;
+
+    public TryInvokeAsyncResult(bool isBound, T result)
     {
-        public readonly bool IsBound;
-        public readonly T Result;
+        this.IsBound = isBound;
+        this.Result = result;
+    }
 
-        public TryInvokeAsyncResult(bool isBound, T result)
+    public void Deconstruct(out bool isBound, out T result)
+    {
+        isBound = this.IsBound;
+        result = this.Result;
+    }
+}
+
+/// <summary>
+/// UI thread commonly manipulator.
+/// </summary>
+[DebuggerStepThrough]
+public static class UIThread
+{
+    /// <summary>
+    /// Detects current thread context on the UI thread.
+    /// </summary>
+    public static ValueTask<bool> IsBoundAsync() =>
+        InternalUIThread.IsBoundAsync();
+
+    /// <summary>
+    /// Detects current thread context on the UI thread.
+    /// </summary>
+    [Obsolete("IsBound property is deprecated. Use IsBoundAsync() method instead.", true)]
+    public static bool IsBound =>
+        throw new NotImplementedException();
+
+    /// <summary>
+    /// Binds current task to the UI thread context manually.
+    /// </summary>
+    /// <returns>Awaitable UI thread object.</returns>
+    /// <example>
+    /// <code>
+    /// // (On the arbitrary thread context here)
+    /// 
+    /// // Switch to UI thread context uses async-await.
+    /// await UIThread.Bind();
+    /// 
+    /// // (On the UI thread context here)
+    /// </code>
+    /// </example>
+    public static UIThreadAwaitable Bind() =>
+        new UIThreadAwaitable();
+
+    /// <summary>
+    /// Try to bind current task to the UI thread context manually.
+    /// </summary>
+    /// <returns>True if bound UI thread</returns>
+    /// <example>
+    /// <code>
+    /// // (On the arbitrary thread context here)
+    /// 
+    /// // Switch to UI thread context uses async-await.
+    /// if (!(await UIThread.TryBind()))
+    /// {
+    ///     // Failed to bind (UI thread is not found, maybe reason is UI shutdown)
+    ///     return;
+    /// }
+    /// 
+    /// // (On the UI thread context here)
+    /// </code>
+    /// </example>
+    public static UIThreadTryBindAwaitable TryBind() =>
+        new UIThreadTryBindAwaitable();
+
+    /// <summary>
+    /// Unbinds current UI task to the worker thread context manually.
+    /// </summary>
+    /// <returns>Awaitable worker thread object.</returns>
+    /// <example>
+    /// <code>
+    /// // (On the UI thread context here)
+    /// 
+    /// // Switch to worker thread context uses async-await.
+    /// await UIThread.Unbind();
+    /// 
+    /// // (On the worker thread context here)
+    /// </code>
+    /// </example>
+    public static UIThreadUnbindAwaitable Unbind() =>
+        new UIThreadUnbindAwaitable();
+
+    ////////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Execute on the UI thread context.
+    /// </summary>
+    /// <typeparam name="T">Return type</typeparam>
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>Result</returns>
+    public static async ValueTask<T> InvokeAsync<T>(Func<ValueTask<T>> action)
+    {
+        await Bind();
+        return await action().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Execute on the UI thread context.
+    /// </summary>
+    /// <param name="action">Action on UI thread context</param>
+    public static async ValueTask InvokeAsync(Func<ValueTask> action)
+    {
+        await Bind();
+        await action().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Execute on the UI thread context.
+    /// </summary>
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>True if executed.</returns>
+    public static async ValueTask<bool> TryInvokeAsync(Func<ValueTask> action)
+    {
+        if (await TryBind())
         {
-            this.IsBound = isBound;
-            this.Result = result;
+            await action().ConfigureAwait(false);
+            return true;
         }
-
-        public void Deconstruct(out bool isBound, out T result)
+        else
         {
-            isBound = this.IsBound;
-            result = this.Result;
+            return false;
         }
     }
 
     /// <summary>
-    /// UI thread commonly manipulator.
+    /// Execute on the UI thread context.
     /// </summary>
-    [DebuggerStepThrough]
-    public static class UIThread
+    /// <param name="action">Action on UI thread context</param>
+    /// <returns>True if executed.</returns>
+    public static async ValueTask<TryInvokeAsyncResult<T>> TryInvokeAsync<T>(Func<ValueTask<T>> action)
     {
-        /// <summary>
-        /// Detects current thread context on the UI thread.
-        /// </summary>
-        public static ValueTask<bool> IsBoundAsync() =>
-            InternalUIThread.IsBoundAsync();
-
-        /// <summary>
-        /// Detects current thread context on the UI thread.
-        /// </summary>
-        [Obsolete("IsBound property is deprecated. Use IsBoundAsync() method instead.", true)]
-        public static bool IsBound =>
-            throw new NotImplementedException();
-
-        /// <summary>
-        /// Binds current task to the UI thread context manually.
-        /// </summary>
-        /// <returns>Awaitable UI thread object.</returns>
-        /// <example>
-        /// <code>
-        /// // (On the arbitrary thread context here)
-        /// 
-        /// // Switch to UI thread context uses async-await.
-        /// await UIThread.Bind();
-        /// 
-        /// // (On the UI thread context here)
-        /// </code>
-        /// </example>
-        public static UIThreadAwaitable Bind() =>
-            new UIThreadAwaitable();
-
-        /// <summary>
-        /// Try to bind current task to the UI thread context manually.
-        /// </summary>
-        /// <returns>True if bound UI thread</returns>
-        /// <example>
-        /// <code>
-        /// // (On the arbitrary thread context here)
-        /// 
-        /// // Switch to UI thread context uses async-await.
-        /// if (!(await UIThread.TryBind()))
-        /// {
-        ///     // Failed to bind (UI thread is not found, maybe reason is UI shutdown)
-        ///     return;
-        /// }
-        /// 
-        /// // (On the UI thread context here)
-        /// </code>
-        /// </example>
-        public static UIThreadTryBindAwaitable TryBind() =>
-            new UIThreadTryBindAwaitable();
-
-        /// <summary>
-        /// Unbinds current UI task to the worker thread context manually.
-        /// </summary>
-        /// <returns>Awaitable worker thread object.</returns>
-        /// <example>
-        /// <code>
-        /// // (On the UI thread context here)
-        /// 
-        /// // Switch to worker thread context uses async-await.
-        /// await UIThread.Unbind();
-        /// 
-        /// // (On the worker thread context here)
-        /// </code>
-        /// </example>
-        public static UIThreadUnbindAwaitable Unbind() =>
-            new UIThreadUnbindAwaitable();
-
-        ////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Execute on the UI thread context.
-        /// </summary>
-        /// <typeparam name="T">Return type</typeparam>
-        /// <param name="action">Action on UI thread context</param>
-        /// <returns>Result</returns>
-        public static async ValueTask<T> InvokeAsync<T>(Func<ValueTask<T>> action)
+        if (await TryBind())
         {
-            await Bind();
-            return await action().ConfigureAwait(false);
+            return new TryInvokeAsyncResult<T>(true, await action().ConfigureAwait(false));
         }
-
-        /// <summary>
-        /// Execute on the UI thread context.
-        /// </summary>
-        /// <param name="action">Action on UI thread context</param>
-        public static async ValueTask InvokeAsync(Func<ValueTask> action)
+        else
         {
-            await Bind();
-            await action().ConfigureAwait(false);
+            return new TryInvokeAsyncResult<T>(false, default!);
         }
-
-        /// <summary>
-        /// Execute on the UI thread context.
-        /// </summary>
-        /// <param name="action">Action on UI thread context</param>
-        /// <returns>True if executed.</returns>
-        public static async ValueTask<bool> TryInvokeAsync(Func<ValueTask> action)
-        {
-            if (await TryBind())
-            {
-                await action().ConfigureAwait(false);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Execute on the UI thread context.
-        /// </summary>
-        /// <param name="action">Action on UI thread context</param>
-        /// <returns>True if executed.</returns>
-        public static async ValueTask<TryInvokeAsyncResult<T>> TryInvokeAsync<T>(Func<ValueTask<T>> action)
-        {
-            if (await TryBind())
-            {
-                return new TryInvokeAsyncResult<T>(true, await action().ConfigureAwait(false));
-            }
-            else
-            {
-                return new TryInvokeAsyncResult<T>(false, default!);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-
-        public static readonly UIThreadAccessorInstance Accessor =
-            UIThreadAccessorInstance.Instace;
     }
+
+    ////////////////////////////////////////////////////////////////////////
+
+    public static readonly UIThreadAccessorInstance Accessor =
+        UIThreadAccessorInstance.Instace;
 }

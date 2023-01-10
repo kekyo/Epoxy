@@ -24,55 +24,54 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Epoxy
+namespace Epoxy;
+
+public static class Program
 {
-    public static class Program
+    public static int Main(string[] args)
     {
-        public static int Main(string[] args)
+        var isTrace = false;
+        void Message(LogLevels level, string message)
         {
-            var isTrace = false;
-            void Message(LogLevels level, string message)
+            switch (level)
             {
-                switch (level)
-                {
-                    case LogLevels.Information:
-                        Console.WriteLine($"Epoxy.Build: {message}");
-                        break;
-                    case LogLevels.Trace when !isTrace:
-                        break;
-                    default:
-                        Console.WriteLine($"Epoxy.Build: {level.ToString().ToLowerInvariant()}: {message}");
-                        break;
-                }
+                case LogLevels.Information:
+                    Console.WriteLine($"Epoxy.Build: {message}");
+                    break;
+                case LogLevels.Trace when !isTrace:
+                    break;
+                default:
+                    Console.WriteLine($"Epoxy.Build: {level.ToString().ToLowerInvariant()}: {message}");
+                    break;
+            }
+        }
+
+        try
+        {
+            var referencesBasePath = args[0].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var targetAssemblyPath = args[1];
+            isTrace = args.ElementAtOrDefault(2) is { } arg2 && bool.TryParse(arg2, out var v) && v;
+
+            var injector = new ViewModelInjector(referencesBasePath, Message);
+
+            if (injector.Inject(targetAssemblyPath))
+            {
+                Message(
+                    LogLevels.Information, 
+                    $"Replaced injected assembly: Assembly={Path.GetFileName(targetAssemblyPath)}");
+            }
+            else
+            {
+                Message(LogLevels.Information,
+                    $"Injection target isn't found: Assembly={Path.GetFileName(targetAssemblyPath)}");
             }
 
-            try
-            {
-                var referencesBasePath = args[0].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                var targetAssemblyPath = args[1];
-                isTrace = args.ElementAtOrDefault(2) is { } arg2 && bool.TryParse(arg2, out var v) && v;
-
-                var injector = new ViewModelInjector(referencesBasePath, Message);
-
-                if (injector.Inject(targetAssemblyPath))
-                {
-                    Message(
-                        LogLevels.Information, 
-                        $"Replaced injected assembly: Assembly={Path.GetFileName(targetAssemblyPath)}");
-                }
-                else
-                {
-                    Message(LogLevels.Information,
-                        $"Injection target isn't found: Assembly={Path.GetFileName(targetAssemblyPath)}");
-                }
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Message(LogLevels.Error, $"{ex.GetType().Name}: {ex.Message}");
-                return Marshal.GetHRForException(ex);
-            }
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Message(LogLevels.Error, $"{ex.GetType().Name}: {ex.Message}");
+            return Marshal.GetHRForException(ex);
         }
     }
 }

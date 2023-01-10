@@ -22,31 +22,30 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+public static class ObservableCollectionExtension
 {
-    public static class ObservableCollectionExtension
+    public static ObservableCollection<TValue> ToObservableCollection<TValue>(
+        this IEnumerable<TValue> enumerable)
     {
-        public static ObservableCollection<TValue> ToObservableCollection<TValue>(
-            this IEnumerable<TValue> enumerable)
+        var collection = new ObservableCollection<TValue>();
+
+        foreach (var value in enumerable)
         {
-            var collection = new ObservableCollection<TValue>();
-
-            foreach (var value in enumerable)
-            {
-                collection.Add(value);
-            }
-
-            return collection;
+            collection.Add(value);
         }
 
-        public static void AddRange<TValue>(
-            this ObservableCollection<TValue> collection,
-            IEnumerable<TValue> values)
+        return collection;
+    }
+
+    public static void AddRange<TValue>(
+        this ObservableCollection<TValue> collection,
+        IEnumerable<TValue> values)
+    {
+        foreach (var value in values)
         {
-            foreach (var value in values)
-            {
-                collection.Add(value);
-            }
+            collection.Add(value);
         }
     }
 }

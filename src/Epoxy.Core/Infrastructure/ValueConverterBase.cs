@@ -53,140 +53,139 @@ using Avalonia.Data.Converters;
 
 using Epoxy.Internal;
 
-namespace Epoxy.Infrastructure
+namespace Epoxy.Infrastructure;
+
+/// <summary>
+/// The ValueConverter base class using internal only.
+/// </summary>
+/// <typeparam name="TFrom">Value conversion from this type.</typeparam>
+/// <typeparam name="TTo">Value conversion to this type.</typeparam>
+/// <remarks>You have to use Epoxy.ViewModel class instead this class directly.</remarks>
+public abstract class ValueConverterBase<TFrom, TTo> : ValueConverter
 {
     /// <summary>
-    /// The ValueConverter base class using internal only.
+    /// The constructor.
     /// </summary>
-    /// <typeparam name="TFrom">Value conversion from this type.</typeparam>
-    /// <typeparam name="TTo">Value conversion to this type.</typeparam>
-    /// <remarks>You have to use Epoxy.ViewModel class instead this class directly.</remarks>
-    public abstract class ValueConverterBase<TFrom, TTo> : ValueConverter
+    private protected ValueConverterBase()
+    { }
+
+    private protected abstract bool InternalTryConvert(TFrom from, out TTo result);
+
+    private protected abstract bool InternalTryConvertBack(TTo to, out TFrom result);
+
+    private protected override object? Convert(object? value, Type targetType, object? parameter)
     {
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        private protected ValueConverterBase()
-        { }
-
-        private protected abstract bool InternalTryConvert(TFrom from, out TTo result);
-
-        private protected abstract bool InternalTryConvertBack(TTo to, out TFrom result);
-
-        private protected override object? Convert(object? value, Type targetType, object? parameter)
+        if (parameter != null)
         {
-            if (parameter != null)
-            {
-                throw new ArgumentException(
-                    $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
-            }
-            if (!targetType.IsAssignableFrom(typeof(TTo)))
-            {
-                throw new ArgumentException(
-                    $"ValueConverter.Convert: Type mismatched in {this.GetPrettyTypeName()}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
-            }
-
-            if (value is TFrom from)
-            {
-                if (this.InternalTryConvert(from, out var result))
-                {
-                    return result;
-                }
-            }
-
-            return DefaultValue.XamlProperty;
+            throw new ArgumentException(
+                $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+        }
+        if (!targetType.IsAssignableFrom(typeof(TTo)))
+        {
+            throw new ArgumentException(
+                $"ValueConverter.Convert: Type mismatched in {this.GetPrettyTypeName()}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
         }
 
-        private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
+        if (value is TFrom from)
         {
-            if (parameter != null)
+            if (this.InternalTryConvert(from, out var result))
             {
-                throw new ArgumentException(
-                    $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+                return result;
             }
-            if (!typeof(TFrom).IsAssignableFrom(targetType))
-            {
-                throw new ArgumentException(
-                    $"ValueConverter.ConvertBack: Type mismatched in {this.GetPrettyTypeName()}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
-            }
-
-            if (value is TTo to)
-            {
-                if (this.InternalTryConvertBack(to, out var result))
-                {
-                    return result;
-                }
-            }
-
-            return DefaultValue.XamlProperty;
         }
+
+        return DefaultValue.XamlProperty;
     }
 
-    /// <summary>
-    /// The ValueConverter base class using internal only.
-    /// </summary>
-    /// <typeparam name="TFrom">Value conversion from this type.</typeparam>
-    /// <typeparam name="TParameter">Value conversion with this type parameter.</typeparam>
-    /// <typeparam name="TTo">Value conversion to this type.</typeparam>
-    /// <remarks>You have to use Epoxy.ViewModel class instead this class directly.</remarks>
-    public abstract class ValueConverterBase<TFrom, TParameter, TTo> : ValueConverter
+    private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
     {
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        private protected ValueConverterBase()
-        { }
-
-        private protected abstract bool InternalTryConvert(TFrom from, TParameter parameter, out TTo result);
-
-        private protected abstract bool InternalTryConvertBack(TTo to, TParameter parameter, out TFrom result);
-
-        private protected override object? Convert(object? value, Type targetType, object? parameter)
+        if (parameter != null)
         {
-            if (!DefaultValue.IsDefault<TParameter>(value))
-            {
-                throw new ArgumentException(
-                    $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
-            }
-            if (!targetType.IsAssignableFrom(typeof(TTo)))
-            {
-                throw new ArgumentException(
-                    $"ValueConverter.Convert: Type mismatched in {this.GetPrettyTypeName()}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
-            }
-
-            if (value is TFrom from)
-            {
-                if (this.InternalTryConvert(from, (TParameter)parameter!, out var result))
-                {
-                    return result;
-                }
-            }
-
-            return DefaultValue.XamlProperty;
+            throw new ArgumentException(
+                $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+        }
+        if (!typeof(TFrom).IsAssignableFrom(targetType))
+        {
+            throw new ArgumentException(
+                $"ValueConverter.ConvertBack: Type mismatched in {this.GetPrettyTypeName()}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
         }
 
-        private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
+        if (value is TTo to)
         {
-            if (!DefaultValue.IsDefault<TParameter>(value))
+            if (this.InternalTryConvertBack(to, out var result))
             {
-                throw new ArgumentException(
-                    $"ValueConverter.ConvertBack: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+                return result;
             }
-            if (!typeof(TFrom).IsAssignableFrom(targetType))
-            {
-                throw new ArgumentException(
-                    $"ValueConverter.ConvertBack: Type mismatched in {this.GetPrettyTypeName()}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
-            }
-
-            if (value is TTo to)
-            {
-                if (this.InternalTryConvertBack(to, (TParameter)parameter!, out var result))
-                {
-                    return result;
-                }
-            }
-
-            return DefaultValue.XamlProperty;
         }
+
+        return DefaultValue.XamlProperty;
+    }
+}
+
+/// <summary>
+/// The ValueConverter base class using internal only.
+/// </summary>
+/// <typeparam name="TFrom">Value conversion from this type.</typeparam>
+/// <typeparam name="TParameter">Value conversion with this type parameter.</typeparam>
+/// <typeparam name="TTo">Value conversion to this type.</typeparam>
+/// <remarks>You have to use Epoxy.ViewModel class instead this class directly.</remarks>
+public abstract class ValueConverterBase<TFrom, TParameter, TTo> : ValueConverter
+{
+    /// <summary>
+    /// The constructor.
+    /// </summary>
+    private protected ValueConverterBase()
+    { }
+
+    private protected abstract bool InternalTryConvert(TFrom from, TParameter parameter, out TTo result);
+
+    private protected abstract bool InternalTryConvertBack(TTo to, TParameter parameter, out TFrom result);
+
+    private protected override object? Convert(object? value, Type targetType, object? parameter)
+    {
+        if (!DefaultValue.IsDefault<TParameter>(value))
+        {
+            throw new ArgumentException(
+                $"ValueConverter.Convert: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+        }
+        if (!targetType.IsAssignableFrom(typeof(TTo)))
+        {
+            throw new ArgumentException(
+                $"ValueConverter.Convert: Type mismatched in {this.GetPrettyTypeName()}: From={typeof(TFrom).FullName}, To={targetType.FullName}");
+        }
+
+        if (value is TFrom from)
+        {
+            if (this.InternalTryConvert(from, (TParameter)parameter!, out var result))
+            {
+                return result;
+            }
+        }
+
+        return DefaultValue.XamlProperty;
+    }
+
+    private protected override object? ConvertBack(object? value, Type targetType, object? parameter)
+    {
+        if (!DefaultValue.IsDefault<TParameter>(value))
+        {
+            throw new ArgumentException(
+                $"ValueConverter.ConvertBack: Invalid parameter given in {this.GetPrettyTypeName()}, Parameter={parameter.GetPrettyTypeName()}");
+        }
+        if (!typeof(TFrom).IsAssignableFrom(targetType))
+        {
+            throw new ArgumentException(
+                $"ValueConverter.ConvertBack: Type mismatched in {this.GetPrettyTypeName()}: To={targetType.FullName}, From={typeof(TFrom).FullName}");
+        }
+
+        if (value is TTo to)
+        {
+            if (this.InternalTryConvertBack(to, (TParameter)parameter!, out var result))
+            {
+                return result;
+            }
+        }
+
+        return DefaultValue.XamlProperty;
     }
 }
