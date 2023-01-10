@@ -74,7 +74,8 @@ jobs:
         msbuild -p:Configuration=Release -maxCpuCount -t:restore Epoxy.sln
 
     - name: Build
-      run: msbuild -p:Configuration=Release -maxCpuCount Epoxy.sln
+      run:
+        msbuild -p:Configuration=Release -maxCpuCount Epoxy.sln
 
     - name: Build NuGet packages
       run: |
@@ -94,6 +95,8 @@ jobs:
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
+        msbuild -t:restore -p:Configuration=Release -maxCpuCount templates\Epoxy.Templates.csproj
+        msbuild -p:Configuration=Release -maxCpuCount templates\Epoxy.Templates.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts templates\Epoxy.Templates.csproj
     #    msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Uno\Epoxy.Core.Uno.csproj
     #    msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Uno\Epoxy.Uno.csproj
