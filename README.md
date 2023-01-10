@@ -40,7 +40,7 @@
   * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
-  * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
+  * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17134.0 or higher)
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * Safe asynchronous operation (async-await) ready.
@@ -786,6 +786,7 @@ Apache-v2
     * The F# language allows extensions to static members,
       but they are adapted to be referenced from the `Factory` property as in C#.
   * Package binaries contain breaking changes. Please rebuild after upgrading.
+  * Upgraded UWP version to 18362, because VS2022 omits earlier versions.
 * 1.9.0:
   * Added support for .NET 7 SDK.
   * To make package dependencies more flexible, the following supported versions have been downgraded respectively.

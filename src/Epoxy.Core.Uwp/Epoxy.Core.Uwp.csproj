@@ -2,11 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <!-- Universal Windows Platform is used with netstandard2.0 (truly interoperable) has limitation,
-         bottom version requires 10.0.16299 or upper (Fall creators update)
-         https://devblogs.microsoft.com/dotnet/announcing-uwp-support-for-net-standard-2-0/
-    -->
-    <TargetFramework>uap10.0.16299</TargetFramework>
+    <TargetFramework>uap10.0.18362</TargetFramework>
     <AssemblyTitle>Epoxy.Core.Uwp</AssemblyTitle>
     <PackageId>Epoxy.Core.Uwp</PackageId>
     <PackageTags>$(PackageTags);uwp;uap</PackageTags>
@@ -21,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup>

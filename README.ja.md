@@ -40,7 +40,7 @@
   * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms)  5.0.0.1874 or higher)
-  * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
+  * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17763.0 or higher)
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
@@ -783,6 +783,7 @@ Apache-v2
   * `CommandFactory`と`PileFactory`をobsoleteにしました。代わりに`Command.Factory` `Pile.Factory`を使用して下さい。
     * F#言語では、スタティックメンバに対する拡張が可能ですが、C#と同様に`Factory`プロパティから参照するように合わせてあります。
   * パッケージバイナリは、破壊的変更を含んでいます。アップグレード後は再ビルドを行ってください。
+  * VS2022でのビルドが出来なくなったため、UWPバージョンを18362に更新しました。
 * 1.9.0:
   * .NET 7 SDKに対応しました。
   * パッケージ依存関係をより柔軟にするため、以下のサポートバージョンをそれぞれダウングレードしました。但し動作確認は最新バージョンのみで行っています。
