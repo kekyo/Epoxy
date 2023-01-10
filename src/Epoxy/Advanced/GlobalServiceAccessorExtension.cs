@@ -64,12 +64,6 @@ namespace Epoxy.Advanced
     public static class GlobalServiceAccessorExtension
     {
         /// <summary>
-        /// Get GlobalService accessor instance.
-        /// </summary>
-        public static readonly GlobalServiceAccessor Accessor =
-            InternalGlobalService.Accessor;
-
-        /// <summary>
         /// Register an instance into GlobalService.
         /// </summary>
         /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
