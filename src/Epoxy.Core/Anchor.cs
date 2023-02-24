@@ -97,7 +97,7 @@ public sealed class Anchor
                 }
                 if (n is Pile np)
                 {
-                    np.Moore((UIElement)b);
+                    np.Bind((UIElement)b);
                 }
             });
 #elif AVALONIA
@@ -116,7 +116,7 @@ public sealed class Anchor
             }
             if (e.NewValue.GetValueOrDefault() is { } np)
             {
-                np.Moore((UIElement)e.Sender);
+                np.Bind((UIElement)e.Sender);
             }
         });
 #else
@@ -133,7 +133,7 @@ public sealed class Anchor
                 }
                 if (e.NewValue is Pile np)
                 {
-                    np.Moore((UIElement)d);
+                    np.Bind((UIElement)d);
                 }
             }));
 #endif

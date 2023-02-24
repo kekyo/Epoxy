@@ -75,7 +75,7 @@ public abstract class Pile
     /// Will bind an Anchor.
     /// </summary>
     /// <param name="element">Target anchoring element</param>
-    internal abstract void Moore(UIElement element);
+    internal abstract void Bind(UIElement element);
 
     /// <summary>
     /// Will release an Anchor.
@@ -135,11 +135,11 @@ public sealed class Pile<TUIElement> : Pile
     /// Will bind an Anchor.
     /// </summary>
     /// <param name="element">Target anchoring element</param>
-    internal override void Moore(UIElement element)
+    internal override void Bind(UIElement element)
     {
         if (!(element is TUIElement))
         {
-            throw new InvalidOperationException($"Couldn't moore {element.GetType().FullName}.");
+            throw new InvalidOperationException($"Couldn't bind this anchor: {element.GetType().FullName}.");
         }
         this.element.Target = (TUIElement)element;
     }
@@ -169,7 +169,7 @@ public sealed class Pile<TUIElement> : Pile
         }
         else if (!canIgnore)
         {
-            throw new InvalidOperationException("Didn't moore a UIElement.");
+            throw new InvalidOperationException("You should bind an anchor before renting from the Pile.");
         }
         else
         {
@@ -192,7 +192,7 @@ public sealed class Pile<TUIElement> : Pile
         }
         else
         {
-            throw new InvalidOperationException("Didn't moore a UIElement.");
+            throw new InvalidOperationException("You should bind an anchor before renting from the Pile.");
         }
     }
 
@@ -237,6 +237,6 @@ public sealed class Pile<TUIElement> : Pile
     /// <returns>Formatted string</returns>
     public override string ToString() =>
         this.element.Target is TUIElement element ?
-            $"Mooring: {element.GetType().FullName}" :
+            $"Bound: {element.GetType().FullName}" :
             "Released";
 }
