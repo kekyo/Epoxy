@@ -49,9 +49,9 @@ namespace Epoxy
         public static string[] TargetPaths =>
             Directory.EnumerateFiles(targetBasePath, "Epoxy.Build.TestTargets.dll", SearchOption.AllDirectories).
 #if NETFRAMEWORK
-            Where(p => !(p.Contains("netcoreapp") || p.Contains("netstandard") || p.Contains("net5") || p.Contains("net6"))).
+            Where(p => !(p.Contains("netcoreapp") || p.Contains("netstandard") || p.Contains("net5") || p.Contains("net6") || p.Contains("net7"))).
 #else
-            Where(p => p.Contains("netcoreapp") || p.Contains("netstandard") || p.Contains("net5") || p.Contains("net6")).
+            Where(p => p.Contains("netcoreapp") || p.Contains("netstandard") || p.Contains("net5") || p.Contains("net6") || p.Contains("net7")).
 #endif
             ToArray();
 
