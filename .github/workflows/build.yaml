@@ -98,8 +98,6 @@ jobs:
         msbuild -t:restore -p:Configuration=Release -maxCpuCount templates\Epoxy.Templates.csproj
         msbuild -p:Configuration=Release -maxCpuCount templates\Epoxy.Templates.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts templates\Epoxy.Templates.csproj
-    #    msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Uno\Epoxy.Core.Uno.csproj
-    #    msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Uno\Epoxy.Uno.csproj
 
     #-----------------------------------------------------------------------
     # Test
@@ -132,8 +130,6 @@ jobs:
         dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.OpenSilver.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Templates.*.nupkg --source ref1
-    #    dotnet nuget push artifacts\Epoxy.Core.Uno.*.nupkg --source ref1
-    #    dotnet nuget push artifacts\Epoxy.Uno.*.nupkg --source ref1
 
     #-----------------------------------------------------------------------
     # Deploy packages (main)
@@ -158,5 +154,3 @@ jobs:
     #    dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\FSharp.Epoxy.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Templates.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
-    #    dotnet nuget push artifacts\Epoxy.Core.Uno.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
-    #    dotnet nuget push artifacts\Epoxy.Uno.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
