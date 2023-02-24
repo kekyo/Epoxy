@@ -777,6 +777,10 @@ Apache-v2
 
 ## History
 
+* 1.11.0:
+  * Anchor/Pileの接続が行われていない場合や失敗した場合のメッセージを改めました (#30)
+  * `GlobalService`のスタティックメソッドによる操作をobsoleteにしました。代わりに`GlobalService.Accessor`を使用して下さい。
+    * F#言語では、スタティックメンバに対する拡張が可能ですが、C#と同様に`Accessor`プロパティから参照するように合わせてあります。
 * 1.10.0:
   * GlobalServiceに、`RegisterExplicit<TService>()`と`UnregisterExplicit<TService>()`を追加しました。
     これらは、対象のインターフェイスに`GlobalService`属性が適用されていなくても、管理を可能にします。
