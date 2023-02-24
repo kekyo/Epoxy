@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy - An independent flexible XAML MVVM library for .NET
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////
+-->
+<resources>
+
+  <style name="MainTheme" parent="MainTheme.Base">
+    <!-- As of Xamarin.Forms 4.6 the theme has moved into the Forms binary -->
+    <!-- If you want to override anything you can do that here. -->
+    <!-- Underneath are a couple of entries to get you started. -->
+
+    <!-- Set theme colors from https://aka.ms/material-colors -->
+    <!-- colorPrimary is used for the default action bar background -->
+    <!--<item name="colorPrimary">#2196F3</item>-->
+    <!-- colorPrimaryDark is used for the status bar -->
+    <!--<item name="colorPrimaryDark">#1976D2</item>-->
+    <!-- colorAccent is used as the default value for colorControlActivated
+         which is used to tint widgets -->
+    <!--<item name="colorAccent">#FF4081</item>-->
+  </style>
+</resources>
