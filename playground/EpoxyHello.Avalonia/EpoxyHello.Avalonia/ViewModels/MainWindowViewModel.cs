@@ -19,9 +19,6 @@
 
 #nullable enable
 
-using Epoxy;
-using Epoxy.Synchronized;
-
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -29,20 +26,29 @@ using System.Threading.Tasks;
 
 using Avalonia.Media.Imaging;
 
+using Epoxy;
 using EpoxyHello.Models;
 
 namespace EpoxyHello.Avalonia.ViewModels
 {
-    public sealed class MainWindowViewModel : ViewModel
+    [ViewModel]
+    public sealed class MainWindowViewModel
     {
+        public Command Ready { get; }
+
+        public bool IsEnabled { get; private set; }
+
+        public ObservableCollection<ItemViewModel> Items { get; } = new();
+
+        public Command Fetch { get; }
+
         public MainWindowViewModel()
         {
-            this.Items = new ObservableCollection<ItemViewModel>();
-
             // A handler for window opened
-            this.Ready = Command.Factory.CreateSync(() =>
+            this.Ready = Command.Factory.Create(() =>
             {
                 this.IsEnabled = true;
+                return default;
             });
 
             // A handler for fetch button
@@ -72,33 +78,9 @@ namespace EpoxyHello.Avalonia.ViewModels
                 }
                 finally
                 {
-                    IsEnabled = true;
+                    this.IsEnabled = true;
                 }
             });
-        }
-
-        public Command? Ready
-        {
-            get => this.GetValue();
-            set => this.SetValue(value);
-        }
-
-        public bool IsEnabled
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
-
-        public ObservableCollection<ItemViewModel>? Items
-        {
-            get => this.GetValue<ObservableCollection<ItemViewModel>?>();
-            private set => this.SetValue(value);
-        }
-
-        public Command? Fetch
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
         }
     }
 }

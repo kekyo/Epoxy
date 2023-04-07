@@ -17,32 +17,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Epoxy;
-using Epoxy.Synchronized;
-
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
+using Epoxy;
+using EpoxyHello.Models;
+
 // Conflicted between Xamarin.Forms.Command and Epoxy.Command.
 using Command = Epoxy.Command;
 
-using EpoxyHello.Models;
-
 namespace EpoxyHello.Xamarin.Forms.ViewModels
 {
-    public sealed class MainContentPageViewModel : ViewModel
+    [ViewModel]
+    public sealed class MainContentPageViewModel
     {
+        public Command Ready { get; }
+
+        public bool IsEnabled { get; private set; }
+
+        public ObservableCollection<ItemViewModel> Items { get; } = new();
+
+        public Command Fetch { get; }
+
         public MainContentPageViewModel()
         {
-            this.Items = new ObservableCollection<ItemViewModel>();
-
             // A handler for page appearing
-            this.Ready = Command.Factory.CreateSync(() =>
+            this.Ready = Command.Factory.Create(() =>
             {
                 this.IsEnabled = true;
+                return default;
             });
 
             // A handler for fetch button
@@ -78,33 +84,9 @@ namespace EpoxyHello.Xamarin.Forms.ViewModels
                 }
                 finally
                 {
-                    IsEnabled = true;
+                    this.IsEnabled = true;
                 }
             });
-        }
-
-        public Command? Ready
-        {
-            get => this.GetValue();
-            set => this.SetValue(value);
-        }
-
-        public bool IsEnabled
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
-
-        public ObservableCollection<ItemViewModel>? Items
-        {
-            get => this.GetValue<ObservableCollection<ItemViewModel>?>();
-            private set => this.SetValue(value);
-        }
-
-        public Epoxy.Command? Fetch
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
         }
     }
 }

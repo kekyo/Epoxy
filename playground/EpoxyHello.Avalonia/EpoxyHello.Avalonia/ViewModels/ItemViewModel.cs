@@ -25,24 +25,13 @@ using Avalonia.Media.Imaging;
 
 namespace EpoxyHello.Avalonia.ViewModels
 {
-    public sealed class ItemViewModel : ViewModel
+    [ViewModel]
+    public sealed class ItemViewModel
     {
-        public string? Title
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
+        public string? Title { get; set; }
 
-        public Bitmap? Image
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
+        public Bitmap? Image { get; set; }
 
-        public int Score
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
+        public int Score { get; set; }
     }
 }

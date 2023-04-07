@@ -33,12 +33,11 @@ using EpoxyHello.Models;
 
 namespace EpoxyHello.Maui.ViewModels
 {
-    public sealed class MainContentPageViewModel : ViewModel
+    [ViewModel]
+    public sealed class MainContentPageViewModel
     {
         public MainContentPageViewModel()
         {
-            this.Items = new ObservableCollection<ItemViewModel>();
-
             // A handler for page appearing
             this.Ready = Command.Factory.CreateSync(() =>
             {
@@ -83,28 +82,12 @@ namespace EpoxyHello.Maui.ViewModels
             });
         }
 
-        public Command? Ready
-        {
-            get => this.GetValue();
-            set => this.SetValue(value);
-        }
+        public Command Ready { get; }
 
-        public bool IsEnabled
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
+        public bool IsEnabled { get; private set; }
 
-        public ObservableCollection<ItemViewModel>? Items
-        {
-            get => this.GetValue<ObservableCollection<ItemViewModel>?>();
-            private set => this.SetValue(value);
-        }
+        public ObservableCollection<ItemViewModel> Items { get; } = new();
 
-        public Command? Fetch
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
+        public Command Fetch { get; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\src\Epoxy.Build\build\Epoxy.Build.props" />
+
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -13,4 +15,9 @@
     <ProjectReference Include="..\..\..\src\Epoxy.Avalonia\Epoxy.Avalonia.csproj" />
     <ProjectReference Include="..\..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
+
+  <Import Project="..\..\..\src\Epoxy.Build\build\Epoxy.Build.targets" />
+  <PropertyGroup>
+    <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..\..\src\Epoxy.Build\bin\$(Configuration)\$(_EB_PlatformName)'))</EpoxyBuildToolingDir>
+  </PropertyGroup>
 </Project>

@@ -19,9 +19,6 @@
 
 #nullable enable
 
-using Epoxy;
-using Epoxy.Synchronized;
-
 using System;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -29,25 +26,39 @@ using System.Threading.Tasks;
 
 using Windows.Storage.Streams;
 using Windows.UI;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
+using Epoxy;
 using EpoxyHello.Models;
 
 namespace EpoxyHello.Uwp.ViewModels
 {
-    public sealed class MainPageViewModel : ViewModel
+    [ViewModel]
+    public sealed class MainPageViewModel
     {
+        public Command Ready { get; }
+
+        public bool IsEnabled { get; private set; }
+
+        public ObservableCollection<ItemViewModel> Items { get; } = new();
+
+        public Command Fetch { get; }
+
+        public Pile<Button> ButtonPile { get; } = Pile.Factory.Create<Button>();
+
+        public Command ButtonPileInvoker { get; }
+
+        public string? ThreadIncrementer { get; private set; }
+
         public MainPageViewModel()
         {
-            this.Items = new ObservableCollection<ItemViewModel>();
-
             // A handler for window loaded
-            this.Ready = Command.Factory.CreateSync(() =>
+            this.Ready = Command.Factory.Create(() =>
             {
                 this.IsEnabled = true;
+                return default;
             });
 
             // A handler for fetch button
@@ -94,11 +105,14 @@ namespace EpoxyHello.Uwp.ViewModels
             // Pile is an safe accessor of a temporary UIElement reference in view model.
             // CAUTION: NOT RECOMMENDED for normal usage on MVVM architecture,
             //    Pile is a last solution for complex UI manipulation.
-            this.ButtonPile = Pile.Factory.Create<Button>();
-            this.ButtonPileInvoker = Command.Factory.CreateSync(() =>
-                this.ButtonPile.RentSync(
+            this.ButtonPileInvoker = Command.Factory.Create(() =>
+                this.ButtonPile.RentAsync(
                     // Rent temporary UIElement reference only inside of lambda expression.
-                    button => button.Background = new SolidColorBrush(Color.FromArgb(0, 255, 0, 0))));
+                    button =>
+                    {
+                        button.Background = new SolidColorBrush(Color.FromArgb(0, 255, 0, 0));
+                        return default;
+                    }));
 
             //////////////////////////////////////////////////////////////////////////
             // UIThread:
@@ -120,48 +134,6 @@ namespace EpoxyHello.Uwp.ViewModels
                     count++;
                 }
             });
-        }
-
-        public Command? Ready
-        {
-            get => this.GetValue();
-            set => this.SetValue(value);
-        }
-
-        public bool IsEnabled
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
-
-        public ObservableCollection<ItemViewModel>? Items
-        {
-            get => this.GetValue<ObservableCollection<ItemViewModel>?>();
-            private set => this.SetValue(value);
-        }
-
-        public Command? Fetch
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
-
-        public Pile<Button>? ButtonPile
-        {
-            get => this.GetValue<Pile<Button>?>();
-            private set => this.SetValue(value);
-        }
-
-        public Command? ButtonPileInvoker
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
-        }
-
-        public string? ThreadIncrementer
-        {
-            get => this.GetValue();
-            private set => this.SetValue(value);
         }
     }
 }

@@ -18,7 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 using Epoxy;
-using Epoxy.Synchronized;
 
 using System;
 using System.Collections.ObjectModel;
@@ -36,15 +35,23 @@ namespace EpoxyHello.Wpf.ViewModels;
 [ViewModel]
 public sealed class MainWindowViewModel
 {
+    public Command Ready { get; }
+
+    public bool IsEnabled { get; set; }
+
+    public ObservableCollection<ItemViewModel> Items { get; } = new();
+
+    public Command Fetch { get; }
+
+    public Pile<Panel> IndicatorPile { get; } = Pile.Factory.Create<Panel>();
+
     public MainWindowViewModel()
     {
-        this.Items = new ObservableCollection<ItemViewModel>();
-        this.IndicatorPile = Pile.Factory.Create<Panel>();
-
         // A handler for window loaded
-        this.Ready = Command.Factory.CreateSync(() =>
+        this.Ready = Command.Factory.Create(() =>
         {
             this.IsEnabled = true;
+            return default;
         });
 
         // A handler for fetch button
@@ -104,10 +111,4 @@ public sealed class MainWindowViewModel
             });
         });
     }
-
-    public Command? Ready { get; set; }
-    public bool IsEnabled { get; set; }
-    public ObservableCollection<ItemViewModel>? Items { get; set; }
-    public Command? Fetch { get; set; }
-    public Pile<Panel>? IndicatorPile { get; set; }
 }

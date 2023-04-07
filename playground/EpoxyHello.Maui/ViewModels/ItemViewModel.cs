@@ -22,24 +22,13 @@ using Microsoft.Maui.Controls;
 
 namespace EpoxyHello.Maui.ViewModels
 {
-    public sealed class ItemViewModel : ViewModel
+    [ViewModel]
+    public sealed class ItemViewModel
     {
-        public string? Title
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
+        public string? Title { get; set; }
 
-        public ImageSource? Image
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
+        public ImageSource? Image { get; set; }
 
-        public int Score
-        {
-            get => GetValue();
-            set => SetValue(value);
-        }
+        public int Score { get; set; }
     }
 }

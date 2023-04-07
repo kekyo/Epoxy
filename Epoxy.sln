@@ -58,9 +58,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.WinUI", "src\Epoxy.Wi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EpoxyHello.WinUI", "EpoxyHello.WinUI", "{411D80C2-6223-428F-AD33-7B75B735D364}"
 EndProject
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "EpoxyHello.WinUI.Desktop (Package)", "playground\EpoxyHello.WinUI\EpoxyHello.WinUI.Desktop\EpoxyHello.WinUI.Desktop (Package)\EpoxyHello.WinUI.Desktop (Package).wapproj", "{9E343E2E-9EEB-448D-A602-41D39733F76E}"
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "EpoxyHello.WinUI.Desktop (Package)", "playground\EpoxyHello.WinUI\EpoxyHello.WinUI.Desktop (Package)\EpoxyHello.WinUI.Desktop (Package).wapproj", "{9E343E2E-9EEB-448D-A602-41D39733F76E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.WinUI.Desktop", "playground\EpoxyHello.WinUI\EpoxyHello.WinUI.Desktop\EpoxyHello.WinUI.Desktop\EpoxyHello.WinUI.Desktop.csproj", "{3DAA1687-ACFD-471C-BCEE-DBDA8DD31467}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.WinUI.Desktop", "playground\EpoxyHello.WinUI\EpoxyHello.WinUI.Desktop\EpoxyHello.WinUI.Desktop.csproj", "{3DAA1687-ACFD-471C-BCEE-DBDA8DD31467}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Core.Wpf", "src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj", "{C0A15D5B-C338-4306-9C2B-CE7E6AB50DE1}"
 EndProject
