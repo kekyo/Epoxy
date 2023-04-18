@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj" />
-    <ProjectReference Include="..\..\samples\EpoxyHello.Core\EpoxyHello.Core.csproj" />
+    <ProjectReference Include="..\..\playground\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

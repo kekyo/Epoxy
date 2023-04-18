@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj" />
     <ProjectReference Include="..\..\..\src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj" />
-    <ProjectReference Include="..\..\..\samples\EpoxyHello.Core\EpoxyHello.Core.csproj" />
+    <ProjectReference Include="..\..\..\playground\EpoxyHello.Core\EpoxyHello.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
