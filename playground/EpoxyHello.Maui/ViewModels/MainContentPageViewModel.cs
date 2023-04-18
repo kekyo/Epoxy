@@ -31,63 +31,62 @@ using Command = Epoxy.Command;
 
 using EpoxyHello.Models;
 
-namespace EpoxyHello.Maui.ViewModels
+namespace EpoxyHello.Maui.ViewModels;
+
+[ViewModel]
+public sealed class MainContentPageViewModel
 {
-    [ViewModel]
-    public sealed class MainContentPageViewModel
+    public MainContentPageViewModel()
     {
-        public MainContentPageViewModel()
+        // A handler for page appearing
+        this.Ready = Command.Factory.CreateSync(() =>
         {
-            // A handler for page appearing
-            this.Ready = Command.Factory.CreateSync(() =>
+            this.IsEnabled = true;
+        });
+
+        // A handler for fetch button
+        this.Fetch = Command.Factory.Create(async () =>
+        {
+            this.IsEnabled = false;
+
+            try
             {
-                this.IsEnabled = true;
-            });
+                // Uses Reddit API
+                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
 
-            // A handler for fetch button
-            this.Fetch = Command.Factory.Create(async () =>
+                this.Items.Clear();
+
+                static async ValueTask<ImageSource> FetchImageAsync(Uri url)
+                {
+                    var data = await Reddit.FetchImageAsync(url);
+                    return new StreamImageSource
+                    {
+                        Stream = _ => Task.FromResult((Stream)new MemoryStream(data))
+                    };
+                }
+
+                foreach (var reddit in reddits)
+                {
+                    this.Items.Add(new ItemViewModel
+                    {
+                        Title = reddit.Title,
+                        Score = reddit.Score,
+                        Image = await FetchImageAsync(reddit.Url)
+                    });
+                }
+            }
+            finally
             {
-                this.IsEnabled = false;
-
-                try
-                {
-                    // Uses Reddit API
-                    var reddits = await Reddit.FetchNewPostsAsync("r/aww");
-
-                    this.Items.Clear();
-
-                    static async ValueTask<ImageSource> FetchImageAsync(Uri url)
-                    {
-                        var data = await Reddit.FetchImageAsync(url);
-                        return new StreamImageSource
-                        {
-                            Stream = _ => Task.FromResult((Stream)new MemoryStream(data))
-                        };
-                    }
-
-                    foreach (var reddit in reddits)
-                    {
-                        this.Items.Add(new ItemViewModel
-                        {
-                            Title = reddit.Title,
-                            Score = reddit.Score,
-                            Image = await FetchImageAsync(reddit.Url)
-                        });
-                    }
-                }
-                finally
-                {
-                    IsEnabled = true;
-                }
-            });
-        }
-
-        public Command Ready { get; }
-
-        public bool IsEnabled { get; private set; }
-
-        public ObservableCollection<ItemViewModel> Items { get; } = new();
-
-        public Command Fetch { get; }
+                IsEnabled = true;
+            }
+        });
     }
+
+    public Command Ready { get; }
+
+    public bool IsEnabled { get; private set; }
+
+    public ObservableCollection<ItemViewModel> Items { get; } = new();
+
+    public Command Fetch { get; }
 }

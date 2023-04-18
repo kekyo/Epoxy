@@ -31,62 +31,61 @@ using System.Windows.Media;
 using EpoxyHello.Models;
 using System.Windows.Media.Imaging;
 
-namespace EpoxyHello.OpenSilver.ViewModels
+namespace EpoxyHello.OpenSilver.ViewModels;
+
+[ViewModel]
+public sealed class MainWindowViewModel
 {
-    [ViewModel]
-    public sealed class MainWindowViewModel
+    public Command Ready { get; }
+
+    public bool IsEnabled { get; private set; }
+
+    public ObservableCollection<ItemViewModel> Items { get; } = new();
+
+    public Command Fetch { get; }
+
+    public MainWindowViewModel()
     {
-        public Command Ready { get; }
-
-        public bool IsEnabled { get; private set; }
-
-        public ObservableCollection<ItemViewModel> Items { get; } = new();
-
-        public Command Fetch { get; }
-
-        public MainWindowViewModel()
+        // A handler for window opened
+        this.Ready = Command.Factory.Create(() =>
         {
-            // A handler for window opened
-            this.Ready = Command.Factory.Create(() =>
+            this.IsEnabled = true;
+            return default;
+        });
+
+        // A handler for fetch button
+        this.Fetch = Command.Factory.Create(async () =>
+        {
+            this.IsEnabled = false;
+
+            try
+            {
+                // Uses Reddit API
+                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+
+                this.Items.Clear();
+
+                static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.SetSource(new MemoryStream(await Reddit.FetchImageAsync(url)));
+                    return bitmap;
+                }
+
+                foreach (var reddit in reddits)
+                {
+                    this.Items.Add(new ItemViewModel
+                    {
+                        Title = reddit.Title,
+                        Score = reddit.Score,
+                        Image = await FetchImageAsync(reddit.Url)
+                    });
+                }
+            }
+            finally
             {
                 this.IsEnabled = true;
-                return default;
-            });
-
-            // A handler for fetch button
-            this.Fetch = Command.Factory.Create(async () =>
-            {
-                this.IsEnabled = false;
-
-                try
-                {
-                    // Uses Reddit API
-                    var reddits = await Reddit.FetchNewPostsAsync("r/aww");
-
-                    this.Items.Clear();
-
-                    static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
-                    {
-                        var bitmap = new BitmapImage();
-                        bitmap.SetSource(new MemoryStream(await Reddit.FetchImageAsync(url)));
-                        return bitmap;
-                    }
-
-                    foreach (var reddit in reddits)
-                    {
-                        this.Items.Add(new ItemViewModel
-                        {
-                            Title = reddit.Title,
-                            Score = reddit.Score,
-                            Image = await FetchImageAsync(reddit.Url)
-                        });
-                    }
-                }
-                finally
-                {
-                    this.IsEnabled = true;
-                }
-            });
-        }
+            }
+        });
     }
 }

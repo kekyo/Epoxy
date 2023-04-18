@@ -19,11 +19,10 @@
 
 using Xamarin.Forms;
 
-namespace EpoxyHello.Xamarin.Forms.Views
+namespace EpoxyHello.Xamarin.Forms.Views;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
-    {
-        public MainPage() =>
-            InitializeComponent();
-    }
+    public MainPage() =>
+        InitializeComponent();
 }

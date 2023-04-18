@@ -20,15 +20,14 @@
 using Epoxy;
 using Microsoft.Maui.Controls;
 
-namespace EpoxyHello.Maui.ViewModels
+namespace EpoxyHello.Maui.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
 
-        public ImageSource? Image { get; set; }
+    public ImageSource? Image { get; set; }
 
-        public int Score { get; set; }
-    }
+    public int Score { get; set; }
 }

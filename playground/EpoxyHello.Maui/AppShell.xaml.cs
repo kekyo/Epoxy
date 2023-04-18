@@ -19,13 +19,12 @@
 
 using Microsoft.Maui.Controls;
 
-namespace EpoxyHello.Maui
+namespace EpoxyHello.Maui;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

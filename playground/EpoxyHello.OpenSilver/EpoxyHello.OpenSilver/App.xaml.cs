@@ -21,15 +21,14 @@ using System.Windows;
 
 using EpoxyHello.OpenSilver.Views;
 
-namespace EpoxyHello.OpenSilver
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            this.InitializeComponent();
+namespace EpoxyHello.OpenSilver;
 
-            Window.Current.Content = new MainPage();
-        }
+public partial class App : Application
+{
+    public App()
+    {
+        this.InitializeComponent();
+
+        Window.Current.Content = new MainPage();
     }
 }

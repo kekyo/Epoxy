@@ -21,17 +21,16 @@ using Epoxy;
 
 using System.Windows.Media;
 
-namespace EpoxyHello.OpenSilver.Views.Converters
-{
-    public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
-    {
-        private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
-        private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));
+namespace EpoxyHello.OpenSilver.Views.Converters;
 
-        public override bool TryConvert(int from, out Brush result)
-        {
-            result = from >= 5 ? yellow : gray;
-            return true;
-        }
+public sealed class ScoreToBrushConverter : ValueConverter<int, Brush>
+{
+    private static readonly Brush yellow = new SolidColorBrush(Color.FromArgb(255, 96, 96, 0));
+    private static readonly Brush gray = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96));
+
+    public override bool TryConvert(int from, out Brush result)
+    {
+        result = from >= 5 ? yellow : gray;
+        return true;
     }
 }

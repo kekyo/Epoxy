@@ -22,15 +22,14 @@
 using Epoxy;
 using Microsoft.UI.Xaml.Media;
 
-namespace EpoxyHello.WinUI.Desktop.ViewModels
+namespace EpoxyHello.WinUI.Desktop.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
 
-        public ImageSource? Image { get; set; }
+    public ImageSource? Image { get; set; }
 
-        public int Score { get; set; }
-    }
+    public int Score { get; set; }
 }

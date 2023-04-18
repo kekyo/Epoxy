@@ -20,15 +20,14 @@
 using Epoxy;
 using Xamarin.Forms;
 
-namespace EpoxyHello.Xamarin.Forms.ViewModels
+namespace EpoxyHello.Xamarin.Forms.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
 
-        public ImageSource? Image { get; set; }
+    public ImageSource? Image { get; set; }
 
-        public int Score { get; set; }
-    }
+    public int Score { get; set; }
 }

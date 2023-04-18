@@ -19,13 +19,12 @@
 
 using Windows.UI.Xaml.Controls;
 
-namespace EpoxyHello.Uwp.Views
+namespace EpoxyHello.Uwp.Views;
+
+public sealed partial class MainPage : Page
 {
-    public sealed partial class MainPage : Page
+    public MainPage()
     {
-        public MainPage()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

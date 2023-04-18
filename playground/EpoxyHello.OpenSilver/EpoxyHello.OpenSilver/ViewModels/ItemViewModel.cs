@@ -22,15 +22,14 @@
 using Epoxy;
 using System.Windows.Media;
 
-namespace EpoxyHello.OpenSilver.ViewModels
+namespace EpoxyHello.OpenSilver.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
 
-        public ImageSource? Image { get; set; }
+    public ImageSource? Image { get; set; }
 
-        public int Score { get; set; }
-    }
+    public int Score { get; set; }
 }

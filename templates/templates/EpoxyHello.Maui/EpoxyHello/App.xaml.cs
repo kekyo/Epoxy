@@ -1,22 +1,13 @@
-﻿////////////////////////////////////////////////////////////////////////////
-//
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
-//
-////////////////////////////////////////////////////////////////////////////
+﻿using Microsoft.Maui.Controls;
 
-using Microsoft.Maui.Controls;
+namespace EpoxyHello;
 
-namespace EpoxyHello
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
-        public App()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            MainPage = new AppShell();
-        }
+        MainPage = new AppShell();
     }
 }

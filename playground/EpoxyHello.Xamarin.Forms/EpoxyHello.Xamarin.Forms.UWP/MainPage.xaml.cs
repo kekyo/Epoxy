@@ -17,15 +17,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace EpoxyHello.Xamarin.Forms.UWP
-{
-    public sealed partial class MainPage
-    {
-        public MainPage()
-        {
-            this.InitializeComponent();
+namespace EpoxyHello.Xamarin.Forms.UWP;
 
-            LoadApplication(new EpoxyHello.Xamarin.Forms.App());
-        }
+public sealed partial class MainPage
+{
+    public MainPage()
+    {
+        this.InitializeComponent();
+
+        LoadApplication(new EpoxyHello.Xamarin.Forms.App());
     }
 }

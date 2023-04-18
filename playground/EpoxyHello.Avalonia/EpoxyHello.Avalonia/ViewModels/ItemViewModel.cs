@@ -23,15 +23,14 @@ using Epoxy;
 
 using Avalonia.Media.Imaging;
 
-namespace EpoxyHello.Avalonia.ViewModels
+namespace EpoxyHello.Avalonia.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
 {
-    [ViewModel]
-    public sealed class ItemViewModel
-    {
-        public string? Title { get; set; }
+    public string? Title { get; set; }
 
-        public Bitmap? Image { get; set; }
+    public Bitmap? Image { get; set; }
 
-        public int Score { get; set; }
-    }
+    public int Score { get; set; }
 }

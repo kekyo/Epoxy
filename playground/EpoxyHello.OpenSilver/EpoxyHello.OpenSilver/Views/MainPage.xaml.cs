@@ -19,15 +19,14 @@
 
 using System.Windows.Controls;
 
-namespace EpoxyHello.OpenSilver.Views
-{
-    public sealed partial class MainPage : Page
-    {
-        public MainPage()
-        {
-            this.InitializeComponent();
+namespace EpoxyHello.OpenSilver.Views;
 
-            // Enter construction logic here...
-        }
+public sealed partial class MainPage : Page
+{
+    public MainPage()
+    {
+        this.InitializeComponent();
+
+        // Enter construction logic here...
     }
 }

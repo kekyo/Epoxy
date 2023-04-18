@@ -1,13 +1,3 @@
-<!--
-////////////////////////////////////////////////////////////////////////////
-//
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
-//
-////////////////////////////////////////////////////////////////////////////
--->
-
 <Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
   <Application>
     <!--
@@ -15,7 +5,6 @@
       the application package. The asterisks are not wildcards.
     -->
     <Assembly Name="*Application*" Dynamic="Required All" />
-    
     <!-- Add your application specific runtime directives here. -->
   </Application>
 </Directives>
