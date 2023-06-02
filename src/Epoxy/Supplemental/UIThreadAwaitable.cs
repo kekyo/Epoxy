@@ -35,7 +35,7 @@ public struct UIThreadAwaitable
 }
 
 [DebuggerStepThrough]
-public sealed class UIThreadAwaiter : INotifyCompletion
+public sealed class UIThreadAwaiter : INotifyCompletion, ICriticalNotifyCompletion
 {
     private bool isBound;
 
@@ -45,6 +45,14 @@ public sealed class UIThreadAwaiter : INotifyCompletion
     public bool IsCompleted { get; private set; }
 
     public void OnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnUIThread(isBound =>
+        {
+            this.isBound = isBound;
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public void UnsafeOnCompleted(Action continuation) =>
         InternalUIThread.ContinueOnUIThread(isBound =>
         {
             this.isBound = isBound;
@@ -71,7 +79,7 @@ public struct UIThreadTryBindAwaitable
 }
 
 [DebuggerStepThrough]
-public sealed class UIThreadTryBindAwaiter : INotifyCompletion
+public sealed class UIThreadTryBindAwaiter : INotifyCompletion, ICriticalNotifyCompletion
 {
     private bool isBound;
 
@@ -81,6 +89,14 @@ public sealed class UIThreadTryBindAwaiter : INotifyCompletion
     public bool IsCompleted { get; private set; }
 
     public void OnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnUIThread(isBound =>
+        {
+            this.isBound = isBound;
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public void UnsafeOnCompleted(Action continuation) =>
         InternalUIThread.ContinueOnUIThread(isBound =>
         {
             this.isBound = isBound;
@@ -103,7 +119,7 @@ public struct UIThreadUnbindAwaitable
 }
 
 [DebuggerStepThrough]
-public sealed class UIThreadUnbindAwaiter : INotifyCompletion
+public sealed class UIThreadUnbindAwaiter : INotifyCompletion, ICriticalNotifyCompletion
 {
     internal UIThreadUnbindAwaiter()
     { }
@@ -111,6 +127,13 @@ public sealed class UIThreadUnbindAwaiter : INotifyCompletion
     public bool IsCompleted { get; private set; }
 
     public void OnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnWorkerThread(() =>
+        {
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public void UnsafeOnCompleted(Action continuation) =>
         InternalUIThread.ContinueOnWorkerThread(() =>
         {
             this.IsCompleted = true;
