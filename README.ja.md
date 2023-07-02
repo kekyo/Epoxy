@@ -45,7 +45,7 @@
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
-* F#は6.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
+* F#は5.0以降に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
 * 小さなライブラリで、理解しやすいAPIです。
   * プラットフォーム標準以外のフレームワークやライブラリに依存していません。
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
@@ -777,6 +777,8 @@ Apache-v2
 
 ## History
 
+* 1.12.0:
+  * F#の依存を5.0.0まで下げました。
 * 1.11.0:
   * Anchor/Pileの接続が行われていない場合や失敗した場合のメッセージを改めました (#30)
   * `GlobalService`のスタティックメソッドによる操作をobsoleteにしました。代わりに`GlobalService.Accessor`を使用して下さい。

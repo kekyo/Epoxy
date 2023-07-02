@@ -45,7 +45,7 @@
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
-* F# is 6.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
+* F# is 5.0 or upper, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
 * Smallest footprint and easy understandable.
   * No dependency on non-platform standard frameworks or libraries.
 * Supported simplest and minimalism Model-View-ViewModel design.
@@ -778,6 +778,8 @@ Apache-v2
 
 ## History
 
+* 1.12.0:
+  * Downgraded F# dependency to 5.0.0.
 * 1.11.0:
   * Modified messages when Anchor/Pile connection is not made or fails (#30)
   * Obsoleted operations with static methods of `GlobalService`. Use `GlobalService.Accessor` instead.
