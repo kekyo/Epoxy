@@ -1,3 +1,4 @@
+<!--
 ////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
@@ -16,25 +17,11 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////
-
-using Avalonia;
-using System;
-
-namespace EpoxyHello.Avalonia11;
-
-public static class Program
-{
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<App>().
-            UsePlatformDetect().
-            LogToTrace();
-
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static int Main(string[] args) =>
-        BuildAvaloniaApp().
-        StartWithClassicDesktopLifetime(args);
-}
+-->
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="EpoxyHello.Avalonia11.App">
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+</Application>

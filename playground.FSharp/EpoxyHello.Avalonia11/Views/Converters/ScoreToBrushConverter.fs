@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
@@ -17,24 +17,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Avalonia;
-using System;
+namespace EpoxyHello.Avalonia11.Views.Converters
 
-namespace EpoxyHello.Avalonia11;
+open Epoxy
+open Avalonia.Media
 
-public static class Program
-{
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<App>().
-            UsePlatformDetect().
-            LogToTrace();
+[<AutoOpen>]
+module private ScoreToBrushConverterModule =
+    let yellow = new SolidColorBrush(Color.FromArgb(255uy, 96uy, 96uy, 0uy)) :> Brush
+    let gray = new SolidColorBrush(Color.FromArgb(255uy, 96uy, 96uy, 96uy)) :> Brush
 
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static int Main(string[] args) =>
-        BuildAvaloniaApp().
-        StartWithClassicDesktopLifetime(args);
-}
+[<Sealed>]
+type public ScoreToBrushConverter() =
+    inherit ValueConverter<int, Brush>()
+
+    override __.convert from =
+        if from >= 5 then Some yellow else Some gray

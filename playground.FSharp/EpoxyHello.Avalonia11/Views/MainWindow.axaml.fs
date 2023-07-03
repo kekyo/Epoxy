@@ -17,24 +17,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Avalonia;
-using System;
+namespace EpoxyHello.Avalonia11.Views
 
-namespace EpoxyHello.Avalonia11;
+open Avalonia
+open Avalonia.Controls
+open Avalonia.Markup.Xaml
 
-public static class Program
-{
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<App>().
-            UsePlatformDetect().
-            LogToTrace();
+[<Sealed>]
+type MainWindow() as self =
+    inherit Window()
 
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static int Main(string[] args) =>
-        BuildAvaloniaApp().
-        StartWithClassicDesktopLifetime(args);
-}
+    do
+        self.InitializeComponent()
+#if DEBUG
+        self.AttachDevTools()
+#endif
+
+    member private self.InitializeComponent() =
+        AvaloniaXamlLoader.Load(self)

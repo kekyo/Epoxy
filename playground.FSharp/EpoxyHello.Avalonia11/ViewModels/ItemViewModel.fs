@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
@@ -17,24 +17,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Avalonia;
-using System;
+namespace EpoxyHello.Avalonia11.ViewModels
 
-namespace EpoxyHello.Avalonia11;
+open Epoxy
+open Avalonia.Media.Imaging
 
-public static class Program
-{
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<App>().
-            UsePlatformDetect().
-            LogToTrace();
+type ItemViewModel() =
+    inherit ViewModel()
 
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static int Main(string[] args) =>
-        BuildAvaloniaApp().
-        StartWithClassicDesktopLifetime(args);
-}
+    member __.Title
+        with get(): string = __.getValue()
+        and set (value: string) = __.setValue value
+
+    member __.Image
+        with get(): Bitmap = __.getValue()
+        and set (value: Bitmap) = __.setValue value
+
+    member __.Score
+        with get(): int = __.getValue()
+        and set (value: int) = __.setValue value

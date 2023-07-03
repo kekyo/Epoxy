@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
@@ -17,24 +17,25 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-using Avalonia;
-using System;
+open System
 
-namespace EpoxyHello.Avalonia11;
+open Avalonia
+open Avalonia.Logging
 
-public static class Program
-{
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<App>().
-            UsePlatformDetect().
-            LogToTrace();
+open EpoxyHello.Avalonia11
 
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static int Main(string[] args) =>
-        BuildAvaloniaApp().
-        StartWithClassicDesktopLifetime(args);
-}
+// Avalonia configuration, don't remove; also used by visual designer.
+[<CompiledName "BuildAvaloniaApp">] 
+let buildAvaloniaApp() = 
+    AppBuilder.Configure<App>().
+        UsePlatformDetect().
+        LogToTrace(LogEventLevel.Warning)
+
+// Initialization code. Don't use any Avalonia, third-party APIs or any
+// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+// yet and stuff might break.
+[<STAThread>]
+[<EntryPoint>]
+let main args =
+    buildAvaloniaApp().
+        StartWithClassicDesktopLifetime(args)
