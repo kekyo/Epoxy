@@ -51,6 +51,12 @@ using Avalonia.LogicalTree;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
+#if AVALONIA11
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
+using DependencyObject = Avalonia.AvaloniaObject;
+#endif
+
 using Epoxy.Internal;
 using Epoxy.Supplemental;
 
@@ -59,7 +65,7 @@ namespace Epoxy.Advanced;
 public class AttachableCollection<TSelf, TObject> :
     LogicalTreeObjectCollection<TSelf, TObject>, IAttachedObject
     where TSelf : LogicalTreeObjectCollection<TObject>, IAttachedObject, new()
-#if AVALONIA
+#if AVALONIA || AVALONIA11
     where TObject : ILogical, ISetLogicalParent, IAttachedObject
 #elif UNO && !WINDOWS_UWP
     where TObject : class, DependencyObject, IAttachedObject

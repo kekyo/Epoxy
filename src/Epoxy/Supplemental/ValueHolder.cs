@@ -53,7 +53,7 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -128,13 +128,13 @@ public struct ValueHolder
         vh.GetValue<Thickness>();
     public static implicit operator Color(ValueHolder vh) =>
         vh.GetValue<Color>();
-#if WINDOWS_WPF || AVALONIA
+#if WINDOWS_WPF || AVALONIA || AVALONIA11
     public static implicit operator Vector(ValueHolder vh) =>
         vh.GetValue<Vector>();
     public static implicit operator Pen?(ValueHolder vh) =>
         vh.GetValue<Pen?>();
 #endif
-#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO || AVALONIA || OPENSILVER
+#if WINDOWS_WPF || WINDOWS_UWP || WINUI || UNO || AVALONIA || AVALONIA11 || OPENSILVER
     public static implicit operator Brush?(ValueHolder vh) =>
         vh.GetValue<Brush?>();
     public static implicit operator Rect(ValueHolder vh) =>
@@ -150,7 +150,7 @@ public struct ValueHolder
     public static implicit operator FontAttributes(ValueHolder vh) =>
         vh.GetValue<FontAttributes>();
 #endif
-#if AVALONIA
+#if AVALONIA || AVALONIA11
     public static implicit operator DrawingImage?(ValueHolder vh) =>
         vh.GetValue<DrawingImage?>();
     public static implicit operator Bitmap?(ValueHolder vh) =>

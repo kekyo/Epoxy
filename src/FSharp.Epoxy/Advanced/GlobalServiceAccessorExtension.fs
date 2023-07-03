@@ -19,12 +19,12 @@
 
 namespace Epoxy.Advanced
 
+open System
 open System.Diagnostics
 open System.Runtime.InteropServices
 
 open Epoxy.Advanced
 open Epoxy.Internal
-open System
 
 [<DebuggerStepThrough>]
 [<AutoOpen>]

@@ -31,7 +31,7 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia;
 #endif
 
@@ -76,7 +76,7 @@ internal static class DefaultValue
 #if XAMARIN_FORMS || MAUI
     public static readonly object? XamlProperty =
         null;
-#elif AVALONIA
+#elif AVALONIA || AVALONIA11
     public static readonly object? XamlProperty =
         AvaloniaProperty.UnsetValue;
 #else

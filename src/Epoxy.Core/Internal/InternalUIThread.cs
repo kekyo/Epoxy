@@ -49,7 +49,7 @@ using Xamarin.Forms;
 using Microsoft.Maui.Controls;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia.Threading;
 #endif
 
@@ -68,7 +68,7 @@ internal static partial class InternalUIThread
             return true;
         }
 #endif
-#if AVALONIA
+#if AVALONIA || AVALONIA11
         var dispatcher = Dispatcher.UIThread;
         if (dispatcher?.CheckAccess() ?? false)
         {

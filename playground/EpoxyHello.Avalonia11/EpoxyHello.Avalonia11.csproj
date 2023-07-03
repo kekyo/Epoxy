@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\src\Epoxy.Build\build\Epoxy.Build.props" />
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
+    <IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    <PackageReference Include="Avalonia" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Epoxy.Core.Avalonia11\Epoxy.Core.Avalonia11.csproj" />
+    <ProjectReference Include="..\..\src\Epoxy.Avalonia11\Epoxy.Avalonia11.csproj" />
+    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\src\Epoxy.Build\build\Epoxy.Build.targets" />
+  <PropertyGroup>
+    <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..\src\Epoxy.Build\bin\$(Configuration)\$(_EB_PlatformName)'))</EpoxyBuildToolingDir>
+  </PropertyGroup>
+</Project>

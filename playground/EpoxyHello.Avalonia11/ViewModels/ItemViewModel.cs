@@ -17,16 +17,20 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace global
+#nullable enable
 
-#if XAMARIN_FORMS
-type private UIElement = Xamarin.Forms.VisualElement
-#endif
+using Epoxy;
 
-#if AVALONIA
-type private UIElement = Avalonia.Controls.IControl
-#endif
+using Avalonia.Media.Imaging;
 
-#if AVALONIA11
-type private UIElement = Avalonia.Controls.Control
-#endif
+namespace EpoxyHello.Avalonia11.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
+{
+    public string? Title { get; set; }
+
+    public Bitmap? Image { get; set; }
+
+    public int Score { get; set; }
+}

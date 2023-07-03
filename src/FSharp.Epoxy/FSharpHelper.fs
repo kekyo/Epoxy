@@ -44,7 +44,7 @@ open System.Windows.Threading
 open Xamarin.Forms
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 open Avalonia
 open Avalonia.Threading
 #endif
@@ -142,7 +142,7 @@ module public FSharpHelper =
         member dispatcher.invokeAsync (action: unit -> Async<'TResult>) =
             invokeAsync dispatcher action |> unwrapTaskAsAsyncResult
 #endif
-#if AVALONIA
+#if AVALONIA || AVALONIA11
     type Dispatcher with
 
         /// <summary>
