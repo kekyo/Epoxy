@@ -53,8 +53,16 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 
 #if AVALONIA
 using Avalonia;
+using System.Reactive;
 using DependencyObject = Avalonia.IAvaloniaObject;
 using UIElement = Avalonia.Controls.IControl;
+#endif
+
+#if AVALONIA11
+using Avalonia;
+using Avalonia.Reactive;
+using DependencyObject = Avalonia.AvaloniaObject;
+using UIElement = Avalonia.Controls.Control;
 #endif
 
 namespace Epoxy;
@@ -100,7 +108,7 @@ public sealed class Anchor
                     np.Bind((UIElement)b);
                 }
             });
-#elif AVALONIA
+#elif AVALONIA || AVALONIA11
     public static readonly AvaloniaProperty<Pile?> PileProperty =
         AvaloniaProperty.RegisterAttached<Anchor, UIElement, Pile?>("Pile");
 
@@ -108,7 +116,8 @@ public sealed class Anchor
     /// The type initializer.
     /// </summary>
     static Anchor() =>
-        PileProperty.Changed.Subscribe(e =>
+        PileProperty.Changed.Subscribe(
+            new AnonymousObserver<AvaloniaPropertyChangedEventArgs<Pile?>>(e =>
         {
             if (e.OldValue.GetValueOrDefault() is { } op)
             {
@@ -118,7 +127,7 @@ public sealed class Anchor
             {
                 np.Bind((UIElement)e.Sender);
             }
-        });
+        }));
 #else
     public static readonly DependencyProperty PileProperty =
         DependencyProperty.RegisterAttached(

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>FSharp.Epoxy.Avalonia</id>
+    <id>Epoxy.Avalonia11</id>
     <version>$PackageVersion$</version>
     <authors>Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,68 +12,56 @@
     <description>An independent flexible XAML MVVM library for .NET</description>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <copyright>Copyright (c) Kouji Matsui</copyright>
-    <tags>mvvm viewmodel easy simple combinable async awaitable command fsharp avalonia</tags>
+    <tags>mvvm viewmodel easy simple combinable async awaitable command avalonia</tags>
     <repository type="git" url="https://github.com/kekyo/Epoxy.git" branch="$RepositoryBranch$" commit="$RepositoryCommit$" />
     <dependencies>
       <group targetFramework=".NETFramework4.6.1">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETFramework4.8">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp2.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp2.1">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp2.2">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp3.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETCoreApp3.1">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net5.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net6.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net7.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETStandard2.1">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
-        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Epoxy.Core.Avalonia11" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
     </dependencies>
     <frameworkAssemblies>
@@ -81,9 +69,9 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="bin\$Configuration$\**\FSharp.Epoxy.dll" target="lib" />
-    <file src="bin\$Configuration$\**\FSharp.Epoxy.pdb" target="lib" />
-    <file src="bin\$Configuration$\**\FSharp.Epoxy.xml" target="lib" />
+    <file src="bin\$Configuration$\**\Epoxy.dll" target="lib" />
+    <file src="bin\$Configuration$\**\Epoxy.pdb" target="lib" />
+    <file src="bin\$Configuration$\**\Epoxy.xml" target="lib" />
     <file src="..\..\Images\Epoxy.100.png" target="/" />
   </files>
 </package>

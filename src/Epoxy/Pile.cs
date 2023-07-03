@@ -55,6 +55,12 @@ using DependencyObject = Avalonia.IAvaloniaObject;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
+#if AVALONIA11
+using Avalonia;
+using DependencyObject = Avalonia.AvaloniaObject;
+using UIElement = Avalonia.Controls.Control;
+#endif
+
 namespace Epoxy;
 
 /// <summary>

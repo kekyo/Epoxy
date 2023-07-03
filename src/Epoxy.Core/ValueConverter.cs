@@ -47,7 +47,7 @@ using Xamarin.Forms;
 using Microsoft.Maui.Controls;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia.Data.Converters;
 #endif
 

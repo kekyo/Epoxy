@@ -17,16 +17,32 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-namespace global
+#nullable enable
 
-#if XAMARIN_FORMS
-type private UIElement = Xamarin.Forms.VisualElement
-#endif
+using System;
 
-#if AVALONIA
-type private UIElement = Avalonia.Controls.IControl
-#endif
+using Avalonia.Threading;
 
-#if AVALONIA11
-type private UIElement = Avalonia.Controls.Control
-#endif
+namespace Epoxy.Internal;
+
+partial class InternalUIThread
+{
+    public static void ContinueOnUIThread(Action<bool> continuation)
+    {
+        if (Dispatcher.UIThread is { } dispatcher)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                continuation(true);
+            }
+            else
+            {
+                dispatcher.Post(() => continuation(true));
+            }
+        }
+        else
+        {
+            continuation(false);
+        }
+    }
+}

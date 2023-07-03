@@ -51,6 +51,10 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
+#if AVALONIA11
+using UIElement = Avalonia.Controls.Control;
+#endif
+
 namespace Epoxy.Synchronized;
 
 /// <summary>

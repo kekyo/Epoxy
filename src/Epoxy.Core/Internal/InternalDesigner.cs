@@ -43,7 +43,7 @@ using Xamarin.Forms;
 using Microsoft.Maui.Controls;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia;
 using Avalonia.Controls;
 #endif
@@ -77,7 +77,7 @@ internal static class InternalDesigner
 #if WINDOWS_UWP || WINUI || UNO
         get => DesignMode.DesignModeEnabled;
 #endif
-#if AVALONIA
+#if AVALONIA || AVALONIA11
         get => Design.IsDesignMode;
 #endif
 #if XAMARIN_FORMS || MAUI

@@ -50,6 +50,10 @@ using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
+#if AVALONIA11
+using DependencyObject = Avalonia.AvaloniaObject;
+#endif
+
 using Epoxy.Supplemental;
 
 namespace Epoxy.Advanced;
@@ -73,7 +77,7 @@ public abstract partial class AttachedObject :    // HACK: partial is required o
 #if XAMARIN_FORMS || MAUI
     Element, IAttachedObject
 #endif
-#if AVALONIA
+#if AVALONIA || AVALONIA11
     LogicalTreeObject, IAttachedObject
 #endif
 {
@@ -127,7 +131,7 @@ public class AttachedObject<TSelf> :
 #if XAMARIN_FORMS || MAUI
     where TSelf : Element, IAttachedObject, new()
 #endif
-#if AVALONIA
+#if AVALONIA || AVALONIA11
     where TSelf : AttachedObject, new()
 #endif
 {

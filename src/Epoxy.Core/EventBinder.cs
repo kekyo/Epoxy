@@ -50,7 +50,15 @@ using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 #if AVALONIA
 using Avalonia;
 using Avalonia.Data;
+using System.Reactive;
 using DependencyObject = Avalonia.IAvaloniaObject;
+#endif
+
+#if AVALONIA11
+using Avalonia;
+using Avalonia.Data;
+using Avalonia.Reactive;
+using DependencyObject = Avalonia.AvaloniaObject;
 #endif
 
 using Epoxy.Internal;
@@ -73,7 +81,7 @@ namespace Epoxy;
 /// &lt;/Window&gt;
 /// </code>
 /// </example>
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 public sealed class EventBinder
 #else
 public static class EventBinder
@@ -109,7 +117,7 @@ public static class EventBinder
     /// </summary>
     public static EventsCollection? GetEvents(DependencyObject d) =>
         (EventsCollection?)d.GetValue(EventsProperty);
-#elif AVALONIA
+#elif AVALONIA || AVALONIA11
     /// <summary>
     /// The constructor.
     /// </summary>
@@ -131,7 +139,8 @@ public static class EventBinder
     /// The type initializer.
     /// </summary>
     static EventBinder() =>
-        EventsProperty.Changed.Subscribe(e =>
+        EventsProperty.Changed.Subscribe(
+            new AnonymousObserver<AvaloniaPropertyChangedEventArgs<EventsCollection?>>(e =>
         {
             if (!e.OldValue.Equals(e.NewValue))
             {
@@ -144,7 +153,7 @@ public static class EventBinder
                     nec.Attach(e.Sender);
                 }
             }
-        });
+        }));
 
     /// <summary>
     /// Get EventsCollection instance.
@@ -295,7 +304,7 @@ public sealed class Event :
             BindingMode.Default,
             null,
             (d, _, nv) => ((Event)d).OnCommandPropertyChanged(nv));
-#elif AVALONIA
+#elif AVALONIA || AVALONIA11
     /// <summary>
     /// Binds target CLR event name bindable property declaration.
     /// </summary>
@@ -320,8 +329,12 @@ public sealed class Event :
     /// </summary>
     static Event()
     {
-        EventNameProperty.Changed.Subscribe(e => ((Event)e.Sender).OnEventNamePropertyChanged(e.OldValue, e.NewValue));
-        CommandProperty.Changed.Subscribe(e => ((Event)e.Sender).OnCommandPropertyChanged(e.NewValue));
+        EventNameProperty.Changed.Subscribe(
+            new AnonymousObserver<AvaloniaPropertyChangedEventArgs<string>>(e =>
+                ((Event)e.Sender).OnEventNamePropertyChanged(e.OldValue, e.NewValue)));
+        CommandProperty.Changed.Subscribe(
+            new AnonymousObserver<AvaloniaPropertyChangedEventArgs<ICommand>>(e =>
+                ((Event)e.Sender).OnCommandPropertyChanged(e.NewValue)));
     }
 #else
     /// <summary>
