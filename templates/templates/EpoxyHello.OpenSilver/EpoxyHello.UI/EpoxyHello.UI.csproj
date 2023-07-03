@@ -4,8 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
     <DefineSilverlight>true</DefineSilverlight>
   </PropertyGroup>
   <ItemGroup>

@@ -1,14 +1,4 @@
-﻿<!--
-////////////////////////////////////////////////////////////////////////////
-//
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
-//
-////////////////////////////////////////////////////////////////////////////
--->
-
-<forms:WindowsPage
+﻿<forms:WindowsPage
     x:Class="EpoxyHello.UWP.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:forms="using:Xamarin.Forms.Platform.UWP"
@@ -17,4 +7,3 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
 </forms:WindowsPage>
-    

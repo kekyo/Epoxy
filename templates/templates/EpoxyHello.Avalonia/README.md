@@ -4,7 +4,6 @@
 
 * [Epoxy GitHub repository](https://github.com/kekyo/Epoxy)
 * [You can use Avalonia XAML live viewer exntesion on VSExt (Recommended)](https://marketplace.visualstudio.com/items?itemName=AvaloniaTeam.AvaloniaforVisualStudio)
-* [You can apply license headers from template](https://marketplace.visualstudio.com/items?itemName=StefanWenig.LicenseHeaderManager)
 
 ## Projects
 

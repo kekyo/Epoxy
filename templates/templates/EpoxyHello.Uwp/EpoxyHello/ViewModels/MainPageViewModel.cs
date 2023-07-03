@@ -1,90 +1,26 @@
-﻿////////////////////////////////////////////////////////////////////////////
-//
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
-//
-////////////////////////////////////////////////////////////////////////////
-
-#nullable enable
+﻿#nullable enable
 
 using Epoxy;
-using Epoxy.Synchronized;
-
 using System;
-using System.Collections.ObjectModel;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-
-using Windows.Storage.Streams;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 
 using EpoxyHello.Models;
+using System.Collections.ObjectModel;
 
-namespace EpoxyHello.ViewModels
+namespace EpoxyHello.ViewModels;
+
+[ViewModel]
+public sealed class MainPageViewModel
 {
-    [ViewModel]
-    public sealed class MainPageViewModel
+    public Command Ready { get; }
+    public string Title { get; private set; } = "";
+
+    public MainPageViewModel()
     {
-        public MainPageViewModel()
+        // A handler for window loaded
+        this.Ready = Command.Factory.Create(() =>
         {
-            this.Items = new ObservableCollection<ItemViewModel>();
-
-            // A handler for window loaded
-            this.Ready = Command.Factory.CreateSync(() =>
-            {
-                this.IsEnabled = true;
-            });
-
-            // A handler for fetch button
-            this.Fetch = Command.Factory.Create(async () =>
-            {
-                this.IsEnabled = false;
-
-                try
-                {
-                    // Uses Reddit API
-                    var reddits = await Reddit.FetchNewPostsAsync("r/aww");
-
-                    this.Items.Clear();
-
-                    static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
-                    {
-                        var raStream = new InMemoryRandomAccessStream();
-                        await raStream.WriteAsync((await Reddit.FetchImageAsync(url)).AsBuffer());
-                        raStream.Seek(0);
-                        var bitmap = new BitmapImage();
-                        await bitmap.SetSourceAsync(raStream);
-                        return bitmap;
-                    }
-
-                    foreach (var reddit in reddits)
-                    {
-                        this.Items.Add(new ItemViewModel
-                        {
-                            Title = reddit.Title,
-                            Score = reddit.Score,
-                            Image = await FetchImageAsync(reddit.Url)
-                        });
-                    }
-                }
-                finally
-                {
-                    IsEnabled = true;
-                }
-            });
-        }
-
-        public Command? Ready { get; private set; }
-
-        public bool IsEnabled { get; private set; }
-
-        public ObservableCollection<ItemViewModel>? Items { get; private set; }
-
-        public Command? Fetch { get; private set; }
+            this.Title = "Hello Epoxy!";
+            return default;
+        });
     }
 }

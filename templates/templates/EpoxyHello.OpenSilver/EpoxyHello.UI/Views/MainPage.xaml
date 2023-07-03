@@ -1,19 +1,9 @@
-<!--
-////////////////////////////////////////////////////////////////////////////
-//
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
-//
-////////////////////////////////////////////////////////////////////////////
--->
 <Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy.Core"
         xmlns:viewmodels="clr-namespace:EpoxyHello.ViewModels"
-        xmlns:converters="clr-namespace:EpoxyHello.Views.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="EpoxyHello.Views.MainPage">
 
@@ -25,34 +15,5 @@
         <epoxy:Event EventName="Loaded" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
 
-    <DockPanel>
-        <Button DockPanel.Dock="Top"
-                Height="30" Foreground="Black" Background="Red"
-                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                IsEnabled="{Binding IsEnabled}"
-                Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
-        <Grid>
-            <ListBox ItemsSource="{Binding Items}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="5">
-                            <StackPanel.Resources>
-                                <converters:ScoreToBrushConverter x:Key="ScoreToBrushConverter" />
-                            </StackPanel.Resources>
-
-                            <TextBlock
-                                Text="{Binding Title}"
-                                Background="{Binding Score, Converter={StaticResource ScoreToBrushConverter}}"/>
-                            <Image
-                                Margin="5,3,5,0"
-                                Source="{Binding Image}"
-                                Stretch="UniformToFill" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
-    </DockPanel>
+    <TextBlock Text="{Binding Title}" />
 </Page>
