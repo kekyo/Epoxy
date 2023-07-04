@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)",
+  "classifications": [ "Epoxy", "Avalonia", "XAML", "Desktop" ],
+  "identity": "FSharp.Epoxy.Template.Avalonia11",
+  "groupIdentity": "Epoxy.Template.Avalonia11",
+  "name": "Epoxy.Avalonia11 MVVM template",
+  "shortName": "epoxy-avalonia11",
+  "tags": {
+    "language": "F#",
+    "type": "project"
+  },
+  "sourceName": "EpoxyHello"
+}
