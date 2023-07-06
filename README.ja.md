@@ -11,6 +11,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
+|Epoxy.Avalonia11|[![NuGet Epoxy.Avalonia11](https://img.shields.io/nuget/v/Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia11)|Avalonia version 11|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -23,6 +24,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia11|[![NuGet FSharp.Epoxy.Avalonia11](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia11)|Avalonia version 11|
 |FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
 
 ## dotnet CLIテンプレート
@@ -37,7 +39,7 @@
   * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
   * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms)  5.0.0.1874 or higher)
   * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
@@ -65,7 +67,7 @@
 ## サンプルコード
 
 様々な環境の実働サンプルがあります。
-このサンプルは、Reddit掲示板のr/awwから、最新の投稿記事と画像を非同期でダウンロードしながら、
+このサンプルは、The Cat APIから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
 ### サンプルコードの入手とビルド方法
@@ -91,6 +93,7 @@ dotnet build
 |`dotnet new`引数|言語|対象|
 |:--|:--|:--|
 |`epoxy-wpf`|C#, F#|WPFのサンプルコード|
+|`epoxy-avalonia11`|C#, F#|Avalonia 11のサンプルコード (xplat相当)|
 |`epoxy-avalonia`|C#, F#|Avaloniaのサンプルコード|
 |`epoxy-opensilver`|C#|OpenSilverのサンプルコード|
 |`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
@@ -132,7 +135,7 @@ Model-View-ViewModelの役割についてのおさらい:
 
 * `View`: XAMLでユーザーインターフェイスを記述し、`ViewModel`とバインディングする（コードビハインドを書かない）。
 * `ViewModel`: `Model`から情報を取得して、`View`にマッピングするプロパティを定義する。
-* `Model`: ユーザーインターフェイスに直接関係の無い処理を実装。ここではRedditから投稿をダウンロードする処理。
+* `Model`: ユーザーインターフェイスに直接関係の無い処理を実装。ここではThe Cat APIから猫情報をダウンロードする処理。
 
 以下にこれらのMVVM要素の関係を図示します:
 
@@ -211,16 +214,19 @@ public sealed class MainWindowViewModel
         //   未処理の例外も正しく処理されます。
         this.Fetch = Command.Factory.Create(async () =>
         {
-            var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+            var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
             this.Items.Clear();
 
-            foreach (var reddit in reddits)
+            foreach (var cat in cats)
             {
-                var bitmap = new WriteableBitmap(
-                    BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
-                bitmap.Freeze();
-                this.Items.Add(bitmap);
+                if (cat.Url is { } url)
+                {
+                    var bitmap = new WriteableBitmap(
+                        BitmapFrame.Create(new MemoryStream(await TheCatAPI.FetchImageAsync(url))));
+                    bitmap.Freeze();
+                    this.Items.Add(bitmap);
+                }
             }
         });
     }
@@ -229,18 +235,18 @@ public sealed class MainWindowViewModel
 
 ### Modelの実装例
 
-Redditにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
+The Cat APIにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
 このプロジェクトは、WPF・Xamarin Forms・Uno・UWPのいずれにも依存せず、完全に独立しています。
 
 このように、依存性を排除することで、マルチプラットフォーム対応の共通化を行うことが出来ますが、
 小規模な開発であれば、`Model`の実装を`ViewModel`と同じプロジェクトに配置してもかまいません
 (分離しておけば、意図せず依存してしまったという失敗を排除出来ます)。
 
-[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/Reddit.cs#L63)を抜粋します:
+[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/TheCatAPI.cs#L55)を抜粋します:
 
 ```csharp
 // Modelの実装: netstandard2.0の純粋なライブラリ
-// Redditから画像をダウンロードする
+// The Cat APIから画像をダウンロードする
 public static async ValueTask<byte[]> FetchImageAsync(Uri url)
 {
     using (var response =
@@ -686,7 +692,7 @@ type public ScoreToBrushConverter() =
 // デフォルトの関数定義は、全てF#の`Async`型を受け取るように定義されているため、
 // 以下のように非同期ワークフロー `async { ... }` で書くことが出来る。
 self.Fetch <- Command.Factory.create(fun () -> async {
-    let! reddits = Reddit.fetchNewPostsAsync "r/aww"
+    let! cats = TheCatAPI.FetchTheCatsAsync 10
     // ...
 })
 ```
@@ -777,6 +783,10 @@ Apache-v2
 
 ## History
 
+* 1.13.0:
+  * Avalonia 11に対応しました。
+  * テンプレートコードを最小化しました。MVVMのModel部分に相当するサンプルコードを参照する場合は、
+    リポジトリ内の`playground`ディレクトリを参照して下さい。
 * 1.12.0:
   * F#の依存を5.0.0まで下げました。
 * 1.11.0:

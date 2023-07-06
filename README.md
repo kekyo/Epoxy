@@ -11,6 +11,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
+|Epoxy.Avalonia11|[![NuGet Epoxy.Avalonia11](https://img.shields.io/nuget/v/Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia11)|Avalonia version 11|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -23,6 +24,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia11|[![NuGet FSharp.Epoxy.Avalonia11](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia11)|Avalonia version 11|
 |FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
 
 ## dotnet CLI template
@@ -37,7 +39,7 @@
   * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
   * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
   * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
@@ -58,7 +60,7 @@
 ## Sample code
 
 You can refer multi-platform application sample code variation in.
-This sample displays a list of the latest posts and images from the Reddit forum r/aww, downloading them asynchronously and displays them in a list format.
+This sample displays a list of the latest posts and images from The Cat API, downloading them asynchronously and displays them in a list format.
 
 ### How to get and build the sample code
 
@@ -83,6 +85,7 @@ dotnet build
 |`dotnet new` parameter|Language|Target|
 |:--|:--|:--|
 |`epoxy-wpf`|C#, F#|Sample code for WPF|
+|`epoxy-avalonia11`|C#, F#|Sample code for Avalonia 11 (xplat)|
 |`epoxy-avalonia`|C#, F#|Sample code for Avalonia|
 |`epoxy-opensilver`|C#|Sample code for OpenSilver|
 |`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
@@ -123,7 +126,7 @@ Review of Model-View-ViewModel architecture:
 
 * `View`: Describes the user interface in XAML and write binding expressions to the `ViewModel` (without writing code-behinds).
 * `ViewModel`: Get information from `Model` and define properties that map to `View`.
-* `Model`: Implement processes that are not directly related to the user interface. In this case, the process of downloading posts from Reddit.
+* `Model`: Implement processes that are not directly related to the user interface. In this case, the process of downloading cat information from The Cat API.
 
 The relationship between these MVVM elements is illustrated in the following figure:
 
@@ -200,16 +203,19 @@ public sealed class MainWindowViewModel
         //   Ofcourse, we can use async/await safely in lambda expressions!
         this.Fetch = Command.Factory.Create(async () =>
         {
-            var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+            var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
             this.Items.Clear();
 
-            foreach (var reddit in reddits)
+            foreach (var cat in cats)
             {
-                var bitmap = new WriteableBitmap(
-                    BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
-                bitmap.Freeze();
-                this.Items.Add(bitmap);
+                if (cat.Url is { } url)
+                {
+                    var bitmap = new WriteableBitmap(
+                        BitmapFrame.Create(new MemoryStream(await TheCatAPI.FetchImageAsync(url))));
+                    bitmap.Freeze();
+                    this.Items.Add(bitmap);
+                }
             }
         });
     }
@@ -229,7 +235,7 @@ However, for small-scale development, you can place the `Model` implementation i
 
 ```csharp
 // Model implementation: The pure netstandard2.0 library.
-// Downalod image data from Reddit.
+// Downalod image data from The Cat API.
 public static async ValueTask<byte[]> FetchImageAsync(Uri url)
 {
     using (var response =
@@ -688,7 +694,7 @@ Basically, all asynchronous operations are designed to be described smoothly wit
 // accept F#'s `Async` type, so we can use asynchronous workflows
 // with `async { ... }`.
 self.Fetch <- Command.Factory.create(fun () -> async {
-    let! reddits = Reddit.fetchNewPostsAsync "r/aww"
+    let! cats = TheCatAPI.FetchTheCatsAsync 10
     // ...
 })
 ```
@@ -778,6 +784,11 @@ Apache-v2
 
 ## History
 
+* 1.13.0:
+  * Supported Avalonia 11.
+  * Minimized template code, if you want to refer to the sample code corresponding to the Model part of MVVM,
+    If you want to refer to the sample code corresponding to the Model part of MVVM,
+    please refer to the `playground` directory in the repository.
 * 1.12.0:
   * Downgraded F# dependency to 5.0.0.
 * 1.11.0:
