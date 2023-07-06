@@ -23,6 +23,7 @@ using Epoxy.Synchronized;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 
@@ -51,28 +52,32 @@ public sealed class MainContentPageViewModel
 
             try
             {
-                // Uses Reddit API
-                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+                // Uses The Cat API
+                var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
                 this.Items.Clear();
 
                 static async ValueTask<ImageSource> FetchImageAsync(Uri url)
                 {
-                    var data = await Reddit.FetchImageAsync(url);
+                    var data = await TheCatAPI.FetchImageAsync(url);
                     return new StreamImageSource
                     {
                         Stream = _ => Task.FromResult((Stream)new MemoryStream(data))
                     };
                 }
 
-                foreach (var reddit in reddits)
+                foreach (var cat in cats)
                 {
-                    this.Items.Add(new ItemViewModel
+                    if (cat.Url is { } url)
                     {
-                        Title = reddit.Title,
-                        Score = reddit.Score,
-                        Image = await FetchImageAsync(reddit.Url)
-                    });
+                        var bleed = cat?.Bleeds.FirstOrDefault();
+                        this.Items.Add(new ItemViewModel
+                        {
+                            Title = bleed?.Description ?? bleed?.Temperament ?? "(Unknown)",
+                            Score = bleed?.Intelligence ?? 5,
+                            Image = await FetchImageAsync(url)
+                        });
+                    }
                 }
             }
             finally

@@ -37,7 +37,7 @@
     <StackLayout>
         <Button BackgroundColor="#F32121" Padding="24"
                 TextColor="White" TextTransform="None" FontSize="18"
-                Text="Asynchronous fetch r/aww from Reddit!"
+                Text="Asynchronous fetch the cats from The Cat API!"
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding Fetch}" />
         <ListView ItemsSource="{Binding Items}"

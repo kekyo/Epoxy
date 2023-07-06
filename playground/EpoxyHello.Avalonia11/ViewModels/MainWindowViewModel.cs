@@ -22,6 +22,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Avalonia.Media.Imaging;
@@ -58,22 +59,26 @@ public sealed class MainWindowViewModel
 
             try
             {
-                // Uses Reddit API
-                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+                // Uses The Cat API
+                var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
                 this.Items.Clear();
 
                 static async ValueTask<Bitmap?> FetchImageAsync(Uri url) =>
-                    new Bitmap(new MemoryStream(await Reddit.FetchImageAsync(url)));
+                    new Bitmap(new MemoryStream(await TheCatAPI.FetchImageAsync(url)));
 
-                foreach (var reddit in reddits)
+                foreach (var cat in cats)
                 {
-                    this.Items.Add(new ItemViewModel
+                    if (cat.Url is { } url)
                     {
-                        Title = reddit.Title,
-                        Score = reddit.Score,
-                        Image = await FetchImageAsync(reddit.Url)
-                    });
+                        var bleed = cat?.Bleeds.FirstOrDefault();
+                        this.Items.Add(new ItemViewModel
+                        {
+                            Title = bleed?.Description ?? bleed?.Temperament ?? "(No comment)",
+                            Score = bleed?.Intelligence ?? 5,
+                            Image = await FetchImageAsync(url)
+                        });
+                    }
                 }
             }
             finally

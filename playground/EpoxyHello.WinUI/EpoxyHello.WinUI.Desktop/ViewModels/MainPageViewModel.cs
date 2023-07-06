@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
@@ -61,29 +62,33 @@ public sealed class MainPageViewModel
 
             try
             {
-                // Uses Reddit API
-                var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+                // Uses The Cat API
+                var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
                 this.Items.Clear();
 
                 static async ValueTask<ImageSource?> FetchImageAsync(Uri url)
                 {
                     var raStream = new InMemoryRandomAccessStream();
-                    await raStream.WriteAsync((await Reddit.FetchImageAsync(url)).AsBuffer());
+                    await raStream.WriteAsync((await TheCatAPI.FetchImageAsync(url)).AsBuffer());
                     raStream.Seek(0);
                     var bitmap = new BitmapImage();
                     await bitmap.SetSourceAsync(raStream);
                     return bitmap;
                 }
 
-                foreach (var reddit in reddits)
+                foreach (var cat in cats)
                 {
-                    this.Items.Add(new ItemViewModel
+                    if (cat.Url is { } url)
                     {
-                        Title = reddit.Title,
-                        Score = reddit.Score,
-                        Image = await FetchImageAsync(reddit.Url)
-                    });
+                        var bleed = cat?.Bleeds.FirstOrDefault();
+                        this.Items.Add(new ItemViewModel
+                        {
+                            Title = bleed?.Description ?? bleed?.Temperament ?? "(No comment)",
+                            Score = bleed?.Intelligence ?? 5,
+                            Image = await FetchImageAsync(url)
+                        });
+                    }
                 }
             }
             finally

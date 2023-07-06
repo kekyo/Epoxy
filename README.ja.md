@@ -162,7 +162,7 @@ XAMLビューの定義とその実装を、MVVMに従って完全に分離しつ
     <DockPanel>
         <!-- ボタンのクリックイベントを、ViewModel側にバインディングで通知します。 -->
         <Button DockPanel.Dock="Top" Height="30"
-                Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
+                Command="{Binding Fetch}">Asynchronous fetch the cats from The Cat API!</Button>
         <Grid>
             <!-- ListBoxに、ダウンロードした記事を保持するViewModelのコレクションをバインディングします。 -->
             <ListBox ItemsSource="{Binding Items}"

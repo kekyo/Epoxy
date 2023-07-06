@@ -42,7 +42,7 @@
                 Height="30" Foreground="White" Background="Red"
                 HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                 IsEnabled="{Binding IsEnabled}"
-                Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
+                Command="{Binding Fetch}">Asynchronous fetch the cats from The Cat API!</Button>
         <Grid>
             <ListBox ItemsSource="{Binding Items}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"

@@ -153,7 +153,7 @@ Completed separately xaml based view declarations.
     <DockPanel>
         <!-- Binding button click event. -->
         <Button DockPanel.Dock="Top" Height="30"
-                Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
+                Command="{Binding Fetch}">Asynchronous fetch the cats from The Cat API!</Button>
         <Grid>
             <!-- Binding an image collection. -->
             <ListBox ItemsSource="{Binding Items}"

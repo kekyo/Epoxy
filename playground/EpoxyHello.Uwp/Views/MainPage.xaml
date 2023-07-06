@@ -48,7 +48,7 @@
                 Background="#F32121" Padding="24"
                 Foreground="White" FontSize="18"
                 HorizontalAlignment="Stretch"
-                Content="Asynchronous fetch r/aww from Reddit!"
+                Content="Asynchronous fetch the cats from The Cat API!"
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding Fetch}" />
         <ListView Grid.Row="1"
