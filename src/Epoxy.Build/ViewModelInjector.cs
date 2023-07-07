@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -537,11 +537,12 @@ public sealed class ViewModelInjector
                             var initializeValueMethod = new GenericInstanceMethod(
                                 module.ImportReference(this.initializeFSharpValueTMethod));
                             initializeValueMethod.GenericArguments.Add(
-                                module.ImportReference(fd.FieldType));
+                                module.ImportReference(fd).FieldType);
 
                             body.Instructions[index++] = Instruction.Create(OpCodes.Ldstr, accessor.Property.Name);
                             body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldarg_0));
-                            body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldflda, propertiesField));
+                            body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldflda,
+                                module.ImportReference(propertiesField)));
                             body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, initializeValueMethod));
                             body.Instructions.Insert(index++, Instruction.Create(OpCodes.Pop));
                         }
@@ -574,7 +575,7 @@ public sealed class ViewModelInjector
         }
     }
 
-    private void InjectProperties(
+    private Dictionary<FieldDefinition, AccessorInformation> InjectProperties(
         ModuleDefinition module, TypeDefinition targetType, FieldDefinition propertiesField)
     {
         var candidateAccessors = new Dictionary<FieldDefinition, AccessorInformation>();
@@ -605,7 +606,7 @@ public sealed class ViewModelInjector
                         LogLevels.Trace,
                         $"InjectProperties: Injected property: Property={pd.FullName}");
 
-                    var backingStoreField = module.ImportReference(getterBackingStoreCandidates[0]).Resolve();
+                    var backingStoreField = getterBackingStoreCandidates[0].Resolve();
                     candidateAccessors[backingStoreField] = new AccessorInformation(
                         pd, getter, setter);
                 }
@@ -624,10 +625,15 @@ public sealed class ViewModelInjector
             }
         }
 
-        this.RemoveBackingFields(module, targetType, propertiesField, candidateAccessors);
+        this.RemoveBackingFields(
+            module, targetType, propertiesField, candidateAccessors);
+
+        return candidateAccessors;
     }
 
-    private bool InjectIntoType(ModuleDefinition module, TypeDefinition targetType)
+    private bool InjectIntoType(
+        ModuleDefinition module, TypeDefinition targetType,
+        out Dictionary<FieldDefinition, AccessorInformation> removedAccessors)
     {
         var propertiesField = new FieldDefinition(
             "epoxy_properties__",
@@ -641,7 +647,7 @@ public sealed class ViewModelInjector
 
         this.InjectPropertyChangeEvents(module, targetType, propertiesField);
         this.InjectPrettyPrint(module, targetType);
-        this.InjectProperties(module, targetType, propertiesField);
+        removedAccessors = this.InjectProperties(module, targetType, propertiesField);
 
         return true;
     }
@@ -674,21 +680,28 @@ public sealed class ViewModelInjector
 
             var targetTypes = targetAssembly.MainModule.GetTypes().
                 Where(td => (td.IsClass || td.IsValueType) &&
-                        ((suffixDetection && td.FullName.EndsWith("ViewModel")) ||
-                         (attributeDetection && td.HasCustomAttributes &&
-                         td.CustomAttributes.Any(ca => ca.AttributeType.FullName == this.viewModelAttributeType.FullName))) &&
+                    ((suffixDetection && td.FullName.EndsWith("ViewModel")) ||
+                     (attributeDetection && td.HasCustomAttributes &&
+                     td.CustomAttributes.Any(ca => ca.AttributeType.FullName == this.viewModelAttributeType.FullName))) &&
                      !td.Interfaces.Any(ii => ii.InterfaceType.FullName == this.iViewModelImplementerType.FullName)).
                 ToArray();
 
             if (targetTypes.Length >= 1)
             {
                 var injected = false;
+                var removedAccessor = new Dictionary<FieldDefinition, AccessorInformation>();
 
                 foreach (var targetType in targetTypes)
                 {
-                    if (this.InjectIntoType(targetAssembly.MainModule, targetType))
+                    if (this.InjectIntoType(targetAssembly.MainModule, targetType, out var rfs))
                     {
                         injected = true;
+
+                        foreach (var rf in rfs)
+                        {
+                            removedAccessor.Add(rf.Key, rf.Value);
+                        }
+
                         this.message(
                             LogLevels.Trace,
                             $"Injected a view model: Assembly={targetAssemblyName}, Type={targetType.FullName}");
@@ -703,6 +716,54 @@ public sealed class ViewModelInjector
 
                 if (injected)
                 {
+                    var module = targetAssembly.MainModule;
+                    var actions = new List<Action>();
+                    Parallel.ForEach(
+                        module.GetTypes().
+                        Where(td => td.IsClass || td.IsValueType),
+                        td =>
+                        {
+                            foreach (var md in td.Methods.
+                                Where(md => !md.IsAbstract && md.HasBody))
+                            {
+                                for (var index = 0; index < md.Body.Instructions.Count; index++)
+                                {
+                                    var inst = md.Body.Instructions[index];
+                                    if (inst.Operand is FieldDefinition fd &&
+                                        removedAccessor.TryGetValue(fd, out var accessor))
+                                    {
+                                        if (inst.OpCode == OpCodes.Ldfld)
+                                        {
+                                            var capturedIndex = index;
+                                            lock (actions)
+                                            {
+                                                actions.Add(() =>
+                                                    md.Body.Instructions[capturedIndex] =
+                                                        Instruction.Create(OpCodes.Call,
+                                                            module.ImportReference(accessor.Getter)));
+                                            }
+                                        }
+                                        else if (inst.OpCode == OpCodes.Stfld)
+                                        {
+                                            var capturedIndex = index;
+                                            lock (actions)
+                                            {
+                                                actions.Add(() =>
+                                                    md.Body.Instructions[capturedIndex] =
+                                                        Instruction.Create(OpCodes.Call,
+                                                            module.ImportReference(accessor.Setter)));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                    foreach (var action in actions)
+                    {
+                        action();
+                    }
+
                     injectedAssemblyPath = injectedAssemblyPath ?? targetAssemblyPath;
 
                     targetAssembly.Write(
