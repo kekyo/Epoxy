@@ -20,8 +20,8 @@
 #nullable enable
 
 using System;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Epoxy;
@@ -48,9 +48,33 @@ public static class Program
 
         try
         {
-            var referencesBasePath = args[0].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-            var targetAssemblyPath = args[1];
-            isTrace = args.ElementAtOrDefault(2) is { } arg2 && bool.TryParse(arg2, out var v) && v;
+            var isDebug = false;
+
+            var index = 0;
+            while (true)
+            {
+                if (args[index] == "-t")
+                {
+                    isTrace = true;
+                }
+                else if (args[index] == "-d")
+                {
+                    isDebug = true;
+                }
+                else
+                {
+                    break;
+                }
+                index++;
+            }
+
+            var referencesBasePath = args[index++].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var targetAssemblyPath = args[index];
+
+            if (isDebug)
+            {
+                Debugger.Launch();
+            }
 
             var injector = new ViewModelInjector(referencesBasePath, Message);
 

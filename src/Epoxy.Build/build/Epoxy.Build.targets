@@ -29,6 +29,7 @@
   <PropertyGroup>
     <EpoxyBuildEnable Condition="'$(EpoxyBuildEnable)' == ''">True</EpoxyBuildEnable>
     <EpoxyBuildTrace Condition="'$(EpoxyBuildTrace)' == ''">False</EpoxyBuildTrace>
+    <EpoxyBuildDebug Condition="'$(EpoxyBuildDebug)' == ''">False</EpoxyBuildDebug>
   </PropertyGroup>
 
   <!-- ======================== -->
@@ -99,6 +100,8 @@
       <EpoxyBuildToolingRuntimeName Condition="'$(EpoxyBuildToolingRuntimeName)' == ''">$(_EB_RuntimeName)</EpoxyBuildToolingRuntimeName>
       <EpoxyBuildToolingDir Condition="'$(EpoxyBuildToolingDir)' == ''">$([System.IO.Path]::GetFullPath('$(_EB_ToolingDir)'))</EpoxyBuildToolingDir>
       <EpoxyBuildToolingPath Condition="'$(EpoxyBuildToolingPath)' == ''">$([System.IO.Path]::Combine('$(EpoxyBuildToolingDir)','$(_EB_ExecutableName)'))</EpoxyBuildToolingPath>
+      <EpoxyBuildToolingTraceOption Condition="$(EpoxyBuildTrace)"> -t</EpoxyBuildToolingTraceOption>
+      <EpoxyBuildToolingDebugOption Condition="$(EpoxyBuildDebug)"> -d</EpoxyBuildToolingDebugOption>
     </PropertyGroup>
 
     <GetCombinedReferencesBasePath References="@(ReferencePath)">
@@ -106,6 +109,6 @@
     </GetCombinedReferencesBasePath>
         
     <Exec WorkingDirectory="$(EpoxyBuildToolingDir)"
-        Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot; &quot;$(CombinedReferencesBasePath)&quot; &quot;$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)&quot; $(EpoxyBuildTrace)" />
+        Command="$(EpoxyBuildToolingRuntimeName)&quot;$(EpoxyBuildToolingPath)&quot;$(EpoxyBuildToolingTraceOption)$(EpoxyBuildToolingDebugOption) &quot;$(CombinedReferencesBasePath)&quot; &quot;$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)&quot;" />
   </Target>
 </Project>
