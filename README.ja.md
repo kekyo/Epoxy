@@ -783,19 +783,16 @@ Apache-v2
 
 ## History
 
-* 1.13.0:
+* 1.10.0:
   * Avalonia 11に対応しました。
   * テンプレートコードを最小化しました。MVVMのModel部分に相当するサンプルコードを参照する場合は、
     リポジトリ内の`playground`ディレクトリを参照して下さい。
   * `internal` modifierによるバッキングストアのフィールド参照を行っている場合に、ViewModelインジェクタで例外が発生するのを修正しました。
     意図的にそのようなコードを書いた場合や、F#の最適化が機能した場合に発生していました。
-* 1.12.0:
   * F#の依存を5.0.0まで下げました。
-* 1.11.0:
   * Anchor/Pileの接続が行われていない場合や失敗した場合のメッセージを改めました (#30)
   * `GlobalService`のスタティックメソッドによる操作をobsoleteにしました。代わりに`GlobalService.Accessor`を使用して下さい。
     * F#言語では、スタティックメンバに対する拡張が可能ですが、C#と同様に`Accessor`プロパティから参照するように合わせてあります。
-* 1.10.0:
   * GlobalServiceに、`RegisterExplicit<TService>()`と`UnregisterExplicit<TService>()`を追加しました。
     これらは、対象のインターフェイスに`GlobalService`属性が適用されていなくても、管理を可能にします。
   * `CommandFactory`と`PileFactory`をobsoleteにしました。代わりに`Command.Factory` `Pile.Factory`を使用して下さい。

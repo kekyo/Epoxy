@@ -784,21 +784,18 @@ Apache-v2
 
 ## History
 
-* 1.13.0:
+* 1.10.0:
   * Supported Avalonia 11.
   * Minimized template code, if you want to refer to the sample code corresponding to the Model part of MVVM,
     If you want to refer to the sample code corresponding to the Model part of MVVM,
     please refer to the `playground` directory in the repository.
   * Fixed an exception in the ViewModel injector when referencing the backing store field with an `internal` and narrow modifier.
     This was occurring when such code was intentionally written or when F# optimizations worked.
-* 1.12.0:
   * Downgraded F# dependency to 5.0.0.
-* 1.11.0:
   * Modified messages when Anchor/Pile connection is not made or fails (#30)
   * Obsoleted operations with static methods of `GlobalService`. Use `GlobalService.Accessor` instead.
     * The F# language allows extensions to static members,
       but they are adapted to be referenced from the `Accessor` property as in C#.
-* 1.10.0:
   * Added `RegisterExplicit<TService>()` and `UnregisterExplicit<TService>()` to GlobalService.
     These allow management even if the `GlobalService` attribute is not applied to the target interface.
   * `CommandFactory` and `PileFactory` have been obsoleted.
