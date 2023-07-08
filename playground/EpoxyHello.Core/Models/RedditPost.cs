@@ -21,6 +21,7 @@ using System;
 
 namespace EpoxyHello.Models;
 
+[Obsolete("Old sample implementation.")]
 public sealed class RedditPost
 {
     public readonly string Title;

@@ -59,7 +59,7 @@ type public MainWindowViewModel() as self =
                 do self.Items.Clear()
 
                 let fetchImageAsync url = async {
-                    let! image = Reddit.FetchImageAsync url
+                    let! image = TheCatAPI.FetchImageAsync url
                     return new Bitmap(new MemoryStream(image))
                 }
 

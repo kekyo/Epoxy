@@ -224,14 +224,14 @@ public sealed class MainWindowViewModel
 
 ### Example of Model implementation
 
-The common code to access Reddit is implemented in the `EpoxyHello.Core` project.
-It does not depend on either WPF, Xamarin Forms, Uno and UWP assemblies and is completely independent.
+The common code to access The Cat API is implemented in the `EpoxyHello.Core` project.
+It does not depend on either WPF, Xamarin Forms, Avalonia, UWP, WinUI and OpenSilver assemblies and is completely independent.
 
 By eliminating dependencies in this way, we can achieve commonality for multi-platform support.
 However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
 (separating them eliminates the possibility of unintentional dependencies).
 
-[Image downloader from Reddit post (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/Reddit.cs#L63):
+[Image downloader from The Cat API (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/TheCatAPI.cs#L55):
 
 ```csharp
 // Model implementation: The pure netstandard2.0 library.

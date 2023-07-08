@@ -236,7 +236,7 @@ public sealed class MainWindowViewModel
 ### Modelの実装例
 
 The Cat APIにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
-このプロジェクトは、WPF・Xamarin Forms・Uno・UWPのいずれにも依存せず、完全に独立しています。
+このプロジェクトは、WPF・Xamarin Forms・Avalonia・UWP・WinUI・OpenSilverのいずれにも依存せず、完全に独立しています。
 
 このように、依存性を排除することで、マルチプラットフォーム対応の共通化を行うことが出来ますが、
 小規模な開発であれば、`Model`の実装を`ViewModel`と同じプロジェクトに配置してもかまいません

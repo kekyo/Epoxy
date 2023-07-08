@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 
 namespace EpoxyHello.Models;
 
+[Obsolete("Old sample implementation.")]
 public static class Reddit
 {
     private static readonly HttpClient httpClient = new HttpClient();
