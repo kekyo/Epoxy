@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml;
 
 namespace EpoxyHello.Views;
 
-public sealed class MainWindow : Window
+public sealed partial class MainWindow : Window
 {
     public MainWindow()
     {
