@@ -16,6 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RelaxVersioner" Version="3.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="**\*" />
     <Content Include="templates\**\*" Exclude="**\.vs;templates\**\bin\**;templates\**\obj\**;**\*.user" />
     <None Include="../Images/Epoxy.100.png" Pack="true" PackagePath="" />
