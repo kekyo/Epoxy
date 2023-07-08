@@ -71,10 +71,12 @@ jobs:
 
     - name: NuGet restore
       run: |
+        msbuild -p:Configuration=Release -maxCpuCount -t:restore src\Epoxy.Build\Epoxy.Build.csproj
         msbuild -p:Configuration=Release -maxCpuCount -t:restore Epoxy.sln
 
     - name: Build
-      run:
+      run: |
+        msbuild -p:Configuration=Release -maxCpuCount src\Epoxy.Build\Epoxy.Build.csproj
         msbuild -p:Configuration=Release -maxCpuCount Epoxy.sln
 
     - name: Build NuGet packages
