@@ -1,15 +1,14 @@
 ﻿using Epoxy;
-using System;
 
 namespace EpoxyHello.ViewModels;
 
 [ViewModel]
-public sealed class MainWindowViewModel
+public sealed class MainViewModel
 {
     public Command Ready { get; }
     public string Title { get; private set; } = "";
 
-    public MainWindowViewModel()
+    public MainViewModel()
     {
         // A handler for window loaded
         this.Ready = Command.Factory.Create(() =>
