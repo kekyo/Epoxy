@@ -70,9 +70,12 @@
 このサンプルは、The Cat APIから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
-### サンプルコードの入手とビルド方法
+サンプルコードプロジェクトは、[playgroundディレクトリ](playground/) 、又はF#のサンプルコードは [playground.FSharpディレクトリ](playground.FSharp/) 
+にあります。
 
-.NET 6 SDKのCLIテンプレートに対応しています。以下のようなコマンドで、簡単にサンプルコードをクリーンな状態で試すことができます:
+### ビルドテンプレートとビルド方法
+
+.NET 7 SDKのCLIテンプレートに対応しています。以下のようなコマンドで、簡単にテンプレートコードをクリーンな状態で試すことができます:
 
 ```bash
 # テンプレートパッケージをインストール（初回又はバージョンアップ時のみ）
@@ -85,30 +88,34 @@ dotnet new epoxy-wpf
 dotnet build
 ```
 
-* 注意: テンプレートは .NET 6 を想定しているため、.NET 6 SDKをあらかじめインストールして下さい。
-  他のバージョンのみの環境（例えば.NET 7/5 SDK）では、`TargetFramework`を修正しないと、ビルドに失敗します。
+テンプレートコードには、以下のコードが含まれています:
+
+* MVVMのモデルコードを格納する、`Core`プロジェクト。但し中身は空です。
+* "Hello Epoxy!"と表示するだけの、非常にシンプルなコードを含むプロジェクト。
+
+注意: テンプレートは .NET 7 を想定しているため、.NET 7 SDKをあらかじめインストールして下さい。
+他のバージョンのみの環境（例えば.NET 6/5 SDK）では、`TargetFramework`を修正しないと、ビルドに失敗します。
 
 ### 現在サポートしているテンプレート一覧
 
 |`dotnet new`引数|言語|対象|
 |:--|:--|:--|
-|`epoxy-wpf`|C#, F#|WPFのサンプルコード|
-|`epoxy-avalonia11`|C#, F#|Avalonia 11のサンプルコード (xplat相当)|
-|`epoxy-avalonia`|C#, F#|Avaloniaのサンプルコード|
-|`epoxy-opensilver`|C#|OpenSilverのサンプルコード|
-|`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
-|`epoxy-uwp`|C#|UWPのサンプルコード|
-|`epoxy-winui`|C#|WinUI 3のサンプルコード|
-|`epoxy-maui`|C#|.NET MAUIのサンプルコード|
+|`epoxy-wpf`|C#, F#|WPFのテンプレートコード|
+|`epoxy-avalonia11`|C#, F#|Avalonia 11のテンプレートコード (xplat相当)|
+|`epoxy-avalonia`|C#, F#|旧Avaloniaのテンプレートコード|
+|`epoxy-opensilver`|C#|OpenSilverのテンプレートコード|
+|`epoxy-xamarin-forms`|C#|Xamarin Formsのテンプレートコード|
+|`epoxy-uwp`|C#|UWPのテンプレートコード|
+|`epoxy-winui`|C#|WinUI 3のテンプレートコード|
+|`epoxy-maui`|C#|.NET MAUIのテンプレートコード|
 
-* デフォルトではC#のサンプルコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
+* デフォルトではC#のテンプレートコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
 * Xamarin Forms, UWP, WinUI 3は、古い形式のMSBuildプロジェクトを使用しています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
-* OpenSilverのサンプルコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。
+* OpenSilverのテンプレートコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
   * WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。
-* 上記以外のサンプルコードは、リポジトリ内の `samples` ディレクトリを参照して下さい。
-* MyGetに配置されたdevelブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
+* develブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
 
 ### Visual Studioのウィザードから選択
 
@@ -242,7 +249,7 @@ The Cat APIにアクセスする共通コードは、`EpoxyHello.Core` プロジ
 小規模な開発であれば、`Model`の実装を`ViewModel`と同じプロジェクトに配置してもかまいません
 (分離しておけば、意図せず依存してしまったという失敗を排除出来ます)。
 
-[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/TheCatAPI.cs#L55)を抜粋します:
+[投稿画像をダウンロードする部分 (playground/EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Core/Models/TheCatAPI.cs#L55)を抜粋します:
 
 ```csharp
 // Modelの実装: netstandard2.0の純粋なライブラリ
@@ -397,10 +404,10 @@ public event RoutedEventHandler Loaded;
 UWPの実行環境はセキュリティチェックが厳しいため、
 動的にイベントをフックする場合に制約が存在するためです。
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
-* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
-* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
 ----
 
@@ -444,8 +451,8 @@ await this.LogPile.RentAsync(async textBox =>
 });
 ```
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
 
 ----
 
@@ -496,14 +503,14 @@ public sealed class ScoreToBrushConverter : ValueConverter<int, string, Brush>
 XAMLコンバーター内で非同期処理を行わないようにしましょう
 （そうしたくなった場合は、ModelやViewModel側で実装すれば、デッドロックなどのトラブルを回避できます）。
 
-* [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
+* [For example](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
 ----
 
 ### UIThread
 
 UIスレッドの取り扱いは、異なるプラットフォームにおいても重要な点です。
-Epoxyでは[UIThreadクラス](https://github.com/kekyo/Epoxy/blob/main/Epoxy/UIThread.cs#L29)で同じ操作が行えるようにしています。
+Epoxyでは[UIThreadクラス](https://github.com/kekyo/Epoxy/blob/main/src/Epoxy/UIThread.cs#L55)で同じ操作が行えるようにしています。
 また、このクラスを使うことで、UIの操作と非同期処理を簡単に組み合わせる事が出来ます。
 
 ```csharp
@@ -700,8 +707,6 @@ self.Fetch <- Command.Factory.create(fun () -> async {
 私の別のプロジェクト、[FusionTasks](https://github.com/kekyo/FSharp.Control.FusionTasks)を併用すると、既存の`Task`/`ValueTask`を使うライブラリ（例えば`HttpClient.GetAsync`のような）を、更に簡単に扱うことが出来るようになります。dotnet CLIテンプレートは、既定で有効になっています。
 
 `Task`型や`ValueTask`型を返すメソッドを直接渡す場合や、これらの型を構成するコンピュテーション式を与える場合は、`Epoxy.Supplements`名前空間を明示的に参照してください。
-
-注意: `Async`型を優先する事については、[将来のF#で、`resumable`構造がリリース](https://github.com/dotnet/fsharp/pull/6811)された際に、変更される可能性があります。
 
 ### ViewModelインジェクタ
 

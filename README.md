@@ -62,9 +62,12 @@
 You can refer multi-platform application sample code variation in.
 This sample displays a list of the latest posts and images from The Cat API, downloading them asynchronously and displays them in a list format.
 
-### How to get and build the sample code
+Sample code projects are located in the [playground directory](playground/)
+or F# sample code in the [playground FSharp directory](playground.FSharp/).
 
-The .NET 6 SDK CLI template is supported. You can easily try the sample code in a clean state with the following command:
+### How to get and build the template code
+
+The .NET 7 SDK CLI template is supported. You can easily try the template code in a clean state with the following command:
 
 ```bash
 # Install the template package (Only at the first time or version update)
@@ -77,30 +80,34 @@ dotnet new epoxy-wpf
 dotnet build
 ```
 
-* Caution: .NET 6 SDK must be installed beforehand because the template assumes .NET 6.
-  For other versions only (e.g. .NET 7/5 SDK), the build will fail if you do not modify `TargetFramework` property.
+The template code includes the following code:
+
+* A `Core` project that contains the MVVM model code. However the contents are empty.
+* A project containing very simple code that just displays "Hello Epoxy!".
+
+Caution: .NET 7 SDK must be installed beforehand because the template assumes .NET 7.
+For other versions only (e.g. .NET 6/5 SDK), the build will fail if you do not modify `TargetFramework` property.
 
 ### List of currently supported templates
 
 |`dotnet new` parameter|Language|Target|
 |:--|:--|:--|
-|`epoxy-wpf`|C#, F#|Sample code for WPF|
-|`epoxy-avalonia11`|C#, F#|Sample code for Avalonia 11 (xplat)|
-|`epoxy-avalonia`|C#, F#|Sample code for Avalonia|
-|`epoxy-opensilver`|C#|Sample code for OpenSilver|
-|`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
-|`epoxy-uwp`|C#|Sample code for UWP|
-|`epoxy-winui`|C#|Sample code for WinUI 3|
-|`epoxy-maui`|C#|Sample code for .NET MAUI|
+|`epoxy-wpf`|C#, F#|Template code for WPF|
+|`epoxy-avalonia11`|C#, F#|Template code for Avalonia 11 (xplat)|
+|`epoxy-avalonia`|C#, F#|Template code for older Avalonia|
+|`epoxy-opensilver`|C#|Template code for OpenSilver|
+|`epoxy-xamarin-forms`|C#|Template code for Xamarin Forms|
+|`epoxy-uwp`|C#|Template code for UWP|
+|`epoxy-winui`|C#|Template code for WinUI 3|
+|`epoxy-maui`|C#|Template code for .NET MAUI|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
 * Xamarin Forms and UWP are required old style MSBuild project.
   * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
-* OpenSilver sample code is contained only .NET Framework based simulator project.
+* OpenSilver template code is contained only .NET Framework based simulator project.
   * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
   * You need to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
-* For sample code other than the above, refer to the `samples` directory in the repository.
-* You can use devel branch package placed MyGet, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
+* You can use devel branch package, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
 
 ### Choose by Visual Studio wizard dialog
 
@@ -231,7 +238,7 @@ By eliminating dependencies in this way, we can achieve commonality for multi-pl
 However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
 (separating them eliminates the possibility of unintentional dependencies).
 
-[Image downloader from The Cat API (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/TheCatAPI.cs#L55):
+[Image downloader from The Cat API (playground/EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Core/Models/TheCatAPI.cs#L55):
 
 ```csharp
 // Model implementation: The pure netstandard2.0 library.
@@ -387,10 +394,10 @@ In other words, only events published with the RoutedEventHandler type are eligi
 The UWP runtime environment has strict security checks.
 This is because the UWP runtime environment has strict security checks, and there are restrictions when dynamically hooking events.
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
-* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
-* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/Views/MainWindow.xaml#L36)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L45)
+* [For example (In Xamarin Forms XAML)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/Views/MainPage.xaml#L33)
+* [For example (In Xamarin Forms view model)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Xamarin.Forms/EpoxyHello.Xamarin.Forms/ViewModels/MainContentPageViewModel.cs#L40)
 
 ----
 
@@ -430,8 +437,8 @@ await this.LogPile.RentAsync(async textBox =>
 });
 ```
 
-* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
-* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
+* [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
+* [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
 
 ----
 
@@ -484,14 +491,14 @@ This means that the `TryConvert` method cannot be made to behave like `TryConver
 Try not to do asynchronous processing in the XAML converter!
 (If you want to do so, you can implement it on the `Model` or `ViewModel` side to avoid problems such as deadlocks).
 
-* [For example](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
+* [For example](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/Views/Converters/ScoreToBrushConverter.cs#L25)
 
 ----
 
 ### UIThread
 
 Some different platform contains different UI thread manipulation.
-Epoxy can handle only one [UIThread class](https://github.com/kekyo/Epoxy/blob/main/Epoxy/UIThread.cs#L29),
+Epoxy can handle only one [UIThread class](https://github.com/kekyo/Epoxy/blob/main/src/Epoxy/UIThread.cs#L55),
 it has commonly manipulation methods.
 We can easier combine both UI manipulation and asynchronous operations.
 
@@ -703,8 +710,6 @@ When used in conjunction with my other project [FusionTasks](https://github.com/
 
 `Epoxy.Supplements` namespace should be explicitly imported when directly passing methods that return `Task` or `ValueTask` types, or when providing computation expressions that constitute these types.
 
-NOTE: The preference for the `Async` type may change when [the `resumable` structure is released in a future F# release.](https://github.com/dotnet/fsharp/pull/6811)
-
 ### ViewModel Injector
 
 You can also use the `ViewModel injector` in F#. However, there are syntactic restrictions on auto-implemented properties:
@@ -786,8 +791,7 @@ Apache-v2
 
 * 1.10.0:
   * Supported Avalonia 11.
-  * Minimized template code, if you want to refer to the sample code corresponding to the Model part of MVVM,
-    If you want to refer to the sample code corresponding to the Model part of MVVM,
+  * Minimized template code. If you want to refer to the sample code corresponding to the Model part of MVVM,
     please refer to the `playground` directory in the repository.
   * Fixed an exception in the ViewModel injector when referencing the backing store field with an `internal` and narrow modifier.
     This was occurring when such code was intentionally written or when F# optimizations worked.
