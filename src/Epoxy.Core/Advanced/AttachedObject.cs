@@ -50,102 +50,105 @@ using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
+#if AVALONIA11
+using DependencyObject = Avalonia.AvaloniaObject;
+#endif
+
 using Epoxy.Supplemental;
 
-namespace Epoxy.Advanced
+namespace Epoxy.Advanced;
+
+public interface IAttachedObject
 {
-    public interface IAttachedObject
-    {
-        DependencyObject? AssociatedObject { get; }
+    DependencyObject? AssociatedObject { get; }
 
-        void Attach(DependencyObject dependencyObject);
+    void Attach(DependencyObject dependencyObject);
 
-        void Detach();
-    }
+    void Detach();
+}
 
-    public abstract partial class AttachedObject :    // HACK: partial is required on Uno platform because it makes inserting for DO implementation on the building time.
+public abstract partial class AttachedObject :    // HACK: partial is required on Uno platform because it makes inserting for DO implementation on the building time.
 #if WINDOWS_WPF
-        Freezable, IAttachedObject
+    Freezable, IAttachedObject
 #endif
 #if WINDOWS_UWP || WINUI || UNO || OPENSILVER
-        DependencyObject, IAttachedObject
+    DependencyObject, IAttachedObject
 #endif
 #if XAMARIN_FORMS || MAUI
-        Element, IAttachedObject
+    Element, IAttachedObject
 #endif
-#if AVALONIA
-        LogicalTreeObject, IAttachedObject
+#if AVALONIA || AVALONIA11
+    LogicalTreeObject, IAttachedObject
 #endif
+{
+    private DependencyObject? associatedObject;
+
+    /// <summary>
+    /// The constructor.
+    /// </summary>
+    protected AttachedObject()
+    { }
+
+    public DependencyObject? AssociatedObject =>
+        this.associatedObject;
+
+    protected virtual void OnAttached()
     {
-        private DependencyObject? associatedObject;
-
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        protected AttachedObject()
-        { }
-
-        public DependencyObject? AssociatedObject =>
-            this.associatedObject;
-
-        protected virtual void OnAttached()
-        {
-        }
-
-        protected virtual void OnDetaching()
-        {
-        }
-
-        /// <summary>
-        /// Attach a parent element.
-        /// </summary>
-        /// <param name="associatedObject">Parent element instance</param>
-        public void Attach(DependencyObject? associatedObject)
-        {
-            this.associatedObject = associatedObject;
-            this.OnAttached();
-        }
-
-        /// <summary>
-        /// Detach already attached parent element.
-        /// </summary>
-        public void Detach()
-        {
-            this.OnDetaching();
-            this.associatedObject = null;
-        }
     }
 
-    public class AttachedObject<TSelf> :
-        AttachedObject
+    protected virtual void OnDetaching()
+    {
+    }
+
+    /// <summary>
+    /// Attach a parent element.
+    /// </summary>
+    /// <param name="associatedObject">Parent element instance</param>
+    public void Attach(DependencyObject? associatedObject)
+    {
+        this.associatedObject = associatedObject;
+        this.OnAttached();
+    }
+
+    /// <summary>
+    /// Detach already attached parent element.
+    /// </summary>
+    public void Detach()
+    {
+        this.OnDetaching();
+        this.associatedObject = null;
+    }
+}
+
+public class AttachedObject<TSelf> :
+    AttachedObject
 #if WINDOWS_WPF
-        where TSelf : Freezable, IAttachedObject, new()
+    where TSelf : Freezable, IAttachedObject, new()
 #endif
 #if WINDOWS_UWP || WINUI || UNO || OPENSILVER
-        where TSelf : DependencyObject, IAttachedObject, new()
+    where TSelf : DependencyObject, IAttachedObject, new()
 #endif
 #if XAMARIN_FORMS || MAUI
-        where TSelf : Element, IAttachedObject, new()
+    where TSelf : Element, IAttachedObject, new()
 #endif
-#if AVALONIA
-        where TSelf : AttachedObject, new()
+#if AVALONIA || AVALONIA11
+    where TSelf : AttachedObject, new()
 #endif
-    {
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        public AttachedObject()
-        { }
+{
+    /// <summary>
+    /// The constructor.
+    /// </summary>
+    public AttachedObject()
+    { }
 
 #if WINDOWS_WPF
-        /// <summary>
-        /// Create this class instance.
-        /// </summary>
-        /// <returns>Event instance</returns>
-        /// <remarks>It will be used internal only.</remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        protected sealed override Freezable CreateInstanceCore() =>
-            new TSelf();
+    /// <summary>
+    /// Create this class instance.
+    /// </summary>
+    /// <returns>Event instance</returns>
+    /// <remarks>It will be used internal only.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    protected sealed override Freezable CreateInstanceCore() =>
+        new TSelf();
 #endif
-    }
 }

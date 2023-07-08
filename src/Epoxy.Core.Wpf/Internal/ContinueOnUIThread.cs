@@ -24,36 +24,35 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+partial class InternalUIThread
 {
-    partial class InternalUIThread
+    public static void ContinueOnUIThread(Action<bool> continuation)
     {
-        public static void ContinueOnUIThread(Action<bool> continuation)
+        if (Application.Current?.Dispatcher is { } dispatcher)
         {
-            if (Application.Current?.Dispatcher is { } dispatcher)
+            if (dispatcher.CheckAccess())
             {
-                if (dispatcher.CheckAccess())
-                {
-                    continuation(true);
-                }
-                else
-                {
-                    try
-                    {
-                        var _ = dispatcher.BeginInvoke(
-                            DispatcherPriority.Normal,
-                            new Action(() => continuation(true)));
-                    }
-                    catch
-                    {
-                        continuation(false);
-                    }
-                }
+                continuation(true);
             }
             else
             {
-                continuation(false);
+                try
+                {
+                    var _ = dispatcher.BeginInvoke(
+                        DispatcherPriority.Normal,
+                        new Action(() => continuation(true)));
+                }
+                catch
+                {
+                    continuation(false);
+                }
             }
+        }
+        else
+        {
+            continuation(false);
         }
     }
 }

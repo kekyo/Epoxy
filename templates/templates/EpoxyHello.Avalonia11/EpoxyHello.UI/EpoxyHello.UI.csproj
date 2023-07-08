@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+    <PackageReference Include="Epoxy.Avalonia11" Version="*" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Compile Update="Views\MainWindow.axaml.cs">
+      <DependentUpon>MainWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainView.axaml.cs">
+      <DependentUpon>MainView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+    
+</Project>

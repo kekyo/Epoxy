@@ -21,11 +21,10 @@
 
 using Epoxy.Infrastructure;
 
-namespace Epoxy
+namespace Epoxy;
+
+public abstract class Model : ModelBase
 {
-    public abstract class Model : ModelBase
-    {
-        protected Model()
-        { }
-    }
+    protected Model()
+    { }
 }

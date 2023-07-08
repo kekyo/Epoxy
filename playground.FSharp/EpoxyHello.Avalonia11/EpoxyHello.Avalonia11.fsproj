@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\src\Epoxy.Build\build\Epoxy.Build.props" />
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
+    <IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="7.0.300" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.6.0" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Epoxy.Core.Avalonia11\Epoxy.Core.Avalonia11.csproj" />
+    <ProjectReference Include="..\..\src\FSharp.Epoxy.Avalonia11\FSharp.Epoxy.Avalonia11.fsproj" />
+    <ProjectReference Include="..\..\playground\EpoxyHello.Core\EpoxyHello.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="ViewModels\ItemViewModel.fs" />
+    <Compile Include="ViewModels\MainWindowViewModel.fs" />
+    <Compile Include="Views\Converters\ScoreToBrushConverter.fs" />
+    <Compile Include="Views\MainWindow.axaml.fs" />
+    <Compile Include="App.axaml.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <Import Project="..\..\src\Epoxy.Build\build\Epoxy.Build.targets" />
+  <PropertyGroup>
+    <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..\src\Epoxy.Build\bin\$(Configuration)\$(_EB_PlatformName)'))</EpoxyBuildToolingDir>
+  </PropertyGroup>
+
+</Project>

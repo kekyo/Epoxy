@@ -25,99 +25,121 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+[DebuggerStepThrough]
+public struct UIThreadAwaitable
 {
-    [DebuggerStepThrough]
-    public struct UIThreadAwaitable
-    {
-        public UIThreadAwaiter GetAwaiter() =>
-            new UIThreadAwaiter();
-    }
+    public UIThreadAwaiter GetAwaiter() =>
+        new UIThreadAwaiter();
+}
 
-    [DebuggerStepThrough]
-    public sealed class UIThreadAwaiter : INotifyCompletion
-    {
-        private bool isBound;
+[DebuggerStepThrough]
+public sealed class UIThreadAwaiter : INotifyCompletion, ICriticalNotifyCompletion
+{
+    private bool isBound;
 
-        internal UIThreadAwaiter()
-        { }
+    internal UIThreadAwaiter()
+    { }
 
-        public bool IsCompleted { get; private set; }
+    public bool IsCompleted { get; private set; }
 
-        public void OnCompleted(Action continuation) =>
-            InternalUIThread.ContinueOnUIThread(isBound =>
-            {
-                this.isBound = isBound;
-                this.IsCompleted = true;
-                continuation();
-            });
-
-        public void GetResult()
+    public void OnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnUIThread(isBound =>
         {
-            Debug.Assert(this.IsCompleted);
-            if (!this.isBound)
-            {
-                throw new InvalidOperationException(
-                    "Epoxy: Could not bind to UI thread. UI thread is not found.");
-            }
+            this.isBound = isBound;
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public void UnsafeOnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnUIThread(isBound =>
+        {
+            this.isBound = isBound;
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public void GetResult()
+    {
+        Debug.Assert(this.IsCompleted);
+        if (!this.isBound)
+        {
+            throw new InvalidOperationException(
+                "Epoxy: Could not bind to UI thread. UI thread is not found.");
         }
     }
+}
 
-    [DebuggerStepThrough]
-    public struct UIThreadTryBindAwaitable
-    {
-        public UIThreadTryBindAwaiter GetAwaiter() =>
-            new UIThreadTryBindAwaiter();
-    }
+[DebuggerStepThrough]
+public struct UIThreadTryBindAwaitable
+{
+    public UIThreadTryBindAwaiter GetAwaiter() =>
+        new UIThreadTryBindAwaiter();
+}
 
-    [DebuggerStepThrough]
-    public sealed class UIThreadTryBindAwaiter : INotifyCompletion
-    {
-        private bool isBound;
+[DebuggerStepThrough]
+public sealed class UIThreadTryBindAwaiter : INotifyCompletion, ICriticalNotifyCompletion
+{
+    private bool isBound;
 
-        internal UIThreadTryBindAwaiter()
-        { }
+    internal UIThreadTryBindAwaiter()
+    { }
 
-        public bool IsCompleted { get; private set; }
+    public bool IsCompleted { get; private set; }
 
-        public void OnCompleted(Action continuation) =>
-            InternalUIThread.ContinueOnUIThread(isBound =>
-            {
-                this.isBound = isBound;
-                this.IsCompleted = true;
-                continuation();
-            });
-
-        public bool GetResult()
+    public void OnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnUIThread(isBound =>
         {
-            Debug.Assert(this.IsCompleted);
-            return this.isBound;
-        }
-    }
+            this.isBound = isBound;
+            this.IsCompleted = true;
+            continuation();
+        });
 
-    [DebuggerStepThrough]
-    public struct UIThreadUnbindAwaitable
+    public void UnsafeOnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnUIThread(isBound =>
+        {
+            this.isBound = isBound;
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public bool GetResult()
     {
-        public UIThreadUnbindAwaiter GetAwaiter() =>
-            new UIThreadUnbindAwaiter();
+        Debug.Assert(this.IsCompleted);
+        return this.isBound;
     }
+}
 
-    [DebuggerStepThrough]
-    public sealed class UIThreadUnbindAwaiter : INotifyCompletion
-    {
-        internal UIThreadUnbindAwaiter()
-        { }
+[DebuggerStepThrough]
+public struct UIThreadUnbindAwaitable
+{
+    public UIThreadUnbindAwaiter GetAwaiter() =>
+        new UIThreadUnbindAwaiter();
+}
 
-        public bool IsCompleted { get; private set; }
+[DebuggerStepThrough]
+public sealed class UIThreadUnbindAwaiter : INotifyCompletion, ICriticalNotifyCompletion
+{
+    internal UIThreadUnbindAwaiter()
+    { }
 
-        public void OnCompleted(Action continuation) =>
-            InternalUIThread.ContinueOnWorkerThread(() =>
-            {
-                this.IsCompleted = true;
-                continuation();
-            });
+    public bool IsCompleted { get; private set; }
 
-        public void GetResult() =>
-            Debug.Assert(this.IsCompleted);
-    }
+    public void OnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnWorkerThread(() =>
+        {
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public void UnsafeOnCompleted(Action continuation) =>
+        InternalUIThread.ContinueOnWorkerThread(() =>
+        {
+            this.IsCompleted = true;
+            continuation();
+        });
+
+    public void GetResult() =>
+        Debug.Assert(this.IsCompleted);
 }

@@ -21,16 +21,15 @@
 
 using System.Diagnostics;
 
-namespace Epoxy
-{
-    [DebuggerStepThrough]
-    public sealed class UIThreadAccessorInstance
-    {
-        private UIThreadAccessorInstance()
-        {
-        }
+namespace Epoxy;
 
-        internal static readonly UIThreadAccessorInstance Instace =
-            new UIThreadAccessorInstance();
+[DebuggerStepThrough]
+public sealed class UIThreadAccessorInstance
+{
+    private UIThreadAccessorInstance()
+    {
     }
+
+    internal static readonly UIThreadAccessorInstance Instace =
+        new UIThreadAccessorInstance();
 }

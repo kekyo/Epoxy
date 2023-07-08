@@ -49,172 +49,171 @@ using Xamarin.Forms;
 using Microsoft.Maui.Controls;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia.Threading;
 #endif
 
-namespace Epoxy.Internal
-{
-    internal static partial class InternalUIThread
-    {
-        private static readonly ThreadLocal<bool?> ids = new ThreadLocal<bool?>();
+namespace Epoxy.Internal;
 
-        private static bool InternalIsBound()
-        {
+internal static partial class InternalUIThread
+{
+    private static readonly ThreadLocal<bool?> ids = new ThreadLocal<bool?>();
+
+    private static bool InternalIsBound()
+    {
 #if WINDOWS_WPF
-            var dispatcher = Application.Current?.Dispatcher;
-            if (dispatcher?.CheckAccess() ?? false)
-            {
-                return true;
-            }
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher?.CheckAccess() ?? false)
+        {
+            return true;
+        }
 #endif
-#if AVALONIA
-            var dispatcher = Dispatcher.UIThread;
-            if (dispatcher?.CheckAccess() ?? false)
-            {
-                return true;
-            }
+#if AVALONIA || AVALONIA11
+        var dispatcher = Dispatcher.UIThread;
+        if (dispatcher?.CheckAccess() ?? false)
+        {
+            return true;
+        }
 #endif
 #if WINDOWS_UWP || WINUI || UNO
-            var dispatcher = CoreWindow.GetForCurrentThread()?.Dispatcher;
-            if (dispatcher == null)
+        var dispatcher = CoreWindow.GetForCurrentThread()?.Dispatcher;
+        if (dispatcher == null)
+        {
+            try
             {
-                try
-                {
-                    dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
-                }
-                catch
-                {
-                }
+                dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
             }
-            if (dispatcher?.HasThreadAccess ?? false)
+            catch
             {
-                return true;
             }
+        }
+        if (dispatcher?.HasThreadAccess ?? false)
+        {
+            return true;
+        }
 #endif
 #if WINUI
-            var dispatcher2 = DispatcherQueue.GetForCurrentThread();
-            if (dispatcher2?.HasThreadAccess ?? false)
-            {
-                return true;
-            }
+        var dispatcher2 = DispatcherQueue.GetForCurrentThread();
+        if (dispatcher2?.HasThreadAccess ?? false)
+        {
+            return true;
+        }
 #endif
 #if XAMARIN_FORMS
-            var dispatcher = Application.Current?.Dispatcher;
-            if (!(dispatcher?.IsInvokeRequired ?? true))
-            {
-                return true;
-            }
+        var dispatcher = Application.Current?.Dispatcher;
+        if (!(dispatcher?.IsInvokeRequired ?? true))
+        {
+            return true;
+        }
 #endif
 #if OPENSILVER
-            var dispatcher = Application.Current?.RootVisual?.Dispatcher;
-            if (dispatcher?.CheckAccess() ?? false)
-            {
-                return true;
-            }
+        var dispatcher = Application.Current?.RootVisual?.Dispatcher;
+        if (dispatcher?.CheckAccess() ?? false)
+        {
+            return true;
+        }
 #endif
 #if MAUI
-            var dispatcher = Application.Current?.Dispatcher;
-            if (!(dispatcher?.IsDispatchRequired ?? true))
-            {
-                return true;
-            }
+        var dispatcher = Application.Current?.Dispatcher;
+        if (!(dispatcher?.IsDispatchRequired ?? true))
+        {
+            return true;
+        }
 #endif
 
 #if WINUI
-            if (dispatcher == null && dispatcher2 == null)
+        if (dispatcher == null && dispatcher2 == null)
 #else
-            if (dispatcher == null)
+        if (dispatcher == null)
 #endif
+        {
+            try
             {
-                try
+                // Check equality of UI thread.
+                if (SynchronizationContext.Current is { } context)
                 {
-                    // Check equality of UI thread.
-                    if (SynchronizationContext.Current is { } context)
-                    {
-                        var id = -1;
-                        context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
-                        return id == Thread.CurrentThread.ManagedThreadId;
-                    }
-                }
-                catch
-                {
-                    // On UWP and MAUI, will cause NotSupportedException.
+                    var id = -1;
+                    context.Send(_ => id = Thread.CurrentThread.ManagedThreadId, null);
+                    return id == Thread.CurrentThread.ManagedThreadId;
                 }
             }
-
-            return false;
-        }
-
-        public static ValueTask<bool> IsBoundAsync()
-        {
-            switch (ids.Value)
+            catch
             {
-                case true:
-                    return new ValueTask<bool>(true);
-                case false:
-                    return new ValueTask<bool>(false);
-                default:
-#if OPENSILVER
-                    if (Application.Current?.RootVisual?.Dispatcher is { } dispatcher)
-                    {
-                        var id = Thread.CurrentThread.ManagedThreadId;
-                        var tcs = new TaskCompletionSource<bool>();
-                        dispatcher.BeginInvoke(new Action(() =>
-                            tcs.TrySetResult(id == Thread.CurrentThread.ManagedThreadId)));
-                        return new ValueTask<bool>(tcs.Task);
-                    }
-#endif
-                    var f = InternalIsBound();
-                    ids.Value = f;
-                    return new ValueTask<bool>(f);
+                // On UWP and MAUI, will cause NotSupportedException.
             }
         }
 
-        public static bool UnsafeIsBound()
+        return false;
+    }
+
+    public static ValueTask<bool> IsBoundAsync()
+    {
+        switch (ids.Value)
         {
-            switch (ids.Value)
-            {
-                case true:
-                    return true;
-                case false:
-                    break;
-                default:
+            case true:
+                return new ValueTask<bool>(true);
+            case false:
+                return new ValueTask<bool>(false);
+            default:
 #if OPENSILVER
-                    // Could not check in OpenSilver.
-                    return true;
-#else
-                    var f = InternalIsBound();
-                    ids.Value = f;
-                    if (f)
-                    {
-                        return true;
-                    }
-                    break;
+                if (Application.Current?.RootVisual?.Dispatcher is { } dispatcher)
+                {
+                    var id = Thread.CurrentThread.ManagedThreadId;
+                    var tcs = new TaskCompletionSource<bool>();
+                    dispatcher.BeginInvoke(new Action(() =>
+                        tcs.TrySetResult(id == Thread.CurrentThread.ManagedThreadId)));
+                    return new ValueTask<bool>(tcs.Task);
+                }
 #endif
-            }
-#if XAMARIN_FORMS
-            // Workaround XF on UWP:
-            //   The dispatcher will make invalid result for IsInvokeRequired in
-            //   BindableContext initialize sequence.
-            if (Device.RuntimePlatform.Equals(Device.UWP))
-            {
+                var f = InternalIsBound();
+                ids.Value = f;
+                return new ValueTask<bool>(f);
+        }
+    }
+
+    public static bool UnsafeIsBound()
+    {
+        switch (ids.Value)
+        {
+            case true:
                 return true;
-            }
+            case false:
+                break;
+            default:
+#if OPENSILVER
+                // Could not check in OpenSilver.
+                return true;
+#else
+                var f = InternalIsBound();
+                ids.Value = f;
+                if (f)
+                {
+                    return true;
+                }
+                break;
 #endif
-            return false;
         }
-
-        public static void ContinueOnWorkerThread(Action continuation)
+#if XAMARIN_FORMS
+        // Workaround XF on UWP:
+        //   The dispatcher will make invalid result for IsInvokeRequired in
+        //   BindableContext initialize sequence.
+        if (Device.RuntimePlatform.Equals(Device.UWP))
         {
-            if (UnsafeIsBound())
-            {
-                ThreadPool.QueueUserWorkItem(_ => continuation(), null);
-            }
-            else
-            {
-                continuation();
-            }
+            return true;
+        }
+#endif
+        return false;
+    }
+
+    public static void ContinueOnWorkerThread(Action continuation)
+    {
+        if (UnsafeIsBound())
+        {
+            ThreadPool.QueueUserWorkItem(_ => continuation(), null);
+        }
+        else
+        {
+            continuation();
         }
     }
 }

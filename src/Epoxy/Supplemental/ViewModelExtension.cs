@@ -26,32 +26,31 @@ using System.Threading.Tasks;
 
 using Epoxy.Internal;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+/// <summary>
+/// The ViewModel methods.
+/// </summary>
+[DebuggerStepThrough]
+public static class ViewModelExtension
 {
     /// <summary>
-    /// The ViewModel methods.
+    /// Set value directly.
     /// </summary>
-    [DebuggerStepThrough]
-    public static class ViewModelExtension
-    {
-        /// <summary>
-        /// Set value directly.
-        /// </summary>
-        /// <typeparam name="TValue">Value type</typeparam>
-        /// <param name="viewModel">ViewModel instance</param>
-        /// <param name="newValue">Value</param>
-        /// <param name="propertyChanged">Callback delegate when value has changed</param>
-        /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
-        /// <returns>ValueTask</returns>
-        public static ValueTask SetValueAsync<TValue>(
-            this ViewModel viewModel,
-            TValue newValue,
-            Func<TValue, Task> propertyChanged,
-            [CallerMemberName] string? propertyName = null) =>
-            viewModel.InternalSetValueAsync(
-                newValue,
-                value => propertyChanged(value).AsValueTaskUnit(),
-                propertyName).
-            AsValueTaskVoid();
-    }
+    /// <typeparam name="TValue">Value type</typeparam>
+    /// <param name="viewModel">ViewModel instance</param>
+    /// <param name="newValue">Value</param>
+    /// <param name="propertyChanged">Callback delegate when value has changed</param>
+    /// <param name="propertyName">Property name (Will auto insert by compiler)</param>
+    /// <returns>ValueTask</returns>
+    public static ValueTask SetValueAsync<TValue>(
+        this ViewModel viewModel,
+        TValue newValue,
+        Func<TValue, Task> propertyChanged,
+        [CallerMemberName] string? propertyName = null) =>
+        viewModel.InternalSetValueAsync(
+            newValue,
+            value => propertyChanged(value).AsValueTaskUnit(),
+            propertyName).
+        AsValueTaskVoid();
 }

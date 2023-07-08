@@ -1,18 +1,9 @@
-﻿////////////////////////////////////////////////////////////////////////////
-//
-// Epoxy template source code.
-// Write your own copyright and note.
-// (You can use https://github.com/rubicon-oss/LicenseHeaderManager)
-//
-////////////////////////////////////////////////////////////////////////////
+﻿using System.Windows;
 
-using System.Windows;
+namespace EpoxyHello.Views;
 
-namespace EpoxyHello.Views
+public sealed partial class MainWindow : Window
 {
-    public sealed partial class MainWindow : Window
-    {
-        public MainWindow() =>
-            InitializeComponent();
-    }
+    public MainWindow() =>
+        InitializeComponent();
 }

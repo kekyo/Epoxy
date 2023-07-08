@@ -29,172 +29,152 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+[EditorBrowsable(EditorBrowsableState.Never)]
+[DebuggerStepThrough]
+public sealed class InternalPropertyBag :
+    Dictionary<string, object?>
+{
+    internal PropertyChangingEventHandler? propertyChanging;
+    internal PropertyChangedEventHandler? propertyChanged;
+}
+
+[EditorBrowsable(EditorBrowsableState.Never)]
+public delegate ValueTask PropertyChangedAsyncDelegate<TValue>(TValue value);
+
+[DebuggerStepThrough]
+[EditorBrowsable(EditorBrowsableState.Never)]
+public static class InternalModelHelper
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    [DebuggerStepThrough]
-    public sealed class InternalPropertyBag :
-        Dictionary<string, object?>
+    public static ref InternalPropertyBag? GetPropertyBagReference(ViewModelBase viewModel) =>
+        ref viewModel.epoxy_properties__;
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static InternalPropertyBag Prepare(ref InternalPropertyBag? properties)
     {
-        internal PropertyChangingEventHandler? propertyChanging;
-        internal PropertyChangedEventHandler? propertyChanged;
+        if (!(properties is InternalPropertyBag))
+        {
+            properties = new InternalPropertyBag();
+        }
+        return properties;
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public delegate ValueTask PropertyChangedAsyncDelegate<TValue>(TValue value);
-
-    [DebuggerStepThrough]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public static class InternalModelHelper
+    public static object? GetValue(
+        object? defaultValue,
+        string? propertyName,
+        ref InternalPropertyBag? properties)
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ref InternalPropertyBag? GetPropertyBagReference(ViewModelBase viewModel) =>
-            ref viewModel.epoxy_properties__;
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static InternalPropertyBag Prepare(ref InternalPropertyBag? properties)
+        Debug.Assert(propertyName is string);
+        if (!InternalUIThread.UnsafeIsBound())
         {
-            if (!(properties is InternalPropertyBag))
-            {
-                properties = new InternalPropertyBag();
-            }
-            return properties;
+            throw new InvalidOperationException(
+                "Couldn't use GetValue() on worker thread context.");
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static object? GetValue(
-            object? defaultValue,
-            string? propertyName,
-            ref InternalPropertyBag? properties)
+        var p = Prepare(ref properties);
+        if (p.TryGetValue(propertyName!, out var value))
         {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use GetValue() on worker thread context.");
-            }
+            return value;
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }
 
-            var p = Prepare(ref properties);
-            if (p.TryGetValue(propertyName!, out var value))
-            {
-                return value;
-            }
-            else
-            {
-                return defaultValue;
-            }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static TValue GetValueT<TValue>(
+        TValue defaultValue,
+        string? propertyName,
+        ref InternalPropertyBag? properties)
+    {
+        Debug.Assert(propertyName is string);
+        if (!InternalUIThread.UnsafeIsBound())
+        {
+            throw new InvalidOperationException(
+                "Couldn't use GetValue<TValue>() on worker thread context.");
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static TValue GetValueT<TValue>(
-            TValue defaultValue,
-            string? propertyName,
-            ref InternalPropertyBag? properties)
+        var p = Prepare(ref properties);
+        if (p.TryGetValue(propertyName!, out var value) && value is TValue v)
         {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use GetValue<TValue>() on worker thread context.");
-            }
+            return v;
+        }
+        else
+        {
+            return defaultValue!;
+        }
+    }
 
-            var p = Prepare(ref properties);
-            if (p.TryGetValue(propertyName!, out var value) && value is TValue v)
-            {
-                return v;
-            }
-            else
-            {
-                return defaultValue!;
-            }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static void InitializeFSharpValueT<TValue>(
+        TValue initializeValue,
+        string propertyName,
+        ref InternalPropertyBag? properties)
+    {
+        Debug.Assert(propertyName is string);
+
+        var p = Prepare(ref properties);
+
+        if (!p.TryGetValue(propertyName, out var oldValue) ||
+            DefaultValue<TValue>.IsDefault(oldValue))
+        {
+            p[propertyName] = initializeValue;
+        }
+    }
+
+    // Injector helper: create delegate
+    // Dodged inline generation: https://github.com/jbevain/cecil/discussions/737
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static PropertyChangedAsyncDelegate<TValue> CreatePropertyChangedAsyncDelegate<TValue>(
+        object? target, RuntimeMethodHandle method) =>
+        (PropertyChangedAsyncDelegate<TValue>)Delegate.CreateDelegate(
+            typeof(PropertyChangedAsyncDelegate<TValue>),
+            target!,
+            (MethodInfo)MethodBase.GetMethodFromHandle(method)!);
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static ValueTask<Unit> SetValueWithHookAsyncT<TValue>(
+        TValue newValue,
+        PropertyChangedAsyncDelegate<TValue> propertyChanged,
+        string propertyName,
+        object sender,
+        ref InternalPropertyBag? properties) =>
+        SetValueAsyncT<TValue>(
+            newValue,
+            async v => { await propertyChanged(v).ConfigureAwait(false); return default(Unit); },
+            propertyName,
+            sender,
+            ref properties);
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static ValueTask<Unit> SetValueAsyncT<TValue>(
+        TValue newValue,
+        Func<TValue, ValueTask<Unit>>? propertyChanged,
+        string? propertyName,
+        object sender,
+        ref InternalPropertyBag? properties)
+    {
+        Debug.Assert(propertyName is string);
+        if (!InternalUIThread.UnsafeIsBound())
+        {
+            throw new InvalidOperationException(
+                "Couldn't use SetValue() on worker thread context.");
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void InitializeFSharpValueT<TValue>(
-            TValue initializeValue,
-            string propertyName,
-            ref InternalPropertyBag? properties)
+        var p = Prepare(ref properties);
+        if (p.TryGetValue(propertyName!, out var oldValue))
         {
-            Debug.Assert(propertyName is string);
-
-            var p = Prepare(ref properties);
-
-            if (!p.TryGetValue(propertyName, out var oldValue) ||
-                DefaultValue<TValue>.IsDefault(oldValue))
-            {
-                p[propertyName] = initializeValue;
-            }
-        }
-
-        // Injector helper: create delegate
-        // Dodged inline generation: https://github.com/jbevain/cecil/discussions/737
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static PropertyChangedAsyncDelegate<TValue> CreatePropertyChangedAsyncDelegate<TValue>(
-            object? target, RuntimeMethodHandle method) =>
-            (PropertyChangedAsyncDelegate<TValue>)Delegate.CreateDelegate(
-                typeof(PropertyChangedAsyncDelegate<TValue>),
-                target!,
-                (MethodInfo)MethodBase.GetMethodFromHandle(method)!);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ValueTask<Unit> SetValueWithHookAsyncT<TValue>(
-            TValue newValue,
-            PropertyChangedAsyncDelegate<TValue> propertyChanged,
-            string propertyName,
-            object sender,
-            ref InternalPropertyBag? properties) =>
-            SetValueAsyncT<TValue>(
-                newValue,
-                async v => { await propertyChanged(v).ConfigureAwait(false); return default(Unit); },
-                propertyName,
-                sender,
-                ref properties);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ValueTask<Unit> SetValueAsyncT<TValue>(
-            TValue newValue,
-            Func<TValue, ValueTask<Unit>>? propertyChanged,
-            string? propertyName,
-            object sender,
-            ref InternalPropertyBag? properties)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
-            {
-                throw new InvalidOperationException(
-                    "Couldn't use SetValue() on worker thread context.");
-            }
-
-            var p = Prepare(ref properties);
-            if (p.TryGetValue(propertyName!, out var oldValue))
-            {
-                if (!DefaultValue<TValue>.ValueEquals(oldValue, newValue))
-                {
-                    p.propertyChanging?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
-
-                    if (!DefaultValue.IsDefaultValue(newValue))
-                    {
-                        p[propertyName!] = newValue!;
-                    }
-                    else
-                    {
-                        p.Remove(propertyName!);
-                    }
-
-                    p.propertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
-                    if (propertyChanged is { } pc)
-                    {
-                        return pc.Invoke(newValue);
-                    }
-                }
-            }
-            else
+            if (!DefaultValue<TValue>.ValueEquals(oldValue, newValue))
             {
                 p.propertyChanging?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
 
                 if (!DefaultValue.IsDefaultValue(newValue))
                 {
-                    p.Add(propertyName!, newValue!);
+                    p[propertyName!] = newValue!;
                 }
                 else
                 {
@@ -207,88 +187,107 @@ namespace Epoxy.Internal
                     return pc.Invoke(newValue);
                 }
             }
-
-            return default;
         }
-
-        [DebuggerStepThrough]
-        public static void AddPropertyChanging(
-            PropertyChangingEventHandler? handler,
-            ref InternalPropertyBag? properties)
+        else
         {
-            var p = Prepare(ref properties);
-            p.propertyChanging += handler;
-        }
+            p.propertyChanging?.Invoke(sender, new PropertyChangingEventArgs(propertyName));
 
-        [DebuggerStepThrough]
-        public static void RemovePropertyChanging(
-            PropertyChangingEventHandler? handler,
-            ref InternalPropertyBag? properties)
-        {
-            var p = Prepare(ref properties);
-            p.propertyChanging -= handler;
-        }
-
-        [DebuggerStepThrough]
-        public static void AddPropertyChanged(
-            PropertyChangedEventHandler? handler,
-            ref InternalPropertyBag? properties)
-        {
-            var p = Prepare(ref properties);
-            p.propertyChanged += handler;
-        }
-
-        [DebuggerStepThrough]
-        public static void RemovePropertyChanged(
-            PropertyChangedEventHandler? handler,
-            ref InternalPropertyBag? properties)
-        {
-            var p = Prepare(ref properties);
-            p.propertyChanged -= handler;
-        }
-
-        [DebuggerStepThrough]
-        public static void OnPropertyChanging(
-            string? propertyName,
-            object sender,
-            InternalPropertyBag? properties)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
+            if (!DefaultValue.IsDefaultValue(newValue))
             {
-                throw new InvalidOperationException(
-                    "Couldn't use OnPropertyChanging() on worker thread context.");
+                p.Add(propertyName!, newValue!);
+            }
+            else
+            {
+                p.Remove(propertyName!);
             }
 
-            properties?.propertyChanging?.Invoke(
-                sender, new PropertyChangingEventArgs(propertyName));
-        }
-
-        [DebuggerStepThrough]
-        public static void OnPropertyChanged(
-            string? propertyName,
-            object sender,
-            InternalPropertyBag? properties)
-        {
-            Debug.Assert(propertyName is string);
-            if (!InternalUIThread.UnsafeIsBound())
+            p.propertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
+            if (propertyChanged is { } pc)
             {
-                throw new InvalidOperationException(
-                    "Couldn't use OnPropertyChanged() on worker thread context.");
+                return pc.Invoke(newValue);
             }
-
-            properties?.propertyChanged?.Invoke(
-                sender, new PropertyChangedEventArgs(propertyName));
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static string PrettyPrint(object self, bool includeFields) =>
-            string.Join(
-                ",",
-                (includeFields ?
-                    self.EnumerateFields().Concat(self.EnumerateProperties()) :
-                    self.EnumerateProperties()).
-                OrderBy(entry => entry.Key).
-                Select(entry => $"{entry.Key}={entry.Value ?? "(null)"}"));
+        return default;
     }
+
+    [DebuggerStepThrough]
+    public static void AddPropertyChanging(
+        PropertyChangingEventHandler? handler,
+        ref InternalPropertyBag? properties)
+    {
+        var p = Prepare(ref properties);
+        p.propertyChanging += handler;
+    }
+
+    [DebuggerStepThrough]
+    public static void RemovePropertyChanging(
+        PropertyChangingEventHandler? handler,
+        ref InternalPropertyBag? properties)
+    {
+        var p = Prepare(ref properties);
+        p.propertyChanging -= handler;
+    }
+
+    [DebuggerStepThrough]
+    public static void AddPropertyChanged(
+        PropertyChangedEventHandler? handler,
+        ref InternalPropertyBag? properties)
+    {
+        var p = Prepare(ref properties);
+        p.propertyChanged += handler;
+    }
+
+    [DebuggerStepThrough]
+    public static void RemovePropertyChanged(
+        PropertyChangedEventHandler? handler,
+        ref InternalPropertyBag? properties)
+    {
+        var p = Prepare(ref properties);
+        p.propertyChanged -= handler;
+    }
+
+    [DebuggerStepThrough]
+    public static void OnPropertyChanging(
+        string? propertyName,
+        object sender,
+        InternalPropertyBag? properties)
+    {
+        Debug.Assert(propertyName is string);
+        if (!InternalUIThread.UnsafeIsBound())
+        {
+            throw new InvalidOperationException(
+                "Couldn't use OnPropertyChanging() on worker thread context.");
+        }
+
+        properties?.propertyChanging?.Invoke(
+            sender, new PropertyChangingEventArgs(propertyName));
+    }
+
+    [DebuggerStepThrough]
+    public static void OnPropertyChanged(
+        string? propertyName,
+        object sender,
+        InternalPropertyBag? properties)
+    {
+        Debug.Assert(propertyName is string);
+        if (!InternalUIThread.UnsafeIsBound())
+        {
+            throw new InvalidOperationException(
+                "Couldn't use OnPropertyChanged() on worker thread context.");
+        }
+
+        properties?.propertyChanged?.Invoke(
+            sender, new PropertyChangedEventArgs(propertyName));
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static string PrettyPrint(object self, bool includeFields) =>
+        string.Join(
+            ",",
+            (includeFields ?
+                self.EnumerateFields().Concat(self.EnumerateProperties()) :
+                self.EnumerateProperties()).
+            OrderBy(entry => entry.Key).
+            Select(entry => $"{entry.Key}={entry.Value ?? "(null)"}"));
 }

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+    <TargetFrameworks>net461;net48;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;netstandard2.0;netstandard2.1;net5.0;net6.0;net7.0</TargetFrameworks>
+
+    <AssemblyTitle>Epoxy.Avalonia11</AssemblyTitle>
+      
+    <NuspecFile>Epoxy.Avalonia11.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;AVALONIA11</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;AVALONIA11</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Avalonia11\Epoxy.Core.Avalonia11.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+  </ItemGroup>
+
+</Project>
+

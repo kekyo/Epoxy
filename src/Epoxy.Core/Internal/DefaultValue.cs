@@ -31,57 +31,56 @@ using Windows.UI.Xaml;
 using Microsoft.UI.Xaml;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia;
 #endif
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+internal static class DefaultValue<TValue>
 {
-    internal static class DefaultValue<TValue>
+    private static readonly TValue defaultValue = default!;
+
+    public static bool ValueEquals(object? lhs, TValue rhs)
     {
-        private static readonly TValue defaultValue = default!;
-
-        public static bool ValueEquals(object? lhs, TValue rhs)
+        if ((lhs == null) && (rhs == null))
         {
-            if ((lhs == null) && (rhs == null))
-            {
-                return true;
-            }
-            else if ((lhs == null) && (rhs != null))
-            {
-                return false;
-            }
-            else if ((lhs != null) && (rhs == null))
-            {
-                return false;
-            }
-            else
-            {
-                return lhs!.Equals(rhs);
-            }
+            return true;
         }
-
-        public static bool IsDefault(object? value) =>
-            ValueEquals(value, defaultValue);
+        else if ((lhs == null) && (rhs != null))
+        {
+            return false;
+        }
+        else if ((lhs != null) && (rhs == null))
+        {
+            return false;
+        }
+        else
+        {
+            return lhs!.Equals(rhs);
+        }
     }
 
-    internal static class DefaultValue
-    {
-        public static bool IsDefaultValue<TValue>(this TValue value) =>
-            DefaultValue<TValue>.IsDefault(value);
+    public static bool IsDefault(object? value) =>
+        ValueEquals(value, defaultValue);
+}
 
-        public static bool IsDefault<TValue>(object? value) =>
-            DefaultValue<TValue>.IsDefault(value);
+internal static class DefaultValue
+{
+    public static bool IsDefaultValue<TValue>(this TValue value) =>
+        DefaultValue<TValue>.IsDefault(value);
+
+    public static bool IsDefault<TValue>(object? value) =>
+        DefaultValue<TValue>.IsDefault(value);
 
 #if XAMARIN_FORMS || MAUI
-        public static readonly object? XamlProperty =
-            null;
-#elif AVALONIA
-        public static readonly object? XamlProperty =
-            AvaloniaProperty.UnsetValue;
+    public static readonly object? XamlProperty =
+        null;
+#elif AVALONIA || AVALONIA11
+    public static readonly object? XamlProperty =
+        AvaloniaProperty.UnsetValue;
 #else
-        public static readonly object? XamlProperty =
-            DependencyProperty.UnsetValue;
+    public static readonly object? XamlProperty =
+        DependencyProperty.UnsetValue;
 #endif
-    }
 }

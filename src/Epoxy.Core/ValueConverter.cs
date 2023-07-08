@@ -47,40 +47,39 @@ using Xamarin.Forms;
 using Microsoft.Maui.Controls;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia.Data.Converters;
 #endif
 
 using Epoxy.Internal;
 
-namespace Epoxy
+namespace Epoxy;
+
+public abstract class ValueConverter :
+    IValueConverter
 {
-    public abstract class ValueConverter :
-        IValueConverter
-    {
-        private protected ValueConverter()
-        { }
+    private protected ValueConverter()
+    { }
 
-        private protected abstract object? Convert(object? value, Type targetType, object? parameter);
+    private protected abstract object? Convert(object? value, Type targetType, object? parameter);
 
-        private protected abstract object? ConvertBack(object? value, Type targetType, object? parameter);
+    private protected abstract object? ConvertBack(object? value, Type targetType, object? parameter);
 
-        object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
+    object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
 #if WINDOWS_UWP || WINUI || UNO
-            string? language
+        string? language
 #else
-            CultureInfo? culture
+        CultureInfo? culture
 #endif
-            ) =>
-            this.Convert(value, targetType, parameter);
+        ) =>
+        this.Convert(value, targetType, parameter);
 
-        object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
+    object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
 #if WINDOWS_UWP || WINUI || UNO
-            string? language
+        string? language
 #else
-            CultureInfo? culture
+        CultureInfo? culture
 #endif
-            ) =>
-            this.ConvertBack(value, targetType, parameter);
-    }
+        ) =>
+        this.ConvertBack(value, targetType, parameter);
 }

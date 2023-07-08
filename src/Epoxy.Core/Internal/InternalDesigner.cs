@@ -43,46 +43,45 @@ using Xamarin.Forms;
 using Microsoft.Maui.Controls;
 #endif
 
-#if AVALONIA
+#if AVALONIA || AVALONIA11
 using Avalonia;
 using Avalonia.Controls;
 #endif
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+internal static class InternalDesigner
 {
-    internal static class InternalDesigner
-    {
 #if WINDOWS_WPF || OPENSILVER
-        private static readonly ThreadLocal<bool?> designMode = new ThreadLocal<bool?>();
+    private static readonly ThreadLocal<bool?> designMode = new ThreadLocal<bool?>();
 #endif
 
-        public static bool IsDesignTime
-        {
+    public static bool IsDesignTime
+    {
 #if WINDOWS_WPF || OPENSILVER
-            get
+        get
+        {
+            switch (designMode.Value)
             {
-                switch (designMode.Value)
-                {
-                    case true:
-                        return true;
-                    case false:
-                        return false;
-                    default:
-                        var f = DesignerProperties.GetIsInDesignMode(new DependencyObject());
-                        designMode.Value = f;
-                        return f;
-                }
+                case true:
+                    return true;
+                case false:
+                    return false;
+                default:
+                    var f = DesignerProperties.GetIsInDesignMode(new DependencyObject());
+                    designMode.Value = f;
+                    return f;
             }
+        }
 #endif
 #if WINDOWS_UWP || WINUI || UNO
-            get => DesignMode.DesignModeEnabled;
+        get => DesignMode.DesignModeEnabled;
 #endif
-#if AVALONIA
-            get => Design.IsDesignMode;
+#if AVALONIA || AVALONIA11
+        get => Design.IsDesignMode;
 #endif
 #if XAMARIN_FORMS || MAUI
-            get => DesignMode.IsDesignModeEnabled;
+        get => DesignMode.IsDesignModeEnabled;
 #endif
-        }
     }
 }

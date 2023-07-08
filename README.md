@@ -11,6 +11,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
+|Epoxy.Avalonia11|[![NuGet Epoxy.Avalonia11](https://img.shields.io/nuget/v/Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia11)|Avalonia version 11|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -23,6 +24,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia11|[![NuGet FSharp.Epoxy.Avalonia11](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia11)|Avalonia version 11|
 |FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
 
 ## dotnet CLI template
@@ -37,15 +39,15 @@
   * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
   * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
-  * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
+  * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17134.0 or higher)
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
-* F# is 6.0 compatible, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
+* F# is 5.0 or upper, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
 * Smallest footprint and easy understandable.
   * No dependency on non-platform standard frameworks or libraries.
 * Supported simplest and minimalism Model-View-ViewModel design.
@@ -58,7 +60,7 @@
 ## Sample code
 
 You can refer multi-platform application sample code variation in.
-This sample displays a list of the latest posts and images from the Reddit forum r/aww, downloading them asynchronously and displays them in a list format.
+This sample displays a list of the latest posts and images from The Cat API, downloading them asynchronously and displays them in a list format.
 
 ### How to get and build the sample code
 
@@ -83,6 +85,7 @@ dotnet build
 |`dotnet new` parameter|Language|Target|
 |:--|:--|:--|
 |`epoxy-wpf`|C#, F#|Sample code for WPF|
+|`epoxy-avalonia11`|C#, F#|Sample code for Avalonia 11 (xplat)|
 |`epoxy-avalonia`|C#, F#|Sample code for Avalonia|
 |`epoxy-opensilver`|C#|Sample code for OpenSilver|
 |`epoxy-xamarin-forms`|C#|Sample code for Xamarin Forms|
@@ -123,7 +126,7 @@ Review of Model-View-ViewModel architecture:
 
 * `View`: Describes the user interface in XAML and write binding expressions to the `ViewModel` (without writing code-behinds).
 * `ViewModel`: Get information from `Model` and define properties that map to `View`.
-* `Model`: Implement processes that are not directly related to the user interface. In this case, the process of downloading posts from Reddit.
+* `Model`: Implement processes that are not directly related to the user interface. In this case, the process of downloading cat information from The Cat API.
 
 The relationship between these MVVM elements is illustrated in the following figure:
 
@@ -153,7 +156,7 @@ Completed separately xaml based view declarations.
     <DockPanel>
         <!-- Binding button click event. -->
         <Button DockPanel.Dock="Top" Height="30"
-                Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
+                Command="{Binding Fetch}">Asynchronous fetch the cats from The Cat API!</Button>
         <Grid>
             <!-- Binding an image collection. -->
             <ListBox ItemsSource="{Binding Items}"
@@ -198,18 +201,21 @@ public sealed class MainWindowViewModel
 
         // Step 4: A handler for fetch button.
         //   Ofcourse, we can use async/await safely in lambda expressions!
-        this.Fetch = CommandFactory.Create(async () =>
+        this.Fetch = Command.Factory.Create(async () =>
         {
-            var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+            var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
             this.Items.Clear();
 
-            foreach (var reddit in reddits)
+            foreach (var cat in cats)
             {
-                var bitmap = new WriteableBitmap(
-                    BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
-                bitmap.Freeze();
-                this.Items.Add(bitmap);
+                if (cat.Url is { } url)
+                {
+                    var bitmap = new WriteableBitmap(
+                        BitmapFrame.Create(new MemoryStream(await TheCatAPI.FetchImageAsync(url))));
+                    bitmap.Freeze();
+                    this.Items.Add(bitmap);
+                }
             }
         });
     }
@@ -218,18 +224,18 @@ public sealed class MainWindowViewModel
 
 ### Example of Model implementation
 
-The common code to access Reddit is implemented in the `EpoxyHello.Core` project.
-It does not depend on either WPF, Xamarin Forms, Uno and UWP assemblies and is completely independent.
+The common code to access The Cat API is implemented in the `EpoxyHello.Core` project.
+It does not depend on either WPF, Xamarin Forms, Avalonia, UWP, WinUI and OpenSilver assemblies and is completely independent.
 
 By eliminating dependencies in this way, we can achieve commonality for multi-platform support.
 However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
 (separating them eliminates the possibility of unintentional dependencies).
 
-[Image downloader from Reddit post (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/Reddit.cs#L63):
+[Image downloader from The Cat API (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/TheCatAPI.cs#L55):
 
 ```csharp
 // Model implementation: The pure netstandard2.0 library.
-// Downalod image data from Reddit.
+// Downalod image data from The Cat API.
 public static async ValueTask<byte[]> FetchImageAsync(Uri url)
 {
     using (var response =
@@ -260,7 +266,7 @@ Since each function is independent, it can be used in any combination.
 |:----|:----|
 |ViewModel Injector|This function allows you to automatically implement the PropertyChanged event and other events required for ViewModel at build time. Simply apply the attributes to the target class, and you can skip the complicated code implementation.|
 |ViewModel base class|The ViewModel Injector provides an orthodox base class for the ViewModel's PropertyChanged events, etc. It can be used in scenarios where the ViewModel Injector is not suitable.|
-|CommandFactory|Enables arbitrary asynchronous delegates to be used as ICommand. You can safely implement asynchronous processing as an ICommand. |
+|Command factory|Enables arbitrary asynchronous delegates to be used as ICommand. You can safely implement asynchronous processing as an ICommand. |
 |EventBinder|An attached property that allows you to bind CLR events of any XAML control as ICommand.|
 |Anchor/Pile|Enables any XAML control to be temporarily and safely referenced from the ViewModel,eliminating all code binding and improving implementation visibility when using MVVM. The technique known as the Messenger pattern can also be integrated into the ViewModel with Anchor/Pile.|
 |ValueConverter|Provides a base class for the XAML value converter. It provides a base class for XAML value converters, and can be implemented with type constraints in place.|
@@ -352,7 +358,7 @@ public Command? Ready
 // ...
 
 // Describe what to do when the Loaded event occurs.
-this.Ready = CommandFactory.Create<EventArgs>(async _ =>
+this.Ready = Command.Factory.Create<EventArgs>(async _ =>
 {
     // ex: Asynchronous acquisition of information to be displayed in the list from Model.
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -362,7 +368,7 @@ this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 });
 ```
 
-The generic argument of `CommandFactory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
+The generic argument of `Command.Factory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
 Non-generic methods can also be used when event arguments are not required.
 
 TIP 1: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
@@ -410,7 +416,7 @@ The `Pile` pull in the `UIElement`'s anchor, and we can rent temporary `UIElemen
 
 ```csharp
 // Declared a Pile into the ViewModel.
-this.LogPile = PileFactory.Create<TextBox>();
+this.LogPile = Pile.Factory.Create<TextBox>();
 
 // ...
 
@@ -572,7 +578,7 @@ public sealed class AndroidBluetoothAccessor : IBluetoothAccessor
 public Application()
 {
     // Register a class instance that performs Android-dependent processing.
-    GlobalService.Register(new AndroidBluetoothAccessor());
+    GlobalService.Accessor.Register(new AndroidBluetoothAccessor());
 }
 ```
 
@@ -582,7 +588,7 @@ Now you can use separate implementations through interfaces in a common project:
 // Commonly Sample.Xamarin.Forms project.
 
 // I want to use Bluetooth:
-await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
+await GlobalService.Accessor.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 {
     // Start discovering Bluetooth.
     await accessor.BeginDiscoverAsync();
@@ -591,6 +597,15 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 });
 
 ```
+
+You can use `RegisterExplicit<TService>()` instead of `Register()`,
+to manage interfaces to which the `GlobalService` attribute has not been applied.
+(This is not a `GlobalService` specific problem,
+but a general problem that occurs when holding singleton instances in any DI container.)
+
+This is useful when you want to use an existing (unchangeable) interface type.
+
+#### Supplemental
 
 Existing libraries for dependency injection and dependency isolation
 (e.g. `DependencyService` class, Unity, MEF, etc.) have the following problems:
@@ -678,8 +693,8 @@ Basically, all asynchronous operations are designed to be described smoothly wit
 // Since the default function definitions are all defined to
 // accept F#'s `Async` type, so we can use asynchronous workflows
 // with `async { ... }`.
-self.Fetch <- CommandFactory.create(fun () -> async {
-    let! reddits = Reddit.fetchNewPostsAsync "r/aww"
+self.Fetch <- Command.Factory.create(fun () -> async {
+    let! cats = TheCatAPI.FetchTheCatsAsync 10
     // ...
 })
 ```
@@ -705,7 +720,7 @@ type ItemViewModel() as self =
         // but it is legal when using the ViewModel injector.
         self.Title <- "CCC"
         // You can use this behavior to assign a Command within the `do` block.
-        self.Click <- CommandFactory.create(fun () -> async {
+        self.Click <- Command.Factory.create(fun () -> async {
             // ...
         })
 
@@ -769,6 +784,26 @@ Apache-v2
 
 ## History
 
+* 1.10.0:
+  * Supported Avalonia 11.
+  * Minimized template code, if you want to refer to the sample code corresponding to the Model part of MVVM,
+    If you want to refer to the sample code corresponding to the Model part of MVVM,
+    please refer to the `playground` directory in the repository.
+  * Fixed an exception in the ViewModel injector when referencing the backing store field with an `internal` and narrow modifier.
+    This was occurring when such code was intentionally written or when F# optimizations worked.
+  * Downgraded F# dependency to 5.0.0.
+  * Modified messages when Anchor/Pile connection is not made or fails (#30)
+  * Obsoleted operations with static methods of `GlobalService`. Use `GlobalService.Accessor` instead.
+    * The F# language allows extensions to static members,
+      but they are adapted to be referenced from the `Accessor` property as in C#.
+  * Added `RegisterExplicit<TService>()` and `UnregisterExplicit<TService>()` to GlobalService.
+    These allow management even if the `GlobalService` attribute is not applied to the target interface.
+  * `CommandFactory` and `PileFactory` have been obsoleted.
+    Use `Command.Factory` and `Pile.Factory` instead.
+    * The F# language allows extensions to static members,
+      but they are adapted to be referenced from the `Factory` property as in C#.
+  * Package binaries contain breaking changes. Please rebuild after upgrading.
+  * Upgraded UWP version to 18362, because VS2022 omits earlier versions.
 * 1.9.0:
   * Added support for .NET 7 SDK.
   * To make package dependencies more flexible, the following supported versions have been downgraded respectively.

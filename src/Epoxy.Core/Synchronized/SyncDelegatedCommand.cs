@@ -23,74 +23,73 @@ using System;
 
 using Epoxy.Internal;
 
-namespace Epoxy.Synchronized
+namespace Epoxy.Synchronized;
+
+public sealed class SyncDelegatedCommand : Command
 {
-    public sealed class SyncDelegatedCommand : Command
+    private static readonly Func<bool> defaultCanExecute =
+        () => true;
+
+    private readonly Action execute;
+    private readonly Func<bool> canExecute;
+
+    internal SyncDelegatedCommand(
+        Action execute)
     {
-        private static readonly Func<bool> defaultCanExecute =
-            () => true;
-
-        private readonly Action execute;
-        private readonly Func<bool> canExecute;
-
-        internal SyncDelegatedCommand(
-            Action execute)
-        {
-            this.execute = execute;
-            this.canExecute = defaultCanExecute;
-        }
-
-        internal SyncDelegatedCommand(
-            Action execute,
-            Func<bool> canExecute)
-        {
-            this.execute = execute;
-            this.canExecute = canExecute;
-        }
-
-        protected override bool OnCanExecute(object? parameter) =>
-            this.canExecute.Invoke();
-
-        private protected override void OnExecute(object? parameter) =>
-            this.execute();
+        this.execute = execute;
+        this.canExecute = defaultCanExecute;
     }
 
-    public sealed class SyncDelegatedCommand<TParameter> : Command
+    internal SyncDelegatedCommand(
+        Action execute,
+        Func<bool> canExecute)
     {
-        private static readonly Func<TParameter, bool> defaultCanExecute =
-            _ => true;
-
-        private readonly Action<TParameter> execute;
-        private readonly Func<TParameter, bool> canExecute;
-
-        internal SyncDelegatedCommand(
-            Action<TParameter> execute)
-        {
-            this.execute = execute;
-            this.canExecute = defaultCanExecute;
-        }
-
-        internal SyncDelegatedCommand(
-            Action<TParameter> execute,
-            Func<TParameter, bool> canExecute)
-        {
-            this.execute = execute;
-            this.canExecute = canExecute;
-        }
-
-        protected override bool OnCanExecute(object? parameter)
-        {
-            if (parameter is not TParameter &&
-                !DefaultValue.IsDefault<TParameter>(parameter))
-            {
-                throw new ArgumentException(
-                    $"SyncDelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
-            }
-
-            return this.canExecute.Invoke((TParameter)parameter!);
-        }
-
-        private protected override void OnExecute(object? parameter) =>
-            this.execute((TParameter)parameter!);
+        this.execute = execute;
+        this.canExecute = canExecute;
     }
+
+    protected override bool OnCanExecute(object? parameter) =>
+        this.canExecute.Invoke();
+
+    private protected override void OnExecute(object? parameter) =>
+        this.execute();
+}
+
+public sealed class SyncDelegatedCommand<TParameter> : Command
+{
+    private static readonly Func<TParameter, bool> defaultCanExecute =
+        _ => true;
+
+    private readonly Action<TParameter> execute;
+    private readonly Func<TParameter, bool> canExecute;
+
+    internal SyncDelegatedCommand(
+        Action<TParameter> execute)
+    {
+        this.execute = execute;
+        this.canExecute = defaultCanExecute;
+    }
+
+    internal SyncDelegatedCommand(
+        Action<TParameter> execute,
+        Func<TParameter, bool> canExecute)
+    {
+        this.execute = execute;
+        this.canExecute = canExecute;
+    }
+
+    protected override bool OnCanExecute(object? parameter)
+    {
+        if (parameter is not TParameter &&
+            !DefaultValue.IsDefault<TParameter>(parameter))
+        {
+            throw new ArgumentException(
+                $"SyncDelegatedCommand.OnCanExecute: Invalid parameter given in {this.GetPrettyTypeName()}: Parameter={parameter.GetPrettyTypeName()}");
+        }
+
+        return this.canExecute.Invoke((TParameter)parameter!);
+    }
+
+    private protected override void OnExecute(object? parameter) =>
+        this.execute((TParameter)parameter!);
 }

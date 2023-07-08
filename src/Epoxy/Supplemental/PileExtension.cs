@@ -46,43 +46,46 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 using UIElement = Avalonia.Controls.IControl;
 #endif
 
+#if AVALONIA11
+using UIElement = Avalonia.Controls.Control;
+#endif
+
 using Epoxy.Internal;
 
-namespace Epoxy.Supplemental
+namespace Epoxy.Supplemental;
+
+/// <summary>
+/// Pile methods for Task based asynchronous execution.
+/// </summary>
+/// <remarks>You can manipulate XAML controls directly inside ViewModels
+/// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
+public static class PileExtension
 {
     /// <summary>
-    /// Pile methods for Task based asynchronous execution.
+    /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
     /// </summary>
-    /// <remarks>You can manipulate XAML controls directly inside ViewModels
-    /// when places and binds both an Anchor (in XAML) and a Pile.</remarks>
-    public static class PileExtension
-    {
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
-        /// <returns>ValueTask</returns>
-        public static ValueTask RentAsync<TUIElement>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task> action, bool canIgnore = false)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync(element => action(element).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
+    /// <typeparam name="TUIElement">UI element type</typeparam>
+    /// <param name="pile">Pile instance</param>
+    /// <param name="action">Asynchronous continuation delegate</param>
+    /// <param name="canIgnore">Ignore if didn't complete XAML data-binding.</param>
+    /// <returns>ValueTask</returns>
+    public static ValueTask RentAsync<TUIElement>(
+        this Pile<TUIElement> pile,
+        Func<TUIElement, Task> action, bool canIgnore = false)
+        where TUIElement : UIElement =>
+        pile.InternalRentAsync(element => action(element).AsValueTaskUnit(), canIgnore).AsValueTaskVoid();
 
-        /// <summary>
-        /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
-        /// </summary>
-        /// <typeparam name="TUIElement">UI element type</typeparam>
-        /// <typeparam name="TResult">Result type</typeparam>
-        /// <param name="pile">Pile instance</param>
-        /// <param name="action">Asynchronous continuation delegate</param>
-        /// <returns>Result value</returns>
-        public static ValueTask<TResult> RentAsync<TUIElement, TResult>(
-            this Pile<TUIElement> pile,
-            Func<TUIElement, Task<TResult>> action)
-            where TUIElement : UIElement =>
-            pile.InternalRentAsync(element => InternalHelpers.AsValueTask(action(element)));
-    }
+    /// <summary>
+    /// Temporary rents and manipulates XAML control directly via Anchor/Pile.
+    /// </summary>
+    /// <typeparam name="TUIElement">UI element type</typeparam>
+    /// <typeparam name="TResult">Result type</typeparam>
+    /// <param name="pile">Pile instance</param>
+    /// <param name="action">Asynchronous continuation delegate</param>
+    /// <returns>Result value</returns>
+    public static ValueTask<TResult> RentAsync<TUIElement, TResult>(
+        this Pile<TUIElement> pile,
+        Func<TUIElement, Task<TResult>> action)
+        where TUIElement : UIElement =>
+        pile.InternalRentAsync(element => InternalHelpers.AsValueTask(action(element)));
 }

@@ -18,7 +18,7 @@
       <group targetFramework=".NETStandard2.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.OpenSilver" version="$PackageVersion$" exclude="Build,Analyzers" />
-        <dependency id="FSharp.Core" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="FSharp.Core" version="5.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

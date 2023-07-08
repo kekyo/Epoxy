@@ -11,6 +11,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |Epoxy.Wpf|[![NuGet Epoxy.Wpf](https://img.shields.io/nuget/v/Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Wpf)|WPF version|
+|Epoxy.Avalonia11|[![NuGet Epoxy.Avalonia11](https://img.shields.io/nuget/v/Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia11)|Avalonia version 11|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
@@ -23,6 +24,7 @@
 |Package|main|Description|
 |:--|:--|:--|
 |FSharp.Epoxy.Wpf|[![NuGet FSharp.Epoxy.Wpf](https://img.shields.io/nuget/v/FSharp.Epoxy.Wpf.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Wpf)|WPF version|
+|FSharp.Epoxy.Avalonia11|[![NuGet FSharp.Epoxy.Avalonia11](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia11)|Avalonia version 11|
 |FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
 
 ## dotnet CLIテンプレート
@@ -37,15 +39,15 @@
   * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
   * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
-  * Avalonia: [Avalonia](https://avaloniaui.net/) (0.10.0 or higher)
+  * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms)  5.0.0.1874 or higher)
-  * Universal Windows: Universal Windows 10 (uap10.0.16299 or higher)
+  * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
   * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17763.0 or higher)
   * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
-* F#は6.0に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
+* F#は5.0以降に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
 * 小さなライブラリで、理解しやすいAPIです。
   * プラットフォーム標準以外のフレームワークやライブラリに依存していません。
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
@@ -65,7 +67,7 @@
 ## サンプルコード
 
 様々な環境の実働サンプルがあります。
-このサンプルは、Reddit掲示板のr/awwから、最新の投稿記事と画像を非同期でダウンロードしながら、
+このサンプルは、The Cat APIから、最新の投稿記事と画像を非同期でダウンロードしながら、
 リスト形式で表示するものです。
 
 ### サンプルコードの入手とビルド方法
@@ -91,6 +93,7 @@ dotnet build
 |`dotnet new`引数|言語|対象|
 |:--|:--|:--|
 |`epoxy-wpf`|C#, F#|WPFのサンプルコード|
+|`epoxy-avalonia11`|C#, F#|Avalonia 11のサンプルコード (xplat相当)|
 |`epoxy-avalonia`|C#, F#|Avaloniaのサンプルコード|
 |`epoxy-opensilver`|C#|OpenSilverのサンプルコード|
 |`epoxy-xamarin-forms`|C#|Xamarin Formsのサンプルコード|
@@ -132,7 +135,7 @@ Model-View-ViewModelの役割についてのおさらい:
 
 * `View`: XAMLでユーザーインターフェイスを記述し、`ViewModel`とバインディングする（コードビハインドを書かない）。
 * `ViewModel`: `Model`から情報を取得して、`View`にマッピングするプロパティを定義する。
-* `Model`: ユーザーインターフェイスに直接関係の無い処理を実装。ここではRedditから投稿をダウンロードする処理。
+* `Model`: ユーザーインターフェイスに直接関係の無い処理を実装。ここではThe Cat APIから猫情報をダウンロードする処理。
 
 以下にこれらのMVVM要素の関係を図示します:
 
@@ -162,7 +165,7 @@ XAMLビューの定義とその実装を、MVVMに従って完全に分離しつ
     <DockPanel>
         <!-- ボタンのクリックイベントを、ViewModel側にバインディングで通知します。 -->
         <Button DockPanel.Dock="Top" Height="30"
-                Command="{Binding Fetch}">Asynchronous fetch r/aww from Reddit!</Button>
+                Command="{Binding Fetch}">Asynchronous fetch the cats from The Cat API!</Button>
         <Grid>
             <!-- ListBoxに、ダウンロードした記事を保持するViewModelのコレクションをバインディングします。 -->
             <ListBox ItemsSource="{Binding Items}"
@@ -209,18 +212,21 @@ public sealed class MainWindowViewModel
         // ステップ 4: XAMLで定義したボタンがクリックされた時に、このラムダ式が呼び出されます。
         //   この式はもちろん async-await を使用した非同期処理で書くことが出来て、
         //   未処理の例外も正しく処理されます。
-        this.Fetch = CommandFactory.Create(async () =>
+        this.Fetch = Command.Factory.Create(async () =>
         {
-            var reddits = await Reddit.FetchNewPostsAsync("r/aww");
+            var cats = await TheCatAPI.FetchTheCatsAsync(10);
 
             this.Items.Clear();
 
-            foreach (var reddit in reddits)
+            foreach (var cat in cats)
             {
-                var bitmap = new WriteableBitmap(
-                    BitmapFrame.Create(new MemoryStream(await Reddit.FetchImageAsync(url))));
-                bitmap.Freeze();
-                this.Items.Add(bitmap);
+                if (cat.Url is { } url)
+                {
+                    var bitmap = new WriteableBitmap(
+                        BitmapFrame.Create(new MemoryStream(await TheCatAPI.FetchImageAsync(url))));
+                    bitmap.Freeze();
+                    this.Items.Add(bitmap);
+                }
             }
         });
     }
@@ -229,18 +235,18 @@ public sealed class MainWindowViewModel
 
 ### Modelの実装例
 
-Redditにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
-このプロジェクトは、WPF・Xamarin Forms・Uno・UWPのいずれにも依存せず、完全に独立しています。
+The Cat APIにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
+このプロジェクトは、WPF・Xamarin Forms・Avalonia・UWP・WinUI・OpenSilverのいずれにも依存せず、完全に独立しています。
 
 このように、依存性を排除することで、マルチプラットフォーム対応の共通化を行うことが出来ますが、
 小規模な開発であれば、`Model`の実装を`ViewModel`と同じプロジェクトに配置してもかまいません
 (分離しておけば、意図せず依存してしまったという失敗を排除出来ます)。
 
-[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/Reddit.cs#L63)を抜粋します:
+[投稿画像をダウンロードする部分 (EpoxyHello.Core)](https://github.com/kekyo/Epoxy/blob/main/samples/EpoxyHello.Core/Models/TheCatAPI.cs#L55)を抜粋します:
 
 ```csharp
 // Modelの実装: netstandard2.0の純粋なライブラリ
-// Redditから画像をダウンロードする
+// The Cat APIから画像をダウンロードする
 public static async ValueTask<byte[]> FetchImageAsync(Uri url)
 {
     using (var response =
@@ -272,7 +278,7 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 |:----|:----|
 |ViewModelインジェクタ|ViewModelに必要なPropertyChangedイベントなどを、ビルド時に自動的に実装出来る機能です。対象のクラスに属性を適用するだけで、煩雑なコードの実装を省略出来ます。|
 |ViewModel基底クラス|ViewModelに必要なPropertyChangedイベントなどを、オーソドックスな基底クラスとして提供します。ViewModelインジェクタが適さないシナリオで、使用することが出来ます。|
-|CommandFactory|任意の非同期デリゲートを、ICommandとして利用できるようにします。非同期処理を安全にICommandとして実装出来ます。|
+|Command factory|任意の非同期デリゲートを、ICommandとして利用できるようにします。非同期処理を安全にICommandとして実装出来ます。|
 |EventBinder|任意のXAMLコントロールのCLRイベントを、ICommandとしてバインディング可能にする添付プロパティです。Commandプロパティが提供されていない任意のイベントを、安全にバインディング出来ます。|
 |Anchor/Pile|任意のXAMLコントロールを、一時的かつ安全にViewModelから参照出来るようにします。Anchor/Pileを使用すると、全てのコードビハインドを排除出来るため、MVVMを使用する場合の実装の見通しが良くなります。Messengerパターンとして知られたテクニックも、Anchor/PileでViewModelに集約することが出来ます。|
 |ValueConverter|XAMLの値コンバーターの基底クラスを提供します。事前に型判定が行われ、型制約がある状態で実装することが出来ます。|
@@ -363,7 +369,7 @@ public Command? Ready
 // ...
 
 // Loadedイベントが発生した場合の処理を記述
-this.Ready = CommandFactory.Create<EventArgs>(async _ =>
+this.Ready = Command.Factory.Create<EventArgs>(async _ =>
 {
     // リストに表示する情報をModelから非同期で取得
     foreach (var item in await Model.FetchInitialItemsAsync())
@@ -373,7 +379,7 @@ this.Ready = CommandFactory.Create<EventArgs>(async _ =>
 });
 ```
 
-`CommandFactory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
+`Command.Factory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
 イベントの引数が必要でない場合は、非ジェネリックメソッドを使う事も出来ます。
 
 補足1: WPF,UWPやXamarin Formsでは、`Behavior`や`Trigger`で同じことを実現できますが、
@@ -424,7 +430,7 @@ MVVMアーキテクチャのレアケースにおいて、コントロールを�
 ```csharp
 // PileをViewModelに配置します。
 // (操作したいTextBoxのXAMLにAnchorを配置して、バインディングします)
-this.LogPile = PileFactory.Create<TextBox>();
+this.LogPile = Pile.Factory.Create<TextBox>();
 
 // ...
 
@@ -578,7 +584,7 @@ public sealed class AndroidBluetoothAccessor : IBluetoothAccessor
 public Application()
 {
     // Android依存の処理を行うクラスを登録する
-    GlobalService.Register(new AndroidBluetoothAccessor());
+    GlobalService.Accessor.Register(new AndroidBluetoothAccessor());
 }
 ```
 
@@ -588,15 +594,20 @@ public Application()
 // 共通プロジェクトの、Sample.Xamarin.Formsプロジェクトで使う
 
 // Bluetoothを使いたくなった:
-await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
+await GlobalService.Accessor.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 {
     // Bluetoothの探索を開始する
     await accessor.BeginDiscoverAsync();
 
     // ...
 });
-
 ```
+
+`Register()`の代わりに、`RegisterExplicit<TService>()`を使用すると、
+`GlobalService`属性が適用されていないインターフェイスでも、管理する事が出来ます。
+例えば、既存の（変更できない）インターフェイス型を使用したい場合に有用です。
+
+#### 補足
 
 既存の依存注入や依存分離を行うライブラリ(例:`DependencyService`クラスやUnity、MEFなど)には、以下のような問題があります:
 
@@ -607,6 +618,8 @@ await GlobalService.ExecuteAsync<IBluetoothAccessor>(async accessor =>
 
 注意: "Global"の名の通り、`GlobalService`は、一種のグローバル変数のように振る舞います。
 本来必要のない場所で`GlobalService`を使わないようにして下さい。
+（これは `GlobalService` 固有の問題ではなく、任意のDIコンテナでシングルトンインスタンスを保持した場合に起きる、一般的な問題です。）
+
 少しでも区別できるように、`GlobalService`は`Epoxy.Advanced`名前空間に配置されています（using宣言が必要です）。
 
 ----
@@ -678,8 +691,8 @@ type public ScoreToBrushConverter() =
 ```fsharp
 // デフォルトの関数定義は、全てF#の`Async`型を受け取るように定義されているため、
 // 以下のように非同期ワークフロー `async { ... }` で書くことが出来る。
-self.Fetch <- CommandFactory.create(fun () -> async {
-    let! reddits = Reddit.fetchNewPostsAsync "r/aww"
+self.Fetch <- Command.Factory.create(fun () -> async {
+    let! cats = TheCatAPI.FetchTheCatsAsync 10
     // ...
 })
 ```
@@ -704,7 +717,7 @@ type ItemViewModel() as self =
         // 通常、この式は例外を起こすが、ViewModelインジェクタを使用した場合は合法となる。
         self.Title <- "CCC"
         // この挙動を使用して、doブロック内でCommandを割り当てることが出来る。
-        self.Click <- CommandFactory.create(fun () -> async {
+        self.Click <- Command.Factory.create(fun () -> async {
             // ...
         })
 
@@ -770,6 +783,22 @@ Apache-v2
 
 ## History
 
+* 1.10.0:
+  * Avalonia 11に対応しました。
+  * テンプレートコードを最小化しました。MVVMのModel部分に相当するサンプルコードを参照する場合は、
+    リポジトリ内の`playground`ディレクトリを参照して下さい。
+  * `internal` modifierによるバッキングストアのフィールド参照を行っている場合に、ViewModelインジェクタで例外が発生するのを修正しました。
+    意図的にそのようなコードを書いた場合や、F#の最適化が機能した場合に発生していました。
+  * F#の依存を5.0.0まで下げました。
+  * Anchor/Pileの接続が行われていない場合や失敗した場合のメッセージを改めました (#30)
+  * `GlobalService`のスタティックメソッドによる操作をobsoleteにしました。代わりに`GlobalService.Accessor`を使用して下さい。
+    * F#言語では、スタティックメンバに対する拡張が可能ですが、C#と同様に`Accessor`プロパティから参照するように合わせてあります。
+  * GlobalServiceに、`RegisterExplicit<TService>()`と`UnregisterExplicit<TService>()`を追加しました。
+    これらは、対象のインターフェイスに`GlobalService`属性が適用されていなくても、管理を可能にします。
+  * `CommandFactory`と`PileFactory`をobsoleteにしました。代わりに`Command.Factory` `Pile.Factory`を使用して下さい。
+    * F#言語では、スタティックメンバに対する拡張が可能ですが、C#と同様に`Factory`プロパティから参照するように合わせてあります。
+  * パッケージバイナリは、破壊的変更を含んでいます。アップグレード後は再ビルドを行ってください。
+  * VS2022でのビルドが出来なくなったため、UWPバージョンを18362に更新しました。
 * 1.9.0:
   * .NET 7 SDKに対応しました。
   * パッケージ依存関係をより柔軟にするため、以下のサポートバージョンをそれぞれダウングレードしました。但し動作確認は最新バージョンのみで行っています。

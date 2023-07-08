@@ -51,112 +51,117 @@ using Avalonia.LogicalTree;
 using DependencyObject = Avalonia.IAvaloniaObject;
 #endif
 
+#if AVALONIA11
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
+using DependencyObject = Avalonia.AvaloniaObject;
+#endif
+
 using Epoxy.Internal;
 using Epoxy.Supplemental;
 
-namespace Epoxy.Advanced
-{
-    public class AttachableCollection<TSelf, TObject> :
-        LogicalTreeObjectCollection<TSelf, TObject>, IAttachedObject
-        where TSelf : LogicalTreeObjectCollection<TObject>, IAttachedObject, new()
-#if AVALONIA
-        where TObject : ILogical, ISetLogicalParent, IAttachedObject
+namespace Epoxy.Advanced;
+
+public class AttachableCollection<TSelf, TObject> :
+    LogicalTreeObjectCollection<TSelf, TObject>, IAttachedObject
+    where TSelf : LogicalTreeObjectCollection<TObject>, IAttachedObject, new()
+#if AVALONIA || AVALONIA11
+    where TObject : ILogical, ISetLogicalParent, IAttachedObject
 #elif UNO && !WINDOWS_UWP
-        where TObject : class, DependencyObject, IAttachedObject
+    where TObject : class, DependencyObject, IAttachedObject
 #elif WINDOWS_WPF
-        where TObject : Freezable, IAttachedObject
+    where TObject : Freezable, IAttachedObject
 #elif XAMARIN_FORMS || MAUI
-        where TObject : Element, IAttachedObject
+    where TObject : Element, IAttachedObject
 #else
-        where TObject : DependencyObject, IAttachedObject
+    where TObject : DependencyObject, IAttachedObject
 #endif
+{
+    private DependencyObject? associatedObject;
+
+    public DependencyObject? AssociatedObject =>
+        this.associatedObject;
+
+    public AttachableCollection()
     {
-        private DependencyObject? associatedObject;
+    }
 
-        public DependencyObject? AssociatedObject =>
-            this.associatedObject;
-
-        public AttachableCollection()
+    protected sealed override void OnAdded(TObject element)
+    {
+        if (this.associatedObject != null)
         {
+            element.Attach(this.associatedObject);
         }
+    }
 
-        protected sealed override void OnAdded(TObject element)
+    protected sealed override void OnRemoving(TObject element)
+    {
+        if (this.associatedObject != null)
         {
-            if (this.associatedObject != null)
-            {
-                element.Attach(this.associatedObject);
-            }
+            element.Detach();
         }
+    }
 
-        protected sealed override void OnRemoving(TObject element)
-        {
-            if (this.associatedObject != null)
-            {
-                element.Detach();
-            }
-        }
+    protected virtual void OnAttached()
+    {
+    }
 
-        protected virtual void OnAttached()
-        {
-        }
+    protected virtual void OnDetaching()
+    {
+    }
 
-        protected virtual void OnDetaching()
-        {
-        }
-
-        public void Attach(DependencyObject dependencyObject)
-        {
+    public void Attach(DependencyObject dependencyObject)
+    {
 #if XAMARIN_FORMS || MAUI
-            this.Parent = dependencyObject as Element;
+        this.Parent = dependencyObject as Element;
 #endif
-            if (this.associatedObject != null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            if (!InternalDesigner.IsDesignTime)
-            {
-                this.WritePreamble();
-                this.associatedObject = dependencyObject;
-                this.WritePostscript();
-
-                foreach (var item in this)
-                {
-                    item.Attach(dependencyObject);
-                }
-            }
-
-            this.OnAttached();
+        if (this.associatedObject != null)
+        {
+            throw new InvalidOperationException();
         }
 
-        public void Detach()
+        if (!InternalDesigner.IsDesignTime)
         {
-            this.OnDetaching();
+            this.WritePreamble();
+            this.associatedObject = dependencyObject;
+            this.WritePostscript();
 
             foreach (var item in this)
             {
-                item.Detach();
+                item.Attach(dependencyObject);
             }
-
-            this.WritePreamble();
-            this.associatedObject = null;
-            this.WritePostscript();
-
-#if XAMARIN_FORMS || MAUI
-            this.Parent = null;
-#endif
         }
 
-#if !WINDOWS_WPF
-        [Conditional("WINDOWS_WPF")]
-        private void ReadPreamble()
-        { }
-        [Conditional("WINDOWS_WPF")]
-        private void WritePreamble()
-        { }
-        [Conditional("WINDOWS_WPF")]
-        private void WritePostscript()
-        { }
+        this.OnAttached();
+    }
+
+    public void Detach()
+    {
+        this.OnDetaching();
+
+        foreach (var item in this)
+        {
+            item.Detach();
+        }
+
+        this.WritePreamble();
+        this.associatedObject = null;
+        this.WritePostscript();
+
+#if XAMARIN_FORMS || MAUI
+        this.Parent = null;
 #endif
     }
+
+#if !WINDOWS_WPF
+    [Conditional("WINDOWS_WPF")]
+    private void ReadPreamble()
+    { }
+    [Conditional("WINDOWS_WPF")]
+    private void WritePreamble()
+    { }
+    [Conditional("WINDOWS_WPF")]
+    private void WritePostscript()
+    { }
+#endif
 }

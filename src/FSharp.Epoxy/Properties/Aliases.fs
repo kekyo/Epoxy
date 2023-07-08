@@ -26,3 +26,7 @@ type private UIElement = Xamarin.Forms.VisualElement
 #if AVALONIA
 type private UIElement = Avalonia.Controls.IControl
 #endif
+
+#if AVALONIA11
+type private UIElement = Avalonia.Controls.Control
+#endif

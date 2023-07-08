@@ -2,16 +2,13 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+    <LangVersion>latest</LangVersion>
     <DefineSilverlight>true</DefineSilverlight>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Epoxy.OpenSilver" Version="*" />
     <PackageReference Include="OpenSilver" Version="1.1.0" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />

@@ -22,19 +22,18 @@
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace Epoxy.Internal
+namespace Epoxy.Internal;
+
+[EditorBrowsable(EditorBrowsableState.Never)]
+[DebuggerStepThrough]
+public readonly struct Unit
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    [DebuggerStepThrough]
-    public readonly struct Unit
-    {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public bool Equals(Unit unit) => true;
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object? obj) => obj is Unit;
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override int GetHashCode() => 0;
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override string ToString() => "()";
-    }
+    public bool Equals(Unit unit) => true;
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object? obj) => obj is Unit;
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode() => 0;
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override string ToString() => "()";
 }

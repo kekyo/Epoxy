@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy.Core</AssemblyName>
+    <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Core.Avalonia11</AssemblyTitle>
+    <PackageId>Epoxy.Core.Avalonia11</PackageId>
+    <PackageTags>$(PackageTags);avalonia</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;AVALONIA11</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;AVALONIA11</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy.Core/**/*.cs" />
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>
