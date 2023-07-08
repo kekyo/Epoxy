@@ -36,4 +36,5 @@
   <PropertyGroup>
     <EpoxyBuildToolingDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..\src\Epoxy.Build\bin\$(Configuration)\$(_EB_PlatformName)'))</EpoxyBuildToolingDir>
   </PropertyGroup>
+
 </Project>

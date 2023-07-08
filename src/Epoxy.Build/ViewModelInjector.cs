@@ -652,6 +652,69 @@ public sealed class ViewModelInjector
         return true;
     }
 
+    private static void ReplaceFieldToAccessor(
+        ModuleDefinition module,
+        Dictionary<FieldDefinition, AccessorInformation> removedAccessor)
+    {
+        // An optimization of F# compiler generates always
+        // accessing "member val" with backing store field directly.
+        // So, will replace property accessor instead of
+        // all backing store field referencing.
+
+        var updatingActions = new List<Action>();
+
+        // Enabled parallel processing with delayed updating
+        // when processes all CIL body streams.
+        Parallel.ForEach(
+            module.GetTypes().
+            Where(td => td.IsClass || td.IsValueType),
+            td =>
+            {
+                foreach (var md in td.Methods.
+                    Where(md => !md.IsAbstract && md.HasBody))
+                {
+                    for (var index = 0; index < md.Body.Instructions.Count; index++)
+                    {
+                        var inst = md.Body.Instructions[index];
+                        if (inst.Operand is FieldDefinition fd &&
+                            removedAccessor.TryGetValue(fd, out var accessor))
+                        {
+                            if (inst.OpCode == OpCodes.Ldfld)
+                            {
+                                var capturedIndex = index;
+                                lock (updatingActions)
+                                {
+                                    // Makes delayed processing for application using getter.
+                                    updatingActions.Add(() =>
+                                        md.Body.Instructions[capturedIndex] =
+                                            Instruction.Create(OpCodes.Call,
+                                                module.ImportReference(accessor.Getter)));
+                                }
+                            }
+                            else if (inst.OpCode == OpCodes.Stfld)
+                            {
+                                var capturedIndex = index;
+                                lock (updatingActions)
+                                {
+                                    // Makes delayed processing for application using setter.
+                                    updatingActions.Add(() =>
+                                        md.Body.Instructions[capturedIndex] =
+                                            Instruction.Create(OpCodes.Call,
+                                                module.ImportReference(accessor.Setter)));
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        // Updates sequentially (on this thread).
+        foreach (var updatingAction in updatingActions)
+        {
+            updatingAction();
+        }
+    }
+
     public bool Inject(string targetAssemblyPath, string? injectedAssemblyPath = null)
     {
         this.assemblyResolver.AddSearchDirectory(
@@ -717,52 +780,7 @@ public sealed class ViewModelInjector
                 if (injected)
                 {
                     var module = targetAssembly.MainModule;
-                    var actions = new List<Action>();
-                    Parallel.ForEach(
-                        module.GetTypes().
-                        Where(td => td.IsClass || td.IsValueType),
-                        td =>
-                        {
-                            foreach (var md in td.Methods.
-                                Where(md => !md.IsAbstract && md.HasBody))
-                            {
-                                for (var index = 0; index < md.Body.Instructions.Count; index++)
-                                {
-                                    var inst = md.Body.Instructions[index];
-                                    if (inst.Operand is FieldDefinition fd &&
-                                        removedAccessor.TryGetValue(fd, out var accessor))
-                                    {
-                                        if (inst.OpCode == OpCodes.Ldfld)
-                                        {
-                                            var capturedIndex = index;
-                                            lock (actions)
-                                            {
-                                                actions.Add(() =>
-                                                    md.Body.Instructions[capturedIndex] =
-                                                        Instruction.Create(OpCodes.Call,
-                                                            module.ImportReference(accessor.Getter)));
-                                            }
-                                        }
-                                        else if (inst.OpCode == OpCodes.Stfld)
-                                        {
-                                            var capturedIndex = index;
-                                            lock (actions)
-                                            {
-                                                actions.Add(() =>
-                                                    md.Body.Instructions[capturedIndex] =
-                                                        Instruction.Create(OpCodes.Call,
-                                                            module.ImportReference(accessor.Setter)));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-
-                    foreach (var action in actions)
-                    {
-                        action();
-                    }
+                    ReplaceFieldToAccessor(module, removedAccessor);
 
                     injectedAssemblyPath = injectedAssemblyPath ?? targetAssemblyPath;
 

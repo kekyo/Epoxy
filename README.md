@@ -789,6 +789,8 @@ Apache-v2
   * Minimized template code, if you want to refer to the sample code corresponding to the Model part of MVVM,
     If you want to refer to the sample code corresponding to the Model part of MVVM,
     please refer to the `playground` directory in the repository.
+  * Fixed an exception in the ViewModel injector when referencing the backing store field with an `internal` and narrow modifier.
+    This was occurring when such code was intentionally written or when F# optimizations worked.
 * 1.12.0:
   * Downgraded F# dependency to 5.0.0.
 * 1.11.0:
