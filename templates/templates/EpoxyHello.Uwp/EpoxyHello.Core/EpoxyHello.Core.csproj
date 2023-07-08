@@ -2,12 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Nullable>Enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-  </ItemGroup>
 
 </Project>
