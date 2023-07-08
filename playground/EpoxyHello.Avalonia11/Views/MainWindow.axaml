@@ -65,6 +65,12 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <Grid Width="50" Height="50"
+                  Margin="0,0,30,30"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Bottom"
+                  epoxy:Anchor.Pile="{Binding IndicatorPile}">
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

@@ -17,18 +17,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
+using Epoxy;
 
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 
-using Epoxy;
 using EpoxyHello.Models;
+using EpoxyHello.Avalonia11.Controls;
 
 namespace EpoxyHello.Avalonia11.ViewModels;
 
@@ -43,6 +43,8 @@ public sealed class MainWindowViewModel
 
     public Command Fetch { get; }
 
+    public Pile<Panel> IndicatorPile { get; } = Pile.Factory.Create<Panel>();
+
     public MainWindowViewModel()
     {
         // A handler for window opened
@@ -55,36 +57,49 @@ public sealed class MainWindowViewModel
         // A handler for fetch button
         this.Fetch = Command.Factory.Create(async () =>
         {
+            // Disable button
             this.IsEnabled = false;
 
-            try
+            // Temporary rent Grid children accessor
+            await this.IndicatorPile.RentAsync(async indicator =>
             {
-                // Uses The Cat API
-                var cats = await TheCatAPI.FetchTheCatsAsync(10);
+                // Show WaitingBlock control
+                var waitingBlock = new WaitingBlock();
+                indicator.Children.Add(waitingBlock);
 
-                this.Items.Clear();
-
-                static async ValueTask<Bitmap?> FetchImageAsync(Uri url) =>
-                    new Bitmap(new MemoryStream(await TheCatAPI.FetchImageAsync(url)));
-
-                foreach (var cat in cats)
+                try
                 {
-                    if (cat.Url is { } url)
+                    // Uses The Cat API
+                    var cats = await TheCatAPI.FetchTheCatsAsync(10);
+
+                    this.Items.Clear();
+
+                    static async ValueTask<Bitmap?> FetchImageAsync(Uri url) =>
+                        new Bitmap(new MemoryStream(await TheCatAPI.FetchImageAsync(url)));
+
+                    foreach (var cat in cats)
                     {
-                        var bleed = cat?.Bleeds.FirstOrDefault();
-                        this.Items.Add(new ItemViewModel
+                        if (cat.Url is { } url)
                         {
-                            Title = bleed?.Description ?? bleed?.Temperament ?? "(No comment)",
-                            Score = bleed?.Intelligence ?? 5,
-                            Image = await FetchImageAsync(url)
-                        });
+                            var bleed = cat?.Bleeds.FirstOrDefault();
+                            this.Items.Add(new ItemViewModel
+                            {
+                                Title = bleed?.Description ?? bleed?.Temperament ?? "(No comment)",
+                                Score = bleed?.Intelligence ?? 5,
+                                Image = await FetchImageAsync(url)
+                            });
+                        }
                     }
                 }
-            }
-            finally
-            {
-                this.IsEnabled = true;
-            }
+                finally
+                {
+                    // Hide WaitingBlock control
+                    indicator.Children.Remove(waitingBlock);
+
+                    // Re-enable button
+                    this.IsEnabled = true;
+                }
+            });
         });
     }
 }

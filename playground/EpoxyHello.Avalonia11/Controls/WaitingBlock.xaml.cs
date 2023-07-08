@@ -17,28 +17,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Epoxy;
 using Epoxy.Supplemental;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
-namespace EpoxyHello.Wpf.Controls;
+namespace EpoxyHello.Avalonia11.Controls;
 
 /// <summary>
 /// Interaction logic for WaitingBlock.xaml
 /// </summary>
 public sealed partial class WaitingBlock : UserControl
 {
-    public static readonly DependencyProperty CellBrushesProperty =
-        DependencyProperty.Register(
-            "CellBrushes",
-            typeof(ObservableCollection<SolidColorBrush>),
-            typeof(WaitingBlock));
+    public static readonly AvaloniaProperty CellBrushesProperty =
+        AvaloniaProperty.Register<WaitingBlock, ObservableCollection<IImmutableSolidColorBrush>?>(
+            "CellBrushes");
 
     private int currentPosition;
     private Timer timer;
@@ -69,23 +68,24 @@ public sealed partial class WaitingBlock : UserControl
             TimeSpan.Zero);
     }
 
-    protected override void OnVisualParentChanged(DependencyObject oldParent)
-    {
-        base.OnVisualParentChanged(oldParent);
+    private void InitializeComponent() =>
+        AvaloniaXamlLoader.Load(this);
 
-        if (this.VisualParent != null)
-        {
-            this.timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
-        }
-        else
-        {
-            this.timer.Change(TimeSpan.Zero, TimeSpan.Zero);
-        }
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        this.timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
     }
 
-    public ObservableCollection<SolidColorBrush>? CellBrushes
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        get => (ObservableCollection<SolidColorBrush>?)GetValue(CellBrushesProperty);
+        this.timer.Change(TimeSpan.Zero, TimeSpan.Zero);
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    public ObservableCollection<IImmutableSolidColorBrush>? CellBrushes
+    {
+        get => (ObservableCollection<IImmutableSolidColorBrush>?)GetValue(CellBrushesProperty);
         set => SetValue(CellBrushesProperty, value);
     }
 }
