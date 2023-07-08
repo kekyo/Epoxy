@@ -31,6 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "playground", "playground", 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Wpf", "playground\EpoxyHello.Wpf\EpoxyHello.Wpf.csproj", "{08CFD5A6-8FF6-4150-B92F-D83783AA124A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Core", "playground\EpoxyHello.Core\EpoxyHello.Core.csproj", "{45093A50-DB02-4BF9-A879-D732204A0F23}"
 EndProject
@@ -41,16 +44,25 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpoxyHello.Xamarin.Forms.iOS", "playground\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms.iOS\EpoxyHello.Xamarin.Forms.iOS.csproj", "{FD4397BA-222E-49F6-9901-D4D2A02821E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Xamarin.Forms", "playground\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms\EpoxyHello.Xamarin.Forms.csproj", "{071AF596-97CD-4985-B42A-F635084DC972}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EpoxyHello.Xamarin.Forms", "EpoxyHello.Xamarin.Forms", "{7A785D2F-3A0A-433B-AD3F-B66FFD51B88F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpoxyHello.Uwp", "playground\EpoxyHello.Uwp\EpoxyHello.Uwp.csproj", "{E5487AE0-C1DD-47DC-B446-EA5BE3E74767}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EpoxyHello.Avalonia", "EpoxyHello.Avalonia", "{1A4CCF7A-3BA3-4A1B-98D7-2B18D7C92E73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Avalonia.Desktop", "playground\EpoxyHello.Avalonia\EpoxyHello.Avalonia.Desktop\EpoxyHello.Avalonia.Desktop.csproj", "{6032235F-4A05-4D2A-89EB-C9C2A0C5CD87}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Avalonia", "playground\EpoxyHello.Avalonia\EpoxyHello.Avalonia\EpoxyHello.Avalonia.csproj", "{7152B669-DE0C-4089-AEC4-48269A0F5323}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Avalonia", "src\Epoxy.Avalonia\Epoxy.Avalonia.csproj", "{32ABAA5B-2465-4FE8-8446-7BC7CEC16123}"
 EndProject
@@ -61,6 +73,9 @@ EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "EpoxyHello.WinUI.Desktop (Package)", "playground\EpoxyHello.WinUI\EpoxyHello.WinUI.Desktop (Package)\EpoxyHello.WinUI.Desktop (Package).wapproj", "{9E343E2E-9EEB-448D-A602-41D39733F76E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.WinUI.Desktop", "playground\EpoxyHello.WinUI\EpoxyHello.WinUI.Desktop\EpoxyHello.WinUI.Desktop.csproj", "{3DAA1687-ACFD-471C-BCEE-DBDA8DD31467}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Core.Wpf", "src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj", "{C0A15D5B-C338-4306-9C2B-CE7E6AB50DE1}"
 EndProject
@@ -82,8 +97,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "playground.FSharp", "playgr
 	EndProjectSection
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Wpf", "playground.FSharp\EpoxyHello.Wpf\EpoxyHello.Wpf.fsproj", "{D9A4739F-59D4-4742-97E0-4CC454C986A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Avalonia", "playground.FSharp\EpoxyHello.Avalonia\EpoxyHello.Avalonia\EpoxyHello.Avalonia.fsproj", "{56F094F3-6C81-42EA-88AE-76C6F9ACBC6F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EpoxyHello.Avalonia", "EpoxyHello.Avalonia", "{7B9B309F-0E1D-4EE6-A4AC-5EE432A2A2B4}"
 EndProject
@@ -112,6 +133,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EpoxyHello.OpenSilver", "EpoxyHello.OpenSilver", "{56F05785-AB19-4429-AC90-B3F8A27CE0DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.OpenSilver", "playground\EpoxyHello.OpenSilver\EpoxyHello.OpenSilver\EpoxyHello.OpenSilver.csproj", "{911F5E17-BC70-47B4-A980-97ABB4078809}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.OpenSilver.Simulator", "playground\EpoxyHello.OpenSilver\EpoxyHello.OpenSilver.Simulator\EpoxyHello.OpenSilver.Simulator.csproj", "{A1354344-BA2B-4743-9652-82031C174179}"
 EndProject
@@ -122,6 +146,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Maui", "src\Epoxy.Maui\Epoxy.Maui.csproj", "{0B8DC549-C4BE-4112-8C7F-F2C2ABD94229}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Maui", "playground\EpoxyHello.Maui\EpoxyHello.Maui.csproj", "{046FC4BB-B2C5-4E89-8E9A-508BE4F0CCBE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Core.Avalonia11", "src\Epoxy.Core.Avalonia11\Epoxy.Core.Avalonia11.csproj", "{EA439C38-68F7-4965-978C-85EAD9173553}"
 EndProject
@@ -130,8 +157,14 @@ EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Epoxy.Avalonia11", "src\FSharp.Epoxy.Avalonia11\FSharp.Epoxy.Avalonia11.fsproj", "{8890BC8D-034C-4347-89DC-CC221018A378}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpoxyHello.Avalonia11", "playground\EpoxyHello.Avalonia11\EpoxyHello.Avalonia11.csproj", "{D92134CD-6769-43EC-B869-509C1135232F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Avalonia11", "playground.FSharp\EpoxyHello.Avalonia11\EpoxyHello.Avalonia11.fsproj", "{44942734-7F1C-4466-84AF-C55AFCCB8092}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF5976C8-2143-4769-A029-0B1C64B18F81} = {BF5976C8-2143-4769-A029-0B1C64B18F81}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
