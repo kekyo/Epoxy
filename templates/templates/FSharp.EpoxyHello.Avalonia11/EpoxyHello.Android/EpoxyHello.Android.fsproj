@@ -16,15 +16,19 @@
     <PackageReference Include="Avalonia.Android" Version="11.0.0" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\EpoxyHello.UI\EpoxyHello.UI.csproj" />
+    <ProjectReference Include="..\EpoxyHello.UI\EpoxyHello.UI.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
     <AndroidResource Include="Icon.png">
       <Link>Resources\drawable\Icon.png</Link>
     </AndroidResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="MainActivity.fs" />
   </ItemGroup>
 
 </Project>

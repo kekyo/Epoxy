@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    
+
   <PropertyGroup>
+    <OutputType>Library</OutputType>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -14,20 +15,19 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
-    <PackageReference Include="Epoxy.Avalonia11" Version="*" />
+    <PackageReference Include="FSharp.Epoxy.Avalonia11" Version="*" />
+    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.6.0" />
   </ItemGroup>
-    
+
   <ItemGroup>
-    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />
+    <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.fsproj" />
   </ItemGroup>
-    
+
   <ItemGroup>
-    <Compile Update="Views\MainWindow.axaml.cs">
-      <DependentUpon>MainWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainView.axaml.cs">
-      <DependentUpon>MainView.axaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\MainViewModel.fs" />
+    <Compile Include="Views\MainView.axaml.fs" />
+    <Compile Include="Views\MainWindow.axaml.fs" />
+    <Compile Include="App.axaml.fs" />
   </ItemGroup>
-    
+
 </Project>

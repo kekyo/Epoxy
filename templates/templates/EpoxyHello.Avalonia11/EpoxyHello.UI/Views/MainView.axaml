@@ -6,7 +6,8 @@
     xmlns:epoxy="clr-namespace:Epoxy;assembly=Epoxy.Core"
     xmlns:viewmodels="clr-namespace:EpoxyHello.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="EpoxyHello.Views.MainView">
+    x:Class="EpoxyHello.Views.MainView"
+    x:DataType="viewmodels:MainViewModel">
 
     <UserControl.DataContext>
         <viewmodels:MainViewModel />

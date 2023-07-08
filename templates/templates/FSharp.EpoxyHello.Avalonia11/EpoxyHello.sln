@@ -11,7 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Core", "EpoxyHello.Core\EpoxyHello.Core.fsproj", "{339571A1-FFEB-4E13-8CF1-BA6E95FF31BB}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello", "EpoxyHello\EpoxyHello.fsproj", "{B7A6004F-0021-47D5-A268-88BD1EABD4CC}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.UI", "EpoxyHello.UI\EpoxyHello.UI.fsproj", "{8EDC94ED-6677-4B85-8395-F7795E19EC39}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Desktop", "EpoxyHello.Desktop\EpoxyHello.Desktop.fsproj", "{00696F21-674E-411D-BFF2-3452144A2E76}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Browser", "EpoxyHello.Browser\EpoxyHello.Browser.fsproj", "{A370EF96-D059-460D-839C-3C4CE7192200}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.Android", "EpoxyHello.Android\EpoxyHello.Android.fsproj", "{C7BB12CE-B72E-4A4C-A465-A39FFF4E819C}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EpoxyHello.iOS", "EpoxyHello.iOS\EpoxyHello.iOS.fsproj", "{3B9AF68D-7BE8-4BE1-A8BB-8588FCDB6B27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +31,30 @@ Global
 		{339571A1-FFEB-4E13-8CF1-BA6E95FF31BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{339571A1-FFEB-4E13-8CF1-BA6E95FF31BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{339571A1-FFEB-4E13-8CF1-BA6E95FF31BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7A6004F-0021-47D5-A268-88BD1EABD4CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7A6004F-0021-47D5-A268-88BD1EABD4CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7A6004F-0021-47D5-A268-88BD1EABD4CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7A6004F-0021-47D5-A268-88BD1EABD4CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EDC94ED-6677-4B85-8395-F7795E19EC39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EDC94ED-6677-4B85-8395-F7795E19EC39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EDC94ED-6677-4B85-8395-F7795E19EC39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EDC94ED-6677-4B85-8395-F7795E19EC39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00696F21-674E-411D-BFF2-3452144A2E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00696F21-674E-411D-BFF2-3452144A2E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00696F21-674E-411D-BFF2-3452144A2E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00696F21-674E-411D-BFF2-3452144A2E76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A370EF96-D059-460D-839C-3C4CE7192200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A370EF96-D059-460D-839C-3C4CE7192200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A370EF96-D059-460D-839C-3C4CE7192200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A370EF96-D059-460D-839C-3C4CE7192200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7BB12CE-B72E-4A4C-A465-A39FFF4E819C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7BB12CE-B72E-4A4C-A465-A39FFF4E819C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7BB12CE-B72E-4A4C-A465-A39FFF4E819C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C7BB12CE-B72E-4A4C-A465-A39FFF4E819C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7BB12CE-B72E-4A4C-A465-A39FFF4E819C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7BB12CE-B72E-4A4C-A465-A39FFF4E819C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3B9AF68D-7BE8-4BE1-A8BB-8588FCDB6B27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B9AF68D-7BE8-4BE1-A8BB-8588FCDB6B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B9AF68D-7BE8-4BE1-A8BB-8588FCDB6B27}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3B9AF68D-7BE8-4BE1-A8BB-8588FCDB6B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B9AF68D-7BE8-4BE1-A8BB-8588FCDB6B27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B9AF68D-7BE8-4BE1-A8BB-8588FCDB6B27}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,10 +3,8 @@
 open Epoxy
 open System
 
-open EpoxyHello.Models
-
 [<Sealed; ViewModel>]
-type MainWindowViewModel() as self =
+type MainViewModel() as self =
     do
         // A handler for window loaded
         self.Ready <- Command.Factory.create(fun () -> async {
