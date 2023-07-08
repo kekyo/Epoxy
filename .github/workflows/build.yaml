@@ -119,6 +119,7 @@ jobs:
         dotnet nuget push artifacts\Epoxy.Core.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.Xamarin.Forms.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.Avalonia.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Core.Avalonia11.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.OpenSilver.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.Uwp.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.WinUI.*.nupkg --source ref1
@@ -132,6 +133,7 @@ jobs:
         dotnet nuget push artifacts\Epoxy.WinUI.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref1
+        dotnet nuget push artifacts\FSharp.Epoxy.Avalonia11.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.OpenSilver.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Templates.*.nupkg --source ref1
 
@@ -144,6 +146,7 @@ jobs:
     #    dotnet nuget push artifacts\Epoxy.Core.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Core.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Core.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.Avalonia11.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Core.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Core.Uwp.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Core.WinUI.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
@@ -157,5 +160,6 @@ jobs:
     #    dotnet nuget push artifacts\Epoxy.WinUI.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\FSharp.Epoxy.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\FSharp.Epoxy.Avalonia11.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\FSharp.Epoxy.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Templates.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
