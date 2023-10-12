@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0</TargetFrameworks>
     <AssemblyTitle>Epoxy.Core.Avalonia11</AssemblyTitle>
     <PackageId>Epoxy.Core.Avalonia11</PackageId>
     <PackageTags>$(PackageTags);avalonia</PackageTags>

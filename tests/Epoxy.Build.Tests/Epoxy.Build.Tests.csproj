@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Build.Tests</AssemblyName>
-    <TargetFrameworks>net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <AssemblyTitle>Epoxy.Build.Tests</AssemblyTitle>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
