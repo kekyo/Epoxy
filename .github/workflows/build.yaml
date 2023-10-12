@@ -7,8 +7,8 @@ permissions:
 
 jobs:
   build:
-    runs-on: [self-hosted, windows, x64]
-    #runs-on: windows-latest
+    #runs-on: [self-hosted, windows, x64]
+    runs-on: windows-latest
     steps:
 
     #-----------------------------------------------------------------------
@@ -20,14 +20,6 @@ jobs:
     #   lfs: true
     #- name: Checkout LFS objects
     #  run: git lfs checkout
-
-    - name: Extract branch name
-      id: extract_branch_name
-    #  if: startsWith( github.ref, 'refs/tags/' )
-      run: |
-        $branch_name=$(git name-rev --name-only --exclude=tags/* HEAD)
-        echo "Detected current branch: ${branch_name}"
-        echo "::set-output name=branch_name::${branch_name}"
 
     #-----------------------------------------------------------------------
     # Setup environments
@@ -47,6 +39,13 @@ jobs:
       run: |
         dotnet nuget add source ${{secrets.GH_LOCAL_NUGET_URL}} -n ref1 -u ${{secrets.GH_LOCAL_NUGET_USER}} -p ${{secrets.GH_LOCAL_NUGET_PASSWORD}} --store-password-in-clear-text --configfile nuget.config
 #        dotnet nuget add source ${{secrets.GH_NUGET_URL}} -n ref2 -u ${{secrets.GH_NUGET_USER}} -p ${{secrets.GH_NUGET_PASSWORD}} --store-password-in-clear-text --configfile nuget.config
+
+    - name: Extract branch name
+      id: extract_branch_name
+      run: |
+        $branch_name=$(git name-rev --name-only --exclude=tags/* HEAD)
+        echo "Detected current branch: ${branch_name}"
+        echo "branch_name=${branch_name}" >> $GITHUB_OUTPUT
 
     #-----------------------------------------------------------------------
     # Build
