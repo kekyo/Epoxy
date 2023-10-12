@@ -14,7 +14,7 @@ jobs:
     #-----------------------------------------------------------------------
     # Checkout
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     #   lfs: true
@@ -32,34 +32,16 @@ jobs:
     #-----------------------------------------------------------------------
     # Setup environments
 
-    - name: Setup .NET 2.2
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 2.2.*
-    - name: Setup .NET 3.1
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.*
-    - name: Setup .NET 5
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.*
-    - name: Setup .NET 6
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.*
-    - name: Setup .NET 7
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 7.0.*
-
-    - name: Setup .NET Maui workloads
-      run: |
-        dotnet workload install maui 
-        dotnet workload repair
-
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.3
+        dotnet-version:
+          2.2.x
+          3.1.x
+          5.0.x
+          6.0.x
+          7.0.x
+          8.0.x
 
     - name: Setup NuGet package reference
       run: |
@@ -69,40 +51,33 @@ jobs:
     #-----------------------------------------------------------------------
     # Build
 
-    - name: NuGet restore
-      run: |
-        msbuild -p:Configuration=Release -maxCpuCount -t:restore src\Epoxy.Build\Epoxy.Build.csproj
-        msbuild -p:Configuration=Release -maxCpuCount -t:restore Epoxy.sln
-
     - name: Build
       run: |
-        msbuild -p:Configuration=Release -maxCpuCount src\Epoxy.Build\Epoxy.Build.csproj
-        msbuild -p:Configuration=Release -maxCpuCount Epoxy.sln
+        dotnet build -p:Configuration=Release Epoxy-build.sln
 
     - name: Build NuGet packages
       run: |
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Xamarin.Forms\Epoxy.Core.Xamarin.Forms.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Avalonia11\Epoxy.Core.Avalonia11.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.Uwp\Epoxy.Core.Uwp.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.WinUI\Epoxy.Core.WinUI.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Build\Epoxy.Build.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Wpf\Epoxy.Wpf.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Avalonia\Epoxy.Avalonia.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Avalonia11\Epoxy.Avalonia11.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Uwp\Epoxy.Uwp.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.WinUI\Epoxy.WinUI.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.Avalonia11\FSharp.Epoxy.Avalonia11.fsproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
-        msbuild -t:restore -p:Configuration=Release -maxCpuCount templates\Epoxy.Templates.csproj
-        msbuild -p:Configuration=Release -maxCpuCount templates\Epoxy.Templates.csproj
-        msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\artifacts templates\Epoxy.Templates.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Xamarin.Forms\Epoxy.Core.Xamarin.Forms.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Avalonia11\Epoxy.Core.Avalonia11.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Uwp\Epoxy.Core.Uwp.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.WinUI\Epoxy.Core.WinUI.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Build\Epoxy.Build.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Wpf\Epoxy.Wpf.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Avalonia\Epoxy.Avalonia.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Avalonia11\Epoxy.Avalonia11.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Uwp\Epoxy.Uwp.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.WinUI\Epoxy.WinUI.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj
+        dotnet pack -p:Configuration=Release -o artifacts src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj
+        dotnet pack -p:Configuration=Release -o artifacts src\FSharp.Epoxy.Avalonia11\FSharp.Epoxy.Avalonia11.fsproj
+        dotnet pack -p:Configuration=Release -o artifacts src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
+        dotnet build -p:Configuration=Release templates\Epoxy.Templates.csproj
+        dotnet pack -p:Configuration=Release -o artifacts templates\Epoxy.Templates.csproj
 
     #-----------------------------------------------------------------------
     # Test
@@ -123,16 +98,12 @@ jobs:
         dotnet nuget push artifacts\Epoxy.Core.Avalonia.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.Avalonia11.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.OpenSilver.*.nupkg --source ref1
-        dotnet nuget push artifacts\Epoxy.Core.Uwp.*.nupkg --source ref1
-        dotnet nuget push artifacts\Epoxy.Core.WinUI.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Build.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Xamarin.Forms.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Avalonia.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Avalonia11.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.OpenSilver.*.nupkg --source ref1
-        dotnet nuget push artifacts\Epoxy.Uwp.*.nupkg --source ref1
-        dotnet nuget push artifacts\Epoxy.WinUI.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Avalonia11.*.nupkg --source ref1
