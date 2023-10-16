@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <DebugSymbols>true</DebugSymbols>
