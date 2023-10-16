@@ -55,6 +55,10 @@
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
+      <group targetFramework="net8.0">
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
+        <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
+      </group>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Avalonia" version="$PackageVersion$" exclude="Build,Analyzers" />
