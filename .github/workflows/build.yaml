@@ -63,8 +63,8 @@ jobs:
         msbuild -p:Configuration=Release -maxCpuCount src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
         msbuild -p:Configuration=Release -maxCpuCount -t:restore src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
         msbuild -p:Configuration=Release -maxCpuCount src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
-        msbuild -p:Configuration=Release -maxCpuCount -t:restore src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.csproj
-        msbuild -p:Configuration=Release -maxCpuCount src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.csproj
+        msbuild -p:Configuration=Release -maxCpuCount -t:restore src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
+        msbuild -p:Configuration=Release -maxCpuCount src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
 
     #-----------------------------------------------------------------------
     # Test
