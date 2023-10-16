@@ -12,6 +12,10 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
+  <PropertyGroup Condition="('$(TargetFramework)' == 'netcoreapp3.1') OR ('$(TargetFramework)' == 'net5.0') OR ('$(TargetFramework)' == 'net6.0') OR ('$(TargetFramework)' == 'net7.0') OR ('$(TargetFramework)' == 'net8.0')">
+    <RollForward>Minor</RollForward>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />

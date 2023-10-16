@@ -41,6 +41,8 @@
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</RepoRoot>
+    <PathMap>$(RepoRoot)=.</PathMap>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
