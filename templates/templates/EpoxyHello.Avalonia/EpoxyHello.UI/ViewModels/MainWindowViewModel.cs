@@ -1,8 +1,6 @@
 ﻿using Epoxy;
 using System;
 
-using EpoxyHello.Models;
-
 namespace EpoxyHello.ViewModels;
 
 [ViewModel]
