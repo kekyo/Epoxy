@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RelaxVersioner" Version="3.0.0" PrivateAssets="All" />
+    <PackageReference Include="RelaxVersioner" Version="3.2.20" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
