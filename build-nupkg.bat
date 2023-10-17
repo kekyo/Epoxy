@@ -7,18 +7,18 @@ echo.
 echo "==================================================="
 echo "Building packages"
 
-dotnet build -p:Configuration=Release Epoxy-build.sln
+dotnet build -p:Configuration=Release -p:RestoreNoCache=True Epoxy-build.sln
 
 echo.
 echo "==================================================="
 echo "Building packages (OpenSilver)"
 
-msbuild -p:Configuration=Release -maxCpuCount -t:restore src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
-msbuild -p:Configuration=Release -maxCpuCount src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
-msbuild -p:Configuration=Release -maxCpuCount -t:restore src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
-msbuild -p:Configuration=Release -maxCpuCount src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
-msbuild -p:Configuration=Release -maxCpuCount -t:restore src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
-msbuild -p:Configuration=Release -maxCpuCount src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
+msbuild -p:Configuration=Release -p:RestoreNoCache=True -maxCpuCount -t:restore src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
+msbuild -p:Configuration=Release -p:RestoreNoCache=True -maxCpuCount src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
+msbuild -p:Configuration=Release -p:RestoreNoCache=True -maxCpuCount -t:restore src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
+msbuild -p:Configuration=Release -p:RestoreNoCache=True -maxCpuCount src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
+msbuild -p:Configuration=Release -p:RestoreNoCache=True -maxCpuCount -t:restore src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
+msbuild -p:Configuration=Release -p:RestoreNoCache=True -maxCpuCount src\FSharp.Epoxy.OpenSilver\FSharp.Epoxy.OpenSilver.fsproj
 
 echo.
 echo "==================================================="

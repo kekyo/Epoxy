@@ -7,7 +7,6 @@
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <DebugSymbols>true</DebugSymbols>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
