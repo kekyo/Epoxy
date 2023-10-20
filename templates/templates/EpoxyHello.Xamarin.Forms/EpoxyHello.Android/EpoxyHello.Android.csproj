@@ -10,7 +10,6 @@
     <RootNamespace>EpoxyHello</RootNamespace>
     <AssemblyName>EpoxyHello</AssemblyName>
     <Deterministic>True</Deterministic>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -47,7 +46,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
-    <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,7 +54,7 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.7" />
   </ItemGroup>
   <ItemGroup>
