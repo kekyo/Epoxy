@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Epoxy.OpenSilver" Version="*" />
-    <PackageReference Include="OpenSilver" Version="1.1.0" />
+    <PackageReference Include="OpenSilver" Version="1.2.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EpoxyHello.Core\EpoxyHello.Core.csproj" />

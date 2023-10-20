@@ -26,5 +26,6 @@
     <file src="bin\$Configuration$\net5.0\*.*" target="tools/net5.0" />
     <file src="bin\$Configuration$\net6.0\*.*" target="tools/net6.0" />
     <file src="bin\$Configuration$\net7.0\*.*" target="tools/net7.0" />
+    <file src="bin\$Configuration$\net8.0\*.*" target="tools/net8.0" />
   </files>
 </package>

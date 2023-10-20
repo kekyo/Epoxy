@@ -15,9 +15,6 @@
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
-|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
-|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
-|Epoxy.Maui|[![NuGet Epoxy.Maui](https://img.shields.io/nuget/v/Epoxy.Maui.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Maui)|.NET MAUI|
 
 ## NuGetパッケージ F#専用
 
@@ -38,13 +35,10 @@
 * Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、独立した柔軟性のあるライブラリです。
   * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
-  * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
+  * WPF: .NET 8.0/7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms)  5.0.0.1874 or higher)
-  * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
-  * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17763.0 or higher)
-  * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
 * F#は5.0以降に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
@@ -94,7 +88,7 @@ dotnet build
 * "Hello Epoxy!"と表示するだけの、非常にシンプルなコードを含むプロジェクト。
 
 注意: テンプレートは .NET 7 を想定しているため、.NET 7 SDKをあらかじめインストールして下さい。
-他のバージョンのみの環境（例えば.NET 6/5 SDK）では、`TargetFramework`を修正しないと、ビルドに失敗します。
+他のバージョンのみの環境（例えば.NET 8/6/5 SDK）では、`TargetFramework`を修正しないと、ビルドに失敗します。
 
 ### 現在サポートしているテンプレート一覧
 
@@ -105,17 +99,14 @@ dotnet build
 |`epoxy-avalonia`|C#, F#|旧Avaloniaのテンプレートコード|
 |`epoxy-opensilver`|C#|OpenSilverのテンプレートコード|
 |`epoxy-xamarin-forms`|C#|Xamarin Formsのテンプレートコード|
-|`epoxy-uwp`|C#|UWPのテンプレートコード|
-|`epoxy-winui`|C#|WinUI 3のテンプレートコード|
-|`epoxy-maui`|C#|.NET MAUIのテンプレートコード|
 
 * デフォルトではC#のテンプレートコードが展開されます。F#にする場合は、`dotnet new epoxy-wpf -lang F#`のように、オプションをコマンドラインに加えます。
-* Xamarin Forms, UWP, WinUI 3は、古い形式のMSBuildプロジェクトを使用しています。
+* Xamarin Formsは、古い形式のMSBuildプロジェクトを使用しています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
 * OpenSilverのテンプレートコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
   * WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。
-* develブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
+* develブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json --force`
 
 ### Visual Studioのウィザードから選択
 
@@ -243,7 +234,7 @@ public sealed class MainWindowViewModel
 ### Modelの実装例
 
 The Cat APIにアクセスする共通コードは、`EpoxyHello.Core` プロジェクトで実装しています。
-このプロジェクトは、WPF・Xamarin Forms・Avalonia・UWP・WinUI・OpenSilverのいずれにも依存せず、完全に独立しています。
+このプロジェクトは、WPF・Xamarin Forms・Avalonia・OpenSilverのいずれにも依存せず、完全に独立しています。
 
 このように、依存性を排除することで、マルチプラットフォーム対応の共通化を行うことが出来ますが、
 小規模な開発であれば、`Model`の実装を`ViewModel`と同じプロジェクトに配置してもかまいません
@@ -389,11 +380,11 @@ this.Ready = Command.Factory.Create<EventArgs>(async _ =>
 `Command.Factory.Create<T>`のジェネリック引数には、イベントの第二引数(通常EventArgsを継承したクラス)を指定します。
 イベントの引数が必要でない場合は、非ジェネリックメソッドを使う事も出来ます。
 
-補足1: WPF,UWPやXamarin Formsでは、`Behavior`や`Trigger`で同じことを実現できますが、
-WPFやUWPの場合は追加のパッケージが必要になることと、汎用的に設計されているため、やや複雑です。
+補足1: WPFやXamarin Formsでは、`Behavior`や`Trigger`で同じことを実現できますが、
+追加のパッケージが必要になることと、汎用的に設計されているため、やや複雑です。
 `EventBinder`を使うことで、同じ記法でシンプルに記述できる利点があります。
 
-補足2: UWP環境(UnoのUWPビルドを含む)では、対象のイベントは以下のようなシグネチャである必要があります:
+補足2: UWP環境(Xamarin FormsのUWPビルドを含む)では、対象のイベントは以下のようなシグネチャである必要があります:
 
 ```csharp
 // EventBinderでバインディング可能なイベント
@@ -545,7 +536,7 @@ await UIThread.InvokeAsync(async () =>
 
 #### UWP環境で実行する場合の注意
 
-現在の実装では、UWPネイティブや、Xamarin Forms/UnoでのUWP環境においての実行、WinUIなどのUWP由来のランタイムで
+現在の実装では、Xamarin FormsのUWP環境においての実行で
 `UIThread`クラスを使う場合、`View`構築中の`ViewModel`のコンストラクタなどで使用すると、正しい結果が得られない場合があります。
 
 UWPは、ビューを保持するウインドウ毎に異なるUIスレッドが割り当てられていて、
@@ -788,6 +779,9 @@ Apache-v2
 
 ## History
 
+* 1.11.0:
+  * .NET 8 RC2に対応しました。
+  * UWP, WinUI3, MAUIをサポートから外しました (#39).
 * 1.10.0:
   * Avalonia 11に対応しました。
   * テンプレートコードを最小化しました。MVVMのModel部分に相当するサンプルコードを参照する場合は、

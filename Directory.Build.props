@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <DebugSymbols>true</DebugSymbols>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -25,7 +25,7 @@
     <PackageTags>mvvm;viewmodel;easy;simple;combinable;async;awaitable;command</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
-    <NoWarn>$(NoWarn);NU1605;NU1701;NU1803;NU1503;CA1416</NoWarn>
+    <NoWarn>$(NoWarn);NU1605;NU1701;NU1803;NU1503;NU1902;NU1903;CA1416;NETSDK1202</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' != 'Release'">
@@ -40,6 +40,8 @@
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</RepoRoot>
+    <PathMap>$(RepoRoot)=.</PathMap>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">

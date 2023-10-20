@@ -15,9 +15,6 @@
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
-|Epoxy.Uwp|[![NuGet Epoxy.Uwp](https://img.shields.io/nuget/v/Epoxy.Uwp.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Uwp)|Universal Windows version|
-|Epoxy.WinUI|[![NuGet Epoxy.WinUI](https://img.shields.io/nuget/v/Epoxy.WinUI.svg?style=flat)](https://www.nuget.org/packages/Epoxy.WinUI)|WinUI 3 version|
-|Epoxy.Maui|[![NuGet Epoxy.Maui](https://img.shields.io/nuget/v/Epoxy.Maui.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Maui)|.NET MAUI|
 
 ## NuGet for F# specialized
 
@@ -38,13 +35,10 @@
 * Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
   * All .NET languages including C#, and specialized F# NuGet packages are available.
 * Supported platforms:
-  * WPF: .NET 7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
+  * WPF: .NET 8.0/7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
-  * Universal Windows: Universal Windows 10 (uap10.0.18362 or higher)
-  * WinUI 3: [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (net5.0-windows10.0.17134.0 or higher)
-  * .NET MAUI: [.NET Multi-platform App UI](https://dotnet.microsoft.com/en-us/apps/maui) (.net6.0 or higher)
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * F# is 5.0 or upper, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
@@ -86,7 +80,7 @@ The template code includes the following code:
 * A project containing very simple code that just displays "Hello Epoxy!".
 
 Caution: .NET 7 SDK must be installed beforehand because the template assumes .NET 7.
-For other versions only (e.g. .NET 6/5 SDK), the build will fail if you do not modify `TargetFramework` property.
+For other versions only (e.g. .NET 8/6/5 SDK), the build will fail if you do not modify `TargetFramework` property.
 
 ### List of currently supported templates
 
@@ -97,17 +91,14 @@ For other versions only (e.g. .NET 6/5 SDK), the build will fail if you do not m
 |`epoxy-avalonia`|C#, F#|Template code for older Avalonia|
 |`epoxy-opensilver`|C#|Template code for OpenSilver|
 |`epoxy-xamarin-forms`|C#|Template code for Xamarin Forms|
-|`epoxy-uwp`|C#|Template code for UWP|
-|`epoxy-winui`|C#|Template code for WinUI 3|
-|`epoxy-maui`|C#|Template code for .NET MAUI|
 
 * By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
-* Xamarin Forms and UWP are required old style MSBuild project.
+* Xamarin Forms is required old style MSBuild project.
   * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
 * OpenSilver template code is contained only .NET Framework based simulator project.
   * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
   * You need to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
-* You can use devel branch package, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
+* You can use devel branch package, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json --force`
 
 ### Choose by Visual Studio wizard dialog
 
@@ -232,7 +223,7 @@ public sealed class MainWindowViewModel
 ### Example of Model implementation
 
 The common code to access The Cat API is implemented in the `EpoxyHello.Core` project.
-It does not depend on either WPF, Xamarin Forms, Avalonia, UWP, WinUI and OpenSilver assemblies and is completely independent.
+It does not depend on either WPF, Xamarin Forms, Avalonia and OpenSilver assemblies and is completely independent.
 
 By eliminating dependencies in this way, we can achieve commonality for multi-platform support.
 However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
@@ -378,12 +369,12 @@ this.Ready = Command.Factory.Create<EventArgs>(async _ =>
 The generic argument of `Command.Factory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
 Non-generic methods can also be used when event arguments are not required.
 
-TIP 1: In WPF, UWP, and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
-However, WPF and UWP require additional packages and are designed to be generic,
+TIP 1: In WPF and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
+However, they require additional packages and are designed to be generic,
 so they are a bit more complex.
 Using `EventBinder` has the advantage of being simple and using the same notation.
 
-TIP 2: In a UWP environment (including UWP builds of Uno), the target event should have the following signature:
+TIP 2: In a UWP environment (including UWP builds of Xamarin Forms), the target event should have the following signature:
 
 ```csharp
 // Events that can be bound by EventBinder
@@ -536,7 +527,7 @@ then use `UIThread.TryBind()` to verify continue processing can be performed.
 
 In the current implementation, if you use the `UIThread` class,
 in the constructor of a `ViewModel` while building a `View` and like,
-inside a UWP environment such as UWP native, Xamarin Forms/Uno, or a UWP-derived runtime such as WinUI,
+inside Xamarin Forms on UWP environment,
 you may not get the correct results.
 
 UWP has a different UI thread assigned to each window that holds a view,
@@ -789,6 +780,9 @@ Apache-v2
 
 ## History
 
+* 1.11.0:
+  * Supported .NET 8 RC2
+  * Dropped UWP, WinUI3 and MAUI (See #39 ).
 * 1.10.0:
   * Supported Avalonia 11.
   * Minimized template code. If you want to refer to the sample code corresponding to the Model part of MVVM,

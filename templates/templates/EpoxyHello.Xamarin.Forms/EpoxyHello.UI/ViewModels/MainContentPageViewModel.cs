@@ -5,8 +5,6 @@ using Xamarin.Forms;
 // Conflicted between Xamarin.Forms.Command and Epoxy.Command.
 using Command = Epoxy.Command;
 
-using EpoxyHello.Models;
-
 namespace EpoxyHello.ViewModels;
 
 [ViewModel]
