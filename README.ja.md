@@ -106,7 +106,7 @@ dotnet build
 * OpenSilverのテンプレートコードは、.NET Frameworkベースのシミュレータプロジェクトが含まれています。
   * ビルド・実行する場合は、`dotnet build` ではなく、Visual Studioでソリューションを開く必要があります。
   * WebAssemblyとしてChromeやFirefoxなどでホストする場合は、別途プロジェクトが必要です。
-* develブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
+* develブランチパッケージを使用できます。dotnet CLI公式には説明されていませんが、`--nuget-source`オプションを使用します: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json --force`
 
 ### Visual Studioのウィザードから選択
 

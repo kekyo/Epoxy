@@ -98,7 +98,7 @@ For other versions only (e.g. .NET 8/6/5 SDK), the build will fail if you do not
 * OpenSilver template code is contained only .NET Framework based simulator project.
   * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
   * You need to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
-* You can use devel branch package, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json`
+* You can use devel branch package, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json --force`
 
 ### Choose by Visual Studio wizard dialog
 
