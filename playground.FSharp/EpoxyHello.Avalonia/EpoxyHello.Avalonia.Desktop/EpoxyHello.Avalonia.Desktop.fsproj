@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="7.0.300" />
+    <PackageReference Update="FSharp.Core" Version="8.0.100" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     <PackageReference Include="Avalonia" Version="0.10.21" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.21" />

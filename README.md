@@ -780,6 +780,8 @@ Apache-v2
 
 ## History
 
+* 1.12.0:
+  * Supported .NET 8.0 SDK.
 * 1.11.0:
   * Supported .NET 8 RC2
   * Dropped UWP, WinUI3 and MAUI (See #39 ).
