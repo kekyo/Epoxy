@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="7.0.300" />
+    <PackageReference Update="FSharp.Core" Version="8.0.100" />
   </ItemGroup>
 
   <Import Project="..\..\src\Epoxy.Build\build\Epoxy.Build.targets" />
