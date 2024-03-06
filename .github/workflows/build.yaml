@@ -17,7 +17,7 @@ jobs:
     - name: Support longpaths
       run: git config --system core.longpaths true
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     #   lfs: true
@@ -28,7 +28,7 @@ jobs:
     # Setup environments
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           2.2.x
@@ -83,12 +83,14 @@ jobs:
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Xamarin.Forms\Epoxy.Core.Xamarin.Forms.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Avalonia11\Epoxy.Core.Avalonia11.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Core.Maui\Epoxy.Core.Maui.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.Core.OpenSilver\Epoxy.Core.OpenSilver.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Build\Epoxy.Build.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Wpf\Epoxy.Wpf.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Avalonia\Epoxy.Avalonia.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Avalonia11\Epoxy.Avalonia11.csproj
+        dotnet pack -p:Configuration=Release -o artifacts src\Epoxy.Maui\Epoxy.Maui.csproj
         msbuild -t:pack -p:Configuration=Release -p:PackageOutputPath=..\..\artifacts src\Epoxy.OpenSilver\Epoxy.OpenSilver.csproj
         dotnet pack -p:Configuration=Release -o artifacts src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj
         dotnet pack -p:Configuration=Release -o artifacts src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj
@@ -108,12 +110,14 @@ jobs:
         dotnet nuget push artifacts\Epoxy.Core.Avalonia.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.Avalonia11.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Core.OpenSilver.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Core.Maui.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Build.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Xamarin.Forms.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Avalonia.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.Avalonia11.*.nupkg --source ref1
         dotnet nuget push artifacts\Epoxy.OpenSilver.*.nupkg --source ref1
+        dotnet nuget push artifacts\Epoxy.Maui.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Wpf.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref1
         dotnet nuget push artifacts\FSharp.Epoxy.Avalonia11.*.nupkg --source ref1
@@ -131,12 +135,14 @@ jobs:
     #    dotnet nuget push artifacts\Epoxy.Core.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Core.Avalonia11.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Core.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Core.Maui.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Build.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Xamarin.Forms.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.Avalonia11.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\Epoxy.OpenSilver.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
+    #    dotnet nuget push artifacts\Epoxy.Maui.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\FSharp.Epoxy.Wpf.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\FSharp.Epoxy.Avalonia.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
     #    dotnet nuget push artifacts\FSharp.Epoxy.Avalonia11.*.nupkg --source ref2 --api-key ${{secrets.GH_NUGET_APIKEY}}
