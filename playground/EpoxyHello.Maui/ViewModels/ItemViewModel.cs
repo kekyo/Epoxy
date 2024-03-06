@@ -17,15 +17,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#nullable enable
-
-#if XAMARIN_FORMS
-using Xamarin.Forms;
-#endif
-
-#if MAUI
+using Epoxy;
 using Microsoft.Maui.Controls;
-#endif
 
-[assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
-[assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]
+namespace EpoxyHello.Maui.ViewModels;
+
+[ViewModel]
+public sealed class ItemViewModel
+{
+    public string? Title { get; set; }
+
+    public ImageSource? Image { get; set; }
+
+    public int Score { get; set; }
+}

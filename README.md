@@ -15,6 +15,7 @@
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
+|Epoxy.Maui|[![NuGet Epoxy.Maui](https://img.shields.io/nuget/v/Epoxy.Maui.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Maui)|.NET MAUI version|
 
 ## NuGet for F# specialized
 
@@ -39,6 +40,7 @@
   * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
   * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
+  * .NET MAUI: 7.0 or higher
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
 * F# is 5.0 or upper, F# signatures (camel-case functions, function types, `Async` type assumptions) are defined.
@@ -60,6 +62,9 @@ Sample code projects are located in the [playground directory](playground/)
 or F# sample code in the [playground FSharp directory](playground.FSharp/).
 
 ### How to get and build the template code
+
+Note: Template projects will be discontinued in future versions.
+You can still use Epoxy in the current version by simply adding the corresponding package to your project.
 
 The .NET 7 SDK CLI template is supported. You can easily try the template code in a clean state with the following command:
 
@@ -780,6 +785,11 @@ Apache-v2
 
 ## History
 
+* 1.13.0:
+  * .NET MAUI package has been resurrected because Xamarin Forms is no longer supported (#39)
+    * However, there is no template project. To use Epoxy in your MAUI project, simply add the `Epoxy.Maui` package.
+    * Similarly, template projects for other platforms will be deprecated in the next release.
+  * Downgraded the reference version to Avalonia 11.
 * 1.12.0:
   * Supported .NET 8.0 SDK.
 * 1.11.0:
