@@ -15,6 +15,7 @@
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
 |Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
+|Epoxy.Maui|[![NuGet Epoxy.Maui](https://img.shields.io/nuget/v/Epoxy.Maui.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Maui)|.NET MAUI version|
 
 ## NuGetパッケージ F#専用
 
@@ -38,7 +39,8 @@
   * WPF: .NET 8.0/7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms)  5.0.0.1874 or higher)
+  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
+  * .NET MAUI: 7.0 or higher
 * 非同期処理 (async-await) を安全に書くことが出来るように配慮しています。
 * C# 8.0でサポートされた、null許容参照型を使えます。
 * F#は5.0以降に対応しています。F#向けのシグネチャ (camel case functions・関数型・Async型前提) が定義されています。
@@ -68,6 +70,9 @@
 にあります。
 
 ### ビルドテンプレートとビルド方法
+
+注意: 将来のバージョンで、テンプレートプロジェクトは廃止されます。
+現在のバージョンにおいても、単にあなたのプロジェクトに対応するパッケージを追加するだけで、Epoxyを使用することが出来ます。
 
 .NET 7 SDKのCLIテンプレートに対応しています。以下のようなコマンドで、簡単にテンプレートコードをクリーンな状態で試すことができます:
 
@@ -779,6 +784,11 @@ Apache-v2
 
 ## History
 
+* 1.13.0:
+  * Xamarin Formsがサポート終了となるため、 .NET MAUIパッケージを復活させました (#39)
+    * 但し、テンプレートプロジェクトは存在しません。あなたのMAUIプロジェクトでEpoxyを使うには、単に `Epoxy.Maui` パッケージを追加すればOKです。
+    * 同様に、他のプラットフォーム向けのテンプレートプロジェクトも、次のリリースで廃止する予定です。
+  * Avalonia 11への参照バージョンをダウングレードしました。
 * 1.12.0:
   * .NET 8.0 SDKに対応しました。
 * 1.11.0:
