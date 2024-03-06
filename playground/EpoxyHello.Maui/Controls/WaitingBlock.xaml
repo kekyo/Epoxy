@@ -1,0 +1,50 @@
+﻿<!--
+////////////////////////////////////////////////////////////////////////////
+//
+// Epoxy - An independent flexible XAML MVVM library for .NET
+// Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////
+-->
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:EpoxyHello.Maui.Controls"
+    mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
+    x:Class="EpoxyHello.Maui.Controls.WaitingBlock">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="16" />
+            <RowDefinition Height="16" />
+            <RowDefinition Height="16" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16" />
+            <ColumnDefinition Width="16" />
+            <ColumnDefinition Width="16" />
+        </Grid.ColumnDefinitions>
+        <Rectangle Grid.Row="0" Grid.Column="0" Fill="{Binding CellBrush0}" />
+        <Rectangle Grid.Row="0" Grid.Column="1" Fill="{Binding CellBrush1}" />
+        <Rectangle Grid.Row="0" Grid.Column="2" Fill="{Binding CellBrush2}" />
+        <Rectangle Grid.Row="1" Grid.Column="0" Fill="{Binding CellBrush7}" />
+        <Rectangle Grid.Row="1" Grid.Column="2" Fill="{Binding CellBrush3}" />
+        <Rectangle Grid.Row="2" Grid.Column="0" Fill="{Binding CellBrush6}" />
+        <Rectangle Grid.Row="2" Grid.Column="1" Fill="{Binding CellBrush5}" />
+        <Rectangle Grid.Row="2" Grid.Column="2" Fill="{Binding CellBrush4}" />
+    </Grid>
+</ContentView>

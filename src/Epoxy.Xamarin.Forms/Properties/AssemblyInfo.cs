@@ -19,7 +19,13 @@
 
 #nullable enable
 
+#if XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
+
+#if MAUI
+using Microsoft.Maui.Controls;
+#endif
 
 [assembly: XmlnsDefinition("https://github.com/kekyo/Epoxy", "Epoxy")]
 [assembly: XmlnsPrefix("https://github.com/kekyo/Epoxy", "epoxy")]

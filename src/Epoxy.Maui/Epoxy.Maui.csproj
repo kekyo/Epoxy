@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy</AssemblyName>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Maui</AssemblyTitle>
+      
+    <NuspecFile>Epoxy.Maui.nuspec</NuspecFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;MAUI</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;MAUI</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net8.0'">
+    <UseMaui>true</UseMaui>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Epoxy.Core.Maui\Epoxy.Core.Maui.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy/**/*.cs" />
+    <Compile Include="../Epoxy.Xamarin.Forms/**/*.cs" />
+    <Compile Remove="../Epoxy.Xamarin.Forms/bin/**/*.cs" />
+    <Compile Remove="../Epoxy.Xamarin.Forms/obj/**/*.cs" />
+  </ItemGroup>
+
+</Project>

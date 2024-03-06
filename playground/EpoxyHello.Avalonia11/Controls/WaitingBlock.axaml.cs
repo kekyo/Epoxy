@@ -44,8 +44,7 @@ public sealed partial class WaitingBlock : UserControl
 
     public WaitingBlock()
     {
-        InitializeComponent();
-        this.DataContext = this;
+        this.InitializeComponent();
 
         this.CellBrushes = Enumerable.Range(0, 8).
             Select(_ => Brushes.Gray).
@@ -64,8 +63,10 @@ public sealed partial class WaitingBlock : UserControl
                 }
             },
             null,
-            TimeSpan.Zero,
-            TimeSpan.Zero);
+            Timeout.InfiniteTimeSpan,
+            Timeout.InfiniteTimeSpan);
+
+        this.DataContext = this;
     }
 
     private void InitializeComponent() =>
@@ -79,7 +80,7 @@ public sealed partial class WaitingBlock : UserControl
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        this.timer.Change(TimeSpan.Zero, TimeSpan.Zero);
+        this.timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
         base.OnDetachedFromVisualTree(e);
     }
 

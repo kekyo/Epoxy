@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Epoxy.Core</AssemblyName>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0</TargetFrameworks>
+    <AssemblyTitle>Epoxy.Core.Maui</AssemblyTitle>
+    <PackageId>Epoxy.Core.Maui</PackageId>
+    <PackageTags>$(PackageTags);maui</PackageTags>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE;MAUI</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;MAUI</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net8.0'">
+    <UseMaui>true</UseMaui>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net7.0'">
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Epoxy.Core/**/*.cs" />
+    <Compile Include="../Epoxy.Core.Xamarin.Forms/**/*.cs" />
+    <Compile Remove="../Epoxy.Core.Xamarin.Forms/bin/**/*.cs" />
+    <Compile Remove="../Epoxy.Core.Xamarin.Forms/obj/**/*.cs" />
+    <None Include="../../Images/Epoxy.100.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

@@ -21,6 +21,7 @@
 
 using Epoxy.Infrastructure;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -68,7 +69,7 @@ namespace Epoxy
             var basePaths = new[] { targetBasePath };
             var injector = new ViewModelInjector(basePaths!, (_, message) => Trace.WriteLine(message));
             var actual = injector.Inject(targetPath, injectedPath);
-            Assert.IsTrue(actual);
+            ClassicAssert.IsTrue(actual);
 
             var context = new AssemblyLoadContext("test_" + Guid.NewGuid().ToString(), true);
             try
@@ -91,137 +92,137 @@ namespace Epoxy
 
                 var count = 0;
                 var changing = false;
-                vm.PropertyChanging += (s, e) => { Assert.IsFalse(changing); changing = true; count++; };
-                vm.PropertyChanged += (s, e) => { Assert.IsTrue(changing); changing = false; count++; };
+                vm.PropertyChanging += (s, e) => { ClassicAssert.IsFalse(changing); changing = true; count++; };
+                vm.PropertyChanged += (s, e) => { ClassicAssert.IsTrue(changing); changing = false; count++; };
 
                 dynamic dvm = vm;
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC4", dvm.Prop4);
-                Assert.AreEqual(0, count);
+                ClassicAssert.AreEqual("ABC4", dvm.Prop4);
+                ClassicAssert.AreEqual(0, count);
 
                 dvm.Prop4 = "AAA4";
-                Assert.AreEqual(2, count);
+                ClassicAssert.AreEqual(2, count);
 
-                Assert.AreEqual("AAA4", dvm.Prop4);
-                Assert.AreEqual(2, count);
+                ClassicAssert.AreEqual("AAA4", dvm.Prop4);
+                ClassicAssert.AreEqual(2, count);
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC3", dvm.Prop3);
-                Assert.AreEqual(2, count);
+                ClassicAssert.AreEqual("ABC3", dvm.Prop3);
+                ClassicAssert.AreEqual(2, count);
 
                 dvm.SetProp3("AAA3");
-                Assert.AreEqual(4, count);
+                ClassicAssert.AreEqual(4, count);
 
-                Assert.AreEqual("AAA3", dvm.Prop3);
-                Assert.AreEqual(4, count);
+                ClassicAssert.AreEqual("AAA3", dvm.Prop3);
+                ClassicAssert.AreEqual(4, count);
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC2", dvm.Prop2);
-                Assert.AreEqual(4, count);
+                ClassicAssert.AreEqual("ABC2", dvm.Prop2);
+                ClassicAssert.AreEqual(4, count);
 
                 dvm.SetProp2("AAA2");
-                Assert.AreEqual(6, count);
+                ClassicAssert.AreEqual(6, count);
 
-                Assert.AreEqual("AAA2", dvm.Prop2);
-                Assert.AreEqual(6, count);
+                ClassicAssert.AreEqual("AAA2", dvm.Prop2);
+                ClassicAssert.AreEqual(6, count);
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC5", dvm.GetProp5());
-                Assert.AreEqual(6, count);
+                ClassicAssert.AreEqual("ABC5", dvm.GetProp5());
+                ClassicAssert.AreEqual(6, count);
 
                 dvm.Prop5 = "AAA5";
-                Assert.AreEqual(8, count);
+                ClassicAssert.AreEqual(8, count);
 
-                Assert.AreEqual("AAA5", dvm.GetProp5());
-                Assert.AreEqual(8, count);
+                ClassicAssert.AreEqual("AAA5", dvm.GetProp5());
+                ClassicAssert.AreEqual(8, count);
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC6", dvm.Prop6);
-                Assert.AreEqual(8, count);
+                ClassicAssert.AreEqual("ABC6", dvm.Prop6);
+                ClassicAssert.AreEqual(8, count);
 
                 dvm.Prop6 = "AAA6";
-                Assert.AreEqual(10, count);
+                ClassicAssert.AreEqual(10, count);
 
-                Assert.AreEqual("AAA6", dvm.Prop6);
-                Assert.AreEqual(10, count);
+                ClassicAssert.AreEqual("AAA6", dvm.Prop6);
+                ClassicAssert.AreEqual(10, count);
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC7", dvm.Prop7);
-                Assert.AreEqual(10, count);
+                ClassicAssert.AreEqual("ABC7", dvm.Prop7);
+                ClassicAssert.AreEqual(10, count);
 
                 dvm.Prop7 = "AAA7";
-                Assert.AreEqual(12, count);
+                ClassicAssert.AreEqual(12, count);
 
-                Assert.AreEqual("AAA7", dvm.Prop7);
-                Assert.AreEqual(12, count);
+                ClassicAssert.AreEqual("AAA7", dvm.Prop7);
+                ClassicAssert.AreEqual(12, count);
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC8", dvm.Prop8);
-                Assert.AreEqual(12, count);
+                ClassicAssert.AreEqual("ABC8", dvm.Prop8);
+                ClassicAssert.AreEqual(12, count);
 
                 dvm.Prop8 = "AAA8";
-                Assert.AreEqual(12, count);     // didn't inject
+                ClassicAssert.AreEqual(12, count);     // didn't inject
 
-                Assert.AreEqual("ABC8", dvm.Prop8);
-                Assert.AreEqual(12, count);
+                ClassicAssert.AreEqual("ABC8", dvm.Prop8);
+                ClassicAssert.AreEqual(12, count);
 
                 ////////////////////////
 
-                Assert.IsNull(dvm.Prop9);
-                Assert.AreEqual(12, count);
+                ClassicAssert.IsNull(dvm.Prop9);
+                ClassicAssert.AreEqual(12, count);
 
                 dvm.Prop9 = "AAA9";
-                Assert.AreEqual(14, count);
+                ClassicAssert.AreEqual(14, count);
 
-                Assert.AreEqual("AAA9", dvm.Prop9);
-                Assert.AreEqual(14, count);
-                Assert.AreEqual("AAA9", dvm.Prop9Set);
-                Assert.AreEqual(14, count);
+                ClassicAssert.AreEqual("AAA9", dvm.Prop9);
+                ClassicAssert.AreEqual(14, count);
+                ClassicAssert.AreEqual("AAA9", dvm.Prop9Set);
+                ClassicAssert.AreEqual(14, count);
 
                 ////////////////////////
 
-                Assert.AreEqual("ABC10", dvm.Prop10);
-                Assert.AreEqual(14, count);
+                ClassicAssert.AreEqual("ABC10", dvm.Prop10);
+                ClassicAssert.AreEqual(14, count);
 
                 dvm.Prop10 = "AAA10";
-                Assert.AreEqual(14, count);     // didn't inject
+                ClassicAssert.AreEqual(14, count);     // didn't inject
 
-                Assert.AreEqual("AAA10", dvm.Prop10);
-                Assert.AreEqual(14, count);
+                ClassicAssert.AreEqual("AAA10", dvm.Prop10);
+                ClassicAssert.AreEqual(14, count);
 
                 ////////////////////////
 
-                Assert.IsNull(dvm.Prop11);
-                Assert.AreEqual(14, count);
+                ClassicAssert.IsNull(dvm.Prop11);
+                ClassicAssert.AreEqual(14, count);
 
                 dvm.Prop11 = "AAA11";
-                Assert.AreEqual(16, count);
+                ClassicAssert.AreEqual(16, count);
 
-                Assert.AreEqual("AAA11", dvm.Prop11);
-                Assert.AreEqual(16, count);
-                Assert.AreEqual("AAA11", dvm.Prop11Set);
-                Assert.AreEqual(16, count);
+                ClassicAssert.AreEqual("AAA11", dvm.Prop11);
+                ClassicAssert.AreEqual(16, count);
+                ClassicAssert.AreEqual("AAA11", dvm.Prop11Set);
+                ClassicAssert.AreEqual(16, count);
 
                 ////////////////////////
 
-                Assert.IsNull(dvm.Prop12);
-                Assert.AreEqual(16, count);
+                ClassicAssert.IsNull(dvm.Prop12);
+                ClassicAssert.AreEqual(16, count);
 
                 dvm.Prop12 = "AAA12";
-                Assert.AreEqual(18, count);
+                ClassicAssert.AreEqual(18, count);
 
-                Assert.AreEqual("AAA12", dvm.Prop12);
-                Assert.AreEqual(18, count);
-                Assert.AreEqual("AAA12", dvm.Prop12Set);
-                Assert.AreEqual(18, count);
+                ClassicAssert.AreEqual("AAA12", dvm.Prop12);
+                ClassicAssert.AreEqual(18, count);
+                ClassicAssert.AreEqual("AAA12", dvm.Prop12Set);
+                ClassicAssert.AreEqual(18, count);
             }
             finally
             {
