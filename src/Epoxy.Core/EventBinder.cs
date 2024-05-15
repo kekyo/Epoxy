@@ -331,10 +331,13 @@ public sealed class Event :
     {
         EventNameProperty.Changed.Subscribe(
             new AnonymousObserver<AvaloniaPropertyChangedEventArgs<string>>(e =>
-                ((Event)e.Sender).OnEventNamePropertyChanged(e.OldValue, e.NewValue)));
+                ((Event)e.Sender).OnEventNamePropertyChanged(
+                    e.OldValue.HasValue ? e.OldValue.Value : null,
+                    e.NewValue.HasValue ? e.NewValue.Value : null)));
         CommandProperty.Changed.Subscribe(
             new AnonymousObserver<AvaloniaPropertyChangedEventArgs<ICommand>>(e =>
-                ((Event)e.Sender).OnCommandPropertyChanged(e.NewValue)));
+                ((Event)e.Sender).OnCommandPropertyChanged(
+                    e.NewValue.HasValue ? e.NewValue.Value : null)));
     }
 #else
     /// <summary>
