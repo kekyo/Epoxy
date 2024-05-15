@@ -61,6 +61,10 @@ This sample displays a list of the latest posts and images from The Cat API, dow
 Sample code projects are located in the [playground directory](playground/)
 or F# sample code in the [playground FSharp directory](playground.FSharp/).
 
+If you want to apply Epoxy in a full-scratch or to apply Epoxy into an existing project,
+[Avalonia 11 sample repository with step-by-step commits](https://github.com/kekyo/Epoxy.Avalonia11.SampleProject) may be helpful.
+
+
 ### How to get and build the template code
 
 Note: Template projects will be discontinued in future versions.
@@ -785,6 +789,11 @@ Apache-v2
 
 ## History
 
+* 1.14.0:
+  * In Avalonia 11, allow URLs to be specified in the namespace when referencing Epoxy from XAML.
+    It can be specified as `xmlns:epoxy="https://github.com/kekyo/Epoxy"`.
+  * Fixed EventBinder not working properly in Avalonia in some cases (#42)
+  * This is the final version of the Xamarin Forms and Template package.
 * 1.13.0:
   * .NET MAUI package has been resurrected because Xamarin Forms is no longer supported (#39)
     * However, there is no template project. To use Epoxy in your MAUI project, simply add the `Epoxy.Maui` package.

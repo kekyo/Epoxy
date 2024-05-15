@@ -129,6 +129,9 @@ dotnet build
 
 ![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
 
+フルスクラッチでEpoxyを導入したい、あるいは既存のプロジェクトにEpoxyを導入したい場合は、
+[ステップバイステップでコミットを作成した、Avalonia 11のサンプルリポジトリ](https://github.com/kekyo/Epoxy.Avalonia11.SampleProject) が役に立つかもしれません。
+
 
 ----
 
@@ -784,6 +787,11 @@ Apache-v2
 
 ## History
 
+* 1.14.0:
+  * Avalonia 11で、XAMLからEpoxyを参照する際の名前空間にURLを指定可能にしました。
+    `xmlns:epoxy="https://github.com/kekyo/Epoxy"` のように指定できます。
+  * Avaloniaで、EventBinderが正しく機能しない場合があるのを修正しました (#42)
+  * このバージョンで、Xamarin Formsとテンプレートパッケージの最終バージョンとなります。
 * 1.13.0:
   * Xamarin Formsがサポート終了となるため、 .NET MAUIパッケージを復活させました (#39)
     * 但し、テンプレートプロジェクトは存在しません。あなたのMAUIプロジェクトでEpoxyを使うには、単に `Epoxy.Maui` パッケージを追加すればOKです。
