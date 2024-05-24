@@ -27,9 +27,6 @@
 
   <ItemGroup>
     <Compile Include="../Epoxy/**/*.cs" />
-    <Compile Include="../Epoxy.Xamarin.Forms/**/*.cs" />
-    <Compile Remove="../Epoxy.Xamarin.Forms/bin/**/*.cs" />
-    <Compile Remove="../Epoxy.Xamarin.Forms/obj/**/*.cs" />
   </ItemGroup>
 
 </Project>
