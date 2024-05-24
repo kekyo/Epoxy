@@ -34,14 +34,6 @@ public interface IAsyncCommand
     ValueTask ExecuteAsync(object? parameter);
 }
 
-public sealed class UnobservedExceptionEventArgs : EventArgs
-{
-    public UnobservedExceptionEventArgs(Exception ex) =>
-        this.Exception = ex;
-
-    public readonly Exception Exception;
-}
-
 public abstract class Command : ICommand, IAsyncCommand
 {
     protected Command()

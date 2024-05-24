@@ -21,7 +21,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 #if WINDOWS_UWP || UNO
@@ -58,7 +62,7 @@ internal static class EventMetadata
         }
         if (ei == null)
         {
-            throw new ArgumentException($"Couldn't bind event: Type={type.FullName}, Name={name}");
+            throw new ArgumentException($"Couldn't find an event: Type={type.FullName}, Name={name}");
         }
         return ei;
     }
@@ -118,10 +122,38 @@ internal static class EventMetadata
         WindowsRuntimeMarshal.RemoveEventHandler(remove, (RoutedEventHandler)handler);
     }
 #else
-    public static void AddEvent(EventInfo ei, object instance, Delegate handler) =>
-        ei.AddEventHandler(instance, handler);
+    public static void AddEvent(EventInfo ei, object instance, Delegate handler)
+    {
+        if (ei.EventHandlerType!.IsInstanceOfType(handler))
+        {
+            ei.AddEventHandler(instance, handler);
+        }
+        else
+        {
+            // Stabilize.
+            var exactHandler = Delegate.CreateDelegate(
+                ei.EventHandlerType,
+                handler.Target,
+                handler.Method);
+            ei.AddEventHandler(instance, exactHandler);
+        }
+    }
 
-    public static void RemoveEvent(EventInfo ei, object instance, Delegate handler) =>
-        ei.RemoveEventHandler(instance, handler);
+    public static void RemoveEvent(EventInfo ei, object instance, Delegate handler)
+    {
+        if (ei.EventHandlerType!.IsInstanceOfType(handler))
+        {
+            ei.RemoveEventHandler(instance, handler);
+        }
+        else
+        {
+            // Stabilize.
+            var exactHandler = Delegate.CreateDelegate(
+                ei.EventHandlerType,
+                handler.Target,
+                handler.Method);
+            ei.RemoveEventHandler(instance, exactHandler);
+        }
+    }
 #endif
 }

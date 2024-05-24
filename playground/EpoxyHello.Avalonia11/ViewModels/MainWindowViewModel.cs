@@ -35,7 +35,8 @@ namespace EpoxyHello.Avalonia11.ViewModels;
 [ViewModel]
 public sealed class MainWindowViewModel
 {
-    public Command Ready { get; }
+    //public Command Ready { get; }
+    public Well ReadyWell { get; }
 
     public bool IsEnabled { get; private set; }
 
@@ -48,7 +49,8 @@ public sealed class MainWindowViewModel
     public MainWindowViewModel()
     {
         // A handler for window opened
-        this.Ready = Command.Factory.Create(() =>
+        //this.Ready = Command.Factory.Create(() =>
+        this.ReadyWell = Well.Factory.Create<Window>("Opened", () =>
         {
             this.IsEnabled = true;
             return default;

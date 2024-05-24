@@ -33,9 +33,14 @@
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
 
+    <!--
     <epoxy:EventBinder.Events>
         <epoxy:Event EventName="Opened" Command="{Binding Ready}" />
     </epoxy:EventBinder.Events>
+    -->
+    <epoxy:Fountain.Ducts>
+        <epoxy:Duct Well="{Binding ReadyWell}" />
+    </epoxy:Fountain.Ducts>
 
     <DockPanel>
         <Button DockPanel.Dock="Top"
