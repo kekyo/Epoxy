@@ -60,6 +60,8 @@ public sealed class ViewModelInjector
     private readonly TypeReference propertyChangingEventHandlerType;
     private readonly TypeReference propertyChangedEventHandlerType;
 
+    private readonly TypeDefinition? wellExtensionType;
+
     private readonly MethodDefinition addPropertyChanging;
     private readonly MethodDefinition removePropertyChanging;
     private readonly MethodDefinition addPropertyChanged;
@@ -80,6 +82,9 @@ public sealed class ViewModelInjector
     private readonly MethodDefinition itRemovePropertyChanging;
     private readonly MethodDefinition itAddPropertyChanged;
     private readonly MethodDefinition itRemovePropertyChanged;
+
+    private readonly MethodDefinition? wellAddMethod;
+    private readonly MethodDefinition? wellAddTEventArgsMethod;
 
     public ViewModelInjector(string[] referencesBasePath, Action<LogLevels, string> message)
     {
@@ -102,6 +107,18 @@ public sealed class ViewModelInjector
             }
         );
 
+        var epoxyPath = referencesBasePath.
+            Select(basePath => Path.Combine(basePath, "Epoxy.dll")).
+            First(File.Exists);
+
+        var epoxyAssembly = AssemblyDefinition.ReadAssembly(
+            epoxyPath,
+            new ReaderParameters
+            {
+                AssemblyResolver = assemblyResolver,
+            }
+        );
+
         var fsharpEpoxyPath = referencesBasePath.
             Select(basePath => Path.Combine(basePath, "FSharp.Epoxy.dll")).
             FirstOrDefault(File.Exists);
@@ -118,6 +135,12 @@ public sealed class ViewModelInjector
         this.message(
             LogLevels.Trace,
             $"Epoxy.Core.dll is loaded: Path={epoxyCorePath}");
+        if (epoxyAssembly != null)
+        {
+            this.message(
+                LogLevels.Trace,
+                $"Epoxy.dll is loaded: Path={epoxyPath}");
+        }
         if (fsharpEpoxyAssembly != null)
         {
             this.message(
@@ -149,6 +172,9 @@ public sealed class ViewModelInjector
             "Epoxy.Internal.InternalFSharpModelHelper")!;
         this.propertyChangedFSharpAsyncDelegateTypeT = fsharpEpoxyAssembly?.MainModule.GetType(
             "Epoxy.Internal.PropertyChangedFSharpAsyncDelegate`1")!;
+
+        this.wellExtensionType = epoxyAssembly?.MainModule.GetType(
+            "Epoxy.WellExtension")!;
 
         this.propertyChangingEventHandlerType = internalPropertyBagType.Fields.
             First(f => f.Name == "propertyChanging").FieldType;
@@ -196,6 +222,11 @@ public sealed class ViewModelInjector
             First().AddMethod;
         this.itRemovePropertyChanged = itPropertyChangedType.Events.
             First().RemoveMethod;
+
+        this.wellAddMethod = this.wellExtensionType?.Methods.
+            First(m => m.IsStatic && m.GenericParameters.Count == 1 && m.Name == "Add" && m.Parameters.Count == 5);
+        this.wellAddTEventArgsMethod = this.wellExtensionType?.Methods.
+            First(m => m.IsStatic && m.GenericParameters.Count == 2 && m.Name == "Add" && m.Parameters.Count == 5);
     }
 
     private void InjectPropertyChangeEvents(
@@ -715,6 +746,104 @@ public sealed class ViewModelInjector
         }
     }
 
+    private static void ForEach<T>(
+        IEnumerable<T> enumerable,
+        Action<T> action)
+    {
+        foreach (var item in enumerable)
+        {
+            action(item);
+        }
+    }
+
+    private static bool ReplaceAddWell(
+        ModuleDefinition module)
+    {
+        var updatingActions = new Queue<Stack<Action>>();
+
+        // Enabled parallel processing with delayed updating
+        // when processes all CIL body streams.
+        //Parallel.ForEach(
+        ForEach(
+            module.GetTypes().
+            Where(td => td.IsClass),
+            td =>
+            {
+                foreach (var md in td.Methods.
+                    Where(md => !md.IsAbstract && md.HasBody))
+                {
+                    // (Have to make reverse order)
+                    var actions = new Stack<Action>();
+
+                    var instructions = md.Body.Instructions;
+                    for (var index = 0; index < instructions.Count; index++)
+                    {
+                        // public static void Add<TEventArgs>(this Well well, string eventName, Func<TEventArgs, ValueTask> action)
+                        // public static void Add(this Well well, string eventName, Func<ValueTask> action)
+                        var inst = instructions[index];
+                        if (inst.OpCode == OpCodes.Call &&
+                            inst.Operand is MethodReference tmr &&
+                            !tmr.HasThis &&
+                            tmr.DeclaringType.FullName == "Epoxy.WellExtension" &&
+                            tmr.Name == "Add" &&
+                            tmr.Parameters.Count == 3 &&
+                            tmr.Parameters[0].ParameterType.FullName == "Epoxy.Well" &&
+                            tmr.Parameters[1].ParameterType.FullName == "System.String" &&
+                            tmr.Parameters[2].ParameterType.Name.StartsWith("Func"))
+                        {
+                            // Makes delayed processing for application.
+                            var capturedIndex = index;
+                            actions.Push(() =>
+                            {
+                                var tmd = tmr.Resolve();
+                                if (tmd.IsPublic && tmd.IsStatic &&
+                                    tmd.CustomAttributes.Any(ca => ca.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute"))
+                                {
+                                    switch (tmd.GenericParameters.Count)
+                                    {
+                                        case 0:
+                                        case 1:
+                                            //md.Body.Instructions.Insert(capturedIndex++,
+                                            //    Instruction.Create(OpCodes.Call,
+                                            //        module.ImportReference(accessor.Getter)));
+                                            break;
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    if (actions.Count >= 1)
+                    {
+                        lock (updatingActions)
+                        {
+                            updatingActions.Enqueue(actions);
+                        }
+                    }
+                }
+            });
+
+        if (updatingActions.Count >= 1)
+        {
+            // Updates sequentially (on this thread).
+            do
+            {
+                var actions = updatingActions.Dequeue();
+                while (actions.Count >= 1)
+                {
+                    var action = actions.Pop();
+                    action();
+                }
+            }
+            while (updatingActions.Count >= 1);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public bool Inject(string targetAssemblyPath, string? injectedAssemblyPath = null)
     {
         this.assemblyResolver.AddSearchDirectory(
@@ -749,11 +878,10 @@ public sealed class ViewModelInjector
                      !td.Interfaces.Any(ii => ii.InterfaceType.FullName == this.iViewModelImplementerType.FullName)).
                 ToArray();
 
+            var injected = false;
+            var removedAccessor = new Dictionary<FieldDefinition, AccessorInformation>();
             if (targetTypes.Length >= 1)
             {
-                var injected = false;
-                var removedAccessor = new Dictionary<FieldDefinition, AccessorInformation>();
-
                 foreach (var targetType in targetTypes)
                 {
                     if (this.InjectIntoType(targetAssembly.MainModule, targetType, out var rfs))
@@ -776,23 +904,28 @@ public sealed class ViewModelInjector
                             $"InjectProperties: Ignored a type: Assembly={targetAssemblyName}, Type={targetType.FullName}");
                     }
                 }
+            }
 
-                if (injected)
-                {
-                    var module = targetAssembly.MainModule;
-                    ReplaceFieldToAccessor(module, removedAccessor);
+            var module = targetAssembly.MainModule;
+            if (ReplaceAddWell(module))
+            {
+                injected = true;
+            }
 
-                    injectedAssemblyPath = injectedAssemblyPath ?? targetAssemblyPath;
+            if (injected)
+            {
+                ReplaceFieldToAccessor(module, removedAccessor);
 
-                    targetAssembly.Write(
-                        injectedAssemblyPath,
-                        new WriterParameters
-                        {
-                            WriteSymbols = true,
-                            DeterministicMvid = true,
-                        });
-                    return true;
-                }
+                injectedAssemblyPath = injectedAssemblyPath ?? targetAssemblyPath;
+
+                targetAssembly.Write(
+                    injectedAssemblyPath,
+                    new WriterParameters
+                    {
+                        WriteSymbols = true,
+                        DeterministicMvid = true,
+                    });
+                return true;
             }
         }
 

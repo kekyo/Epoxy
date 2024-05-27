@@ -24,6 +24,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -36,7 +37,7 @@ namespace EpoxyHello.Wpf.ViewModels;
 [ViewModel]
 public sealed class MainWindowViewModel
 {
-    public Command Ready { get; }
+    public Well<Window> MainWindowWell { get; } = Well.Factory.Create<Window>();
 
     public bool IsEnabled { get; set; }
 
@@ -48,12 +49,32 @@ public sealed class MainWindowViewModel
 
     public MainWindowViewModel()
     {
-        // A handler for window loaded
-        this.Ready = Command.Factory.Create(() =>
-        {
-            this.IsEnabled = true;
-            return default;
-        });
+        // A handler for window opened
+        //this.MainWindowWell.Add(
+        //    //FrameworkElement.LoadedEvent,
+        //    "Loaded",
+        //    () =>
+        //    {
+        //        this.IsEnabled = true;
+        //        return default;
+        //    },
+        //    (window, obj, ptr) => {
+        //        var dlg = new EventHandler(obj, ptr);
+        //        window.Opened += dlg;
+        //    },
+        //    (window, obj, ptr) => {
+        //        var dlg = new EventHandler(obj, ptr);
+        //        window.Opened -= dlg;
+        //    });
+
+        this.MainWindowWell.Add(
+            //FrameworkElement.LoadedEvent,
+            "Loaded",
+            () =>
+            {
+                this.IsEnabled = true;
+                return default;
+            });
 
         // A handler for fetch button
         this.Fetch = Command.Factory.Create(async () =>

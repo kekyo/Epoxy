@@ -48,6 +48,23 @@ public sealed class MainWindowViewModel
     public MainWindowViewModel()
     {
         // A handler for window opened
+        //this.MainWindowWell.Add(
+        //    //Window.WindowOpenedEvent,
+        //    "Opened",
+        //    () =>
+        //    {
+        //        this.IsEnabled = true;
+        //        return default;
+        //    },
+        //    (window, obj, ptr) => {
+        //        var dlg = new EventHandler(obj, ptr);
+        //        window.Opened += dlg;
+        //    },
+        //    (window, obj, ptr) => {
+        //        var dlg = new EventHandler(obj, ptr);
+        //        window.Opened -= dlg;
+        //    });
+
         this.MainWindowWell.Add(
             Window.WindowOpenedEvent,
             () =>

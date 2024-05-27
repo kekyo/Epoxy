@@ -27,15 +27,12 @@
         xmlns:viewmodels="clr-namespace:EpoxyHello.Wpf.ViewModels"
         xmlns:converters="clr-namespace:EpoxyHello.Wpf.Views.Converters"
         mc:Ignorable="d"
-        Title="EpoxyHello.Wpf" Height="450" Width="800">
+        Title="EpoxyHello.Wpf" Height="450" Width="800"
+        epoxy:Fountain.Well="{Binding MainWindowWell}">
 
     <Window.DataContext>
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
-
-    <epoxy:EventBinder.Events>
-        <epoxy:Event EventName="Loaded" Command="{Binding Ready}" />
-    </epoxy:EventBinder.Events>
    
     <DockPanel>
         <Button DockPanel.Dock="Top"
