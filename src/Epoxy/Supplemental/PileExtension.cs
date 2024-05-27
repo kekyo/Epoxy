@@ -42,12 +42,8 @@ using UIElement = Xamarin.Forms.VisualElement;
 using UIElement = Microsoft.Maui.Controls.VisualElement;
 #endif
 
-#if AVALONIA
-using UIElement = Avalonia.Controls.IControl;
-#endif
-
-#if AVALONIA11
-using UIElement = Avalonia.Controls.Control;
+#if AVALONIA || AVALONIA11
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 using Epoxy.Internal;

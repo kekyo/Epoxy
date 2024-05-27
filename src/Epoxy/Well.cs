@@ -19,6 +19,8 @@
 
 #nullable enable
 
+using Epoxy.Internal;
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -39,21 +41,27 @@ using System.Windows;
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
+using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
 #if MAUI
 using Microsoft.Maui.Controls;
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+using UIElement = Microsoft.Maui.Controls.VisualElement;
 #endif
 
 #if AVALONIA
 using Avalonia;
+using Avalonia.Interactivity;
 using DependencyObject = Avalonia.IAvaloniaObject;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 #if AVALONIA11
 using Avalonia;
+using Avalonia.Interactivity;
 using DependencyObject = Avalonia.AvaloniaObject;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 namespace Epoxy;
@@ -72,56 +80,117 @@ namespace Epoxy;
 /// </code>
 /// </example>
 [DebuggerStepThrough]
-public static class WellFactoryExtension
+public static class WellExtension
 {
     /// <summary>
     /// Create a Well.
     /// </summary>
-    /// <typeparam name="TDependencyObject">Target control type</typeparam>
+    /// <typeparam name="TUIElement">Target control type</typeparam>
     /// <param name="factory">Factory instance (not used)</param>
-    /// <param name="eventName">Event name</param>
-    /// <param name="action">Action handler</param>
     /// <returns>Well instance</returns>
-    public static Well<TDependencyObject> Create<TDependencyObject>(
-        this WellFactoryInstance factory,
-        string eventName,
-        Func<ValueTask> action)
-        where TDependencyObject : DependencyObject =>
-        new Well<TDependencyObject>(eventName, action);
+    public static Well<TUIElement> Create<TUIElement>(
+        this WellFactoryInstance factory)
+        where TUIElement : UIElement =>
+        new Well<TUIElement>();
+
+    /////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Create a Well.
+    /// Add a well handler.
     /// </summary>
-    /// <typeparam name="TDependencyObject">Target control type</typeparam>
-    /// <typeparam name="TEventArgs">Additional parameter type</typeparam>
-    /// <param name="factory">Factory instance (not used)</param>
+    /// <typeparam name="TEventArgs">Handler receive type</typeparam>
+    /// <param name="well">Well</param>
     /// <param name="eventName">Event name</param>
-    /// <param name="action">Action handler</param>
-    /// <returns>Well instance</returns>
-    public static Well<TDependencyObject, TEventArgs> Create<TDependencyObject, TEventArgs>(
-        this WellFactoryInstance factory,
+    /// <param name="action">Action delegate</param>
+    public static void Add<TEventArgs>(
+        this Well well,
         string eventName,
+        Func<TEventArgs, ValueTask> action) =>
+        well.InternalAdd(eventName, action);
+
+    /// <summary>
+    /// Add a well handler.
+    /// </summary>
+    /// <param name="well">Well</param>
+    /// <param name="eventName">Event name</param>
+    /// <param name="action">Action delegate</param>
+    public static void Add(
+        this Well well,
+        string eventName,
+        Func<ValueTask> action) =>
+        well.InternalAdd<EventArgs>(eventName, _ => action());
+
+    /// <summary>
+    /// Remove a well handler.
+    /// </summary>
+    /// <param name="well">Well</param>
+    /// <param name="eventName">Event name</param>
+    public static void Remove(
+        this Well well,
+        string eventName) =>
+        well.InternalRemove(eventName);
+
+#if !(XAMARIN_FORMS || MAUI)
+    /// <summary>
+    /// Add a well handler.
+    /// </summary>
+    /// <typeparam name="TEventArgs">Handler receive type</typeparam>
+    /// <param name="well">Well</param>
+    /// <param name="routedEvent">RoutedEvent</param>
+    /// <param name="action">Action delegate</param>
+    public static void Add<TEventArgs>(
+        this Well well,
+#if AVALONIA || AVALONIA11
+        RoutedEvent<TEventArgs> routedEvent,
+#else
+        RoutedEvent routedEvent,
+#endif
         Func<TEventArgs, ValueTask> action)
-        where TDependencyObject : DependencyObject =>
-        new Well<TDependencyObject, TEventArgs>(eventName, action);
+        where TEventArgs : RoutedEventArgs =>
+        well.InternalAdd(routedEvent, action);
+
+    /// <summary>
+    /// Add a well handler.
+    /// </summary>
+    /// <param name="well">Well</param>
+    /// <param name="routedEvent">RoutedEvent</param>
+    /// <param name="action">Action delegate</param>
+    public static void Add(
+        this Well well,
+        RoutedEvent routedEvent,
+        Func<ValueTask> action) =>
+        well.InternalAdd<RoutedEventArgs>(routedEvent, _ => action());
+
+    /// <summary>
+    /// Remove a well handler.
+    /// </summary>
+    /// <param name="well">Well</param>
+    /// <param name="routedEvent">RoutedEvent</param>
+    public static void Remove(
+        this Well well,
+        RoutedEvent routedEvent) =>
+        well.InternalRemove(routedEvent);
+#endif
+
+    /////////////////////////////////////////////////////////////////
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static Well<TDependencyObject> Create<TDependencyObject>(
-        this WellFactoryInstance factory,
-        string eventName,
-        Func<ValueTask> action,
-        Action<TDependencyObject, object, IntPtr> adder,
-        Action<TDependencyObject, object, IntPtr> remover)
-        where TDependencyObject : DependencyObject =>
-        new Well<TDependencyObject>(eventName, action, adder, remover);
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public static Well<TDependencyObject, TEventArgs> Create<TDependencyObject, TEventArgs>(
-        this WellFactoryInstance factory,
+    public static void Add<TUIElement, TEventArgs>(
+        this Well<TUIElement> well,
         string eventName,
         Func<TEventArgs, ValueTask> action,
-        Action<TDependencyObject, object, IntPtr> adder,
-        Action<TDependencyObject, object, IntPtr> remover)
-        where TDependencyObject : DependencyObject =>
-        new Well<TDependencyObject, TEventArgs>(eventName, action, adder, remover);
+        Action<TUIElement, object, IntPtr> adder,
+        Action<TUIElement, object, IntPtr> remover)
+        where TUIElement : UIElement =>
+        well.InternalAdd(eventName, action, adder, remover);
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static void Add<TUIElement>(
+        this Well<TUIElement> well,
+        string eventName,
+        Func<ValueTask> action,
+        Action<TUIElement, object, IntPtr> adder,
+        Action<TUIElement, object, IntPtr> remover)
+        where TUIElement : UIElement =>
+        well.InternalAdd<EventArgs>(eventName, _ => action(), adder, remover);
 }

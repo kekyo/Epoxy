@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
@@ -23,6 +23,7 @@ using Epoxy.Internal;
 
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -41,27 +42,33 @@ using System.Windows;
 #if XAMARIN_FORMS
 using Xamarin.Forms;
 using DependencyObject = Xamarin.Forms.BindableObject;
+using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
 #if MAUI
 using Microsoft.Maui.Controls;
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+using UIElement = Microsoft.Maui.Controls.VisualElement;
 #endif
 
 #if AVALONIA
 using Avalonia;
+using Avalonia.Interactivity;
 using DependencyObject = Avalonia.IAvaloniaObject;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 #if AVALONIA11
 using Avalonia;
+using Avalonia.Interactivity;
 using DependencyObject = Avalonia.AvaloniaObject;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 namespace Epoxy;
 
 /// <summary>
-/// The Well base class is used with Fountain and Duct.
+/// The Well is used with Fountation, there will bind loosely and can transfer event signal.
 /// </summary>
 /// <remarks>You can use with generic Well&lt;T&gt; class.</remarks>
 public abstract class Well
@@ -75,14 +82,31 @@ public abstract class Well
     /// <summary>
     /// Will bind a Fountain.
     /// </summary>
-    /// <param name="d">Target Fountain element</param>
-    internal abstract void Bind(DependencyObject d);
+    /// <param name="e">Target Fountain element</param>
+    internal abstract void Bind(UIElement e);
 
     /// <summary>
     /// Will release a Fountain.
     /// </summary>
-    /// <param name="d">Target Fountain element</param>
-    internal abstract void Release(DependencyObject d);
+    /// <param name="e">Target Fountain element</param>
+    internal abstract void Release(UIElement e);
+
+    internal abstract void InternalAdd<TEventArgs>(
+        string eventName,
+        Func<TEventArgs, ValueTask> action);
+
+    internal abstract void InternalRemove(
+        string eventName);
+
+#if !(XAMARIN_FORMS || MAUI)
+    internal abstract void InternalAdd<TEventArgs>(
+        RoutedEvent routedEvent,
+        Func<TEventArgs, ValueTask> action)
+        where TEventArgs : RoutedEventArgs;
+
+    internal abstract void InternalRemove(
+        RoutedEvent routedEvent);
+#endif
 
     public static readonly WellFactoryInstance Factory =
         WellFactoryInstance.Instance;
@@ -100,73 +124,6 @@ public sealed class WellFactoryInstance
 }
 
 /// <summary>
-/// The Well is used with Fountation, there will bind and can transfer .NET event signal.
-/// </summary>
-/// <remarks>See Fountain guide: https://github.com/kekyo/Epoxy#fountain</remarks>
-/// <example>
-/// <code>
-/// // Declared a Well into the ViewModel.
-/// this.ReadyWell = Well.Factory.Create<Window>("Loaded", async () =&gt;
-/// {
-///     // Event received.
-/// });
-/// </code>
-/// </example>
-public sealed class Well<TDependencyObject> : Well
-    where TDependencyObject : DependencyObject
-{
-    private readonly EventTrampoline<TDependencyObject, EventArgs> et;
-
-    /// <summary>
-    /// The constructor.
-    /// </summary>
-    /// <param name="eventName">Event name</param>
-    /// <param name="action">Action</param>
-    internal Well(
-        string eventName,
-        Func<ValueTask> action) =>
-        this.et = new DynamicEventTrampoline<TDependencyObject, EventArgs>(eventName, _ => action());
-
-    internal Well(string eventName,
-        Func<ValueTask> action,
-        Action<TDependencyObject, object, IntPtr> adder,
-        Action<TDependencyObject, object, IntPtr> remover) =>
-        this.et = new StaticEventTrampoline<TDependencyObject, EventArgs>(eventName, _ => action(), adder, remover);
-
-    /// <summary>
-    /// Will bind a Fountain.
-    /// </summary>
-    /// <param name="d">Target Fountain element</param>
-    internal override void Bind(DependencyObject d)
-    {
-        if (d is not TDependencyObject depo)
-        {
-            throw new InvalidOperationException($"Couldn't bind this Fountain: {d.GetType().FullName}.");
-        }
-        this.et.Bind(depo);
-    }
-
-    /// <summary>
-    /// Will release a Fountain.
-    /// </summary>
-    /// <param name="d">Target Fountain element</param>
-    internal override void Release(DependencyObject d)
-    {
-        if (d is TDependencyObject depo)
-        {
-            this.et.Release(depo);
-        }
-    }
-
-    /// <summary>
-    /// Generate formatted string of this instance.
-    /// </summary>
-    /// <returns>Formatted string</returns>
-    public override string ToString() =>
-        $"Well: {this.et}";
-}
-
-/// <summary>
 /// The Well is used with Fountation, there will bind loosely and can transfer event signal.
 /// </summary>
 /// <remarks>See Fountain guide: https://github.com/kekyo/Epoxy#fountain</remarks>
@@ -179,56 +136,169 @@ public sealed class Well<TDependencyObject> : Well
 /// });
 /// </code>
 /// </example>
-public sealed class Well<TDependencyObject, TEventArgs> : Well
-    where TDependencyObject : DependencyObject
+public sealed class Well<TUIElement> : Well
+    where TUIElement : UIElement
 {
-    private readonly EventTrampoline<TDependencyObject, TEventArgs> et;
+    // With one or more events hooked, the WeakReference should always hold a reference.
+    // Here, WeakReference is used to consider the state where no events are hooked at all.
+
+    private readonly Dictionary<string, EventTrampoline<TUIElement>> ets = new();
+    private readonly WeakReference element =
+        new WeakReference(null);
 
     /// <summary>
     /// The constructor.
     /// </summary>
-    /// <param name="eventName">Event name</param>
-    /// <param name="action">Action</param>
-    internal Well(
-        string eventName,
-        Func<TEventArgs, ValueTask> action) =>
-        this.et = new DynamicEventTrampoline<TDependencyObject, TEventArgs>(eventName, action);
-
-    internal Well(string eventName,
-        Func<TEventArgs, ValueTask> action,
-        Action<TDependencyObject, object, IntPtr> adder,
-        Action<TDependencyObject, object, IntPtr> remover) =>
-        this.et = new StaticEventTrampoline<TDependencyObject, TEventArgs>(eventName, action, adder, remover);
+    internal Well()
+    {
+    }
 
     /// <summary>
     /// Will bind a Fountain.
     /// </summary>
-    /// <param name="d">Target Fountain element</param>
-    internal override void Bind(DependencyObject d)
+    /// <param name="element">Target Fountain element</param>
+    internal override void Bind(UIElement element)
     {
-        if (d is not TDependencyObject depo)
+        Debug.Assert(!this.element.IsAlive);
+
+        if (element is not TUIElement e)
         {
-            throw new InvalidOperationException($"Couldn't bind this Fountain: {d.GetType().FullName}.");
+            throw new InvalidOperationException($"Couldn't bind this Fountain: {element.GetType().FullName}.");
         }
-        this.et.Bind(depo);
+
+        this.element.Target = e;
+
+        foreach (var et in this.ets.Values)
+        {
+            et.Bind(e);
+        }
     }
 
     /// <summary>
     /// Will release a Fountain.
     /// </summary>
-    /// <param name="d">Target Fountain element</param>
-    internal override void Release(DependencyObject d)
+    /// <param name="element">Target Fountain element</param>
+    internal override void Release(UIElement element)
     {
-        if (d is TDependencyObject depo)
+        Debug.Assert(this.element.Target is TUIElement e && object.ReferenceEquals(element, e));
+
+        foreach (var et in this.ets.Values)
         {
-            this.et.Release(depo);
+            et.Release((TUIElement)element);
+        }
+
+        this.element.Target = null;
+    }
+
+    private void InternalAdd(
+        EventTrampoline<TUIElement> et)
+    {
+        if (this.ets.TryGetValue(et.EventName, out var oet))
+        {
+            if (this.element.Target is TUIElement e)
+            {
+                oet.Release(e);
+            }
+        }
+
+        this.ets[et.EventName] = et;
+
+        if (this.element.Target is TUIElement e2)
+        {
+            et.Bind(e2);
         }
     }
+
+    /// <summary>
+    /// Add a handler with dynamic event trampoline.
+    /// </summary>
+    /// <param name="eventName">Event name</param>
+    /// <param name="action">Action delegate</param>
+    internal override void InternalAdd<TEventArgs>(
+        string eventName,
+        Func<TEventArgs, ValueTask> action)
+    {
+        var et = new DynamicEventTrampoline<TUIElement, TEventArgs>(
+            eventName, action);
+        this.InternalAdd(et);
+    }
+
+    /// <summary>
+    /// Add a handler with static event trampoline.
+    /// </summary>
+    /// <param name="eventName">Event name</param>
+    /// <param name="action">Action delegate</param>
+    /// <param name="adder">Handler adder</param>
+    /// <param name="remover">Handler remover</param>
+    internal void InternalAdd<TEventArgs>(
+        string eventName,
+        Func<TEventArgs, ValueTask> action,
+        Action<TUIElement, object, IntPtr> adder,
+        Action<TUIElement, object, IntPtr> remover)
+    {
+        var et = new StaticEventTrampoline<TUIElement, TEventArgs>(
+            eventName, action, adder, remover);
+        this.InternalAdd(et);
+    }
+
+    /// <summary>
+    /// Remove a handler with event name.
+    /// </summary>
+    /// <param name="eventName">Event name</param>
+    internal override void InternalRemove(
+        string eventName)
+    {
+        if (this.ets.TryGetValue(eventName, out var oet))
+        {
+            if (this.element.Target is TUIElement e)
+            {
+                oet.Release(e);
+            }
+
+            this.ets.Remove(eventName);
+        }
+    }
+
+#if !(XAMARIN_FORMS || MAUI)
+    /// <summary>
+    /// Add a handler indicates RoutedEvent.
+    /// </summary>
+    /// <param name="routedEvent">RoutedEvent</param>
+    /// <param name="action">Action delegate</param>
+    internal override void InternalAdd<TEventArgs>(
+        RoutedEvent routedEvent,
+        Func<TEventArgs, ValueTask> action)
+    {
+        var et = new RoutedEventTrampoline<TUIElement, TEventArgs>(
+            routedEvent, action);
+        this.InternalAdd(et);
+    }
+
+    /// <summary>
+    /// Remove a handler indicates RoutedEvent.
+    /// </summary>
+    /// <param name="routedEvent">RoutedEvent</param>
+    internal override void InternalRemove(
+        RoutedEvent routedEvent)
+    {
+        var eventName = routedEvent.GetFullName();
+
+        if (this.ets.TryGetValue(eventName, out var oet))
+        {
+            if (this.element.Target is TUIElement e)
+            {
+                oet.Release(e);
+            }
+
+            this.ets.Remove(eventName);
+        }
+    }
+#endif
 
     /// <summary>
     /// Generate formatted string of this instance.
     /// </summary>
     /// <returns>Formatted string</returns>
     public override string ToString() =>
-        $"Well: {this.et}";
+        $"Well: Ducts={this.ets.Count}";
 }

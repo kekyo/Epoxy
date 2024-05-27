@@ -41,22 +41,36 @@ using System.Windows;
 
 #if XAMARIN_FORMS
 using Xamarin.Forms;
+using DependencyObject = Xamarin.Forms.BindableObject;
+using UIElement = Xamarin.Forms.VisualElement;
 #endif
 
 #if MAUI
 using Microsoft.Maui.Controls;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+using UIElement = Microsoft.Maui.Controls.VisualElement;
 #endif
 
-#if AVALONIA || AVALONIA11
+#if AVALONIA
 using Avalonia;
+using Avalonia.Interactivity;
+using DependencyObject = Avalonia.IAvaloniaObject;
+using UIElement = Avalonia.Interactivity.Interactive;
+#endif
+
+#if AVALONIA11
+using Avalonia;
+using Avalonia.Interactivity;
+using DependencyObject = Avalonia.AvaloniaObject;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 namespace Epoxy.Internal;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal abstract class EventTrampoline<TTarget, TEventArgs>
+internal abstract class EventTrampoline<TTarget>
 {
-    private protected readonly string EventName;
+    public readonly string EventName;
 
     private protected EventTrampoline(
         string eventName) =>
@@ -71,8 +85,10 @@ internal abstract class EventTrampoline<TTarget, TEventArgs>
     protected abstract void OnRelease(TTarget target);
 }
 
+////////////////////////////////////////////////////////
+
 internal sealed class DynamicEventTrampoline<TTarget, TEventArgs> :
-    EventTrampoline<TTarget, TEventArgs>
+    EventTrampoline<TTarget>
 {
     private readonly Func<TEventArgs, ValueTask> action;
     private readonly EventInfo ei;
@@ -121,8 +137,10 @@ internal sealed class DynamicEventTrampoline<TTarget, TEventArgs> :
         $"DynamicEventTrampoline: {typeof(TTarget).FullName}.{this.EventName}";
 }
 
+////////////////////////////////////////////////////////
+
 internal sealed class StaticEventTrampoline<TTarget, TEventArgs> :
-    EventTrampoline<TTarget, TEventArgs>
+    EventTrampoline<TTarget>
 {
     private readonly IntPtr methodPtr;
     private readonly Action<TTarget, object, IntPtr> adder;
@@ -174,3 +192,87 @@ internal sealed class StaticEventTrampoline<TTarget, TEventArgs> :
     public override string ToString() =>
         $"StaticEventTrampoline: {typeof(TTarget).FullName}.{this.EventName}";
 }
+
+////////////////////////////////////////////////////////
+
+#if !(XAMARIN_FORMS || MAUI)
+internal static class RoutedEventExtension
+{
+    public static string GetFullName(this RoutedEvent routedEvent) =>
+#if OPENSILVER
+        $"RoutedEvent${routedEvent}";
+#else
+        $"RoutedEvent${routedEvent.OwnerType.FullName}.{routedEvent.Name}";
+#endif
+}
+
+internal sealed class RoutedEventTrampoline<TTarget, TEventArgs> :
+    EventTrampoline<TTarget>
+    where TTarget : UIElement
+    where TEventArgs : RoutedEventArgs
+{
+    private readonly RoutedEvent routedEvent;
+    private readonly Func<TEventArgs, ValueTask> action;
+
+    public RoutedEventTrampoline(
+        RoutedEvent routedEvent,
+        Func<TEventArgs, ValueTask> action) :
+        base(routedEvent.GetFullName())
+    {
+        this.routedEvent = routedEvent;
+        this.action = action;
+    }
+
+#if WINDOWS_WPF || OPENSILVER
+    private async void OnFireEvent(object sender, RoutedEventArgs e)
+#else
+    private async void OnFireEvent(object sender, TEventArgs e)
+#endif
+    {
+        if (this.action is { } action)
+        {
+            try
+            {
+#if WINDOWS_WPF || OPENSILVER
+                await action((TEventArgs)e);
+#else
+                await action(e);
+#endif
+            }
+            catch (Exception ex)
+            {
+                // HACK: Because the exception will ignore by 'async void' bottom stack,
+                //   (And will reraise delaying UnobservedException on finalizer thread.)
+                //   This captures logical task context and reraise on UI thread pumps immediately.
+                var edi = ExceptionDispatchInfo.Capture(ex);
+                InternalUIThread.ContinueOnUIThread(_ => edi.Throw());
+            }
+        }
+    }
+
+    protected override void OnBind(TTarget target) =>
+#if WINDOWS_WPF
+        target.AddHandler(this.routedEvent, new RoutedEventHandler(this.OnFireEvent));
+#elif OPENSILVER
+        target.AddHandler(this.routedEvent, new RoutedEventHandler(this.OnFireEvent), false);
+#else
+        target.AddHandler(this.routedEvent, this.OnFireEvent);
+#endif
+
+    protected override void OnRelease(TTarget target) =>
+#if WINDOWS_WPF
+        target.RemoveHandler(this.routedEvent, new RoutedEventHandler(this.OnFireEvent));
+#elif OPENSILVER
+        target.RemoveHandler(this.routedEvent, new RoutedEventHandler(this.OnFireEvent));
+#else
+        target.RemoveHandler(this.routedEvent, this.OnFireEvent);
+#endif
+
+    public override string ToString() =>
+#if OPENSILVER
+        $"RoutedEventTrampoline: {this.routedEvent}";
+#else
+        $"RoutedEventTrampoline: {this.routedEvent.OwnerType.FullName}.{this.routedEvent.Name}";
+#endif
+}
+#endif

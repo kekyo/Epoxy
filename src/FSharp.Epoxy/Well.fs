@@ -25,19 +25,30 @@ open Epoxy.Internal
 open System
 open System.ComponentModel
 open System.Diagnostics
-open System.Threading.Tasks
-open System.Runtime.InteropServices
 
 #if WINDOWS_UWP || UNO
-open Windows.UI.Xaml
+open Windows.UI.Xaml;
 #endif
 
 #if WINUI
-open Microsoft.UI.Xaml
+open Microsoft.UI.Xaml;
 #endif
 
 #if WINDOWS_WPF || OPENSILVER
-open System.Windows
+open System.Windows;
+#endif
+
+#if XAMARIN_FORMS
+open Xamarin.Forms;
+#endif
+
+#if MAUI
+open Microsoft.Maui.Controls;
+#endif
+
+#if AVALONIA || AVALONIA11
+open Avalonia;
+open Avalonia.Interactivity;
 #endif
 
 /// <summary>
@@ -45,47 +56,118 @@ open System.Windows
 /// </summary>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
-module public WellFactoryExtension =
+module public WellExtension =
 
     type public WellFactoryInstance with
 
         /// <summary>
-        /// Create an anonymous control typed Pile.
+        /// Create a Well.
         /// </summary>
-        /// <typeparam name="TDependencyObject">Target control type</typeparam>
-        /// <param name="eventName">Event name</param>
-        /// <param name="action">Action</param>
+        /// <typeparam name="TUIElement">Target control type</typeparam>
         /// <returns>Well instance</returns>
-        member _.create<'TDependencyObject when 'TDependencyObject :> DependencyObject>(
-            eventName: string,
-            action: unit -> Async<unit>) =
-                new Well<'TDependencyObject>(eventName, action >> asyncUnitAsValueTaskVoid)
+        member _.create<'TUIElement when 'TUIElement :> UIElement>() =
+            new Well<'TUIElement>()
+                
+    /////////////////////////////////////////////////////////////////
+
+    type public Well<'TUIElement when 'TUIElement :> UIElement> with
 
         /// <summary>
-        /// Create a Pile.
+        /// Add a well handler.
         /// </summary>
-        /// <typeparam name="TDependencyObject">Target control type</typeparam>
-        /// <typeparam name="TEventArgs">Additional parameter type</typeparam>
+        /// <typeparam name="TEventArgs">Handler receive type</typeparam>
+        /// <param name="well">Well</param>
         /// <param name="eventName">Event name</param>
-        /// <param name="action">Action</param>
-        /// <returns>Well instance</returns>
-        member _.create<'TDependencyObject, 'TEventArgs when 'TDependencyObject :> DependencyObject>(
+        /// <param name="action">Action delegate</param>
+        member well.add<'TEventArgs>(
             eventName: string,
             action: 'TEventArgs -> Async<unit>) =
-                new Well<'TDependencyObject, 'TEventArgs>(eventName, action >> asyncUnitAsValueTaskVoid)
+                well.InternalAdd(
+                    eventName,
+                    action >> asyncUnitAsValueTaskVoid)
 
-        [<EditorBrowsable(EditorBrowsableState.Never)>]
-        member _.create<'TDependencyObject when 'TDependencyObject :> DependencyObject>(
+        /// <summary>
+        /// Add a well handler.
+        /// </summary>
+        /// <param name="well">Well</param>
+        /// <param name="eventName">Event name</param>
+        /// <param name="action">Action delegate</param>
+        member well.add(
             eventName: string,
-            action: unit -> Async<unit>,
-            adder: Action<'TDependencyObject, obj, IntPtr>,
-            remover: Action<'TDependencyObject, obj, IntPtr>) =
-                new Well<'TDependencyObject>(eventName, action >> asyncUnitAsValueTaskVoid, adder, remover)
+            action: unit -> Async<unit>) =
+                well.InternalAdd<EventArgs>(
+                    eventName,
+                    fun _ -> (action() |> asyncUnitAsValueTaskVoid))
+
+        /// <summary>
+        /// Remove a well handler.
+        /// </summary>
+        /// <param name="well">Well</param>
+        /// <param name="eventName">Event name</param>
+        member well.remove(
+            eventName: string) =
+                well.InternalRemove(eventName)
+
+#if !(XAMARIN_FORMS || MAUI)
+        /// <summary>
+        /// Add a well handler.
+        /// </summary>
+        /// <typeparam name="TEventArgs">Handler receive type</typeparam>
+        /// <param name="well">Well</param>
+        /// <param name="routedEvent">RoutedEvent</param>
+        /// <param name="action">Action delegate</param>
+        member well.add<'TEventArgs when 'TEventArgs :> RoutedEventArgs>(
+#if AVALONIA || AVALONIA11
+            routedEvent: RoutedEvent<'TEventArgs>,
+#else
+            routedEvent: RoutedEvent,
+#endif
+            action: 'TEventArgs -> Async<unit>) =
+                well.InternalAdd(
+                    routedEvent,
+                    action >> asyncUnitAsValueTaskVoid)
+
+        /// <summary>
+        /// Add a well handler.
+        /// </summary>
+        /// <param name="well">Well</param>
+        /// <param name="routedEvent">RoutedEvent</param>
+        /// <param name="action">Action delegate</param>
+        member well.add(
+            routedEvent: RoutedEvent,
+            action: unit -> Async<unit>) =
+                well.InternalAdd<RoutedEventArgs>(
+                    routedEvent,
+                    fun _ -> (action() |> asyncUnitAsValueTaskVoid))
+
+        /// <summary>
+        /// Remove a well handler.
+        /// </summary>
+        /// <param name="well">Well</param>
+        /// <param name="routedEvent">RoutedEvent</param>
+        member well.remove(
+            routedEvent: RoutedEvent) =
+                well.InternalRemove(routedEvent)
+#endif
+
+        /////////////////////////////////////////////////////////////////
 
         [<EditorBrowsable(EditorBrowsableState.Never)>]
-        member _.create<'TDependencyObject, 'TEventArgs when 'TDependencyObject :> DependencyObject>(
+        member well.add<'TUIElement, 'TEventArgs when 'TUIElement :> UIElement>(
             eventName: string,
             action: 'TEventArgs -> Async<unit>,
-            adder: Action<'TDependencyObject, obj, IntPtr>,
-            remover: Action<'TDependencyObject, obj, IntPtr>) =
-                new Well<'TDependencyObject, 'TEventArgs>(eventName, action >> asyncUnitAsValueTaskVoid, adder, remover)
+            adder: Action<'TUIElement, obj, IntPtr>,
+            remover: Action<'TUIElement, obj, IntPtr>) =
+                well.InternalAdd(eventName, action >> asyncUnitAsValueTaskVoid, adder, remover)
+
+        [<EditorBrowsable(EditorBrowsableState.Never)>]
+        member well.add<'TUIElement when 'TUIElement :> UIElement>(
+            eventName: string,
+            action: unit -> Async<unit>,
+            adder: Action<'TUIElement, obj, IntPtr>,
+            remover: Action<'TUIElement, obj, IntPtr>) =
+                well.InternalAdd<EventArgs>(
+                    eventName,
+                    (fun _ -> (action() |> asyncUnitAsValueTaskVoid)),
+                    adder,
+                    remover)

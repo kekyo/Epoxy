@@ -54,13 +54,13 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
-using UIElement = Avalonia.Controls.IControl;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 #if AVALONIA11
 using Avalonia;
 using DependencyObject = Avalonia.AvaloniaObject;
-using UIElement = Avalonia.Controls.Control;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 namespace Epoxy;
@@ -143,22 +143,22 @@ public sealed class Pile<TUIElement> : Pile
     /// <param name="element">Target anchoring element</param>
     internal override void Bind(UIElement element)
     {
-        if (!(element is TUIElement))
+        Debug.Assert(!this.element.IsAlive);
+
+        if (element is not TUIElement e)
         {
             throw new InvalidOperationException($"Couldn't bind this anchor: {element.GetType().FullName}.");
         }
-        this.element.Target = (TUIElement)element;
+
+        this.element.Target = e;
     }
 
     /// <summary>
     /// Will release an Anchor.
     /// </summary>
     /// <param name="element">Target anchoring element</param>
-    internal override void Release(UIElement element)
-    {
-        Debug.Assert(this.element.Target is TUIElement e && object.ReferenceEquals(e, element));
+    internal override void Release(UIElement element) =>
         this.element.Target = null;
-    }
 
     /// <summary>
     /// Execute with anchoring element.
