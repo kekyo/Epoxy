@@ -52,42 +52,16 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
-using UIElement = Avalonia.Controls.IControl;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 #if AVALONIA11
 using Avalonia;
 using DependencyObject = Avalonia.AvaloniaObject;
-using UIElement = Avalonia.Controls.Control;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 namespace Epoxy;
-
-/// <summary>
-/// PileFactory class is obsoleted. Use Pile.Factory instead.
-/// </summary>
-[Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")]
-[DebuggerStepThrough]
-public static class PileFactory
-{
-    /// <summary>
-    /// PileFactory class is obsoleted. Use Pile.Factory instead.
-    /// </summary>
-    /// <returns>Pile instance</returns>
-    [Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")]
-    public static Pile<UIElement> Create() =>
-        new Pile<UIElement>();
-
-    /// <summary>
-    /// PileFactory class is obsoleted. Use Pile.Factory instead.
-    /// </summary>
-    /// <typeparam name="TUIElement">Target control type</typeparam>
-    /// <returns>Pile instance</returns>
-    [Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")]
-    public static Pile<TUIElement> Create<TUIElement>()
-        where TUIElement : UIElement =>
-        new Pile<TUIElement>();
-}
 
 /// <summary>
 /// The Pile factory.

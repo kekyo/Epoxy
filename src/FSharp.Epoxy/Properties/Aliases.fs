@@ -20,13 +20,21 @@
 namespace global
 
 #if XAMARIN_FORMS
+type private DependencyObject = Xamarin.Forms.BindableObject
 type private UIElement = Xamarin.Forms.VisualElement
 #endif
 
+#if MAUI
+type private DependencyObject = Microsoft.Maui.Controls.BindableObject
+type private UIElement = Microsoft.Maui.Controls.VisualElement
+#endif
+
 #if AVALONIA
-type private UIElement = Avalonia.Controls.IControl
+type private DependencyObject = Avalonia.IAvaloniaObject
+type private UIElement = Avalonia.Interactivity.Interactive
 #endif
 
 #if AVALONIA11
-type private UIElement = Avalonia.Controls.Control
+type private DependencyObject = Avalonia.AvaloniaObject
+type private UIElement = Avalonia.Interactivity.Interactive
 #endif

@@ -61,13 +61,6 @@ public static class UIThread
         InternalUIThread.IsBoundAsync();
 
     /// <summary>
-    /// Detects current thread context on the UI thread.
-    /// </summary>
-    [Obsolete("IsBound property is deprecated. Use IsBoundAsync() method instead.", true)]
-    public static bool IsBound =>
-        throw new NotImplementedException();
-
-    /// <summary>
     /// Binds current task to the UI thread context manually.
     /// </summary>
     /// <returns>Awaitable UI thread object.</returns>

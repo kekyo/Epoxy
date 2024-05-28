@@ -48,7 +48,7 @@ module public SyncViewModelExtension =
         member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> unit, [<Optional; CallerMemberName>] propertyName) =
             viewModel.InternalSetValueAsync<'TValue>(newValue, propertyChanged >> unitAsValueTaskUnit |> asFunc1, propertyName) |> ignore
 
-        // Dodge mistake choicing asynchronously overloads
+        // Avoid mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use setValueAsync instead.", true)>]
         member viewModel.setValueSync (newValue, propertyChanged: 'TValue -> ValueTask<unit>, [<Optional; CallerMemberName>] propertyName) =

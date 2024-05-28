@@ -35,54 +35,6 @@ module private CommandFactoryGenerator =
     let inline createP1 executeAsync canExecute = new DelegatedCommand<'TParameter>(executeAsync, canExecute) :> Command
 
 /// <summary>
-/// CommandFactory class is obsoleted. Use Command.Factory instead.
-/// </summary>
-[<Obsolete("CommandFactory class is obsoleted. Use Command.Factory instead.")>]
-[<DebuggerStepThrough>]
-[<AbstractClass>]
-[<Sealed>]
-type public CommandFactory =
-    /// <summary>
-    /// CommandFactory class is obsoleted. Use Command.Factory instead.
-    /// </summary>
-    /// <param name="executeAsync">Asynchronous handler</param>
-    /// <returns>A Command instance</returns>
-    [<Obsolete("CommandFactory class is obsoleted. Use Command.Factory instead.")>]
-    static member create executeAsync =
-        create0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0)
-
-    /// <summary>
-    /// CommandFactory class is obsoleted. Use Command.Factory instead.
-    /// </summary>
-    /// <param name="executeAsync">Asynchronous handler</param>
-    /// <param name="canExecute">Responder for be able to execute</param>
-    /// <returns>A Command instance</returns>
-    [<Obsolete("CommandFactory class is obsoleted. Use Command.Factory instead.")>]
-    static member create (executeAsync, canExecute) =
-        create1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc0) (canExecute |> asFunc0)
-
-    /// <summary>
-    /// CommandFactory class is obsoleted. Use Command.Factory instead.
-    /// </summary>
-    /// <typeparam name="'TParameter">Handler parameter type</typeparam>
-    /// <param name="executeAsync">Asynchronous handler</param>
-    /// <returns>A Command instance</returns>
-    [<Obsolete("CommandFactory class is obsoleted. Use Command.Factory instead.")>]
-    static member create (executeAsync: 'TParameter -> Async<unit>) =
-        createP0 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1)
-
-    /// <summary>
-    /// CommandFactory class is obsoleted. Use Command.Factory instead.
-    /// </summary>
-    /// <typeparam name="'TParameter">Handler parameter type</typeparam>
-    /// <param name="executeAsync">Asynchronous handler</param>
-    /// <param name="canExecute">Responder for be able to execute</param>
-    /// <returns>A Command instance</returns>
-    [<Obsolete("CommandFactory class is obsoleted. Use Command.Factory instead.")>]
-    static member create (executeAsync: 'TParameter -> Async<unit>, canExecute) =
-        createP1 (executeAsync >> asyncUnitAsValueTaskUnit |> asFunc1) (canExecute |> asFunc1)
-
-/// <summary>
 /// Command factory functions for Async&lt;unit&gt; based asynchronous handler.
 /// </summary>
 [<DebuggerStepThrough>]

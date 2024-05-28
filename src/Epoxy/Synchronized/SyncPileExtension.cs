@@ -48,11 +48,11 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 #endif
 
 #if AVALONIA
-using UIElement = Avalonia.Controls.IControl;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 #if AVALONIA11
-using UIElement = Avalonia.Controls.Control;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 namespace Epoxy.Synchronized;
@@ -97,7 +97,7 @@ public static class SyncPileExtension
         where TUIElement : UIElement =>
         pile.InternalRentSync(action);
 
-    #region Dodge mistake choicing asynchronously overloads
+    #region Avoid mistake choicing asynchronously overloads
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Obsolete("Use RentAsync instead.", true)]
     public static void RentSync<TUIElement>(

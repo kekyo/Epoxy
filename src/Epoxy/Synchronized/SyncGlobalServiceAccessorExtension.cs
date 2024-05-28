@@ -64,7 +64,7 @@ public static class SyncGlobalServiceAccessorExtension
         Func<TService, TResult> action) =>
         InternalGlobalService.ExecuteSync(action);
 
-    #region Dodge mistake choicing asynchronously overloads
+    #region Avoid mistake choicing asynchronously overloads
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Obsolete("Use ExecuteAsync instead.", true)]
     public static void ExecuteSync<TService>(

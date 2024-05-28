@@ -22,6 +22,7 @@
 using System;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 
 #if WINDOWS_UWP || UNO
@@ -268,23 +269,12 @@ public sealed class Event :
     /// <summary>
     /// Binds target CLR event name bindable property declaration.
     /// </summary>
+#if NET5_0_OR_GREATER
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents)]
+#endif
     public static readonly BindableProperty EventNameProperty =
         BindableProperty.Create(
             "EventName",
-            typeof(string),
-            typeof(Event),
-            null,
-            BindingMode.Default,
-            null,
-            (d, ov, nv) => ((Event)d).OnEventNamePropertyChanged(ov, nv));
-
-    /// <summary>
-    /// Binds target CLR event name bindable property declaration.
-    /// </summary>
-    [Obsolete("Use EventName instead.")]
-    public static readonly BindableProperty NameProperty =
-        BindableProperty.Create(
-            "Name",
             typeof(string),
             typeof(Event),
             null,
@@ -308,15 +298,11 @@ public sealed class Event :
     /// <summary>
     /// Binds target CLR event name bindable property declaration.
     /// </summary>
+#if NET5_0_OR_GREATER
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents)]
+#endif
     public static readonly AvaloniaProperty<string> EventNameProperty =
         AvaloniaProperty.Register<Event, string>("EventName");
-
-    /// <summary>
-    /// Binds target CLR event name bindable property declaration.
-    /// </summary>
-    [Obsolete("Use EventName instead.")]
-    public static readonly AvaloniaProperty<string> NameProperty =
-        AvaloniaProperty.Register<Event, string>("Name");
 
     /// <summary>
     /// Binds ICommand expression bindable property declaration.
@@ -343,25 +329,15 @@ public sealed class Event :
     /// <summary>
     /// Binds target CLR event name bindable property declaration.
     /// </summary>
+#if NET5_0_OR_GREATER
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents)]
+#endif
     public static readonly DependencyProperty EventNameProperty =
         DependencyProperty.Register(
             "EventName",
             typeof(string),
             typeof(Event),
             new PropertyMetadata(null, (d, e) => ((Event)d).OnEventNamePropertyChanged(e.OldValue, e.NewValue)));
-
-#if !OPENSILVER
-    /// <summary>
-    /// Binds target CLR event name bindable property declaration.
-    /// </summary>
-    [Obsolete("Use EventName instead.")]
-    public static readonly DependencyProperty NameProperty =
-        DependencyProperty.Register(
-            "Name",
-            typeof(string),
-            typeof(Event),
-            new PropertyMetadata(null, (d, e) => ((Event)d).OnEventNamePropertyChanged(e.OldValue, e.NewValue)));
-#endif
 
     /// <summary>
     /// Binds ICommand expression bindable property declaration.
@@ -384,23 +360,14 @@ public sealed class Event :
     /// <summary>
     /// Binds target CLR event name.
     /// </summary>
+#if NET5_0_OR_GREATER
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents)]
+#endif
     public string? EventName
     {
         get => (string?)this.GetValue(EventNameProperty);
         set => this.SetValue(EventNameProperty, value);
     }
-
-#if !OPENSILVER
-    /// <summary>
-    /// Binds target CLR event name.
-    /// </summary>
-    [Obsolete("Use EventName instead.")]
-    public string? Name
-    {
-        get => (string?)this.GetValue(EventNameProperty);
-        set => this.SetValue(EventNameProperty, value);
-    }
-#endif
 
     /// <summary>
     /// Binds ICommand expression.

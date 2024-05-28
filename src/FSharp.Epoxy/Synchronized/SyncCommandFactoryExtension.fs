@@ -76,7 +76,7 @@ module public SyncCommandFactoryExtension =
         member __.createSync (execute: 'TParameter -> unit, canExecute: 'TParameter -> bool) =
             new SyncDelegatedCommand<'TParameter>(execute |> asAction1, canExecute |> asFunc1) :> Command
 
-        // Dodge mistake choicing asynchronously overloads
+        // Avoid mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use createAsync instead.", true)>]
         member __.createSync (execute: unit -> ValueTask) =

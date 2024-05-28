@@ -20,6 +20,7 @@
 #nullable enable
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 using Epoxy.Internal;
@@ -94,6 +95,9 @@ public static class GlobalServiceAccessorExtension
     /// GlobalService.Register(facade);
     /// </code>
     /// </example>
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Epoxy requires CLR for GlobalService feature, have to disable NativeAOT.")]
+#endif
     public static void Register(
         this GlobalServiceAccessor accessor,
         object instance, RegisteringValidations validation = RegisteringValidations.Strict) =>
@@ -131,6 +135,9 @@ public static class GlobalServiceAccessorExtension
     /// GlobalService.RegisterExplicit<IBlueTooth>(facade);
     /// </code>
     /// </example>
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Epoxy requires CLR for GlobalService feature, have to disable NativeAOT.")]
+#endif
     public static void RegisterExplicit<TService>(
         this GlobalServiceAccessor accessor,
         TService instance, RegisteringValidations validation = RegisteringValidations.Strict)
@@ -142,6 +149,9 @@ public static class GlobalServiceAccessorExtension
     /// </summary>
     /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
     /// <param name="instance">Target instance</param>
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Epoxy requires CLR for GlobalService feature, have to disable NativeAOT.")]
+#endif
     public static void Unregister(
         this GlobalServiceAccessor accessor,
         object instance) =>
@@ -152,6 +162,9 @@ public static class GlobalServiceAccessorExtension
     /// </summary>
     /// <typeparam name="TService">Explicit interface type</typeparam>
     /// <param name="accessor">Accessor instance (will use only fixup by compiler)</param>
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Epoxy requires CLR for GlobalService feature, have to disable NativeAOT.")]
+#endif
     public static void UnregisterExplicit<TService>(
         this GlobalServiceAccessor accessor)
         where TService : class =>
@@ -175,6 +188,9 @@ public static class GlobalServiceAccessorExtension
     /// });
     /// </code>
     /// </example>
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Epoxy requires CLR for GlobalService feature, have to disable NativeAOT.")]
+#endif
     public static ValueTask ExecuteAsync<TService>(
         this GlobalServiceAccessor accessor,
         Func<TService, ValueTask> action,
@@ -200,6 +216,9 @@ public static class GlobalServiceAccessorExtension
     /// });
     /// </code>
     /// </example>
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Epoxy requires CLR for GlobalService feature, have to disable NativeAOT.")]
+#endif
     public static ValueTask<TResult> ExecuteAsync<TService, TResult>(
         this GlobalServiceAccessor accessor,
         Func<TService, ValueTask<TResult>> action) =>
