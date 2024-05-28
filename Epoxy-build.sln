@@ -4,21 +4,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Wpf", "src\Epoxy.Wpf\Epoxy.Wpf.csproj", "{1B625B4E-7DBB-45F3-B095-B8016CC592CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Xamarin.Forms", "src\Epoxy.Xamarin.Forms\Epoxy.Xamarin.Forms.csproj", "{15B90169-2BDF-45FA-ACDB-A45AAD6F3CCA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Avalonia", "src\Epoxy.Avalonia\Epoxy.Avalonia.csproj", "{32ABAA5B-2465-4FE8-8446-7BC7CEC16123}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Core.Wpf", "src\Epoxy.Core.Wpf\Epoxy.Core.Wpf.csproj", "{C0A15D5B-C338-4306-9C2B-CE7E6AB50DE1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Core.Xamarin.Forms", "src\Epoxy.Core.Xamarin.Forms\Epoxy.Core.Xamarin.Forms.csproj", "{494DDC01-9BCD-4CE6-B5B6-58F97BD1346C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Core.Avalonia", "src\Epoxy.Core.Avalonia\Epoxy.Core.Avalonia.csproj", "{037C4C66-0ED1-46EF-8AFA-9FF81205E318}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Epoxy.Wpf", "src\FSharp.Epoxy.Wpf\FSharp.Epoxy.Wpf.fsproj", "{C4EE5059-5F8D-40CD-97EA-F450A3CEDF6D}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Epoxy.Avalonia", "src\FSharp.Epoxy.Avalonia\FSharp.Epoxy.Avalonia.fsproj", "{E0E32D7E-E274-418B-9DB2-D4E03AE46E1A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Templates", "templates\Epoxy.Templates.csproj", "{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epoxy.Build", "src\Epoxy.Build\Epoxy.Build.csproj", "{BF5976C8-2143-4769-A029-0B1C64B18F81}"
 EndProject
@@ -54,10 +48,6 @@ Global
 		{1B625B4E-7DBB-45F3-B095-B8016CC592CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B625B4E-7DBB-45F3-B095-B8016CC592CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B625B4E-7DBB-45F3-B095-B8016CC592CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15B90169-2BDF-45FA-ACDB-A45AAD6F3CCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15B90169-2BDF-45FA-ACDB-A45AAD6F3CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15B90169-2BDF-45FA-ACDB-A45AAD6F3CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15B90169-2BDF-45FA-ACDB-A45AAD6F3CCA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32ABAA5B-2465-4FE8-8446-7BC7CEC16123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32ABAA5B-2465-4FE8-8446-7BC7CEC16123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32ABAA5B-2465-4FE8-8446-7BC7CEC16123}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,10 +56,6 @@ Global
 		{C0A15D5B-C338-4306-9C2B-CE7E6AB50DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0A15D5B-C338-4306-9C2B-CE7E6AB50DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0A15D5B-C338-4306-9C2B-CE7E6AB50DE1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{494DDC01-9BCD-4CE6-B5B6-58F97BD1346C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{494DDC01-9BCD-4CE6-B5B6-58F97BD1346C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{494DDC01-9BCD-4CE6-B5B6-58F97BD1346C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{494DDC01-9BCD-4CE6-B5B6-58F97BD1346C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{037C4C66-0ED1-46EF-8AFA-9FF81205E318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{037C4C66-0ED1-46EF-8AFA-9FF81205E318}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{037C4C66-0ED1-46EF-8AFA-9FF81205E318}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -82,8 +68,6 @@ Global
 		{E0E32D7E-E274-418B-9DB2-D4E03AE46E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0E32D7E-E274-418B-9DB2-D4E03AE46E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0E32D7E-E274-418B-9DB2-D4E03AE46E1A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{31223F7E-506F-4FD2-905B-9C9D75DBDFB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF5976C8-2143-4769-A029-0B1C64B18F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF5976C8-2143-4769-A029-0B1C64B18F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF5976C8-2143-4769-A029-0B1C64B18F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
