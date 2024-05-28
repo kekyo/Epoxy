@@ -826,6 +826,7 @@ Apache-v2
   * Deprecated Xamarin Forms.
   * Deprecated Template Projects.
     * Will still function as a new project generation for a while, but will not be updated.
+  * Removed Obsolete member left for compatibility.
 * 1.14.0:
   * In Avalonia 11, allow URLs to be specified in the namespace when referencing Epoxy from XAML.
     It can be specified as `xmlns:epoxy="https://github.com/kekyo/Epoxy"`.

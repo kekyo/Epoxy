@@ -832,6 +832,7 @@ Apache-v2
   * Xamarin Formsを廃止。
   * テンプレートプロジェクトを廃止。
     * まだしばらくは新規プロジェクト生成として機能すると思いますが、更新されません。
+  * 互換性の為に残されていたObsoleteメンバーを削除。
 * 1.14.0:
   * Avalonia 11で、XAMLからEpoxyを参照する際の名前空間にURLを指定可能にしました。
     `xmlns:epoxy="https://github.com/kekyo/Epoxy"` のように指定できます。

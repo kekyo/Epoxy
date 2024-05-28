@@ -40,31 +40,6 @@ open System.Windows
 #endif
 
 /// <summary>
-/// PileFactory class is obsoleted. Use Pile.Factory instead.
-/// </summary>
-[<Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")>]
-[<DebuggerStepThrough>]
-[<AbstractClass; Sealed>]
-type public PileFactory =
-
-    /// <summary>
-    /// PileFactory class is obsoleted. Use Pile.Factory instead.
-    /// </summary>
-    /// <returns>Pile instance</returns>
-    [<Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")>]
-    static member create() =
-        new Pile<UIElement>()
-
-    /// <summary>
-    /// PileFactory class is obsoleted. Use Pile.Factory instead.
-    /// </summary>
-    /// <typeparam name="'TUIElement">Target control type</typeparam>
-    /// <returns>Pile instance</returns>
-    [<Obsolete("PileFactory class is obsoleted. Use Pile.Factory instead.")>]
-    static member create<'TUIElement when 'TUIElement :> UIElement>() =
-        new Pile<'TUIElement>()
-
-/// <summary>
 /// The Pile factory.
 /// </summary>
 /// <remarks>You can manipulate XAML controls directly inside ViewModels

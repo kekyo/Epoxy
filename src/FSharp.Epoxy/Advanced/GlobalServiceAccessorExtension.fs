@@ -26,43 +26,6 @@ open System.Runtime.InteropServices
 open Epoxy.Advanced
 open Epoxy.Internal
 
-[<DebuggerStepThrough>]
-[<AutoOpen>]
-module public GlobalServiceExtension =
-
-    type public GlobalService with
-
-        /// <summary>
-        /// Static register() method is obsoleted, will remove future release. Use Accessor.register() instead.
-        /// </summary>
-        [<Obsolete("Static register() method is obsoleted, will remove future release. Use Accessor.register() instead.")>]
-        static member register(instance: obj, [<Optional; DefaultParameterValue(RegisteringValidations.Strict)>] validation: RegisteringValidations) =
-            InternalGlobalService.Register(instance, validation)
-
-        /// <summary>
-        /// Static unregister() method is obsoleted, will remove future release. Use Accessor.unregister() instead.
-        /// </summary>
-        /// <param name="instance">Target instance</param>
-        [<Obsolete("Static unregister() method is obsoleted, will remove future release. Use Accessor.unregister() instead.")>]
-        static member unregister(instance: obj) =
-            InternalGlobalService.Unregister(instance)
-
-        /// <summary>
-        /// Static executeAsync() method is obsoleted, will remove future release. Use Accessor.executeAsync() instead.
-        /// </summary>
-        [<Obsolete("Static executeAsync() method is obsoleted, will remove future release. Use Accessor.executeAsync() instead.")>]
-        static member executeAsync(action: 'TService -> Async<unit>, [<Optional; DefaultParameterValue(false)>] ignoreNotPresent: bool) =
-            InternalGlobalService.ExecuteAsync<'TService>(action >> asyncUnitAsValueTaskVoid |> asFunc1, ignoreNotPresent)
-            |> valueTaskVoidAsAsyncResult
-
-        /// <summary>
-        /// Static executeAsync() method is obsoleted, will remove future release. Use Accessor.executeAsync() instead.
-        /// </summary>
-        [<Obsolete("Static executeAsync() method is obsoleted, will remove future release. Use Accessor.executeAsync() instead.")>]
-        static member executeAsync(action: 'TService -> Async<'TResult>) =
-            InternalGlobalService.ExecuteAsync<'TService, 'TResult>(action >> asyncAsValueTask |> asFunc1)
-            |> valueTaskAsAsyncResult
-
 /// <summary>
 /// GlobalService is a simple and lightweight dependency injection infrastructure.
 /// </summary>
