@@ -61,7 +61,7 @@ module public SyncGlobalServiceAccessorExtension =
         member __.executeSync (action: 'TService -> 'TResult) =
             InternalGlobalService.ExecuteSync(action |> asFunc1)
 
-        // Dodge mistake choicing asynchronously overloads
+        // Avoid mistake choicing asynchronously overloads
         [<EditorBrowsable(EditorBrowsableState.Never)>]
         [<Obsolete("Use executeAsync instead.", true)>]
         member __.executeSync (action: 'TService -> Async<unit>, [<Optional; DefaultParameterValue(false)>] ignoreNotPresent) =

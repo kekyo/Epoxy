@@ -92,7 +92,7 @@ public static class SyncCommandFactoryExtension
         Func<TParameter, bool> canExecute) =>
         new SyncDelegatedCommand<TParameter>(execute, canExecute);
 
-    #region Dodge mistake choicing asynchronously overloads
+    #region Avoid mistake choicing asynchronously overloads
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Obsolete("Use Create instead.", true)]
     public static Command CreateSync(

@@ -14,7 +14,6 @@
 |Epoxy.Avalonia11|[![NuGet Epoxy.Avalonia11](https://img.shields.io/nuget/v/Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia11)|Avalonia version 11|
 |Epoxy.Avalonia|[![NuGet Epoxy.Avalonia](https://img.shields.io/nuget/v/Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Avalonia)|Avalonia version|
 |Epoxy.OpenSilver|[![NuGet Epoxy.OpenSilver](https://img.shields.io/nuget/v/Epoxy.OpenSilver.svg?style=flat)](https://www.nuget.org/packages/Epoxy.OpenSilver)|OpenSilver version|
-|Epoxy.Xamarin.Forms|[![NuGet Epoxy.Xamarin.Forms](https://img.shields.io/nuget/v/Epoxy.Xamarin.Forms.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Xamarin.Forms)|Xamarin Forms version|
 |Epoxy.Maui|[![NuGet Epoxy.Maui](https://img.shields.io/nuget/v/Epoxy.Maui.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Maui)|.NET MAUI version|
 
 ## NuGet for F# specialized
@@ -25,12 +24,6 @@
 |FSharp.Epoxy.Avalonia11|[![NuGet FSharp.Epoxy.Avalonia11](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia11.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia11)|Avalonia version 11|
 |FSharp.Epoxy.Avalonia|[![NuGet FSharp.Epoxy.Avalonia](https://img.shields.io/nuget/v/FSharp.Epoxy.Avalonia.svg?style=flat)](https://www.nuget.org/packages/FSharp.Epoxy.Avalonia)|Avalonia version|
 
-## dotnet CLI template
-
-|Package|main|Description|
-|:--|:--|:--|
-|Epoxy.Templates|[![NuGet Epoxy.Templates](https://img.shields.io/nuget/v/Epoxy.Templates.svg?style=flat)](https://www.nuget.org/packages/Epoxy.Templates)|dotnet CLI template package|
-
 ## What is this ?
 
 * Epoxy is a .NET XAML Model-View-ViewModel data-bindable infrastructure library, independent flexible API sets.
@@ -39,7 +32,6 @@
   * WPF: .NET 8.0/7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
   * OpenSilver: [OpenSilver](https://opensilver.net/) (1.0.0 or higher)
-  * Xamarin Forms: [Xamarin Forms](https://github.com/xamarin/Xamarin.Forms) (5.0.0.1874 or higher)
   * .NET MAUI: 7.0 or higher
 * Safe asynchronous operation (async-await) ready.
 * C# 8.0 nullable reference types ready.
@@ -56,7 +48,15 @@
 ## Sample code
 
 You can refer multi-platform application sample code variation in.
-This sample displays a list of the latest posts and images from The Cat API, downloading them asynchronously and displays them in a list format.
+
+Clicking the button after launching,
+while downloading the latest posted articles and images asynchronously from The Cat API,
+The Cat API asynchronously downloads the latest posts and images,
+and displays them in a list format.
+
+![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Wpf.png)
+
+![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
 
 Sample code projects are located in the [playground directory](playground/)
 or F# sample code in the [playground FSharp directory](playground.FSharp/).
@@ -64,66 +64,22 @@ or F# sample code in the [playground FSharp directory](playground.FSharp/).
 If you want to apply Epoxy in a full-scratch or to apply Epoxy into an existing project,
 [Avalonia 11 sample repository with step-by-step commits](https://github.com/kekyo/Epoxy.Avalonia11.SampleProject) may be helpful.
 
+### Introduction
 
-### How to get and build the template code
+Install the NuGet package that corresponds to your target GUI framework.
+There are many Epoxy packages available, but all you need is:
 
-Note: Template projects will be discontinued in future versions.
-You can still use Epoxy in the current version by simply adding the corresponding package to your project.
+* `Epoxy.Avalonia11`
+* `Epoxy.Avalonia`
+* `Epoxy.WPF`
+* `Epoxy.OpenSilver`
+* `Epoxy.MAUI`
 
-The .NET 7 SDK CLI template is supported. You can easily try the template code in a clean state with the following command:
+You may find other packages like `Epoxy.Core.WPF` or `Epoxy.Build`, though,
+these are automatically used as dependencies from the above packages.
 
-```bash
-# Install the template package (Only at the first time or version update)
-dotnet new -i Epoxy.Templates
-
-# Extract the WPF sample code to the current directory.
-dotnet new epoxy-wpf
-
-# Build
-dotnet build
-```
-
-The template code includes the following code:
-
-* A `Core` project that contains the MVVM model code. However the contents are empty.
-* A project containing very simple code that just displays "Hello Epoxy!".
-
-Caution: .NET 7 SDK must be installed beforehand because the template assumes .NET 7.
-For other versions only (e.g. .NET 8/6/5 SDK), the build will fail if you do not modify `TargetFramework` property.
-
-### List of currently supported templates
-
-|`dotnet new` parameter|Language|Target|
-|:--|:--|:--|
-|`epoxy-wpf`|C#, F#|Template code for WPF|
-|`epoxy-avalonia11`|C#, F#|Template code for Avalonia 11 (xplat)|
-|`epoxy-avalonia`|C#, F#|Template code for older Avalonia|
-|`epoxy-opensilver`|C#|Template code for OpenSilver|
-|`epoxy-xamarin-forms`|C#|Template code for Xamarin Forms|
-
-* By default, the C# sample code is extracted; to change to F#, add option into command line like: `dotnet new epoxy-wpf -lang F#`.
-* Xamarin Forms is required old style MSBuild project.
-  * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
-* OpenSilver template code is contained only .NET Framework based simulator project.
-  * If you want to build and run, you need to open the solution in Visual Studio instead of `dotnet build`.
-  * You need to add a web hosting project when need to host onto Chrome and Firefox by WebAssembly.
-* You can use devel branch package, describes below: `dotnet new -i Epoxy.Templates::<version> --nuget-source http://nuget.kekyo.online:59103/repository/nuget/index.json --force`
-
-### Choose by Visual Studio wizard dialog
-
-When you install templates with above step, Visual Studio project creation wizard will show up Epoxy's templates in the dialog:
-
-![Template selection dialog](Images/vswizard_en.png)
-
-----
-
-### Detail for sample code
-
-Full asynchronous fetching and updating into ListBox when you click a button.
-
-![EpoxyHello.Wpf](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Wpf.png)
-
-![EpoxyHello.Xamarin.Forms](https://github.com/kekyo/Epoxy/raw/main/Images/sample.Xamarin.Forms.png)
+Note: `Epoxy.Templates` used to contain template project definitions, but is discontinued as of 1.15.0.
+With this change, the Template Wizard in Visual Studio has also been discontinued too.
 
 ----
 
@@ -187,6 +143,7 @@ Completed separately xaml based view declarations.
 ### Example of ViewModel (WPF) implementation
 
 Completed separately `ViewModel` implementation.
+Completely, that is, without any code-behind in the View class.
 
 ```csharp
 // Step 1: Create a ViewModel class. Then add the ViewModel attribute.
@@ -232,7 +189,7 @@ public sealed class MainWindowViewModel
 ### Example of Model implementation
 
 The common code to access The Cat API is implemented in the `EpoxyHello.Core` project.
-It does not depend on either WPF, Xamarin Forms, Avalonia and OpenSilver assemblies and is completely independent.
+It does not depend on either WPF, Avalonia, OpenSilver and MAUI assemblies and is completely independent.
 
 By eliminating dependencies in this way, we can achieve commonality for multi-platform support.
 However, for small-scale development, you can place the `Model` implementation in the same project as the `ViewModel` implementation
@@ -274,6 +231,7 @@ Since each function is independent, it can be used in any combination.
 |ViewModel Injector|This function allows you to automatically implement the PropertyChanged event and other events required for ViewModel at build time. Simply apply the attributes to the target class, and you can skip the complicated code implementation.|
 |ViewModel base class|The ViewModel Injector provides an orthodox base class for the ViewModel's PropertyChanged events, etc. It can be used in scenarios where the ViewModel Injector is not suitable.|
 |Command factory|Enables arbitrary asynchronous delegates to be used as ICommand. You can safely implement asynchronous processing as an ICommand. |
+|Fountain/Well|This is an attachment property that allows binding of any XAML control event. This makes simpler event handing and allows for safe binding.|
 |EventBinder|An attached property that allows you to bind CLR events of any XAML control as ICommand.|
 |Anchor/Pile|Enables any XAML control to be temporarily and safely referenced from the ViewModel,eliminating all code binding and improving implementation visibility when using MVVM. The technique known as the Messenger pattern can also be integrated into the ViewModel with Anchor/Pile.|
 |ValueConverter|Provides a base class for the XAML value converter. It provides a base class for XAML value converters, and can be implemented with type constraints in place.|
@@ -319,20 +277,94 @@ private ValueTask TitleChangedAsync(string value)
 
 You can also derive and implement the `ViewModel` base class as before without using the `ViewModel injector`.
 
-`ViewModel` base class provides an implementation of the `GetValue`/`SetValue` methods.
-These methods automatically notify to the XAML control by property changes event `PropertyChanging`/`PropertyChanged`.
-For example, when a property is changed upon a button click in `ViewModel`, the change will be notified to the XAML control and reflected to the user interface.
+`ViewModel` base class provides an implementation of the `GetValue`/`SetValue` methods. These methods automatically notify to the XAML control by property changes event `PropertyChanging`/`PropertyChanged`. For example, when a property is changed upon a button click in `ViewModel`, the change will be notified to the XAML control and reflected to the user interface.
 
-In addition, `GetValue` defines the default value,
-and `SetValue` defines an overload that can perform additional operations when the value is changed.
+In addition, `GetValue` defines the default value, and `SetValue` defines an overload that can perform additional operations when the value is changed.
 
-If you don't use the ViewModel injector at entire in your project,
-you can disable it to stop parsing code automatically and speed up the build.
-Specify `False` for` EpoxyBuildEnable` of `PropertyGroup` of csproj.
+If you don't use the ViewModel injector at entire in your project, you can disable it to stop parsing code automatically and speed up the build. Specify `False` for` EpoxyBuildEnable` of `PropertyGroup` of csproj.
+
+----
+
+### Fountain/Well
+
+`Fountain`/`Well` is a new event handling feature that is an alternative to `EventBinder` (see below).
+
+A XAML control CLR event that cannot be bound, it allows for easy hooking on the ViewModel side, without writing any code-behind. Since `RoutedEvent` is also supported, you can write any event handling in exactly the same way.
+
+Also, when a control is detached from the display, the event is automatically unhooked, this prevents memory leaks.
+
+* `Fountain` is the source of the control's events.
+* `Well` is the place to receive events generated by `Fountain`, which is combined with `Fountain` by data binding.
+* Event handlers are added and removed from `Well`.
+
+For example, you can bind WPF's `Window.Loaded` CLR event as follows. Place the `Fountain` attachment property on the control where you want to hook the event, and bind it:
+
+```xml
+<!-- Define XML namespace for Epoxy and bind Fountain with Well -->
+<Window xmlns:epoxy="https://github.com/kekyo/Epoxy"
+    epoxy:Fountain.Well="{Binding MainWindowWell}">
+
+    <!-- ... -->
+</Window>
+```
+
+On the `ViewModel` side, place a `Well`. Add a handler to the `Well`, specifying the event name:
+
+```csharp
+// Define a Well that receives events from the Window
+public Well MainWindowWell { get; } = Well.Factory.Create<Window>();
+
+// ...
+
+// Added a handler to Well when the Loaded CLR event occurs
+this.MainWindowWell.Add("Loaded", async () =>
+{
+    // Asynchronously retrieve information to be displayed in the list from Model
+    foreach (var item in await Model.FetchInitialItemsAsync())
+    {
+        this.Items.Add(item);
+    }
+});
+```
+
+In the `Well.Add()` method, register a handler delegate corresponding to the event. Of course, this handler supports asynchronous processing.
+
+This method has two overloads: one is to specify the CLR event name as a string, and the other is to specify `RoutedEvent`.
+
+The overload specifying `RoutedEvent` can also be used to receive so-called "XAML Attached events":
+
+```csharp
+// Added handler for when a drag event occurs
+// (In the case of Avalonia, the event type `e` is automatically determined)
+this.MainWindowWell.Add(DragDrop.DragEnterEvent, async e =>
+{
+    // (Handling of drag events...)
+});
+```
+
+In Avalonia, because the type of the event argument `EventArgs` is supplied by `RoutedEvent`, This is the least descriptive and maintains type-safety.
+If you need event arguments in other environments, specify the `EventArgs` type in the generic argument `Well.Add<TEventArgs>(...)`.
+
+* Since `RoutedEvent` does not exist in MAUI, Epoxy does not have this feature either.
+
+Different events can be added to a `Well` at the same time. Only one handler with the same event name may be added at a time.
+
+#### Migration from EventBinder
+
+`EventBinder` will also continue to be supported, but if you want to decide if you should migrate to `Fountain`/`Well`, please refer to the table below.
+
+|Insight|Advantages|Disadvantages|
+|:----|:----|:----|:----|
+|XAML|One of the least amount of code.|Different architecture from `Behavior` based.|
+|Binding|Can bind `Well`|Cannot bind `ICommand`|
+|ViewModel|Not only CLR events but also `RoutedEvents` can be hooked. Avalonia automatically determines handler argument types.|Not using `ICommand`.|
+|Reflection|Structure to be reflection-free in the future.|Currently uses reflection. `EventBinder` always uses reflection.|
 
 ----
 
 ### EventBinder
+
+Note: A more convenient `Fountain/Well` feature has been added. New users are encouraged to use it.
 
 `EventBinder` allows binding of unbindable events as `Command` when they are exposed.
 This feature avoids the practice of writing a code-behind for the sake of writing an event handler.
@@ -378,12 +410,12 @@ this.Ready = Command.Factory.Create<EventArgs>(async _ =>
 The generic argument of `Command.Factory.Create<T>` is the second argument of the event (usually a class that inherits from EventArgs).
 Non-generic methods can also be used when event arguments are not required.
 
-TIP 1: In WPF and Xamarin Forms, you can use `Behavior` and `Trigger` to achieve the same thing.
+TIP 1: In WPF and MAUI, you can use `Behavior` and `Trigger` to achieve the same thing.
 However, they require additional packages and are designed to be generic,
 so they are a bit more complex.
 Using `EventBinder` has the advantage of being simple and using the same notation.
 
-TIP 2: In a UWP environment (including UWP builds of Xamarin Forms), the target event should have the following signature:
+TIP 2: In a UWP environment (including UWP builds of MAUI), the target event should have the following signature:
 
 ```csharp
 // Events that can be bound by EventBinder
@@ -789,6 +821,11 @@ Apache-v2
 
 ## History
 
+* 1.15.0:
+  * Added `Fountain/Well` as a new event handling feature.
+  * Deprecated Xamarin Forms.
+  * Deprecated Template Projects.
+    * Will still function as a new project generation for a while, but will not be updated.
 * 1.14.0:
   * In Avalonia 11, allow URLs to be specified in the namespace when referencing Epoxy from XAML.
     It can be specified as `xmlns:epoxy="https://github.com/kekyo/Epoxy"`.

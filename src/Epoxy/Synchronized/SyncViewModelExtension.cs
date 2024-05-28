@@ -51,7 +51,7 @@ public static class SyncViewModelExtension
             value => { propertyChanged(value); return default; },
             propertyName);
 
-    #region Dodge mistake choicing asynchronously overloads
+    #region Avoid mistake choicing asynchronously overloads
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Obsolete("Use SetValueAsync instead.", true)]
     public static void SetValueSync<TValue>(

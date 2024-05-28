@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 // Epoxy - An independent flexible XAML MVVM library for .NET
 // Copyright (c) Kouji Matsui (@kozy_kekyo, @kekyo@mastodon.cloud)
@@ -19,13 +19,9 @@
 
 #nullable enable
 
-using Epoxy.Internal;
-
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 #if WINDOWS_UWP || UNO
 using Windows.UI.Xaml;
@@ -53,6 +49,7 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 
 #if AVALONIA
 using Avalonia;
+using Avalonia.Interactivity;
 using System.Reactive;
 using DependencyObject = Avalonia.IAvaloniaObject;
 using UIElement = Avalonia.Interactivity.Interactive;
@@ -60,6 +57,7 @@ using UIElement = Avalonia.Interactivity.Interactive;
 
 #if AVALONIA11
 using Avalonia;
+using Avalonia.Interactivity;
 using Avalonia.Reactive;
 using DependencyObject = Avalonia.AvaloniaObject;
 using UIElement = Avalonia.Interactivity.Interactive;
@@ -68,79 +66,78 @@ using UIElement = Avalonia.Interactivity.Interactive;
 namespace Epoxy;
 
 /// <summary>
-/// The Anchor is used with Pile, there will bind loosely and can rent control temporarily.
+/// The Fountain give bindable ability for standard CLR events by Fountain-Well infrastructure.
 /// </summary>
-/// <remarks>See Anchor/Pile guide: https://github.com/kekyo/Epoxy#anchorpile</remarks>
+/// <remarks>See Fountain guide: https://github.com/kekyo/Epoxy#fountain</remarks>
 /// <example>
 /// <code>
-/// &lt;Window xmlns:epoxy="https://github.com/kekyo/Epoxy"&gt;
+/// &lt;Window xmlns:epoxy="https://github.com/kekyo/Epoxy"
+///    epoxy:Fountain.Well={Binding WindowWell}&gt;
 ///    &lt;!-- ... --&gt;
-///    &lt;!-- Placed Anchor onto the TextBox and bound property --&gt;
-///    &lt;TextBox epoxy:Anchor.Pile="{Binding LogPile}" /&gt;
 /// &lt;/Window&gt;
 /// </code>
 /// </example>
-public sealed class Anchor
+public sealed class Fountain
 {
     /// <summary>
     /// The constructor.
     /// </summary>
-    private Anchor()
+    private Fountain()
     { }
 
 #if XAMARIN_FORMS || MAUI
-    public static readonly BindableProperty PileProperty =
+    public static readonly BindableProperty WellProperty =
         BindableProperty.CreateAttached(
-            "Pile",
-            typeof(Pile),
-            typeof(Anchor),
+            "Well",
+            typeof(Well),
+            typeof(Fountain),
             null,
             BindingMode.OneWay,
             null,
             (b, o, n) =>
             {
-                if (o is Pile op)
+                if (o is Well op)
                 {
                     op.Release((UIElement)b);
                 }
-                if (n is Pile np)
+                if (n is Well np)
                 {
                     np.Bind((UIElement)b);
                 }
             });
 #elif AVALONIA || AVALONIA11
-    public static readonly AvaloniaProperty<Pile?> PileProperty =
-        AvaloniaProperty.RegisterAttached<Anchor, UIElement, Pile?>("Pile");
+    public static readonly AvaloniaProperty<Well?> WellProperty =
+        AvaloniaProperty.RegisterAttached<Fountain, UIElement, Well?>("Well");
 
     /// <summary>
     /// The type initializer.
     /// </summary>
-    static Anchor() =>
-        PileProperty.Changed.Subscribe(
-            new AnonymousObserver<AvaloniaPropertyChangedEventArgs<Pile?>>(e =>
-        {
-            if (e.OldValue.GetValueOrDefault() is { } op)
+    static Fountain() =>
+        WellProperty.Changed.Subscribe(
+            new AnonymousObserver<AvaloniaPropertyChangedEventArgs<Well?>>(e =>
             {
-                op.Release((UIElement)e.Sender);
-            }
-            if (e.NewValue.GetValueOrDefault() is { } np)
-            {
-                np.Bind((UIElement)e.Sender);
-            }
-        }));
+                if (e.OldValue.GetValueOrDefault() is { } op)
+                {
+                    op.Release((UIElement)e.Sender);
+                }
+                if (e.NewValue.GetValueOrDefault() is { } np)
+                {
+                    np.Bind((UIElement)e.Sender);
+                }
+            }));
 #else
-    public static readonly DependencyProperty PileProperty =
+    public static readonly DependencyProperty WellProperty =
         DependencyProperty.RegisterAttached(
-            "Pile",
-            typeof(Pile),
-            typeof(Anchor),
+            "Well",
+            typeof(Well),
+            typeof(Fountain),
             new PropertyMetadata(null, (d, e) =>
             {
-                if (e.OldValue is Pile op)
+                if (e.OldValue is Well op)
                 {
                     op.Release((UIElement)d);
                 }
-                if (e.NewValue is Pile np)
+                if (e.NewValue is Well np)
                 {
                     np.Bind((UIElement)d);
                 }
@@ -150,18 +147,18 @@ public sealed class Anchor
     /// <summary>
     /// Get Pile from this Anchor.
     /// </summary>
-    public static Pile? GetPile(DependencyObject d) =>
-        (Pile?)d.GetValue(PileProperty);
+    public static Well? GetWell(DependencyObject d) =>
+        (Well?)d.GetValue(WellProperty);
 
     /// <summary>
     /// Set Pile from this Anchor.
     /// </summary>
-    public static void SetPile(DependencyObject d, Pile? pile) =>
-        d.SetValue(PileProperty, pile);
+    public static void SetWell(DependencyObject d, Well? well) =>
+        d.SetValue(WellProperty, well);
 
     /// <summary>
     /// Clear Pile from this Anchor.
     /// </summary>
-    public static void ClearPile(DependencyObject d) =>
-        d.ClearValue(PileProperty);
+    public static void ClearWell(DependencyObject d) =>
+        d.ClearValue(WellProperty);
 }

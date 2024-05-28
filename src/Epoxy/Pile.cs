@@ -52,13 +52,13 @@ using UIElement = Microsoft.Maui.Controls.VisualElement;
 #if AVALONIA
 using Avalonia;
 using DependencyObject = Avalonia.IAvaloniaObject;
-using UIElement = Avalonia.Controls.IControl;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 #if AVALONIA11
 using Avalonia;
 using DependencyObject = Avalonia.AvaloniaObject;
-using UIElement = Avalonia.Controls.Control;
+using UIElement = Avalonia.Interactivity.Interactive;
 #endif
 
 namespace Epoxy;
