@@ -52,8 +52,9 @@ open Avalonia.Interactivity;
 #endif
 
 /// <summary>
-/// The Well factory.
+/// The Well is used with Fountation, there will bind and can transfer .NET event signal.
 /// </summary>
+/// <remarks>See Fountain guide: https://github.com/kekyo/Epoxy#fountain</remarks>
 [<DebuggerStepThrough>]
 [<AutoOpen>]
 module public WellExtension =

@@ -73,9 +73,21 @@ namespace Epoxy;
 /// <example>
 /// <code>
 /// // Declared a Well into the ViewModel.
-/// this.ReadyWell = Well.Factory.Create<Window>("Loaded", async () =&gt;
+/// public Well&lt;Window&gt; WindowWell = Well.Factory.Create&lt;Window&gt;();
+/// 
+/// // ...
+/// 
+/// public MainWindowViewModel()
 /// {
-///     // Event received.
+///     this.WindowWell.Add(Window.Loaded, () =>
+///     {
+///         // Event received.
+///     });
+/// 
+///     this.WindowWell.Add&lt;KeyEventArgs&gt;("KeyDown", e =>
+///     {
+///         // Event received.
+///     });
 /// });
 /// </code>
 /// </example>
@@ -88,6 +100,12 @@ public static class WellExtension
     /// <typeparam name="TUIElement">Target control type</typeparam>
     /// <param name="factory">Factory instance (not used)</param>
     /// <returns>Well instance</returns>
+    /// <example>
+    /// <code>
+    /// // Declared a Well into the ViewModel.
+    /// public Well&lt;Window&gt; WindowWell = Well.Factory.Create&lt;Window&gt;();
+    /// </code>
+    /// </example>
     public static Well<TUIElement> Create<TUIElement>(
         this WellFactoryInstance factory)
         where TUIElement : UIElement =>
@@ -102,6 +120,17 @@ public static class WellExtension
     /// <param name="well">Well</param>
     /// <param name="eventName">Event name</param>
     /// <param name="action">Action delegate</param>
+    /// <example>
+    /// <code>
+    /// public MainWindowViewModel()
+    /// {
+    ///     this.WindowWell.Add&lt;KeyEventArgs&gt;("KeyDown", e =>
+    ///     {
+    ///         // Event received.
+    ///     });
+    /// });
+    /// </code>
+    /// </example>
     public static void Add<TEventArgs>(
         this Well well,
         string eventName,
@@ -114,6 +143,17 @@ public static class WellExtension
     /// <param name="well">Well</param>
     /// <param name="eventName">Event name</param>
     /// <param name="action">Action delegate</param>
+    /// <example>
+    /// <code>
+    /// public MainWindowViewModel()
+    /// {
+    ///     this.WindowWell.Add("Loaded", () =>
+    ///     {
+    ///         // Event received.
+    ///     });
+    /// });
+    /// </code>
+    /// </example>
     public static void Add(
         this Well well,
         string eventName,
@@ -138,6 +178,17 @@ public static class WellExtension
     /// <param name="well">Well</param>
     /// <param name="routedEvent">RoutedEvent</param>
     /// <param name="action">Action delegate</param>
+    /// <example>
+    /// <code>
+    /// public MainWindowViewModel()
+    /// {
+    ///     this.WindowWell.Add(DragDrop.DragEnter, e =>
+    ///     {
+    ///         // Event received.
+    ///     });
+    /// });
+    /// </code>
+    /// </example>
     public static void Add<TEventArgs>(
         this Well well,
 #if AVALONIA || AVALONIA11
@@ -155,6 +206,17 @@ public static class WellExtension
     /// <param name="well">Well</param>
     /// <param name="routedEvent">RoutedEvent</param>
     /// <param name="action">Action delegate</param>
+    /// <example>
+    /// <code>
+    /// public MainWindowViewModel()
+    /// {
+    ///     this.WindowWell.Add(Window.Loaded, () =>
+    ///     {
+    ///         // Event received.
+    ///     });
+    /// });
+    /// </code>
+    /// </example>
     public static void Add(
         this Well well,
         RoutedEvent routedEvent,

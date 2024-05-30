@@ -145,19 +145,19 @@ public sealed class Fountain
 #endif
 
     /// <summary>
-    /// Get Pile from this Anchor.
+    /// Get Well from this Fountain.
     /// </summary>
     public static Well? GetWell(DependencyObject d) =>
         (Well?)d.GetValue(WellProperty);
 
     /// <summary>
-    /// Set Pile from this Anchor.
+    /// Set Well to this Fountain.
     /// </summary>
     public static void SetWell(DependencyObject d, Well? well) =>
         d.SetValue(WellProperty, well);
 
     /// <summary>
-    /// Clear Pile from this Anchor.
+    /// Clear Well from this Fountain.
     /// </summary>
     public static void ClearWell(DependencyObject d) =>
         d.ClearValue(WellProperty);

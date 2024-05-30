@@ -130,9 +130,21 @@ public sealed class WellFactoryInstance
 /// <example>
 /// <code>
 /// // Declared a Well into the ViewModel.
-/// this.KeyDownWell = Well.Factory.Create<Panel, KeyEventArgs>("KeyDown", async e =&gt;
+/// public Well&lt;Window&gt; WindowWell = Well.Factory.Create&lt;Window&gt;();
+/// 
+/// // ...
+/// 
+/// public MainWindowViewModel()
 /// {
-///     // Event received.
+///     this.WindowWell.Add(Window.Loaded, () =>
+///     {
+///         // Event received.
+///     });
+/// 
+///     this.WindowWell.Add&lt;KeyEventArgs&gt;("KeyDown", e =>
+///     {
+///         // Event received.
+///     });
 /// });
 /// </code>
 /// </example>

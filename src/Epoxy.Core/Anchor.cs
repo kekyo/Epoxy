@@ -154,7 +154,7 @@ public sealed class Anchor
         (Pile?)d.GetValue(PileProperty);
 
     /// <summary>
-    /// Set Pile from this Anchor.
+    /// Set Pile to this Anchor.
     /// </summary>
     public static void SetPile(DependencyObject d, Pile? pile) =>
         d.SetValue(PileProperty, pile);
