@@ -1,4 +1,4 @@
-# Epoxy - An independent flexible XAML MVVM library
+# Epoxy - Easy, simplicity and minimalism multi-platform MVVM library.
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
@@ -353,8 +353,8 @@ Different events can be added to a `Well` at the same time. Only one handler wit
 
 `EventBinder` will also continue to be supported, but if you want to decide if you should migrate to `Fountain`/`Well`, please refer to the table below.
 
-|Insight|Advantages|Disadvantages|
-|:----|:----|:----|:----|
+|Insight|Advantages|Note|
+|:----|:----|:----|
 |XAML|One of the least amount of code.|Different architecture from `Behavior` based.|
 |Binding|Can bind `Well`|Cannot bind `ICommand`|
 |ViewModel|Not only CLR events but also `RoutedEvents` can be hooked. Avalonia automatically determines handler argument types.|Not using `ICommand`.|

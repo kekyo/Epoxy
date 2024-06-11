@@ -1,4 +1,4 @@
-# Epoxy - An independent flexible XAML MVVM library
+# Epoxy - 簡単・シンプル・最小限のマルチプラットフォームMVVMライブラリ
 
 ![Epoxy bin](Images/Epoxy.160.png)
 
