@@ -26,8 +26,17 @@
 
 ## これは何?
 
-* Epoxyは、.NET XAML環境で使える、Model-View-ViewModel (MVVM) アーキテクチャ向けの、独立した柔軟性のあるライブラリです。
-  * C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
+あなたは、XAMLを使用するGUIアプリケーションを作ったことはありますか？ WPFから始まり、現在では、Avalonia, OpenSilver, MAUIなど、様々なXAMLプラットフォームが存在します。
+
+これらのXAMLプラットフォームでは、特にMVVM (Model-View-ViewModel) アーキテクチャを併用することが推奨されているのですが、MVVMには解釈の違いによる方言も多く、また完全に統一された強固なアーキテクチャでもないため、実装しようとすると困難に直面することがあります。
+
+Epoxyは、MVVMをアーキテクチャではなく、一種の道具として捉え、学習曲線を緩やかにして、MVVMビギナーへの理解の助けや導入の容易さ、簡単でありながら独立性が高く再利用のしやすい機能群となるように設計しました。
+
+もちろん、Epoxyは初心者専用のライブラリというわけではありません。シンプルであるということは、様々な環境でも柔軟で応用性があるということです。（非公開ではありますが、Epoxyは複数の業務利用実績があります。）
+
+以下に、Epoxyの特徴を示します:
+
+* C#を含む.NETの全処理系向け、及びF#用のNuGetパッケージがあります。
 * 以下の環境をサポートしています:
   * WPF: .NET 8.0/7.0/6.0/5.0, .NET Core 3.0/3.1, .NET Framework 4.5/4.8
   * Avalonia: [Avalonia](https://avaloniaui.net/) (New v11 or 0.10 series)
@@ -41,9 +50,34 @@
 * 大げさにならない、最小の手間とコストで Model-View-ViewModel 設計を実現します。
   * Viewにコードビハインドを書かずに済むことが着地点ですが、そのために煩雑な処理を記述しなければならなくなる事を避ける方針です。
   * MVVMビギナーが躓きそうな部分に焦点を当てています。
-  * 完全な共通化は行いません。Epoxyについてだけ同じように記述可能にし、その他の部分はそれぞれの環境に依存させることで、最大公約数的にならないようにしています。
+  * 完全な共通化は行いません。Epoxyについてだけ同じように記述可能にし、その他の部分はそれぞれの環境に依存させることで、機能が最大公約数的にならないようにしています。
   * それぞれの機能が、相互に関係「しません」。独立しているので、自由に組み合わせることが出来ます。
 * ほかのフレームワークライブラリ(例: ReactiveProperty)と組み合わせて使えるように、余計な操作や暗黙の前提を排除しています。
+
+## 導入方法
+
+ターゲットとなるGUIフレームワークに対応したNuGetパッケージを導入してください。
+Epoxyパッケージは沢山公開されていますが、必要なのは、あなたが使っているXAMLプラットフォームに対応する、以下の特定のパッケージのみです:
+
+* `Epoxy.Avalonia11`
+* `Epoxy.Avalonia`
+* `Epoxy.WPF`
+* `Epoxy.OpenSilver`
+* `Epoxy.MAUI`
+* `FSharp.Epoxy.Avalonia11`
+* `FSharp.Epoxy.Avalonia`
+* `FSharp.Epoxy.WPF`
+
+他に `Epoxy.Core.WPF`や`Epoxy.Build`と言ったパッケージが見つかるかもしれませんが、
+これらは上記のパッケージから依存して自動的に使用されます。
+
+注意: `Epoxy.Templates`には、テンプレートプロジェクト定義が含まれていましたが、1.15.0から廃止されました。これに伴い、Visual Studioのテンプレートウィザードも廃止されています。大丈夫です、ウィザードに頼らなくても、Epoxyは簡単に使い始めることができます！
+
+フルスクラッチでEpoxyを導入したい、あるいは既存のプロジェクトにEpoxyを導入したい場合は、
+[ステップバイステップでコミットを作成した、Avalonia 11のサンプルリポジトリ](https://github.com/kekyo/Epoxy.Avalonia11.SampleProject) が役に立つかもしれません。
+
+
+----
 
 ## サンプルコード
 
@@ -59,38 +93,19 @@
 サンプルコードプロジェクトは、[playgroundディレクトリ](playground/) 、又はF#のサンプルコードは [playground.FSharpディレクトリ](playground.FSharp/) 
 にあります。
 
-フルスクラッチでEpoxyを導入したい、あるいは既存のプロジェクトにEpoxyを導入したい場合は、
-[ステップバイステップでコミットを作成した、Avalonia 11のサンプルリポジトリ](https://github.com/kekyo/Epoxy.Avalonia11.SampleProject) が役に立つかもしれません。
-
 ### 解説動画があります (YouTube, 日本語のみ):
 
 [![Epoxyで C# MVVMアーキテクチャを簡単に実装する話 - 作ってみた 第一回](https://img.youtube.com/vi/LkyrgJbuiQs/0.jpg)](https://www.youtube.com/watch?v=LkyrgJbuiQs)
 
 [(再生出来ない場合はこちら)](https://www.youtube.com/watch?v=LkyrgJbuiQs)
 
-### 導入方法
-
-ターゲットとなるGUIフレームワークに対応したNuGetパッケージを導入してください。
-Epoxyパッケージは沢山公開されていますが、必要なのは:
-
-* `Epoxy.Avalonia11`
-* `Epoxy.Avalonia`
-* `Epoxy.WPF`
-* `Epoxy.OpenSilver`
-* `Epoxy.MAUI`
-
-などのパッケージのみです。
-他に `Epoxy.Core.WPF`や`Epoxy.Build`と言ったパッケージが見つかるかもしれませんが、
-これらは上記のパッケージから依存して自動的に使用されます。
-
-注意: `Epoxy.Templates`には、テンプレートプロジェクト定義が含まれていましたが、1.15.0から廃止されました。
-これに伴い、Visual Studioのテンプレートウィザードも廃止されています。
 
 ----
 
 ## MVVMアプリケーションの実装を、最小限の手間で始める
 
-Model-View-ViewModelの役割についてのおさらい:
+いますぐEpoxyの具体的な機能を確認したい場合は、 [機能一覧](#機能一覧)を参照してください。
+ここでは、Model-View-ViewModelのそれぞれの役割について、おさらいします:
 
 * `View`: XAMLでユーザーインターフェイスを記述し、`ViewModel`とバインディングする（コードビハインドを書かない）。
 * `ViewModel`: `Model`から情報を取得して、`View`にマッピングするプロパティを定義する。
@@ -102,12 +117,16 @@ Model-View-ViewModelの役割についてのおさらい:
 
 注意: MVVMの役割については諸説あります。
 はじめから完全な設計を目指さずに、ブラッシュアップすると良いでしょう。
-Epoxyは段階的に改善する事を想定して開発しています。
+Epoxyは段階的に改善する事を想定して設計しています。
 
-XAMLビューの定義とその実装を、MVVMに従って完全に分離しつつ、最小限の手間で実装する例です
+XAMLビューの定義とその実装を、MVVMに従って完全に分離しつつ、最小限の手間で実装する例を示します。前節の、The CAT APIを使用する例です。
 (このコードはWPFの例で、ポイントとなる点に絞っているため、完全な例はサンプルコードを参照して下さい):
 
 ### View (WPF XAML)の実装例
+
+MVVMのViewとは、表示の見た目や構造をXAMLで定義します。ここには、動的な制御処理は記述しません。各コントロールの配置、色、フォントなどが含まれます。
+
+`ListBox`コントロールは、複数の同じ見た目を持つ項目群を並べて表示する機能があります。 
 
 ```xml
 <Window
@@ -147,10 +166,27 @@ XAMLビューの定義とその実装を、MVVMに従って完全に分離しつ
 
 ### ViewModel (WPF)の実装例
 
-完全に分離された、ViewModelクラスの実装です。
-完全に、とは、つまりViewクラスに、コードビハインドを一切記述しないことを指します。
+ViewModelの役割は、XAMLで定義された各コントロールを制御するコードを記述して、動的な振る舞いを持たせることです。
+
+かつてのWindows Formsのように、なぜViewとViewModelの実装を一体化させないのか？という疑問には、さまざまな理由がありますが、現実的な問題として、 `ListBox` のような複数の要素に対して異なる内容を表示したり制御するのに、コードだけで実現するのは困難だからです。
+
+これを解決するために、データバインディングと呼ばれる機能があり、データバインディングで問題を解決するために、MVVMというアーキテクチャが考案されたと言っていいでしょう。
+
+`ListBox` の例で言うなら、ViewModelに定義されている `Items` コレクションの内容が、1対1で表示の各要素に対応するように、自動的に表示が更新されます。したがって:
+
+* View側は各要素をどのように表示するか。配置や色やフォント、画像やその加工などをXAMLで指定する。
+* ViewModel側は、各要素を追加、削除、あるいは順序の入れ替え、テキスト文字列や画像データの生成を行う。
+
+ことに集中することができます。
+
+![MVVM diagram](Images/mvvm.png)
+
+以下は、表示と制御が完全に分離された、ViewModelクラスの実装です。
+完全に分離、とは、つまりViewクラスに、コードビハインドを一切記述しないことを指します。
 
 ```csharp
+using Epoxy;
+
 // ステップ 1: ViewModelクラスを作ります。そしてViewModel属性を付与します。
 //    この属性は、PropertyChangedを自動的に実装して、XAML側に伝搬できるようにします。
 [ViewModel]
@@ -226,12 +262,12 @@ Modelの実装は、直接ユーザーインターフェイスを操作する事
 非同期操作でタスクコンテキストを分離 `task.ConfigureAwait(false)` することで、
 パフォーマンスを向上させることが出来ます。
 
+
 ----
 
 ## 機能一覧
 
-それぞれの機能は独立しているため、自由に組み合わせて使用出来ます
-（例えば、`ViewModel`を継承していないと使えない、と言うような事はありません）。
+以下に、Epoxyの機能の一覧を示します。Epoxyのそれぞれの機能は独立しているため、自由に組み合わせて使用出来ます（例えば、ViewModelにありがちな、基底クラスの継承は必須ではありません）。
 
 |機能名|概要|
 |:----|:----|
@@ -328,7 +364,7 @@ csprojの`PropertyGroup`の`EpoxyBuildEnable`に`False`を指定して下さい�
 
 ```csharp
 // Windowからのイベントを受信するWellを定義する
-public Well MainWindowWell { get; } = Well.Factory.Create<Window>();
+public Well<Window> MainWindowWell { get; } = Well.Factory.Create<Window>();
 
 // ...
 
@@ -406,11 +442,7 @@ Avaloniaでは、 `RoutedEvent` からイベントの引数 `EventArgs` の型�
 
 ```csharp
 // Loadedイベントを受信するためのCommandプロパティの定義
-public Command? Ready
-{
-    get => this.GetValue();
-    private set => this.SetValue(value);
-}
+public Command Ready { get; private set; }
 
 // ...
 
@@ -476,7 +508,7 @@ MVVMアーキテクチャのレアケースにおいて、コントロールを�
 ```csharp
 // PileをViewModelに配置します。
 // (操作したいTextBoxのXAMLにAnchorを配置して、バインディングします)
-this.LogPile = Pile.Factory.Create<TextBox>();
+public Pile<TextBox> LogPile { get; } = Pile.Factory.Create<TextBox>();
 
 // ...
 
@@ -489,6 +521,8 @@ await this.LogPile.RentAsync(async textBox =>
     textBox.AppendText(result);
 });
 ```
+
+注意: `Anchor`/`Pile`でXAMLコントロールへのインスタンスをレンタルすると、コントロールに対してどのような操作も可能です。しかし、レンタル中にイベントをフックしたりすると、ViewModelの参照が保持されてしまい、メモリリークの原因となります。このようなフック操作は、出来るだけ`Fountain`/`Well`や`EventBinder`を使用して下さい。
 
 * [For example (In WPF XAML)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/Views/MainWindow.xaml#L39)
 * [For example (In WPF view model)](https://github.com/kekyo/Epoxy/blob/main/playground/EpoxyHello.Wpf/ViewModels/MainWindowViewModel.cs#L74)
@@ -832,6 +866,7 @@ Apache-v2
   * Xamarin Formsを廃止。
   * テンプレートプロジェクトを廃止。
     * まだしばらくは新規プロジェクト生成として機能すると思いますが、更新されません。
+    * [ステップバイステップでコミットを作成した、Avalonia 11のサンプルリポジトリ](https://github.com/kekyo/Epoxy.Avalonia11.SampleProject) が役に立つかもしれません。
   * 互換性の為に残されていたObsoleteメンバーを削除。
 * 1.14.0:
   * Avalonia 11で、XAMLからEpoxyを参照する際の名前空間にURLを指定可能にしました。
