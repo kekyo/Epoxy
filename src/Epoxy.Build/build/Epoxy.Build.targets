@@ -50,7 +50,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <_EB_ToolingBaseDir>$([System.IO.Path]::Combine('$(_EB_ScriptBaseDir)','..','tools','$(_EB_PlatformName)'))</_EB_ToolingBaseDir>
+    <EpoxyBuildToolingDir>$([System.IO.Path]::Combine('$(_EB_ScriptBaseDir)','..','tools','$(_EB_PlatformName)'))</EpoxyBuildToolingDir>
   </PropertyGroup>
 
   <!-- ======================== -->
@@ -59,7 +59,7 @@
   <Target Name="EpoxyBuild" AfterTargets="AfterCompile"
     Condition="'$(EpoxyBuildEnable)' == 'True'">
 
-    <_EB_CandidateToolingDir ToolingDir="$(_EB_ToolingBaseDir)">
+    <_EB_CandidateToolingDir ToolingDir="$(EpoxyBuildToolingDir)">
       <Output TaskParameter="CandidateDir" PropertyName="_EB_ToolingCandidateDir" />
     </_EB_CandidateToolingDir>
 

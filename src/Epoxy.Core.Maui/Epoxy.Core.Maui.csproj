@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Epoxy.Core</AssemblyName>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
     <AssemblyTitle>Epoxy.Core.Maui</AssemblyTitle>
     <PackageId>Epoxy.Core.Maui</PackageId>
     <PackageTags>$(PackageTags);maui</PackageTags>
@@ -17,7 +17,7 @@
     <DefineConstants>TRACE;MAUI</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' != 'net8.0'">
+  <PropertyGroup Condition="('$(TargetFramework)' != 'net8.0') AND ('$(TargetFramework)' != 'net9.0')">
     <UseMaui>true</UseMaui>
   </PropertyGroup>
 

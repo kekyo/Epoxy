@@ -7,6 +7,7 @@
     <PackageId>Epoxy.Core.OpenSilver</PackageId>
     <PackageTags>$(PackageTags);opensilver</PackageTags>
     <DefineSilverlight>true</DefineSilverlight>
+    <NoWarn>$(NoWarn);NU1904</NoWarn>   <!-- Yes, you need to update dependent packages on final application project. -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
