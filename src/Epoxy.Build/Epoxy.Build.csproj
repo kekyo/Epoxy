@@ -12,8 +12,8 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
-  <PropertyGroup Condition="('$(TargetFramework)' == 'netcoreapp3.1') OR ('$(TargetFramework)' == 'net5.0') OR ('$(TargetFramework)' == 'net6.0') OR ('$(TargetFramework)' == 'net7.0') OR ('$(TargetFramework)' == 'net8.0')">
-    <RollForward>Minor</RollForward>
+  <PropertyGroup Condition="('$(TargetFramework)' == 'netcoreapp3.1') OR ('$(TargetFramework)' == 'net5.0') OR ('$(TargetFramework)' == 'net6.0') OR ('$(TargetFramework)' == 'net7.0') OR ('$(TargetFramework)' == 'net8.0') OR ('$(TargetFramework)' == 'net9.0')">
+    <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
 
   <ItemGroup>
