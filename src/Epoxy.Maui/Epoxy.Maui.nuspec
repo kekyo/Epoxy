@@ -31,6 +31,10 @@
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Maui" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
+      <group targetFramework=".NETCoreApp9.0">
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
+        <dependency id="Epoxy.Core.Maui" version="$PackageVersion$" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
   <files>

@@ -1,6 +1,8 @@
 @echo off
 
-git clean -xfd
+rem git clean -xfd
+rem dotnet workload restore
+
 mkdir artifacts
 
 echo.

@@ -51,6 +51,10 @@
         <dependency id="Epoxy.Build" version="$PackageVersion$" />
         <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
       </group>
+      <group targetFramework="net9.0-windows7.0">
+        <dependency id="Epoxy.Build" version="$PackageVersion$" />
+        <dependency id="Epoxy.Core.Wpf" version="$PackageVersion$" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
   <files>
