@@ -856,6 +856,10 @@ Apache-v2
 
 ## History
 
+* 1.16.0:
+  * Fixed path not found exception when Epoxy.Build loading on .NET 9.0 SDK.
+  * Force updated MAUI dependencies on net8.0 or newer, because of their package dependencies.
+  * Avalonia (<=10) and OpenSilver packages are last release. Will drop out in the next release.
 * 1.15.0:
   * Added `Fountain/Well` as a new event handling feature.
   * Deprecated Xamarin Forms.

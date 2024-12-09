@@ -861,6 +861,10 @@ Apache-v2
 
 ## History
 
+* 1.16.0:
+  * .NET 9.0 SDKでEpoxy.Buildがロードされるときに、パスが見つからない例外を修正しました。
+  * MAUIの依存関係をnet8.0以降で強制的に更新しました。
+  * Avalonia (<=10) と OpenSilver パッケージは最終リリースです。次のリリースでは削除されます。
 * 1.15.0:
   * 新しいイベントハンドリング機能として、 `Fountain/Well` を追加。
   * Xamarin Formsを廃止。
